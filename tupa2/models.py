@@ -9,6 +9,8 @@ class Henkilo(models.Model) :
     vartio_nro = models.IntegerField()
     puhelin_nro = models.CharField(maxlength=15)
     homma = models.CharField(maxlength=255)
+    def __str__(self) :
+        return self.nimi
     class Admin:
         pass
 
@@ -17,6 +19,8 @@ class Kisa(models.Model) :
     nimi = models.CharField(maxlength=255)
     aika = models.DateField()
     paikka = models.CharField(maxlength=255)
+    def __str__(self) :
+        return self.nimi
     class Admin:
         pass
 
@@ -29,6 +33,8 @@ class Tehtava(models.Model) :
     rastikasky = models.TextField()
     jarjestysnro = models.IntegerField()
     kaava = models.CharField(maxlength=255)
+    def __str__(self) :
+        return self.nimi
     class Admin:
         pass
 
@@ -39,6 +45,8 @@ class Sarja(models.Model) :
     vartion_maksimikoko = models.IntegerField()
     vartion_minimikoko = models.IntegerField()
     kisa = models.ForeignKey(Kisa)
+    def __str__(self) :
+        return self.nimi
     class Admin:
         pass
 
@@ -47,6 +55,8 @@ class Rasti(models.Model) :
     nimi = models.CharField(maxlength=255)
     sarja = models.ForeignKey(Sarja)
     rastimiehet = models.ManyToManyField(Henkilo)
+    def __str__(self) :
+        return self.nimi
     class Admin:
         pass
 
@@ -54,6 +64,8 @@ class Rasti(models.Model) :
 class Allergia(models.Model) :
     mille = models.CharField(maxlength=255)
     henkilo = models.ForeignKey(Henkilo)
+    def __str__(self) :
+        return self.mille
     class Admin:
         pass
 
@@ -68,6 +80,8 @@ class Vartio(models.Model) :
     sahkoposti = models.CharField(maxlength=255)
     osoite = models.CharField(maxlength=255)
     keskeyttanyt = models.IntegerField()
+    def __str__(self) :
+        return self.nimi
     class Admin:
         pass
 
@@ -88,6 +102,8 @@ class Syote(models.Model) :
     vartio = models.ForeignKey(Vartio)
     tehtava = models.ForeignKey(Tehtava)
     parametri = models.BooleanField()
+    def __str__(self) :
+        return self.nimi
     class Admin:
         pass
 
