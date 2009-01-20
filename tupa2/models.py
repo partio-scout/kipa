@@ -7,7 +7,6 @@ class Allergia(models.Model) :
     class Admin:
         pass
 
-
 class Henkilo(models.Model) :
     nimi = models.CharField(maxlength=255)
     syntumavuosi = models.IntegerField(blank=True,null=True)
@@ -32,20 +31,6 @@ class Kisa(models.Model) :
     class Admin:
         pass
 
-
-class Tehtava(models.Model) :
-    nimi = models.CharField(maxlength=255)
-    maksimipisteet = models.FloatField(decimal_places=2, max_digits=5)
-    tehtavaryhma = models.CharField(maxlength=255,blank=True)
-    tehavaluokka = models.CharField(maxlength=255,blank=True)
-    rastikasky = models.TextField(blank=True)
-    kaava = models.CharField(maxlength=255)
-    def __str__(self) :
-        return self.nimi
-    class Admin:
-        pass
-
-
 class Sarja(models.Model) :
     nimi = models.CharField(maxlength=255,core=True)
     maksimipisteet = models.FloatField(max_digits=5,decimal_places=2,core=True)
@@ -57,7 +42,6 @@ class Sarja(models.Model) :
     class Admin:
         pass
 
-
 class Rasti(models.Model) :
     nimi = models.CharField(maxlength=255,core=True)
     sarja = models.ForeignKey(Sarja,edit_inline=models.TABULAR)
@@ -67,8 +51,22 @@ class Rasti(models.Model) :
     class Admin:
         pass
 
+class Tehtava(models.Model) :
+    nimi = models.CharField(maxlength=255,core=True)
+    maksimipisteet = models.FloatField(decimal_places=2, max_digits=5)
+    tehtavaryhma = models.CharField(maxlength=255,blank=True)
+    tehavaluokka = models.CharField(maxlength=255,blank=True)
+    rastikasky = models.TextField(blank=True)
+    kaava = models.CharField(maxlength=255)
+    rasti = models.ForeignKey(Rasti,edit_inline=models.STACKED)
+    def __str__(self) :
+        return self.nimi
+    class Admin:
+        pass
 
-    
+
+
+
 
 class Vartio(models.Model) :
     nimi = models.CharField(maxlength=255)
@@ -106,7 +104,6 @@ class Syote(models.Model) :
     class Admin:
         pass
 
-    
 
 class Lopputulos(models.Model) :
     vartio = models.ForeignKey(Vartio,core=True)
