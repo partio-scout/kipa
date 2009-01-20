@@ -1,4 +1,6 @@
 from django.db import models
+# coding: latin-1
+
 
 class Allergia(models.Model) :
     mille = models.CharField(maxlength=255,core=True)
@@ -6,6 +8,8 @@ class Allergia(models.Model) :
         return self.mille
     class Admin:
         pass
+    class Meta:
+        verbose_name_plural = "Allergiat"
 
 class Henkilo(models.Model) :
     nimi = models.CharField(maxlength=255)
@@ -16,8 +20,11 @@ class Henkilo(models.Model) :
     puhelin_nro = models.CharField(maxlength=15,blank=True)
     homma = models.CharField(maxlength=255,blank=True)
     allergia =	models.ManyToManyField(Allergia ,null=True , blank=True)
+
     def __str__(self) :
         return self.nimi
+    class Meta:
+        verbose_name_plural = "Henkilöt"
     class Admin:
         pass
 
@@ -30,6 +37,9 @@ class Kisa(models.Model) :
         return self.nimi
     class Admin:
         pass
+    class Meta:
+        verbose_name_plural = "Kisat"
+
 
 class Sarja(models.Model) :
     nimi = models.CharField(maxlength=255,core=True)
@@ -41,6 +51,9 @@ class Sarja(models.Model) :
         return self.nimi
     class Admin:
         pass
+    class Meta:
+        verbose_name_plural = "Sarjat"
+
 
 class Rasti(models.Model) :
     nimi = models.CharField(maxlength=255,core=True)
@@ -50,6 +63,9 @@ class Rasti(models.Model) :
         return self.nimi
     class Admin:
         pass
+    class Meta:
+        verbose_name_plural = "Rastit"
+
 
 class Tehtava(models.Model) :
     nimi = models.CharField(maxlength=255,core=True)
@@ -63,9 +79,8 @@ class Tehtava(models.Model) :
         return self.nimi
     class Admin:
         pass
-
-
-
+    class Meta:
+        verbose_name_plural = "Tehtävät"
 
 
 class Vartio(models.Model) :
@@ -82,6 +97,8 @@ class Vartio(models.Model) :
         return self.nimi
     class Admin:
         pass
+class Meta:
+        verbose_name_plural = "Vartiot"
 
 class Rata(models.Model) :
     sarja = models.ForeignKey(Sarja,edit_inline=models.TABULAR)
@@ -89,6 +106,8 @@ class Rata(models.Model) :
     jarjestysnro = models.IntegerField(core=True)
     class Admin:
         pass
+    class Meta:
+        verbose_name_plural = "Radat"
 
 
 class Syote(models.Model) :
@@ -103,6 +122,8 @@ class Syote(models.Model) :
         return self.nimi
     class Admin:
         pass
+    class Meta:
+        verbose_name_plural = "Syötteet"
 
 
 class Lopputulos(models.Model) :
@@ -112,5 +133,6 @@ class Lopputulos(models.Model) :
     list_display = ('vartio', 'tehtava')
     class Admin:
         pass
-
+    class Meta:
+        verbose_name_plural = "Lopputulokset"
 
