@@ -8,12 +8,14 @@ def operoi(alku,operaattori,loppu) :
     Suorittaa niille valitun lasku operaation. 
     Palauttaa merkkijonon jossa numerot ja operaattori on korvattu kyseisen operaation tuloksella.
     """ 
-    lauseke="str( Decimal('" + re.search( r'^\-\d\.\d*\Z|\d\.\d*\Z|\d*\Z|\d\Z ',alku).group(0)+ "')" 
+    numeronHakuLopusta=r'^\-\d*\.\d*\Z|^\-\d*\Z|\d*\.\d*\Z|\d*\Z|\d*\Z'
+    numeronHakuAlusta =r'^\-\d*\.\d*|^\-\d*|\A\d*\.\d*|\A\d*|\A\d*'
+    lauseke="str( Decimal('" + re.search( numeronHakuLopusta,alku).group(0)+ "')" 
     lauseke=lauseke + operaattori 
-    lauseke=lauseke +"Decimal('" + re.search(r'\A\-\d*\.\d*|\A\d*\.\d*|\A\d*|\A\d',loppu).group(0) + "'))"
+    lauseke=lauseke +"Decimal('" + re.search( numeronHakuAlusta,loppu).group(0) + "'))"
     tulos = eval(lauseke)
-    lauseke=  re.sub(r'^\-\d\.\d*\Z|\d\.\d*\Z|\d*\Z|\d\Z',"", alku) + tulos 
-    lauseke=lauseke + re.sub(r'\A\-\d*\.\d*|\A\d*\.\d*|\A\d*|\A\d',"", loppu)
+    lauseke=  re.sub(numeronHakuLopusta,"", alku) + tulos 
+    lauseke=lauseke + re.sub(numeronHakuAlusta,"", loppu)
     return lauseke    
 
 def suorita(kaava) :
