@@ -1,5 +1,5 @@
 # coding: latin-1
-from mysite.tupa2.models import *
+from models import *
 from django.shortcuts import render_to_response
 import operator
 import decimal 

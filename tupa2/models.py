@@ -1,7 +1,7 @@
 from django.db import models
 
 from random import uniform
-from mysite.tupa2.laskin import *
+from laskin import *
 
 class Allergia(models.Model) :
     mille = models.CharField(maxlength=255,core=True)
