@@ -6,15 +6,15 @@ import decimal
 
 def index(request):
       kisat = Kisa.objects.all()
-      return render_to_response('tupa2/index.html', {'latest_kisa_list': kisat })
+      return render_to_response('tupa/index.html', {'latest_kisa_list': kisat })
 
 def kisa(request,kisa_id):
       sarjat = Sarja.objects.filter(kisa__id=kisa_id)
-      return render_to_response('tupa2/kisa.html', {'sarja_list': sarjat })
+      return render_to_response('tupa/kisa.html', {'sarja_list': sarjat })
 
 def sarja(request,sarja_id) :
       sarja= Kisa.objects.filter(id=sarja_id)[0]
-      return render_to_response('tupa2/sarja.html', {'sarja_object': sarja })
+      return render_to_response('tupa/sarja.html', {'sarja_object': sarja })
 
 def tulokset(request,sarja_id):
     sarja = Sarja.objects.filter(id=sarja_id)[0]
@@ -72,6 +72,6 @@ def tulokset(request,sarja_id):
          tulostaulu[i][0]=i+1
          tulostaulu[i][3]="%.1f" % tulostaulu[i][3]
     taulukko=taulukko+tulostaulu
-    return render_to_response('tupa2/tulokset.html', {'tulos_taulukko' : taulukko , 'sarja_objekti' : sarja } )
+    return render_to_response('tupa/tulokset.html', {'tulos_taulukko' : taulukko , 'sarja_objekti' : sarja } )
 
 
