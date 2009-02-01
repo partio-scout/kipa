@@ -20,7 +20,7 @@ def operoi(alku,operaattori,loppu) :
 
 def suorita(kaava) :
     """
-    Suorittaa merkkijonon laskutoimituksen jossa ei ole sulkeita() 
+    Suorittaa merkkijonon laskutoimituksen jossa ei ole sulkeita () 
     Laskee ensin kerto- sekä jakolaskun * /
     Sitten plus ja miinus. + -
     Operaattoreiden välissä voi olla vain lukuja (-)(0-9)(.)(0-9)
