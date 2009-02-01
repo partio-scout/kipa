@@ -5,7 +5,8 @@ import peruslaskin
 
 def haeSulku(lause):
     """
-    Hakee lauseesta ensimmäisten sulkujen välissä olevan merkkijonon.
+    Hakee lauseesta ensimmäisten sulkujen paikat.
+    palauttaa tuple(aukeva,sulkeutuva)
     Jos sulkuja ei löydy palauttaa None
     """
     auki=lause.find('(')
@@ -41,14 +42,14 @@ class laskin :
     """
     Luokka jonka objektit laskevat tulospalvelun tulokset yhdelle vartiolle yhteen tehtävään
     """
-    def max(self,param) :
+    def max(self,max,lauseke) :
         """
         Kasksi parametriä, maksimiarvo ja arvo. Molemmat voivat olla lausekkeita. 
         Palauttaa arvon mikäli se on maksimiarvoa pienempi. Muussa tapauksessa maksimiarvon, 
         tai None jos lausekkeet eivät ole laskettavissa. 
         """
-        arvo=self.laske(param[1],self.muuttujaKirja,self.funktioKirja)
-        suurin=self.laske(param[0],self.muuttujaKirja,self.funktioKirja)
+        arvo=self.laske(lauseke,self.muuttujaKirja,self.funktioKirja)
+        suurin=self.laske(max,self.muuttujaKirja,self.funktioKirja)
         if arvo and suurin and Decimal(arvo) > Decimal(suurin) :
             return suurin
         elif arvo and suurin:
@@ -56,14 +57,14 @@ class laskin :
         else :
             return None
     
-    def min(self,param) :
+    def min(self,min,lauseke) :
         """
         Kaksi parametriä, minimiarvo ja arvo. Molemmat voivat olla lausekkeita.
         Palauttaa arvon mikäli se on minimiarvoa suurempi. Muussa tapauksessa minimiarvon,
         tai None jos lausekkeet eivät ole laskettavissa.
         """
-        arvo=self.laske(param[1],self.muuttujaKirja,self.funktioKirja)
-        pienin=self.laske(param[0],self.muuttujaKirja,self.funktioKirja)
+        arvo=self.laske(lauseke,self.muuttujaKirja,self.funktioKirja)
+        pienin=self.laske(min,self.muuttujaKirja,self.funktioKirja)
          
         if not arvo:
             return None
@@ -71,25 +72,21 @@ class laskin :
             return pienin
         else :
             return arvo
-    def minmax(self,param):
+    def minmax(self,min,max,arvo):
         """
         Kolme parametriä: minimiarvo, maksimiarvo, ja arvo. Ne voivat olla lausekkeita.
         Palauttaa arvon rajattuna minimiarvon ja maksimiarvon väliin. 
         Jos lauseet eivät ole laskettavissa palauttaa None.
         """
-        return "min("+param[0]+",max("+param[1]+","+param[3]+"))"
+        return "min("+min+",max("+max+","+arvo+"))"
 
-    def interpoloi(self,param):
+    def interpoloi(self,s,k,maxp,pm):
         """
         Neljä parametriä: Interpoloitava syöte, kerroin, maksimipisteet sekä arvo jolla saa suurimmat pisteet.
         Palauttaa Interpolointi kaavan. None jos syötteitä ei ole tarpeeksi
         """
-        p=param[0]
-        k=param[1]
-        maxp=param[2]
-        pm=param[3]
-        #min(0,(maxp/(pm-k*med(p)))*(p-k*med(p)))
-        kaava="min(0,("+maxp+"/("+pm+"-"+k+"*"+"med("+p+")))*("+p+"-"+k+"*med("+p+")))"
+        #min(0,(maxp/(pm-k*med(s)))*(s-k*med(s)))
+        kaava="min(0,("+maxp+"/("+pm+"-"+k+"*"+"med("+s+")))*("+s+"-"+k+"*med("+s+")))"
         return kaava
 
     def med(self,param):
@@ -97,8 +94,18 @@ class laskin :
         Yksi parmetri: Tehtävän syöte joista lasketaan mediaani.
         Palauttaa mediaanin. Mikäli syötteitä ei löydy lainkaan palauttaa None
         """
-        mediaani = str(self.teht.mediaani(param[0]))
+        mediaani = str(self.teht.mediaani(param))
         return mediaani
+
+    def suorita(self,funktio,parametrit):
+        """
+        Suorittaa valitun funktion suluissa määritellyillä merkkijono parametreillä. Parametrit erotellaan pilkulla. 
+        Parametrin sisäisten sulkujen välisiä pilkkuja ei erotella parametreiksi, 
+        vaan ne annetaan ajettavalle funktiolle muuttamattomina. 
+        Palauttaa funktion palautusarvon. Jos funktiota ei löydy. Palauttaa None
+        """
+        lista=parametrit.split(',')
+        return funktio(*lista)
 
     def laske(self,kaava,muuttujaKirja=None,funktioKirja=None) :
         """
@@ -108,23 +115,26 @@ class laskin :
         -Laskee sulkujen mukaan */ ensin sitten +-.
         -Mikäli lauseke oli laskettavissa palauttaa tuloksen. Muussa tapauksessa None.
         """
+        # Muuttujakirjaa sekä funktiokirjaa tarvitaan muissakin fuktioissa.
         self.muuttujaKirja=muuttujaKirja
         self.funktioKirja=funktioKirja
         muokattu=kaava
+        # Suoritetaan funktiot.
         if funktioKirja:
             for i, j in funktioKirja.iteritems():  
                 kohdassa=re.search(i, muokattu )
                 while kohdassa:
                     sulut=haeSulku( muokattu[kohdassa.end():])
                     alku=muokattu[:kohdassa.start()]
-                    runko=j+"('"+  muokattu[ sulut[0]+kohdassa.end() +1:sulut[1]+kohdassa.end()-1]+ "'.split(','))"
-                    funktio= str(eval(runko)) 
+                    funktio= self.suorita(j,muokattu[sulut[0]+kohdassa.end() +1:sulut[1]+kohdassa.end()-1])  
                     loppu= muokattu[kohdassa.end()+sulut[1]:]
                     muokattu=alku+funktio+loppu
                     kohdassa=re.search(i,muokattu )
+        # Tulkataan muuttujat.
         if muuttujaKirja:
             for i, j in muuttujaKirja.iteritems():  
                 muokattu = muokattu.replace(i, j)  
+        # Lasketaan tulos
         return peruslaskin.laske(muokattu)
 
     def laskeTulos(self,syotteet,tehtava) :
@@ -142,5 +152,5 @@ class laskin :
            muuttujat.append( (s.lyhenne , str(s.arvo) ) )
            #muuttujat.append( (s.nimi, str(s.arvo) ) )
         # Lasketaan tulokset
-        return self.laske(self.teht.kaava, dict(muuttujat), { "minmax" : "self.minmax" ,"max" : "self.max", "min" : "self.min" , "med" : "self.med", "interpoloi" : "self.interpoloi" } ) 
+        return self.laske(self.teht.kaava, dict(muuttujat), { "minmax" : self.minmax ,"max" : self.max, "min" : self.min , "med" : self.med, "interpoloi" : self.interpoloi } ) 
 
