@@ -1,0 +1,31 @@
+<A href='../../admin/'>AdminSivu </A>
+
+<h1> Tulokset </h1>
+{{ sarja_objekti.kisa.nimi }} <br> 
+<br>
+<p>
+Sarja: {{ sarja_objekti.nimi }} 
+{% if tulos_taulukko %}
+       <table>
+       <ul>
+       {% for rivi in tulos_taulukko %}
+           <tr>
+           {% for sarake in rivi %}
+               <td>
+               {{ sarake }}     
+               </td>
+           {% endfor %}    
+           </tr>    
+       {% endfor %}
+       </ul>
+       </table>
+       
+{% else %}
+    <p>Ei Tuloksia.</p>
+{% endif %}
+
+<p>
+ p = vartion suoritusta ei ole vielä syötetty <br>
+ ? = vartion pisteitä ei voida vielä laskea <br>
+ - = vartio ei ole tehnyt tehtävää <br>
+</p>

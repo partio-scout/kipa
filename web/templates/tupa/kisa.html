@@ -1,0 +1,10 @@
+<h1>{{kisa_object.nimi}}</h1>	
+<br>
+<h2> Sarjat </h2>
+
+{%for sarja in sarja_list %}
+      {{sarja.nimi}}
+      <A href='../tulokset/{{sarja.id}}/' > {{sarja.nimi}} </A> <br>
+
+{% endfor %}
+
