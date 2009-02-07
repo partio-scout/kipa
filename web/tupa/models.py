@@ -126,7 +126,6 @@ class Tehtava(models.Model) :
              if not s.arvo==None :
                  arvot.append( Decimal( str(s.arvo) ) )
         arvot.sort()
-        print len(arvot)
         if len(arvot) % 2 == 1:
             return arvot[(len(arvot)+1)/2-1]
         elif len(arvot):
