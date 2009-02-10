@@ -1,7 +1,9 @@
+#coding=latin_1
 import unittest
 
 from models import *
 from peruslaskin import *
+from laskin  import *
 
 class peruslaskin_test(unittest.TestCase):
 
@@ -38,3 +40,24 @@ class peruslaskin_test(unittest.TestCase):
         assert  laske('10/0') == None 
 
      
+class lasketulos_test(unittest.TestCase):
+
+    """
+    Laskimen lasketulos luokan (eli ns. päätason) unit testit
+    """
+
+    def testLaske_muuttujat(self):
+        perusTehtava = Tehtava()
+        a = Syote()
+        b = Syote()
+        laskia = Laskin()
+        a.lyhenne= "a"
+        a.arvo=5
+        b.lyhenne= "b"
+        b.arvo=2
+        perusTehtava.kaava="a+b"
+        assert  laskia.laskeTulos([a,b],perusTehtava) == '7'
+
+
+
+
