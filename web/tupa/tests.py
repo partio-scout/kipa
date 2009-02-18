@@ -3,15 +3,13 @@ import unittest
 
 from models import *
 from peruslaskin import *
-from laskin  import *
+from laskin import *
 
 class peruslaskin_test(unittest.TestCase):
-
     """
     Peruslaskimen unit testit
 
     """
-
     def testYhteenlasku(self):
         assert  laske('5+5') == '10'
     
