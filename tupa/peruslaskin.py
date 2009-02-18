@@ -10,9 +10,15 @@ def operoi(alku,operaattori,loppu) :
     """ 
     numeronHakuLopusta=r'^\-\d*\.\d*\Z|^\-\d*\Z|\d*\.\d*\Z|\d*\Z|\d*\Z'
     numeronHakuAlusta =r'^\-\d*\.\d*|^\-\d*|\A\d*\.\d*|\A\d*|\A\d*'
-    lauseke="str( Decimal('" + re.search( numeronHakuLopusta,alku).group(0)+ "')" 
+    numeroA = re.search( numeronHakuLopusta,alku).group(0)
+    numeroB = re.search( numeronHakuAlusta,loppu).group(0)
+    if operaattori=='/' and numeroB=='0' :
+        return None
+    if len(numeroA)==0 or len(numeroB)==0 :
+        return None
+    lauseke="str( Decimal('" + numeroA + "')" 
     lauseke=lauseke + operaattori 
-    lauseke=lauseke +"Decimal('" + re.search( numeronHakuAlusta,loppu).group(0) + "'))"
+    lauseke=lauseke +"Decimal('" + numeroB + "'))"
     tulos = eval(lauseke)
     lauseke=  re.sub(numeronHakuLopusta,"", alku) + tulos 
     lauseke=lauseke + re.sub(numeronHakuAlusta,"", loppu)
@@ -31,6 +37,8 @@ def suorita(kaava) :
     haut = (r"\*|/",r"\+|\-")
     for r in range(len(haut)) :
         for o in operaattorit[r]  :
+            if laskettu==None :
+                return None
             haku=re.search( haut[r] , laskettu[1:] )
             if haku:
                 i=haku.start()+1
@@ -63,7 +71,7 @@ def laske(kaava,sanakirja=None) :
     Palauttaa tuloksen jos kaava on laskettavissa. 
     Muussa tapauksessa palautusarvo on None.
     """
-    muokattu=kaava
+    muokattu = kaava.replace(" ","")
     if validioi(muokattu)==False :
         return None
     sulku=re.search( r"\(" , muokattu)
@@ -73,7 +81,9 @@ def laske(kaava,sanakirja=None) :
     sulku=re.search( r"\)" , muokattu)
     if sulku :
         i=sulku.start()
-        muokattu=suorita(muokattu[:i])+muokattu[i+1:]
+        suoritettu=suorita(muokattu[:i])
+        if suoritettu:
+            muokattu=suoritettu + muokattu[i+1:]
     if not re.search( r"\)" , muokattu):
         if not re.search( r"\(", muokattu):
              muokattu=suorita(muokattu)

@@ -37,7 +37,7 @@ def haeSulku(lause):
     else: 
         return None
 
-class laskin :
+class Laskin :
     """
     Luokka jonka objektit laskevat tulospalvelun tulokset yhdelle vartiolle yhteen tehtävään
     """

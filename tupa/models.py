@@ -117,7 +117,7 @@ class Tehtava(models.Model) :
             # Haetaan syotteet:
             syotteet=Syote.objects.filter(vartio=v).filter(tehtava=self)
             # Lasketaan tulokset
-            tulos = Lopputulos( vartio=v, tehtava=self, pisteet = laskin().laskeTulos(syotteet,self) )
+            tulos = Lopputulos( vartio=v, tehtava=self, pisteet = Laskin().laskeTulos(syotteet,self) )
             tulos.save() 
     def mediaani(self,syotteen_nimi):
         syotteet=Syote.objects.filter(tehtava=self).filter(lyhenne=syotteen_nimi)
