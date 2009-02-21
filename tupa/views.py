@@ -18,60 +18,7 @@ def sarja(request,sarja_id) :
 
 def tulokset(request,sarja_id):
     sarja = Sarja.objects.filter(id=sarja_id)[0]
-
-    kisat = Kisa.objects.all()
-    for i in kisat :
-         i.laskeTulokset()
-
-    vartiot = Vartio.objects.all() 
-    tehtavat = Tehtava.objects.all() 
-    taulukko= []
-    ekarivi= []
-
-    # ekarivi
-    ekarivi.append( "Sij")
-    ekarivi.append( "No")
-    ekarivi.append( "Vartio" )
-    ekarivi.append( "Yht" )
-    for t in tehtavat :
-           ekarivi.append( t.nimi )
-    taulukko.append(ekarivi)
-  
-    # tokarivi
-    tokarivi= []
-    tokarivi.append( " " )
-    tokarivi.append( " " )
-    tokarivi.append( "Maxpisteet" )
-    tokarivi.append( sarja.maksimipisteet )
-    for t in tehtavat :
-           tokarivi.append( t.maksimipisteet)
-    taulukko.append(tokarivi)
-
-    # vartiot
-    tulostaulu=[]
-    for v in vartiot :
-       rivi = []
-       rivi.append("")
-       rivi.append(v.nro)
-       rivi.append(v.nimi)
-       yhteensa = 0.0
-       rivi.append(yhteensa)
-       for t in tehtavat :
-           pisteet = Lopputulos.objects.filter(vartio=v).filter(tehtava=t)[0].pisteet
-           if pisteet!=None:
-               rivi.append("%.1f" % pisteet)
-               yhteensa=yhteensa + pisteet
-           else:
-               rivi.append("-")
-       rivi[3]=yhteensa
-       tulostaulu.append(rivi)
-
-    tulostaulu.sort(key=operator.itemgetter(3))
-    tulostaulu.reverse()
-    for i in range(len(tulostaulu)) :
-         tulostaulu[i][0]=i+1
-         tulostaulu[i][3]="%.1f" % tulostaulu[i][3]
-    taulukko=taulukko+tulostaulu
-    return render_to_response('tupa/tulokset.html', {'tulos_taulukko' : taulukko , 'sarja_objekti' : sarja } )
+    tulokset=sarja.laskeTulokset()
+    return render_to_response('tupa/tulokset2.html', {'tulos_taulukko' : tulokset }  )
 
 

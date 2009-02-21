@@ -37,6 +37,8 @@ def haeSulku(lause):
     else: 
         return None
 
+
+
 class Laskin :
     """
     Luokka jonka objektit laskevat tulospalvelun tulokset yhdelle vartiolle yhteen tehtävään
@@ -127,7 +129,7 @@ class Laskin :
                 muokattu = muokattu.replace(i, j)  
         return peruslaskin.laske(muokattu)
 
-    def laskeTulos(self,syotteet,tehtava) :
+    def laskePisteet(self,syotteet,tehtava):
         """
         Laskee tuloksen valitulle tehtävälle ja syötteille.
         Palauttaa tuloksen jos tulos oli laskettavissa.
@@ -143,4 +145,22 @@ class Laskin :
            #muuttujat.append( (s.nimi, str(s.arvo) ) )
         # Lasketaan tulokset
         return self.laske(self.teht.kaava, dict(muuttujat), { "minmax" : "self.minmax" ,"max" : "self.max", "min" : "self.min" , "med" : "self.med", "interpoloi" : "self.interpoloi" } ) 
+
+    def laskeSarja(self,sarja):
+        """
+        Laskee tulokset halutulle sarjalle. 
+        Palauttaa kaksiuloitteisen taulukon[vartio][tehtävä]=pisteet.
+        Taulukon ensimmäisissä sarakkeissa on vartio tai tehtävä objekteja muissa pisteitä.
+        """
+        tulokset=[sarja]
+        tehtavat = sarja.tehtava_set.all()
+        tulokset.append(tehtavat)
+        vartiot = sarja.vartio_set.all()
+        for v in vartiot :
+            rivi=[v]
+            for t in tehtavat: 
+                syotteet = Syote.objects.filter(maarite__tehtava=t).filter(vartio=v)
+                rivi.append( self.laskePisteet( syotteet, t ) )
+            tulokset.append(rivi)
+        return tulokset
 
