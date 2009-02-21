@@ -40,9 +40,7 @@ class Sarja(models.Model) :
     class Meta:
         verbose_name_plural = "Sarjat"
     def laskeTulokset(self) :
-        rastit = Rasti.objects.filter(sarja=self)
-        for r in rastit :
-            r.laskeTulokset()
+        return Laskin().laskeSarja(self)
 
 class Vartio(models.Model) :
     nimi = models.CharField(maxlength=255)
@@ -137,7 +135,7 @@ class Tehtava(models.Model) :
 
 class Rata(models.Model) :
     sarja = models.ForeignKey(Sarja,edit_inline=models.TABULAR)
-    rasti = models.ForeignKey(Rasti,core=True)
+rasti = models.ForeignKey(Rasti,core=True)
     jarjestysnro = models.IntegerField(core=True)
     class Admin:
         pass

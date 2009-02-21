@@ -18,7 +18,8 @@ def sarja(request,sarja_id) :
 
 def tulokset(request,sarja_id):
     sarja = Sarja.objects.filter(id=sarja_id)[0]
-    tulokset=sarja.laskeTulokset()
+    tulokset= sarja.laskeTulokset()
+    print tulokset[0][0].nimi
     return render_to_response('tupa/tulokset2.html', {'tulos_taulukko' : tulokset }  )
 
 

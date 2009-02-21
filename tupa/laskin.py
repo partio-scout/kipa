@@ -152,14 +152,22 @@ class Laskin :
         Palauttaa kaksiuloitteisen taulukon[vartio][tehtävä]=pisteet.
         Taulukon ensimmäisissä sarakkeissa on vartio tai tehtävä objekteja muissa pisteitä.
         """
-        tulokset=[sarja]
-        tehtavat = sarja.tehtava_set.all()
-        tulokset.append(tehtavat)
+        tulokset=[[sarja]]
+        rastit = sarja.rasti_set.all()
+        tehtavat=[]
+        for r in rastit :
+             for t in r.tehtava_set.all():
+                  tehtavat.append( t )
+                  tulokset[0].append(t)
         vartiot = sarja.vartio_set.all()
         for v in vartiot :
             rivi=[v]
             for t in tehtavat: 
-                syotteet = Syote.objects.filter(maarite__tehtava=t).filter(vartio=v)
+                maaritteet = t.syotemaarite_set.all()
+                syotteet = []
+                for m in maaritteet :
+                     for s in m.syote_set.filter(vartio=v):
+                          syotteet.append( s )
                 rivi.append( self.laskePisteet( syotteet, t ) )
             tulokset.append(rivi)
         return tulokset
