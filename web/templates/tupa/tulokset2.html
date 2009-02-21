@@ -1,25 +1,18 @@
 <A href='../../admin/'>AdminSivu </A>
 
 <h1>NÄYTÄ TULOKSET</h1>
-{{ sarja_objekti.kisa.nimi }} <br> 
-<br>
-<p>
+ {{ tulos_taulukko.0.0.kisa.nimi}} <br>  
 
+<br
+<p>
 {% if tulos_taulukko %}
 	<table width="600" border="1">
-	    <tr>
-		    <td>{{ tulos_taulukko[0][0].nimi }}</td>
-			{% for sarake in tulos_taulukko[0] %}
-				<td>{{ sarake.nimi }}</td>
-			{% endfor %}    
-		</tr>
-		{% for rivi in tulos_taulukko %}
-			<tr>
-				<td>{{ sarake.nimi }}</td>
-			{% for sarake in tulos_taulukko %}
-				<td>{{ sarake }}</td>
-			{% endfor %}    
-			</tr>    
+		{% for rivi in tulos_taulukko%}
+                      <tr>
+			    {% for sarake in rivi %}
+			        <td>{{ sarake }}</td>
+			    {% endfor %}    
+		      </tr>    
 		{% endfor %}
 	</table>
        
