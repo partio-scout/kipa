@@ -9,7 +9,7 @@
 #Tested to work on(etch testing 13-08-2007):
 #  Python 2.4.4 (#2, Jul 17 2007, 11:56:54)
 #  [GCC 4.1.3 20070629 (prerelease) (Debian 4.1.2-13)] on linux2
-
+class_prefix="Luotu"
 dependclasses=["User","Group" ,"Permission" , "Message"]
 
 import codecs
@@ -19,7 +19,7 @@ from xml.dom.minidom import *
 import re
 
 #Type dictionary translation types SQL -> Django
-tsd = {"text":"TextField" , "date":"DateField" , "varchar":"CharField" , "int":"IntegerField" , "float":"FloatField" , "serial":"AutoField" , "boolean":"BooleanField" , "numeric":"FloatField" , "timestamp":"DateTimeField" , "bigint":"IntegerField" , "datetime":"DateTimeField"  , "date":"DateField" , "time" : "TimeField" , "bool" : "BooleanField" , "int" : "IntegerField"}
+tsd = {"text":"TextField" , "date":"DateField" , "varchar":"CharField" , "int":"IntegerField" , "float":"FloatField" , "serial":"AutoField" , "boolean":"BooleanField" , "numeric":"FloatField" , "timestamp":"DateTimeField" , "bigint":"IntegerField" , "datetime":"DateTimeField"  , "date":"DateField" , "time" : "TimeField" , "bool" : "BooleanField" , "int" : "IntegerField" , "decimal":"FloatField"}
 
 #convert varchar -> CharField
 v2c = re.compile('varchar\((\d+)\)')
@@ -65,7 +65,7 @@ def dia2django(archivo):
                 if j.nodeType==Node.ELEMENT_NODE and j.hasAttributes():
                     if j.getAttribute("name")=="name":
                         actclas=j.getElementsByTagName("dia:string")[0].childNodes[0].data[1:-1]
-                        myname= "\nclass %s(models.Model) :\n" % actclas
+                        myname= "class "+class_prefix+"%s(models.Model) :\n" % actclas
                         clases[actclas]=[[],myid,myname,0]
                     if j.getAttribute("name")=="attributes":
                         for l in j.getElementsByTagName("dia:composite") :
@@ -104,7 +104,7 @@ def dia2django(archivo):
                                         if myfor not in dependclasses:
                                             #In case we are using Auth classes or external via protected dia visibility
                                             clases[actclas][0].append(myfor)
-                                    tc="models."+tc
+                                    tc="ManyToManyField" #"models."+tc[:16] + tc[16:]
                                     if len(val)>0:
                                         tc=tc.replace(")",","+val+")")
                                 elif tc.find("Field")!=-1 :
@@ -122,7 +122,7 @@ def dia2django(archivo):
                                         if myfor not in dependclasses:
                                             #In case we are using Auth classes
                                             clases[actclas][0].append(myfor)
-                                    tc="models."+tc
+                                    tc="ForeignKey" #"models."+tc[:11] + tc[11:]
                                     if len(val)>0:
                                         tc=tc.replace(")",","+val+")")
                                 elif varch==None :
@@ -132,7 +132,8 @@ def dia2django(archivo):
                                     if len(val)>0 :
                                         tc=tc.replace(")",", "+val+" )")
                                 if not (nc=="id" and tc=="AutoField()"):
-                                    clases[actclas][2]=clases[actclas][2]+("    %s = %s\n" % (nc,tc))
+                                    if not tc=="ForeignKey" and not tc=="ManyToManyField":
+                                        clases[actclas][2]=clases[actclas][2]+("    %s = %s\n" % (nc,tc))
         elif i.getAttribute("type")=="UML - Generalization":
             mycons=['A','A']
             a=i.getElementsByTagName("dia:connection")
@@ -189,5 +190,5 @@ if __name__ == '__main__':
         if len(sys.argv) == 2:
             dia2django(sys.argv[1])
         else :
-            print " Uso:\n \n   "+sys.argv[0]+" diagram.dia\n\n"
+            print " Use:\n \n   "+sys.argv[0]+" diagram.dia\n\n"
 
