@@ -1,3 +1,4 @@
+#coding latin1
 from django.db import models
 
 from random import uniform
@@ -29,7 +30,6 @@ class Kisa(models.Model) :
 
 class Sarja(models.Model) :
     nimi = models.CharField(maxlength=255,core=True)
-    maksimipisteet = models.FloatField(max_digits=5,decimal_places=2,core=True)
     vartion_maksimikoko = models.IntegerField(blank=True,null=True)
     vartion_minimikoko = models.IntegerField(blank=True,null=True)
     kisa = models.ForeignKey(Kisa,edit_inline=models.TABULAR)
@@ -144,20 +144,25 @@ class Rata(models.Model) :
     class Meta:
         verbose_name_plural = "Radat"
 
-class Syote(models.Model) :
-    nimi = models.CharField(maxlength=255,blank=True)
+class SyoteMaarite(models.Model):
+    nimi = models.CharField(maxlength=255,blank=True,core=True)
+    tyyppi = models.CharField(maxlength=255,blank=True,core=True)
     kali_vihje = models.CharField(maxlength=255,blank=True)
-    lyhenne = models.CharField(maxlength=255,core=True)
-    arvo = models.FloatField(max_digits=20,decimal_places=4,null=True,blank=True)
-    vartio = models.ForeignKey(Vartio,null=True,blank=True)
     tehtava = models.ForeignKey(Tehtava,edit_inline=models.TABULAR)
-    parametri = models.BooleanField()
+    class Meta:
+        verbose_name_plural = "Syotteen Maaritteet"
+
+class Syote(models.Model) :
+    arvo = models.CharField(maxlength=255,blank=True)
+    vartio = models.ForeignKey(Vartio,null=True,blank=True)
+    maarite = models.ForeignKey(SyoteMaarite)
     def __str__(self) :
         return self.nimi
     class Admin:
         pass
     class Meta:
         verbose_name_plural = "Syotteet"
+
 
 class Lopputulos(models.Model) :
     vartio = models.ForeignKey(Vartio)
