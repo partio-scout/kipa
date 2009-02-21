@@ -97,7 +97,7 @@ class Tehtava(models.Model) :
     nimi = models.CharField(maxlength=255,core=True)
     maksimipisteet = models.FloatField(decimal_places=2, max_digits=5)
     tehtavaryhma = models.CharField(maxlength=255,blank=True)
-    tehavaluokka = models.CharField(maxlength=255,blank=True)
+    tehtavaluokka = models.CharField(maxlength=255,blank=True)
     rastikasky = models.TextField(blank=True)
     jarjestysnro = models.IntegerField()
     kaava = models.CharField(maxlength=255)
