@@ -82,5 +82,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'web.tupa',
-    'django.contrib.admin'
+    'django.contrib.admin',
+    'django.contrib.formtools',
+    'django.template'
 )
