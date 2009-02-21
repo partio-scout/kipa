@@ -118,7 +118,7 @@ class Tehtava(models.Model) :
 
 class Rata(models.Model) :
     sarja = models.ForeignKey(Sarja,edit_inline=models.TABULAR)
-rasti = models.ForeignKey(Rasti,core=True)
+    rasti = models.ForeignKey(Rasti,core=True)
     jarjestysnro = models.IntegerField(core=True)
     class Admin:
         pass
@@ -130,6 +130,10 @@ class SyoteMaarite(models.Model):
     tyyppi = models.CharField(maxlength=255,blank=True,core=True)
     kali_vihje = models.CharField(maxlength=255,blank=True)
     tehtava = models.ForeignKey(Tehtava,edit_inline=models.TABULAR)
+    def __str__(self) :
+        return self.nimi
+    class Admin:
+        pass
     class Meta:
         verbose_name_plural = "Syotteen Maaritteet"
 
@@ -138,12 +142,11 @@ class Syote(models.Model) :
     vartio = models.ForeignKey(Vartio,null=True,blank=True)
     maarite = models.ForeignKey(SyoteMaarite)
     def __str__(self) :
-        return self.nimi
+        return self.vartio.nimi + " " + self.maarite.nimi + " " + self.maarite.tehtava.nimi
     class Admin:
         pass
     class Meta:
         verbose_name_plural = "Syotteet"
-
 
 class PoikkeavaTulos(models.Model) :
     vartio = models.ForeignKey(Vartio)
