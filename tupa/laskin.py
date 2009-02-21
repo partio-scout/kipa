@@ -141,7 +141,7 @@ class Laskin :
         muuttujat=[]
         for s in syotteet:
            muuttujat.append( ("tmax" ,str(self.teht.maksimipisteet) ))
-           muuttujat.append( (s.lyhenne , str(s.arvo) ) )
+           muuttujat.append( (s.maarite.nimi , str(s.arvo) ) )
            #muuttujat.append( (s.nimi, str(s.arvo) ) )
         # Lasketaan tulokset
         return self.laske(self.teht.kaava, dict(muuttujat), { "minmax" : "self.minmax" ,"max" : "self.max", "min" : "self.min" , "med" : "self.med", "interpoloi" : "self.interpoloi" } ) 
