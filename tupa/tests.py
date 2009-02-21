@@ -42,8 +42,23 @@ class peruslaskin_test(unittest.TestCase):
         
     def testEiaritmtetiikkaa(self):
         assert    laske('a+ b-c*d') == None
-
+    
+    def testkaksikertomerkkia(self):
+        assert    laske('5+2**5') == None
      
+    def testkaksiplusmerkkia(self):
+        assert    laske('5+2++5') == None
+        
+    def testkaksimiinusmerkkia(self):
+        assert    laske('5+2--5') == None
+        
+    def testplusmiinus(self):
+        assert    laske('5+2+-5') == None 
+      
+    def testkertojako(self):
+        assert    laske('5+2*/5') == None
+
+       
 class lasketulos_test(unittest.TestCase):
 
     """
