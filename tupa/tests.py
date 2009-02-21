@@ -56,6 +56,62 @@ class lasketulos_test(unittest.TestCase):
         perusTehtava.kaava="a+b"
         assert  laskia.laskeTulos([a,b],perusTehtava) == '7'
 
+class tietokanta_test(unittest.TestCase):
 
+    """
+    Testataan laskimen kyky‰ ronkkia tietokantaa ja laskea saatu data j‰rkev‰sti. Setupissa m‰‰ritell‰‰n testitietokanta jota k‰ytet‰‰n kaikissa muissa testeiss‰.
+    """
 
-
+    def setup(self):
+        
+        Testikisa = Kisa()
+        Testikisa.nimi = "testikisa"
+        Testikisa.save()
+        
+        Testisarja = Sarja()
+        Testisarja.nimi = "valkoinen"
+        Testisarja.Kisa = Testikisa
+        Testisarja.save()
+        
+        Testivartio = Vartio()
+        Testivartio.nimi = "trikoopellet"
+        Testivartio.Sarja = Testivartio
+        Testivartio.save()
+        
+        Testirasti = Rasti()
+        Testirasti.nimi = "eka_testirasti"
+        Testirasti.Sarja = Testirasti
+        Testirasti.save()
+        
+        Testitehtava = Tehtava()
+        Testitehtava.nimi = "ekatehtava"
+        Testitehtava.Rasti = Testitehtava
+        Testitehtava.kaava = "eka_syote_desimaaliluku+toka_syote_desimaaliluku" 
+        Testitehtava.save()
+        
+        TestiSyoteMaarite1 = SyoteMaarite()
+        TestiSyoteMaarite1.nimi = "eka_syote_desimaaliulku"
+        TestiSyoteMaarite1.Tehtava = TestiSyoteMaarite1
+        TestiSyoteMaarite1.save()
+        
+        TestiSyoteMaarite2 = SyoteMaarite()
+        TestiSyoteMaarite2.nimi = "toka syote_desimaaliluku"
+        TestiSyoteMaarite2.Tehtava = TestiSyoteMaarite2
+        TestiSyoteMaarite2.save()
+        
+        TestiSyoteArvo1 = Syote()
+        TestiSyoteArvo1.arvo = "5"
+        TestiSyoteArvo1.Maarite = TestiSyoteMaarite1
+        TestiSyoteMaarite1.vartio = Testivartio
+        
+        TestiSyoteArvo2 = Syote()
+        TestiSyoteArvo2.arvo = "10"
+        TestiSyoteArvo2.Maarite = TestiSyoteMaarite2
+        TestiSyoteMaarite2.vartio = Testivartio
+        
+        
+    def testlaskevartionpisteet(self):       
+            LaskettavaSarja = Sarja.objects.all().filter(name="valkoinen").filter(kisa__nimi="testikisa")
+            assert Laskin().laskeSarja(LaskettavaSarja) == "15"
+        
+        
