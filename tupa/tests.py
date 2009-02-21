@@ -62,56 +62,58 @@ class tietokanta_test(unittest.TestCase):
     Testataan laskimen kyky‰ ronkkia tietokantaa ja laskea saatu data j‰rkev‰sti. Setupissa m‰‰ritell‰‰n testitietokanta jota k‰ytet‰‰n kaikissa muissa testeiss‰.
     """
 
-    def setup(self):
-        
-        Testikisa = Kisa()
-        Testikisa.nimi = "testikisa"
+    def setUp(self):
+        Testikisa = Kisa(nimi="testikisa")
         Testikisa.save()
         
-        Testisarja = Sarja()
-        Testisarja.nimi = "valkoinen"
-        Testisarja.Kisa = Testikisa
+        Testisarja = Sarja(nimi="valkoinen",kisa=Testikisa)
         Testisarja.save()
         
         Testivartio = Vartio()
         Testivartio.nimi = "trikoopellet"
-        Testivartio.Sarja = Testivartio
+        Testivartio.nro = 1
+        Testivartio.sarja = Testisarja
         Testivartio.save()
         
         Testirasti = Rasti()
         Testirasti.nimi = "eka_testirasti"
-        Testirasti.Sarja = Testirasti
+        Testirasti.sarja = Testisarja
         Testirasti.save()
         
         Testitehtava = Tehtava()
         Testitehtava.nimi = "ekatehtava"
-        Testitehtava.Rasti = Testitehtava
+        Testitehtava.rasti = Testirasti
+        Testitehtava.jarjestysnro = 1
         Testitehtava.kaava = "eka_syote_desimaaliluku+toka_syote_desimaaliluku" 
         Testitehtava.save()
         
         TestiSyoteMaarite1 = SyoteMaarite()
-        TestiSyoteMaarite1.nimi = "eka_syote_desimaaliulku"
-        TestiSyoteMaarite1.Tehtava = TestiSyoteMaarite1
+        TestiSyoteMaarite1.nimi = "eka_syote_desimaaliluku"
+        TestiSyoteMaarite1.tehtava = Testitehtava
         TestiSyoteMaarite1.save()
         
         TestiSyoteMaarite2 = SyoteMaarite()
-        TestiSyoteMaarite2.nimi = "toka syote_desimaaliluku"
-        TestiSyoteMaarite2.Tehtava = TestiSyoteMaarite2
+        TestiSyoteMaarite2.nimi = "toka_syote_desimaaliluku"
+        TestiSyoteMaarite2.tehtava = Testitehtava
         TestiSyoteMaarite2.save()
         
         TestiSyoteArvo1 = Syote()
         TestiSyoteArvo1.arvo = "5"
-        TestiSyoteArvo1.Maarite = TestiSyoteMaarite1
-        TestiSyoteMaarite1.vartio = Testivartio
-        
+        TestiSyoteArvo1.maarite = TestiSyoteMaarite1
+        TestiSyoteArvo1.vartio = Testivartio
+        TestiSyoteArvo1.save()
+
         TestiSyoteArvo2 = Syote()
         TestiSyoteArvo2.arvo = "10"
-        TestiSyoteArvo2.Maarite = TestiSyoteMaarite2
-        TestiSyoteMaarite2.vartio = Testivartio
+        TestiSyoteArvo2.maarite = TestiSyoteMaarite2
+        TestiSyoteArvo2.vartio = Testivartio
+        TestiSyoteArvo2.save()
         
         
     def testlaskevartionpisteet(self):       
-            LaskettavaSarja = Sarja.objects.all().filter(name="valkoinen").filter(kisa__nimi="testikisa")
-            assert Laskin().laskeSarja(LaskettavaSarja) == "15"
+            LaskettavaSarja = Sarja.objects.filter(nimi="valkoinen").filter(kisa__nimi="testikisa")[0]
+            tulokset = Laskin().laskeSarja(LaskettavaSarja) 
+            assert tulokset[1][1]== "15"
+       
         
         

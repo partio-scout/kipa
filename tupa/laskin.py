@@ -140,7 +140,6 @@ class Laskin :
         # Tulkataan muuttujat
         muuttujat=[]
         for s in syotteet:
-           muuttujat.append( ("tmax" ,str(self.teht.maksimipisteet) ))
            muuttujat.append( (s.maarite.nimi , str(s.arvo) ) )
            #muuttujat.append( (s.nimi, str(s.arvo) ) )
         # Lasketaan tulokset
