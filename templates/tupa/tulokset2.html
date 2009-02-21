@@ -1,0 +1,38 @@
+<A href='../../admin/'>AdminSivu </A>
+
+<h1>NÄYTÄ TULOKSET</h1>
+{{ sarja_objekti.kisa.nimi }} <br> 
+<br>
+<p>
+
+{% if tulos_taulukko %}
+	<table width="600" border="1">
+	    <tr>
+		    <td>{{ sarja_objekti.nimi }}</td>
+			{% for tehtavien_lkm in XXX %}
+				<td>TEHTÄVÄN LYHENNE</td>
+			{% endfor %}    
+		</tr>
+		{% for rivi in tulos_taulukko %}
+			<tr>
+				<td>101 Tiput eli vartion numero ja nimi, Piiri</td>
+			{% for tehtavien_lkm in XXX %}
+				<td>VARTION TEHTÄVÄSTÄ SAAMAT PISTEET</td>
+			{% endfor %}    
+			</tr>    
+		{% endfor %}
+	</table>
+       
+{% else %}
+    <p>Ei tuloksia.</p>
+{% endif %}
+
+<p>
+ p = vartion suoritus puuttuu<br>
+ h = vartion suoritus hylätty<br>
+ k = vartio keskeyttänyt<br>
+</p>
+
+</form>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<A href='../../admin/'>AdminSivu </A>
+
+<h1>SYÖTÄ TEHTÄVÄ</h1>
+{{ sarja_objekti.kisa.nimi }} <br> 
+<br>
+<p>
+Sarja: {{ sarja_objekti.nimi }} <br>
+Tehtävä: {{ tehtava_objekti.nimi }} <br>
+
+<form id="form1" name="form1" method="post" action="">
+
+{% if vartio_taulukko %}
+	<table width="600" border="1">
+	    <tr>
+		    <td>Vartio</td>
+			{% for syötteiden_lkm in XXX %}
+				<td>SYÖTTEEN OTSIKKO</td>
+			{% endfor %}    
+		</tr>
+		{% for rivi in vartio_taulukko %}
+			<tr>
+				<td>101 Tiput eli vartion numero ja nimi</td>
+			{% for syötteiden_lkm in XXX %}
+				<td><input name="NUMERO" type="text" id="" tabindex="NUMERO" size="10" /></td>
+			{% endfor %}    
+			</tr>    
+		{% endfor %}
+	</table>
+       
+{% else %}
+    <p>Tehtävän syötteitä ei ole määritelty.</p>
+{% endif %}
+
+<p>
+ p = vartion suoritus puuttuu<br>
+ h = vartion suoritus hylätty<br>
+ k = vartio keskeyttänyt<br>
+</p>
+
+<label><input type="checkbox" name="checkbox1" value="checkbox" />tehtävä syötetty</label> <br />
+<label><input type="checkbox" name="checkbox2" value="checkbox" />tehtävä tarkistettu </label>
+
+<p>
+	<input name="Reset" type="reset" class="btn" onmouseover="this.className='btn btnhov'" onmouseout="this.className='btn'" value="Peru"/> 
+	<input name="Submit" type="submit" class="btn" onmouseover="this.className='btn btnhov'" onmouseout="this.className='btn'" value="Tallenna -&gt;"/>
+</p>
+
+</form>
+</body>
+</html>
