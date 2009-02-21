@@ -41,7 +41,6 @@ class Sarja(models.Model) :
 class Vartio(models.Model) :
     nimi = models.CharField(maxlength=255)
     nro = models.IntegerField()
-    kisa = models.ForeignKey(Kisa)
     sarja = models.ForeignKey(Sarja)
     piiri = models.CharField(maxlength=255,blank=True)
     lippukunta = models.CharField(maxlength=255,blank=True)
@@ -86,7 +85,6 @@ class Rasti(models.Model) :
 
 class Tehtava(models.Model) :
     nimi = models.CharField(maxlength=255,core=True)
-    maksimipisteet = models.FloatField(decimal_places=2, max_digits=5)
     tehtavaryhma = models.CharField(maxlength=255,blank=True)
     tehtavaluokka = models.CharField(maxlength=255,blank=True)
     rastikasky = models.TextField(blank=True)
