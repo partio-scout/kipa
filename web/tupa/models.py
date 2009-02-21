@@ -23,10 +23,6 @@ class Kisa(models.Model) :
         pass
     class Meta:
         verbose_name_plural = "Kisat"
-    def laskeTulokset(self) :
-        sarjat = Sarja.objects.filter(kisa=self)
-        for s in sarjat : 
-            s.laskeTulokset()
 
 class Sarja(models.Model) :
     nimi = models.CharField(maxlength=255,core=True)
@@ -86,10 +82,7 @@ class Rasti(models.Model) :
         pass
     class Meta:
         verbose_name_plural = "Rastit"
-    def laskeTulokset(self) :
-        tehtavat=Tehtava.objects.filter(rasti=self)
-        for t in tehtavat :
-            t.laskeTulokset()
+   
 
 class Tehtava(models.Model) :
     nimi = models.CharField(maxlength=255,core=True)
@@ -106,17 +99,7 @@ class Tehtava(models.Model) :
         pass
     class Meta:
         verbose_name_plural = "Tehtavat"
-    def laskeTulokset(self) :
-        sarjat = Sarja.objects.filter(rasti__tehtava=self)
-        vartiot = Vartio.objects.filter(sarja=sarjat[0])
-        for v in vartiot:
-            # Tuhotaan aikaisempi tulos
-            Lopputulos.objects.filter(vartio=v).filter(tehtava=self).delete()
-            # Haetaan syotteet:
-            syotteet=Syote.objects.filter(vartio=v).filter(tehtava=self)
-            # Lasketaan tulokset
-            tulos = Lopputulos( vartio=v, tehtava=self, pisteet = Laskin().laskeTulos(syotteet,self) )
-            tulos.save() 
+     
     def mediaani(self,syotteen_nimi):
         syotteet=Syote.objects.filter(tehtava=self).filter(lyhenne=syotteen_nimi)
         arvot=[]
@@ -162,14 +145,14 @@ class Syote(models.Model) :
         verbose_name_plural = "Syotteet"
 
 
-class Lopputulos(models.Model) :
+class PoikkeavaTulos(models.Model) :
     vartio = models.ForeignKey(Vartio)
     tehtava = models.ForeignKey(Tehtava)
-    pisteet = models.FloatField(decimal_places=2, max_digits=5,null=True,blank=True)
+    pisteet = models.CharField(maxlength=255)
     def __str__(self) :
         return self.tehtava.nimi + " " + self.vartio.nimi
     class Admin:
         pass
     class Meta:
-        verbose_name_plural = "Lopputulokset"
+        verbose_name_plural = "Poikkeavat tulokset"
 
