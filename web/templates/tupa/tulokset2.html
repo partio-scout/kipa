@@ -8,16 +8,16 @@
 {% if tulos_taulukko %}
 	<table width="600" border="1">
 	    <tr>
-		    <td>{{ sarja_objekti.nimi }}</td>
-			{% for tehtavien_lkm in XXX %}
-				<td>TEHTÄVÄN LYHENNE</td>
+		    <td>{{ tulos_taulukko[0][0].nimi }}</td>
+			{% for sarake in tulos_taulukko[0] %}
+				<td>{{ sarake.nimi }}</td>
 			{% endfor %}    
 		</tr>
 		{% for rivi in tulos_taulukko %}
 			<tr>
-				<td>101 Tiput eli vartion numero ja nimi, Piiri</td>
-			{% for tehtavien_lkm in XXX %}
-				<td>VARTION TEHTÄVÄSTÄ SAAMAT PISTEET</td>
+				<td>{{ sarake.nimi }}</td>
+			{% for sarake in tulos_taulukko %}
+				<td>{{ sarake }}</td>
 			{% endfor %}    
 			</tr>    
 		{% endfor %}
