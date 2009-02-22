@@ -33,7 +33,6 @@ class Kisa(models.Model) :
 
 class Sarja(models.Model) :
     nimi = models.CharField(maxlength=255,core=True)
-    maksimipisteet = models.FloatField(max_digits=5,decimal_places=2,core=True)
     vartion_maksimikoko = models.IntegerField(blank=True,null=True)
     vartion_minimikoko = models.IntegerField(blank=True,null=True)
     kisa = models.ForeignKey(Kisa,edit_inline=models.TABULAR)
@@ -44,14 +43,11 @@ class Sarja(models.Model) :
     class Meta:
         verbose_name_plural = "Sarjat"
     def laskeTulokset(self) :
-        rastit = Rasti.objects.filter(sarja=self)
-        for r in rastit :
-            r.laskeTulokset()
+        return Laskin().laskeSarja(self)
 
 class Vartio(models.Model) :
     nimi = models.CharField(maxlength=255)
     nro = models.IntegerField()
-    kisa = models.ForeignKey(Kisa)
     sarja = models.ForeignKey(Sarja)
     piiri = models.CharField(maxlength=255,blank=True)
     lippukunta = models.CharField(maxlength=255,blank=True)
@@ -99,9 +95,8 @@ class Rasti(models.Model) :
 
 class Tehtava(models.Model) :
     nimi = models.CharField(maxlength=255,core=True)
-    maksimipisteet = models.FloatField(decimal_places=2, max_digits=5)
     tehtavaryhma = models.CharField(maxlength=255,blank=True)
-    tehavaluokka = models.CharField(maxlength=255,blank=True)
+    tehtavaluokka = models.CharField(maxlength=255,blank=True)
     rastikasky = models.TextField(blank=True)
     jarjestysnro = models.IntegerField()
     kaava = models.CharField(maxlength=255)
@@ -112,17 +107,6 @@ class Tehtava(models.Model) :
         pass
     class Meta:
         verbose_name_plural = "Tehtavat"
-    def laskeTulokset(self) :
-        sarjat = Sarja.objects.filter(rasti__tehtava=self)
-        vartiot = Vartio.objects.filter(sarja=sarjat[0])
-        for v in vartiot:
-            # Tuhotaan aikaisempi tulos
-            Lopputulos.objects.filter(vartio=v).filter(tehtava=self).delete()
-            # Haetaan syotteet:
-            syotteet=Syote.objects.filter(vartio=v).filter(tehtava=self)
-            # Lasketaan tulokset
-            tulos = Lopputulos( vartio=v, tehtava=self, pisteet = Laskin().laskeTulos(syotteet,self) )
-            tulos.save() 
     def mediaani(self,syotteen_nimi):
         syotteet=Syote.objects.filter(tehtava=self).filter(lyhenne=syotteen_nimi)
         arvot=[]
@@ -148,16 +132,24 @@ class Rata(models.Model) :
     class Meta:
         verbose_name_plural = "Radat"
 
-class Syote(models.Model) :
+class SyoteMaarite(models.Model) :
     nimi = models.CharField(maxlength=255,blank=True)
     kali_vihje = models.CharField(maxlength=255,blank=True)
-    lyhenne = models.CharField(maxlength=255,core=True)
-    arvo = models.FloatField(max_digits=20,decimal_places=4,null=True,blank=True)
-    vartio = models.ForeignKey(Vartio,null=True,blank=True)
+    tyyppi = models.CharField(maxlength=255,core=True)
     tehtava = models.ForeignKey(Tehtava,edit_inline=models.TABULAR)
-    parametri = models.BooleanField()
     def __str__(self) :
         return self.nimi
+    class Admin:
+        pass
+    class Meta:
+        verbose_name_plural = "Syotteen maaritteet"
+
+class Syote(models.Model) :
+    arvo = models.CharField(maxlength=255,blank=True)
+    vartio = models.ForeignKey(Vartio,null=True,blank=True)
+    maarite = models.ForeignKey(SyoteMaarite)
+    def __str__(self) :
+        return self.vartio.nimi + " " + self.maarite.nimi + " " + self.maarite.tehtava.nimi
     class Admin:
         pass
     class Meta:
