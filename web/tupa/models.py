@@ -26,10 +26,6 @@ class Kisa(models.Model) :
         pass
     class Meta:
         verbose_name_plural = "Kisat"
-    def laskeTulokset(self) :
-        sarjat = Sarja.objects.filter(kisa=self)
-        for s in sarjat : 
-            s.laskeTulokset()
 
 class Sarja(models.Model) :
     nimi = models.CharField(maxlength=255,core=True)
@@ -88,10 +84,6 @@ class Rasti(models.Model) :
         pass
     class Meta:
         verbose_name_plural = "Rastit"
-    def laskeTulokset(self) :
-        tehtavat=Tehtava.objects.filter(rasti=self)
-        for t in tehtavat :
-            t.laskeTulokset()
 
 class Tehtava(models.Model) :
     nimi = models.CharField(maxlength=255,core=True)
