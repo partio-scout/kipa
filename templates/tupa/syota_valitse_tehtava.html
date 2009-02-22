@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Teht&auml;v&auml;n sy&ouml;tt&ouml;</title>
+<link href="main.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="tabcontent.css" />
+
+<script type="text/javascript" src="tabcontent.js">
+/***********************************************
+* Tab Content script v2.2- © Dynamic Drive DHTML code library (www.dynamicdrive.com)
+* This notice MUST stay intact for legal use
+* Visit Dynamic Drive at http://www.dynamicdrive.com/ for full source code
+***********************************************/
+</script>
+</head>
+<body>
+
+<A href='../../admin/'>AdminSivu </A>
+
+<h2>Tulosten syöttö</h2>
+<h3>Valitse sarja ja tehtävä</h3>
+
+<br>
+
+{% if tehtava_taulukko %}
+	<ul id="sarjatabs" class="shadetabs">
+		{% for sarja in tehtava_taulukko%}
+		    {% ifequal sarja tehtava_taulukko.0  %}
+			    <li><a href="#" rel="sarja{{ sarja.id }}" class="selected">{{ sarja.nimi }}</a></li>
+			{% else %}
+			    <li><a href="#" rel="sarja{{ sarja.id }}">{{ sarja.nimi }}</a></li>
+		    {% endifequal %}
+		{% endfor %}
+	</ul>
+       
+	<div style="border:1px solid gray; width:800px; margin-bottom: 1em; padding: 10px">
+	
+		{% for sarja in tehtava_taulukko%}
+		<div id="sarja{{ sarja.id }}" class="tabcontent">
+			<ul id="tehtavatabs" class="">
+				{% for tehtava in tehtava_taulukko %}
+					<li><a href="/tupa/syota/tehtava/{{ tehtava.id }}">{{ tehtava.numero }}  {{ tehtava.nimi }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+		{% endfor %}
+	</div>
+{% endfor %}
+
+
+
+{% else %}
+    <p>Ei määriteltyjä sarjoja tai tehtäviä.</p>
+{% endif %}
+
+<script type="text/javascript">
+	var sarjat=new ddtabcontent("sarjatabs")
+	sarjat.setpersist(true)
+	sarjat.setselectedClassTarget("link") //"link" or "linkparent"
+	sarjat.init()
+</script>
+
+</body>
+</html>
