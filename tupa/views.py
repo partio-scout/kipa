@@ -11,18 +11,32 @@ def index(request):
       kisat = Kisa.objects.all()
       return render_to_response('tupa/index.html', {'latest_kisa_list': kisat })
 
-def kisa(request,kisa_nimi):
+def kisa(request,kisa_nimi) :
+      return render_to_response('tupa/kisa.html', { })
+
+def tulosta(request,kisa_nimi):
       sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
-      return render_to_response('tupa/kisa.html', {'sarja_list': sarjat })
+      return render_to_response('tupa/tulosta.html', {'sarja_list': sarjat })
 
 def maaritaKisa(request, kisa_nimi):
-      return HttpResponse("KISAN " + kisan_nimi + " MÄÄRITYS"  )
+      return HttpResponse("KISAN " + kisa_nimi + " MÄÄRITYS"  )
 
 def maaritaTehtava(request, kisa_nimi, tehtava_id):
       return HttpResponse(kisan_nimi + " TEHTAVAN " + tehtava_id + " MÄÄRITYS")
 
 def syotaKisa(request, kisa_nimi):
-      return HttpResponse("KISAN " + kisa_nimi + " SYÖTTÖ")
+      sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
+      taulukko = []
+      for s in sarjat :
+          rastit= s.rasti_set.all()
+          rastin_tehtavat=[]
+          for r in rastit :
+              tehtavat=r.tehtava_set.all()
+              for t in tehtavat:
+                   rastin_tehtavat.append( t ) 
+          taulukko.append( ( s ,rastin_tehtavat ) )
+      print taulukko
+      return render_to_response('tupa/syota_valitse_tehtava.html', { 'tehtava_taulukko' : taulukko } )
 
 def syotaTehtava(request, kisa_nimi , tehtava_id) :
       return HttpResponse( kisa_nimi + " TEHTÄVÄN " + tehtava_id + " SYÖTTÖ")

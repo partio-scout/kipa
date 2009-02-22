@@ -1,12 +1,14 @@
 <A href='./admin/'>AdminSivu </A> <br>
 
-<h1> Kisat </h1>
 {% if latest_kisa_list %}
+    <h1> Kisat:</h1>
     <ul>
     {% for kisa in latest_kisa_list %}
         <A href='{{kisa.nimi}}/' > {{kisa.nimi}} </A> <br>
     {% endfor %}
     </ul>
+
+
 {% else %}
     <p>Ei määriteltyjä kisoja.</p>
 {% endif %}
