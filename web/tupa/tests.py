@@ -58,27 +58,50 @@ class peruslaskin_test(unittest.TestCase):
     def testkertojako(self):
         assert    laske('5+2*/5') == None
 
+    def testLaskettuNegatiivinenOperandi(self):
+        assert    laske('3*(1-5)') == "-12"
+
        
 class lasketulos_test(unittest.TestCase):
-
     """
     Laskimen lasketulos luokan (eli ns. päätason) unit testit
     """
-    """
     def testLaske_muuttujat(self):
+        perusKisa=Kisa()
+        perusKisa.nimi="Peruskisa"
+        perusKisa.save()
+        perusSarja = Sarja()
+        perusSarja.kisa=perusKisa
+        perusSarja.nimi="PerusSarja"
+        perusSarja.save()
+        perusRasti = Rasti()
+        perusRasti.sarja=perusSarja
+        perusRasti.nimi="PerusRasti"
+        perusRasti.save()
         perusTehtava = Tehtava()
+        perusTehtava.rasti=perusRasti
+        perusTehtava.nimi="PerusTehtava"
+        perusTehtava.save()
         a = Syote()
         b = Syote()
-        a.maarite=SyoteMaarite()
-        b.maarite=SyoteMaarite()
+        maariteA=SyoteMaarite()
+        maariteB=SyoteMaarite()
+        maariteA.nimi = "a"
+        maariteB.nimi = "b"
+        maariteA.tehtava = perusTehtava
+        maariteB.tehtava = perusTehtava
+        maariteA.save()
+        maariteB.save()
+        a.maarite=maariteA
+        b.maarite=maariteB
+        a.save()
+        b.save()
         laskia = Laskin()
-        a.maarite.nimi = "a"
         a.arvo=5
-        b.maarite.nimi= "b"
         b.arvo=2
         perusTehtava.kaava="a+b"
         assert  laskia.laskePisteet([a,b],perusTehtava) == '7'
-    """
+    
    
 
 class tietokanta_test(unittest.TestCase):
@@ -139,15 +162,5 @@ class tietokanta_test(unittest.TestCase):
         LaskettavaSarja = Sarja.objects.filter(nimi="valkoinen").filter(kisa__nimi="testikisa")[0]
         tulokset = Laskin().laskeSarja(LaskettavaSarja) 
         assert tulokset[1][1]== "15"
-    """    
-    def testMinMax(self):
-        laskettavaSarja = Sarja.objects.filter(nimi="valkoinen").filter(kisa__nimi="testikisa")[0]
-        perusTehtava= Tehtava.objects.filter(nimi="ekatehtava")[0]
-        perusTehtava.kaava="minmax(1,5,eka_syote_desimaaliluku+toka_syote_desimaaliluku)"
-        perusTehtava.save()
-        assert  Laskin().laskeSarja(laskettavaSarja)[1][1] == '5'
-        perusTehtava.kaava="minmax(20,25,eka_syote_desimaaliluku+toka_syote_desimaaliluku)"
-        perusTehtava.save()
-        assert  Laskin().laskeSarja(laskettavaSarja)[1][1] == '20'
-    """
+        
         
