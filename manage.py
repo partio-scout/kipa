@@ -1,4 +1,6 @@
 #!/usr/bin/python
+import sys
+from tupa.dia2django import luoMallienRungot
 from django.core.management import execute_manager
 try:
     import settings # Assumed to be in the same directory.
@@ -8,4 +10,7 @@ except ImportError:
     sys.exit(1)
 
 if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        if sys.argv[1]=="syncdb":
+             luoMallienRungot("tupa/tietokanta.dia","tupa/models.py")
     execute_manager(settings)

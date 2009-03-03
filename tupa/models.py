@@ -4,9 +4,12 @@ from random import uniform
 from laskin import *
 from django import newforms as forms
 
-
 class Allergia(models.Model) :
+    #gen_dia_class Allergia
+
     mille = models.CharField(maxlength=255)
+
+    #end_dia_class
     def __str__(self) :
         return self.mille
     class Admin:
@@ -17,9 +20,13 @@ class Allergia(models.Model) :
     
 
 class Kisa(models.Model) :
+    #gen_dia_class Kisa
+
     nimi = models.CharField(maxlength=255)
-    aika = models.DateField(blank=True,null=True)
-    paikka = models.CharField(maxlength=255,blank=True)
+    aika = models.DateField(blank=True, null=True )
+    paikka = models.CharField(maxlength=255, blank=True )
+
+    #end_dia_class
     def __str__(self) :
         return self.nimi
     class Admin:
@@ -28,10 +35,14 @@ class Kisa(models.Model) :
         verbose_name_plural = "Kisat"
 
 class Sarja(models.Model) :
-    nimi = models.CharField(maxlength=255,core=True)
-    vartion_maksimikoko = models.IntegerField(blank=True,null=True)
-    vartion_minimikoko = models.IntegerField(blank=True,null=True)
-    kisa = models.ForeignKey(Kisa,edit_inline=models.TABULAR)
+    #gen_dia_class Sarja
+
+    nimi = models.CharField(maxlength=255)
+    vartion_maksimikoko = models.IntegerField(blank=True, null=True, default=0 )
+    vartion_minimikoko = models.IntegerField(blank=True, null=True,default=0 )
+    kisa = models.ForeignKey(Kisa)
+
+    #end_dia_class
     def __str__(self) :
         return self.nimi
     class Admin:
@@ -42,15 +53,19 @@ class Sarja(models.Model) :
         return Laskin().laskeSarja(self)
 
 class Vartio(models.Model) :
+    #gen_dia_class Vartio
+
     nimi = models.CharField(maxlength=255)
     nro = models.IntegerField()
     sarja = models.ForeignKey(Sarja)
-    piiri = models.CharField(maxlength=255,blank=True)
-    lippukunta = models.CharField(maxlength=255,blank=True)
-    puhelinnro = models.CharField(maxlength=255,blank=True)
-    sahkoposti = models.CharField(maxlength=255,blank=True)
-    osoite = models.CharField(maxlength=255,blank=True)
-    keskeyttanyt = models.IntegerField(null=True,blank=True)
+    piiri = models.CharField(maxlength=255, blank=True )
+    lippukunta = models.CharField(maxlength=255, blank=True )
+    puhelinnro = models.CharField(maxlength=255, blank=True )
+    sahkoposti = models.CharField(maxlength=255, blank=True )
+    osoite = models.CharField(maxlength=255, blank=True )
+    keskeyttanyt = models.IntegerField(blank=True, null=True )
+
+    #end_dia_class
     def __str__(self) :
         return self.nimi
     class Admin:
@@ -59,14 +74,17 @@ class Vartio(models.Model) :
         verbose_name_plural = "Vartiot"
 
 class Henkilo(models.Model) :
+    #gen_dia_class Henkilo
+
     nimi = models.CharField(maxlength=255)
-    syntymavuosi = models.IntegerField(blank=True,null=True)
-    lippukunta = models.CharField(maxlength=255,blank=True)
-    jasennumero = models.CharField(maxlength=15,blank=True)
-    vartio= models.ForeignKey(Vartio,blank=True,null=True)
-    puhelin_nro = models.CharField(maxlength=15,blank=True)
-    homma = models.CharField(maxlength=255,blank=True)
-    allergia =	models.ManyToManyField(Allergia ,null=True , blank=True)
+    syntumavuosi = models.IntegerField(blank=True , null=True )
+    lippukunta = models.CharField(maxlength=255, blank=True, null=True )
+    jasennumero = models.CharField(maxlength=15, blank=True, null=True )
+    vartio_nro = models.IntegerField(blank=True, null=True )
+    puhelin_nro = models.CharField(maxlength=15, blank=True, null=True )
+    homma = models.CharField(maxlength=255, blank=True, null=True )
+
+    #end_dia_class
     class Admin:
         pass
     def __str__(self) :
@@ -75,9 +93,13 @@ class Henkilo(models.Model) :
         verbose_name_plural = "Henkilot"
 
 class Rasti(models.Model) :
-    nimi = models.CharField(maxlength=255,core=True)
-    sarja = models.ForeignKey(Sarja,edit_inline=models.TABULAR)
-    rastimiehet = models.ManyToManyField(Henkilo,blank=True)
+    #gen_dia_class Rasti
+
+    nimi = models.CharField(maxlength=255)
+    sarja = models.ForeignKey(Sarja)
+    rastimiehet = models.ManyToManyField(Henkilo, blank=True )
+
+    #end_dia_class
     def __str__(self) :
         return self.nimi
     class Admin:
@@ -86,13 +108,19 @@ class Rasti(models.Model) :
         verbose_name_plural = "Rastit"
 
 class Tehtava(models.Model) :
-    nimi = models.CharField(maxlength=255,core=True)
-    tehtavaryhma = models.CharField(maxlength=255,blank=True)
-    tehtavaluokka = models.CharField(maxlength=255,blank=True)
-    rastikasky = models.TextField(blank=True)
-    jarjestysnro = models.IntegerField()
+    #gen_dia_class Tehtava
+
+    nimi = models.CharField(maxlength=255)
+    maksimipisteet = models.FloatField(decimal_places=2, max_digits=5, null=True, blank=True )
+    tehtavaryhma = models.CharField(maxlength=255, blank=True )
+    tehtavaluokka = models.CharField(maxlength=255, blank=True )
+    rastikasky = models.TextField(blank=True )
+    jarjestysnro = models.IntegerField(blank=True, null=True )
     kaava = models.CharField(maxlength=255)
-    rasti = models.ForeignKey(Rasti,edit_inline=models.STACKED)
+    rasti = models.ForeignKey(Rasti)
+
+    #end_dia_class
+
     def __str__(self) :
         return self.nimi
     class Admin:
@@ -116,19 +144,28 @@ class Tehtava(models.Model) :
             return None
 
 class Rata(models.Model) :
-    sarja = models.ForeignKey(Sarja,edit_inline=models.TABULAR)
-    rasti = models.ForeignKey(Rasti,core=True)
-    jarjestysnro = models.IntegerField(core=True)
+    #gen_dia_class Rata
+
+    sarja = models.ForeignKey(Sarja)
+    rasti = models.ForeignKey(Rasti)
+    jarjestysnro = models.IntegerField()
+
+    #end_dia_class
+
     class Admin:
         pass
     class Meta:
         verbose_name_plural = "Radat"
 
 class SyoteMaarite(models.Model) :
-    nimi = models.CharField(maxlength=255,blank=True)
-    kali_vihje = models.CharField(maxlength=255,blank=True)
-    tyyppi = models.CharField(maxlength=255,core=True)
-    tehtava = models.ForeignKey(Tehtava,edit_inline=models.TABULAR)
+    #gen_dia_class SyoteMaarite
+
+    nimi = models.CharField(maxlength=255)
+    tyyppi = models.CharField(maxlength=255)
+    kali_vihje = models.CharField(maxlength=255)
+    tehtava = models.ForeignKey(Tehtava)
+
+    #end_dia_class
     def __str__(self) :
         return self.nimi
     class Admin:
@@ -137,9 +174,14 @@ class SyoteMaarite(models.Model) :
         verbose_name_plural = "Syotteen maaritteet"
 
 class Syote(models.Model) :
-    arvo = models.CharField(maxlength=255,blank=True)
-    vartio = models.ForeignKey(Vartio,null=True,blank=True)
+    #gen_dia_class Syote
+
+    arvo = models.CharField(maxlength=255)
+    vartio = models.ForeignKey(Vartio, blank=True )
     maarite = models.ForeignKey(SyoteMaarite)
+
+    #end_dia_class
+
     def __str__(self) :
         return self.vartio.nimi + " " + self.maarite.nimi + " " + self.maarite.tehtava.nimi
     class Admin:
@@ -148,9 +190,13 @@ class Syote(models.Model) :
         verbose_name_plural = "Syotteet"
 
 class Lopputulos(models.Model) :
+    #gen_dia_class Lopputulos
+
     vartio = models.ForeignKey(Vartio)
     tehtava = models.ForeignKey(Tehtava)
-    pisteet = models.FloatField(decimal_places=2, max_digits=5,null=True,blank=True)
+    pisteet = models.FloatField(decimal_places=2, max_digits=5 )
+
+    #end_dia_class
     def __str__(self) :
         return self.tehtava.nimi + " " + self.vartio.nimi
     class Admin:
@@ -159,6 +205,7 @@ class Lopputulos(models.Model) :
         verbose_name_plural = "Lopputulokset"
 
 class Syotatulos(models.Model):
+
     kisa = models.CharField(maxlength=255, help_text='Mille kisalle?')
     sarja = models.CharField(maxlength=255, help_text='Mille sarjalle?')
     tehtavaNro = models.IntegerField(help_text='Mihin tehtavaan?')
