@@ -177,7 +177,7 @@ class Syote(models.Model) :
     #gen_dia_class Syote
 
     arvo = models.CharField(maxlength=255)
-    vartio = models.ForeignKey(Vartio, blank=True )
+    vartio = models.ForeignKey(Vartio, blank=True, null=True )
     maarite = models.ForeignKey(SyoteMaarite)
 
     #end_dia_class

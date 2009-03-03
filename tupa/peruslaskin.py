@@ -50,36 +50,24 @@ def suorita(kaava) :
     else:
         return laskettu
 
-def validioi(kaava) :
-     """
-     Tarkistaa kaavan laskettavuuden:
-     -Tarkistaa että kaava sisältää vain sallittuja merkkejä
-     -Myöhemmin myös että sulut ovat oikein ja että operaattoreiden välissä on luku.
-     Palauttaa True/False
-     """
-     if len(kaava)==0 :
-         return False
-     muokattu= re.sub('\d*\.?\d*',"", kaava)
-     muokattu= re.sub('\+|\-|\*|/|\(|\)| ',"", muokattu)
-     if len(muokattu)==0: 
-         return True
-     else :
-         return False 
 
-def laske(kaava,sanakirja=None) :
+def laskeRekursiivisesti(kaava) :
     """
     Laskee kaavan sulkujen kanssa rekursiivisesti.
     Suortittaa +-*/ toimitukset.
-    Palauttaa tuloksen jos kaava on laskettavissa. 
-    Muussa tapauksessa palautusarvo on None.
+    Mikäli laskussa on virhe palautusarvo on None.
     """
     muokattu = kaava.replace(" ","")
-    if validioi(muokattu)==False :
-        return None
+    #if validioi(muokattu)==False :
+    #    return None
     sulku=re.search( r"\(" , muokattu)
     if sulku :
         i=sulku.start()
-        muokattu=muokattu[:i]+laske(muokattu[i+1:])
+        ratkaistuSulku=laskeRekursiivisesti(muokattu[i+1:])
+        if ratkaistuSulku :
+            muokattu=muokattu[:i]+ratkaistuSulku
+        else : 
+            return None
     sulku=re.search( r"\)" , muokattu)
     if sulku :
         i=sulku.start()
@@ -90,4 +78,46 @@ def laske(kaava,sanakirja=None) :
         if not re.search( r"\(", muokattu):
              muokattu=suorita(muokattu)
     return muokattu
+
+def validioi(kaava) :
+     """
+     Tarkistaa kaavan laskettavuuden:
+     -Tarkistaa että kaava sisältää vain sallittuja merkkejä
+     -Myöhemmin myös että sulut ovat oikein ja että operaattoreiden välissä on luku.
+     Palauttaa True/False
+     """
+     #Kaavassa pitää olla laskettavaa:
+     if len(kaava)==0 :
+         return False
+     
+     # Kaava saa sisältää vain sallittuja merkkejä
+     muokattu= re.sub('\d*\.?\d*',"", kaava)
+     muokattu= re.sub('\+|\-|\*|/|\(|\)| ',"", muokattu)
+     if not len(muokattu)==0: 
+         return False 
+
+     # Aukeavia ja sulkeutuvia sulkeita pitää olla saman verran.
+     if kaava.count('(') or kaava.count(')'):
+         if not kaava.count("(")==kaava.count(")")   :
+             return False
+ 
+     # operaattorit ei saa olla peräkkäin. 
+     for eka in ("+","-","*","/") :
+         for toka in ("+","*","/","-") :
+             if not kaava.find(eka+toka)==-1:
+                 return False
+     
+     return True
+
+def laske(kaava) :
+    """
+    Laskee kaavan sulkujen kanssa
+    Suortittaa +-*/ toimitukset.
+    Palauttaa tuloksen jos kaava on laskettavissa. 
+    Muussa tapauksessa palautusarvo on None.
+    """
+    if validioi(kaava)==False :
+        return None
+    else : 
+        return laskeRekursiivisesti(kaava)
 
