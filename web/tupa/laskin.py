@@ -37,7 +37,31 @@ def haeSulku(lause):
     else: 
         return None
 
-
+def pilkoParametreiksi(merkkijono):
+    """
+    Pilkkoo merkkijonon listaksi pilkkujen kohdalta.
+    Jos merkkijonossa on sulkuja ei pilkkomista tehdä sulkeiden sisältä.
+    """
+    sulkuja=0
+    katkaistavatKohdat=[]
+    for i in range(len(merkkijono)):
+        if merkkijono[i]=='(':
+            sulkuja=sulkuja+1
+        elif merkkijono[i]==')':
+            sulkuja=sulkuja-1
+        elif merkkijono[i]==',' and sulkuja == 0 :
+            katkaistavatKohdat.append(i)
+     
+    if len(katkaistavatKohdat):
+        parametrit=[]
+        edellinenKohta=0
+        for k in katkaistavatKohdat:
+             parametrit.append( merkkijono[edellinenKohta : k ] )
+             edellinenKohta=k+1
+        parametrit.append(merkkijono[edellinenKohta :])
+        return parametrit
+    else: 
+        return merkkijono
 
 class Laskin :
     """
@@ -79,7 +103,7 @@ class Laskin :
         Palauttaa arvon rajattuna minimiarvon ja maksimiarvon väliin. 
         Jos lauseet eivät ole laskettavissa palauttaa None.
         """
-        return "min("+param[0]+",max("+param[1]+","+param[3]+"))"
+        return "min("+param[0]+",max("+param[1]+","+param[2]+"))"
 
     def interpoloi(self,param):
         """
@@ -119,7 +143,7 @@ class Laskin :
                 while kohdassa:
                     sulut=haeSulku( muokattu[kohdassa.end():])
                     alku=muokattu[:kohdassa.start()]
-                    runko=j+"('"+  muokattu[ sulut[0]+kohdassa.end() +1:sulut[1]+kohdassa.end()-1]+ "'.split(','))"
+                    runko=j+"(pilkoParametreiksi('"+  muokattu[ sulut[0]+kohdassa.end() +1:sulut[1]+kohdassa.end()-1]+ "'))"
                     funktio= str(eval(runko)) 
                     loppu= muokattu[kohdassa.end()+sulut[1]:]
                     muokattu=alku+funktio+loppu

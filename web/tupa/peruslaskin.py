@@ -57,6 +57,8 @@ def validioi(kaava) :
      -Myöhemmin myös että sulut ovat oikein ja että operaattoreiden välissä on luku.
      Palauttaa True/False
      """
+     if len(kaava)==0 :
+         return False
      muokattu= re.sub('\d*\.?\d*',"", kaava)
      muokattu= re.sub('\+|\-|\*|/|\(|\)| ',"", muokattu)
      if len(muokattu)==0: 
