@@ -1,0 +1,17 @@
+
+     {% if errors %}
+     <td color=red>
+     {{ errors }}
+     </td>
+     {% endif %}
+       
+      {% block content %}
+
+       <form action="." method="post">     
+        <table class="form">
+          {{ form }}
+        </table>
+        <input type="submit" value="Lähetä" />
+      </form>
+      
+      {% endblock %}

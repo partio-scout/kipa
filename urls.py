@@ -11,4 +11,5 @@ urlpatterns = patterns('web.tupa.views.',
      (r'^tupa/(?P<kisa_nimi>\w+)/tulosta/$', 'tulosta'),
      (r'^tupa/(?P<kisa_nimi>\w+)/tulosta/sarja/(?P<sarja_id>\d+)/$', 'tulostaSarja'),
      (r'^tupa/(?P<kisa_nimi>\w+)/tulosta/piirit/$', 'piirit'),
+     (r'^tupa/lisaasyote/$', 'web.tupa.views.lisaa_syote'),
 )
