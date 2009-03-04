@@ -5,7 +5,10 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 import operator
 import decimal 
 from django.newforms import *
-import django.forms
+from django.forms import *
+from django import oldforms
+from django import newforms as forms
+from django.template import *
 
 def index(request):
       kisat = Kisa.objects.all()
@@ -57,4 +60,40 @@ def piirit(request,kisa_nimi) :
 def syotto(request,sarja_id):
     request.POST["pisteet"]
     return render_to_response('tupa/syotto.html', {})
+
+#tulosten syotto rumalla tavalla
+def lisaa_syote(request):
+
+    SyoteForm = forms.models.form_for_model(Lopputulos)
+    
+    if request.method == 'POST':
+
+        form = SyoteForm(request.POST)
+
+        if form.is_valid():
+
+            entry = form.save(commit=False)
+            entry.owner = request.user
+            entry.save()
+            
+            form = SyoteForm()
+ 
+            t = django.template.loader.get_template('tupa/syota666.html')
+ 
+            c = Context({
+            'form': form,
+            })
+            return HttpResponse(t.render(c))
+
+    else:
+        
+        form = SyoteForm()
+ 
+        t = django.template.loader.get_template('tupa/syota666.html')
+ 
+        c = Context({
+        'form': form,
+    })
+    
+    return HttpResponse(t.render(c))
 
