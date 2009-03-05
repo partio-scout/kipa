@@ -101,7 +101,7 @@ class Rasti(models.Model) :
 
     #end_dia_class
     def __str__(self) :
-        return self.nimi
+        return self.sarja.nimi + " " + self.nimi
     class Admin:
         pass
     class Meta:
@@ -122,17 +122,20 @@ class Tehtava(models.Model) :
     #end_dia_class
 
     def __str__(self) :
-        return self.nimi
+        return self.rasti.sarja.nimi + " " + self.rasti.nimi + " " + self.nimi
     class Admin:
         pass
     class Meta:
         verbose_name_plural = "Tehtavat"
     def mediaani(self,syotteen_nimi):
-        syotteet=Syote.objects.filter(tehtava=self).filter(lyhenne=syotteen_nimi)
+        syotteet=Syote.objects.filter(maarite__tehtava=self)#.filter(maarite__nimi=syotteen_nimi)
         arvot=[]
-        for s in syotteet :
-             if not s.arvo==None :
-                 arvot.append( Decimal( str(s.arvo) ) )
+        #print "SYoTE:
+        if syotteet:
+            for s in syotteet :
+                if not s.arvo==None :
+                    arvot.append( Decimal( str(s.arvo) ) )
+        
         arvot.sort()
         if len(arvot) % 2 == 1:
             return arvot[(len(arvot)+1)/2-1]
@@ -204,15 +207,5 @@ class Lopputulos(models.Model) :
     class Meta:
         verbose_name_plural = "Lopputulokset"
 
-class Syotatulos(models.Model):
-
-    kisa = models.CharField(maxlength=255, help_text='Mille kisalle?')
-    sarja = models.CharField(maxlength=255, help_text='Mille sarjalle?')
-    tehtavaNro = models.IntegerField(help_text='Mihin tehtavaan?')
-    class Admin:
-        pass
-
-    def __str__(self):
-        return self.tehtava
 
 
