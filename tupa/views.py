@@ -8,7 +8,7 @@ from django.newforms import *
 from django.forms import *
 from django import oldforms
 from django import newforms as forms
-from django.template import *
+import django.template
 
 def index(request):
       kisat = Kisa.objects.all()
