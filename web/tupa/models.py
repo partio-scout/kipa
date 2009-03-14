@@ -80,7 +80,6 @@ class Henkilo(models.Model) :
     syntumavuosi = models.IntegerField(blank=True , null=True )
     lippukunta = models.CharField(maxlength=255, blank=True, null=True )
     jasennumero = models.CharField(maxlength=15, blank=True, null=True )
-    vartio_nro = models.IntegerField(blank=True, null=True )
     puhelin_nro = models.CharField(maxlength=15, blank=True, null=True )
     homma = models.CharField(maxlength=255, blank=True, null=True )
 
@@ -192,8 +191,8 @@ class Syote(models.Model) :
     class Meta:
         verbose_name_plural = "Syotteet"
 
-class Lopputulos(models.Model) :
-    #gen_dia_class Lopputulos
+class TuomarineuvosTulos(models.Model) :
+    #gen_dia_class TuomarineuvosTulos
 
     vartio = models.ForeignKey(Vartio)
     tehtava = models.ForeignKey(Tehtava)
@@ -205,7 +204,7 @@ class Lopputulos(models.Model) :
     class Admin:
         pass
     class Meta:
-        verbose_name_plural = "Lopputulokset"
+        verbose_name_plural = "Tuomarineuvoston tulokset"
 
 
 

@@ -190,7 +190,13 @@ class Laskin :
                 for m in maaritteet :
                      for s in m.syote_set.filter(vartio=v):
                           syotteet.append( s )
-                rivi.append( self.laskePisteet( syotteet, t ) )
+                pisteet= self.laskePisteet( syotteet, t )
+                #Tuomarineuvos ylimääritys
+                tuomarineuvostonTulos=v.tuomarineuvostulos_set.filter(tehtava=t)
+                if len( tuomarineuvostonTulos ) == 1:
+                   pisteet =  tuomarineuvostonTulos[0].pisteet
+                #Tuloksen lisäys
+                rivi.append( pisteet )
             tulokset.append(rivi)
         return tulokset
 
