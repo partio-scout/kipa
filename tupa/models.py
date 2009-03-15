@@ -16,8 +16,6 @@ class Allergia(models.Model) :
        pass
     class Meta:
         verbose_name_plural = "Allergiat"
-    
-    
 
 class Kisa(models.Model) :
     #gen_dia_class Kisa
@@ -63,7 +61,7 @@ class Vartio(models.Model) :
     puhelinnro = models.CharField(maxlength=255, blank=True )
     sahkoposti = models.CharField(maxlength=255, blank=True )
     osoite = models.CharField(maxlength=255, blank=True )
-    keskeyttanyt = models.IntegerField(blank=True, null=True )
+    ulkopuolella = models.IntegerField(blank=True, null=True )
 
     #end_dia_class
     def __str__(self) :
@@ -106,6 +104,7 @@ class Rasti(models.Model) :
     class Meta:
         verbose_name_plural = "Rastit"
 
+
 class Tehtava(models.Model) :
     #gen_dia_class Tehtava
 
@@ -126,13 +125,49 @@ class Tehtava(models.Model) :
         pass
     class Meta:
         verbose_name_plural = "Tehtavat"
+
+    def suurin(self,syotteen_nimi) :
+        syotteet=Syote.objects.filter(maarite__tehtava=self).filter(maarite__nimi=syotteen_nimi)
+        suurin=None
+        if syotteet :
+            for s in syotteet :
+                arvo=Decimal(s.arvo)
+                if not s.vartio.ulkopuolella == None and s.maarite.tehtava.jarjestysnro <= s.vartio.ulkopuolella :
+                    pass #Vartio on ulkopuolella joten se on poissa hausta.
+                elif s.arvo==None :
+                    pass #
+                elif suurin ==None :
+                    suurin = arvo
+                elif arvo > suurin :
+                    suurin = arvo
+        return suurin
+
+    def pienin(self,syotteen_nimi) :
+        syotteet=Syote.objects.filter(maarite__tehtava=self).filter(maarite__nimi=syotteen_nimi)
+        pienin=None
+        if syotteet :
+            for s in syotteet :
+                arvo=Decimal(s.arvo)
+                
+                if not s.vartio.ulkopuolella == None and s.maarite.tehtava.jarjestysnro <= s.vartio.ulkopuolella :
+                    pass #Vartio on ulkopuolella joten se on poissa hausta.
+                elif s.arvo==None :
+                    pass #
+                elif pienin==None :
+                    pienin = arvo
+                elif arvo < pienin :
+                    pienin = arvo
+                    
+        return pienin
+
     def mediaani(self,syotteen_nimi):
-        syotteet=Syote.objects.filter(maarite__tehtava=self)#.filter(maarite__nimi=syotteen_nimi)
+        syotteet=Syote.objects.filter(maarite__tehtava=self).filter(maarite__nimi=syotteen_nimi)
         arvot=[]
-        #print "SYoTE:
         if syotteet:
             for s in syotteet :
-                if not s.arvo==None :
+	        if not s.vartio.ulkopuolella == None and s.maarite.tehtava.jarjestysnro <= s.vartio.ulkopuolella:
+                    pass #Vartio on ulkopuolella joten se on poissa mediaanista.
+                elif not s.arvo==None :
                     arvot.append( Decimal( str(s.arvo) ) )
         
         arvot.sort()

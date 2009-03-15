@@ -107,24 +107,58 @@ class Laskin :
 
     def interpoloi(self,param):
         """
-        Neljä parametriä: Interpoloitava syöte, kerroin, maksimipisteet sekä arvo jolla saa suurimmat pisteet.
-        Palauttaa Interpolointi kaavan. None jos syötteitä ei ole tarpeeksi
+        Neljä parametriä: Interpoloitava syöte, kerroin, keskimmäisen laskutapa , maksimipisteet, sekä arvo jolla saa suurimmat pisteet.
+        Keskimmäisen laskutapa on joko "med"=mediaani tai "kesk"=keskimääräinen
+        Arvo jolla saa parhaat pisteet voi olla myös "s" tai "p" Jolloin haetaan syöte joukon suurin tai pienin.
         """
         p=param[0]
         k=param[1]
-        maxp=param[2]
-        pm=param[3]
+        tapa=param[2]
+        maxp=param[3]
+        pm=param[4]
+        if pm =="s":
+           pm="suurin("+p+")"
+        elif pm == "p":
+           pm="pienin("+p+")"
+
         #min(0,(maxp/(pm-k*med(p)))*(p-k*med(p)))
-        kaava="min(0,("+maxp+"/("+pm+"-"+k+"*"+"med("+p+")))*("+p+"-"+k+"*med("+p+")))"
+        kaava="minmax(0,"+maxp+",("+maxp+"/("+pm+"-"+k+"*"+tapa+"("+p+")))*("+p+"-"+k+"*"+tapa+"("+p+")))"
         return kaava
 
-    def med(self,param):
+    def mediaani(self,param):
         """
-        Yksi parmetri: Tehtävän syöte joista lasketaan mediaani.
+        Yksi parametri: Tehtävän syötteiden nimi joista lasketaan mediaani.
         Palauttaa mediaanin. Mikäli syötteitä ei löydy lainkaan palauttaa None
+        Mediaaniin ei oteta mukaan ulkopuolella olevien vartioiden syötteitä. 
         """
-        mediaani = str(self.teht.mediaani(param[0]))
+        mediaani = str(self.teht.mediaani(param))
         return mediaani
+    def keskiarvo(self,param):
+        """
+        Yksi parametri: Tehtävän syötteiden nimi joista lasketaan keskiarvo.
+        Palauttaa Keskiarvon. Mikäli syötteitä ei löydy lainkaan palauttaa None
+        Keskiarvoon ei oteta tehtävässä ulkopuolella olevien vartoiden syötteitä.
+        """
+        keskiarvo = str(self.teht.keskiarvo(param))
+        return keskiarvo
+
+    def suurin(self,param):
+        """
+        Yksi parametri: Tehtävän syötteiden nimi joista haetaan suurin arvo.
+        Palauttaa joukon suurimman. Mikäli syötteitä ei löydy ollenkaan, palauttaa None.
+        Suurinta arvoa ei haeta tehtävässä ulkopuolella olevien vartioiden syötteistä.
+        """
+        arvo=str(self.teht.suurin(param))
+        return arvo
+
+    def pienin(self,param):
+        """
+        Yksi parametri: Tehtävän syötteiden nimi joista haetaan pienin arvo.
+        Palauttaa joukon pienimmän. mikäli syötteitä ei löydy ollenkaan, palauttaa None
+        Pienintä arvoa ei haeta tehtävässä ulkopuolella olevien vartioiden syötteistä.
+        """
+        arvo=str(self.teht.pienin(param) )
+        return arvo
 
     def laske(self,kaava,muuttujaKirja=None,funktioKirja=None) :
         """
@@ -137,21 +171,30 @@ class Laskin :
         self.muuttujaKirja=muuttujaKirja
         self.funktioKirja=funktioKirja
         muokattu=kaava
+
+
+        haku= ""
+
         if funktioKirja:
             for i, j in funktioKirja.iteritems():  
-                kohdassa=re.search(i, muokattu )
-                while kohdassa:
-                    sulut=haeSulku( muokattu[kohdassa.end():])
-                    alku=muokattu[:kohdassa.start()]
-                    runko=j+"(pilkoParametreiksi('"+  muokattu[ sulut[0]+kohdassa.end() +1:sulut[1]+kohdassa.end()-1]+ "'))"
-                    funktio= str(eval(runko)) 
-                    loppu= muokattu[kohdassa.end()+sulut[1]:]
-                    muokattu=alku+funktio+loppu
-                    kohdassa=re.search(i,muokattu )
+                haku=haku+i+r"\("+r"|"
+        haku=haku[:-1]
+        kohdassa=re.search(haku, muokattu )
+
+        while kohdassa  :
+              sulut=haeSulku( muokattu[kohdassa.end()-1:])
+              alku=muokattu[:kohdassa.start()]
+              runko=funktioKirja[kohdassa.group(0)[:-1]]+"(pilkoParametreiksi('"+  muokattu[ sulut[0]+kohdassa.end() :sulut[1]+kohdassa.end()-2]+ "'))"
+              funktio= str(eval(runko)) 
+              loppu= muokattu[kohdassa.end()-1+sulut[1]:]
+              muokattu=alku+funktio+loppu
+              kohdassa=re.search(haku, muokattu )
+        
         if muuttujaKirja:
             for i, j in muuttujaKirja.iteritems():  
                 muokattu = muokattu.replace(i, j)  
-        return peruslaskin.laske(muokattu)
+        tulos= peruslaskin.laske(muokattu)
+        return tulos
 
     def laskePisteet(self,syotteet,tehtava):
         """
@@ -166,12 +209,12 @@ class Laskin :
         for s in syotteet:
            muuttujat.append( (s.maarite.nimi , str(s.arvo) ) )
         # Lasketaan tulokset
-        return self.laske(self.teht.kaava, dict(muuttujat), { "minmax" : "self.minmax" ,"max" : "self.max", "min" : "self.min" , "med" : "self.med", "interpoloi" : "self.interpoloi" } ) 
+        return self.laske(self.teht.kaava, dict(muuttujat), { "interpoloi" : "self.interpoloi" ,"minmax" : "self.minmax" ,"max" : "self.max", "min" : "self.min" , "med" : "self.mediaani","kesk" : "self.keskiarvo" , "pienin" : "self.pienin" , "suurin" : "self.suurin" } ) 
 
     def laskeSarja(self,sarja):
         """
         Laskee tulokset halutulle sarjalle. 
-        Palauttaa kaksiuloitteisen taulukon[vartio][tehtävä]=pisteet.
+        Palauttaa kaksiuloitteisen taulukon[vartio][tehtävä] = pisteet.
         Taulukon ensimmäisissä sarakkeissa on vartio tai tehtävä objekteja muissa pisteitä.
         """
         tulokset=[[sarja]]
