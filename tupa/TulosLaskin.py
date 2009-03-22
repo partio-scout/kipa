@@ -4,6 +4,16 @@ import re
 import AritmeettinenLaskin
 from logger import lokkeri
 
+erikoisFunktiot = { 
+    "interpoloi" : "self.interpoloi" ,
+    "minmax" : "self.minmax" ,
+    "max" : "self.max", 
+    "min" : "self.min" , 
+    "med" : "self.mediaani",
+    "kesk" : "self.keskiarvo" , 
+    "pienin" : "self.pienin" , 
+    "suurin" : "self.suurin" }
+
 def haeSulku(lause):
     """
     Hakee lauseesta ensimmäisten sulkujen välissä olevan merkkijonon.
@@ -66,7 +76,7 @@ def pilkoParametreiksi(merkkijono):
 
 class TulosLaskin :
     """
-    Luokka jonka objektit laskevat tulospalvelun tulokset yhdelle vartiolle yhteen tehtävään
+    Luokka jonka objektit laskevat tulospalvelun tulokset yhdelle sarjalle yhteen tehtävään
     """
     def max(self,param) :
         """
@@ -92,7 +102,6 @@ class TulosLaskin :
         Palauttaa arvon mikäli se on minimiarvoa suurempi. Muussa tapauksessa minimiarvon,
         tai None jos lausekkeet eivät ole laskettavissa.
         """
-
         lokkeri.setMessage( param[0] + "," )
         lokkeri.push()
         arvo=self.laske(param[1],self.muuttujaKirja,self.funktioKirja)
@@ -115,9 +124,11 @@ class TulosLaskin :
 
     def interpoloi(self,param):
         """
-        Neljä parametriä: Interpoloitava syöte, nollan kerroin, keskimmäisen laskutapa , arvo jolla saa maksimipisteet, sekä maksimipisteet.
-        Keskimmäisen laskutapa on joko "med"=mediaani tai "kesk"=keskimääräinen
-        Arvo jolla saa parhaat pisteet voi olla myös "s","suurin" tai "p","pienin" Jolloin haetaan syöte joukon suurin tai pienin.
+        Neljä parametriä: Interpoloitava syöte,
+                          1.Nollat tuottavan tuloksen kerroin keskimmäisestä 
+                          2.Keskimmäisen laskutapa (med/kesk)
+                          3.Arvo jolla saa maksimipisteet (numero/p/pienin/s/suurin)
+                          4.Maksimipisteet. 
         """
         p=param[0]
         k=param[1]
@@ -197,14 +208,13 @@ class TulosLaskin :
               lokkeri.pop()
               loppu= muokattu[kohdassa.end()-1+sulut[1]:]
               muokattu=alku+funktio+loppu
-              kohdassa=re.search(haku, muokattu )
               lokkeri.setMessage( muokattu ).logMessage()
+              kohdassa=re.search(haku, muokattu )
         
         if muuttujaKirja:
             for i, j in muuttujaKirja.iteritems():  
                 muokattu = muokattu.replace(i, j)  
-            lokkeri.setMessage( muokattu ).logMessage()
-
+            
         tulos= AritmeettinenLaskin.laske(muokattu)
         return tulos
 
@@ -225,7 +235,7 @@ class TulosLaskin :
            muuttujat.append( (s.maarite.nimi , str(s.arvo) ) )
         # Lasketaan tulokset
         lokkeri.setMessage( "" )
-        tulos = self.laske(self.teht.kaava, dict(muuttujat), { "interpoloi" : "self.interpoloi" ,"minmax" : "self.minmax" ,"max" : "self.max", "min" : "self.min" , "med" : "self.mediaani","kesk" : "self.keskiarvo" , "pienin" : "self.pienin" , "suurin" : "self.suurin" } ) 
+        tulos = self.laske(self.teht.kaava, dict(muuttujat), erikoisFunktiot ) 
         lokkeri.setMessage( "Pisteet: " + str(tulos) ).logMessage()
         return tulos
 
