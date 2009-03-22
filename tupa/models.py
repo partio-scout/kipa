@@ -121,7 +121,7 @@ class Tehtava(models.Model) :
     #end_dia_class
 
     def __str__(self) :
-        return self.rasti.sarja.nimi + " " + self.rasti.nimi + " " + self.nimi
+        return self.nimi
     class Admin:
         pass
     class Meta:

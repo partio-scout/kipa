@@ -4,6 +4,7 @@ import unittest
 from models import *
 from AritmeettinenLaskin import *
 from TulosLaskin import *
+import decimal
 
 class aritmeettinen_laskin_test(unittest.TestCase):
     """
@@ -104,63 +105,38 @@ class lasketulos_test(unittest.TestCase):
     
    
 
+def haeTulos(sarjanTulokset, vartio, tehtava) :
+    """
+    Hakee Vartion pisteet teht‰v‰lle m‰‰ritellyst‰ tulostaulukosta
+    """
+    for vart_nro in range(len(sarjanTulokset)-1) :
+        for teht_nro in range(len(sarjanTulokset[0])-1):
+            tulokset =sarjanTulokset[vart_nro+1][teht_nro+1]
+            if sarjanTulokset[vart_nro+1][0] ==vartio and sarjanTulokset[0][teht_nro+1] ==tehtava:
+                 return tulokset
+
 class tietokanta_test(unittest.TestCase):
-    fixtures = ['laskenta_tests.xml']
     """
     Testataan laskimen kyky‰ ronkkia tietokantaa ja laskea saatu data j‰rkev‰sti. Setupissa m‰‰ritell‰‰n testitietokanta jota k‰ytet‰‰n kaikissa muissa testeiss‰.
     """
-
+    fixtures = ['laskenta_tests.xml']
     def setUp(self):
-        Testikisa = Kisa(nimi="testikisa")
-        Testikisa.save()
+        sarja=Sarja.objects.filter(nimi="Funktiot")[0]
+        self.parasVartio=Vartio.objects.filter(nimi="ParasVartio")[0]
+        self.keskimmainenVartio=Vartio.objects.filter(nimi="KeskimmainenVartio")[0]
+        self.huonoinVartio=Vartio.objects.filter(nimi="HuonoinVartio")[0]
+        self.tulokset=sarja.laskeTulokset()
+    
+    def testInterpoloiAika(self):
+        tehtava= Tehtava.objects.filter(nimi="interpoloi_aika")[0]
+        assert Decimal(haeTulos(self.tulokset,self.parasVartio,tehtava)) == Decimal("5")
+        assert Decimal(haeTulos(self.tulokset,self.keskimmainenVartio,tehtava)) == Decimal("2.50")
+        assert Decimal(haeTulos(self.tulokset,self.huonoinVartio,tehtava)) == Decimal("0")
+    def testInterpoloiPisteet(self):
+        tehtava= Tehtava.objects.filter(nimi="interpoloi_pisteet")[0]
+        assert Decimal(haeTulos(self.tulokset,self.parasVartio,tehtava)) == Decimal("5")
+        assert Decimal(haeTulos(self.tulokset,self.keskimmainenVartio,tehtava)) == Decimal("2.50")
+        assert Decimal(haeTulos(self.tulokset,self.huonoinVartio,tehtava)) == Decimal("0")
         
-        Testisarja = Sarja(nimi="valkoinen",kisa=Testikisa)
-        Testisarja.save()
-        
-        Testivartio = Vartio()
-        Testivartio.nimi = "trikoopellet"
-        Testivartio.nro = 1
-        Testivartio.sarja = Testisarja
-        Testivartio.save()
-        
-        Testirasti = Rasti()
-        Testirasti.nimi = "eka_testirasti"
-        Testirasti.sarja = Testisarja
-        Testirasti.save()
-        
-        Testitehtava = Tehtava()
-        Testitehtava.nimi = "ekatehtava"
-        Testitehtava.rasti = Testirasti
-        Testitehtava.jarjestysnro = 1
-        Testitehtava.kaava = "eka_syote_desimaaliluku+toka_syote_desimaaliluku" 
-        Testitehtava.save()
-        
-        TestiSyoteMaarite1 = SyoteMaarite()
-        TestiSyoteMaarite1.nimi = "eka_syote_desimaaliluku"
-        TestiSyoteMaarite1.tehtava = Testitehtava
-        TestiSyoteMaarite1.save()
-        
-        TestiSyoteMaarite2 = SyoteMaarite()
-        TestiSyoteMaarite2.nimi = "toka_syote_desimaaliluku"
-        TestiSyoteMaarite2.tehtava = Testitehtava
-        TestiSyoteMaarite2.save()
-        
-        TestiSyoteArvo1 = Syote()
-        TestiSyoteArvo1.arvo = "5"
-        TestiSyoteArvo1.maarite = TestiSyoteMaarite1
-        TestiSyoteArvo1.vartio = Testivartio
-        TestiSyoteArvo1.save()
-
-        TestiSyoteArvo2 = Syote()
-        TestiSyoteArvo2.arvo = "10"
-        TestiSyoteArvo2.maarite = TestiSyoteMaarite2
-        TestiSyoteArvo2.vartio = Testivartio
-        TestiSyoteArvo2.save()
-        
-        
-    def testlaskevartionpisteet(self):       
-        LaskettavaSarja = Sarja.objects.filter(nimi="valkoinen").filter(kisa__nimi="testikisa")[0]
-        tulokset = TulosLaskin().laskeSarja(LaskettavaSarja) 
-        assert tulokset[1][1]== "15"
-        
+     
         
