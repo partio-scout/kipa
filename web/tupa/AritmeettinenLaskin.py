@@ -1,6 +1,7 @@
 # coding: latin-1
 from decimal import *
 import re
+from logger import *
 
 def operoi(alku,operaattori,loppu) :
     """
@@ -63,7 +64,12 @@ def laskeRekursiivisesti(kaava) :
     sulku=re.search( r"\(" , muokattu)
     if sulku :
         i=sulku.start()
+    
+        lokkeri.setMessage(muokattu[:i+1])
+        lokkeri.push()
         ratkaistuSulku=laskeRekursiivisesti(muokattu[i+1:])
+        lokkeri.setMessage(ratkaistuSulku).logMessage()
+        lokkeri.pop()
         if ratkaistuSulku :
             muokattu=muokattu[:i]+ratkaistuSulku
         else : 
