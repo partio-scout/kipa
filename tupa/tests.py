@@ -2,8 +2,8 @@
 import unittest
 
 from models import *
-from peruslaskin import *
-from laskin import *
+from AritmeettinenLaskin import *
+from TulosLaskin import *
 
 class peruslaskin_test(unittest.TestCase):
     """
@@ -96,7 +96,7 @@ class lasketulos_test(unittest.TestCase):
         b.maarite=maariteB
         a.save()
         b.save()
-        laskia = Laskin()
+        laskia = TulosLaskin()
         a.arvo=5
         b.arvo=2
         perusTehtava.kaava="a+b"
@@ -160,7 +160,7 @@ class tietokanta_test(unittest.TestCase):
         
     def testlaskevartionpisteet(self):       
         LaskettavaSarja = Sarja.objects.filter(nimi="valkoinen").filter(kisa__nimi="testikisa")[0]
-        tulokset = Laskin().laskeSarja(LaskettavaSarja) 
+        tulokset = TulosLaskin().laskeSarja(LaskettavaSarja) 
         assert tulokset[1][1]== "15"
         
         
