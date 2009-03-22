@@ -5,7 +5,7 @@ from models import *
 from AritmeettinenLaskin import *
 from TulosLaskin import *
 
-class peruslaskin_test(unittest.TestCase):
+class aritmeettinen_laskin_test(unittest.TestCase):
     """
     Peruslaskimen unit testit
 
@@ -105,7 +105,7 @@ class lasketulos_test(unittest.TestCase):
    
 
 class tietokanta_test(unittest.TestCase):
-
+    fixtures = ['laskenta_tests.xml']
     """
     Testataan laskimen kykyä ronkkia tietokantaa ja laskea saatu data järkevästi. Setupissa määritellään testitietokanta jota käytetään kaikissa muissa testeissä.
     """
