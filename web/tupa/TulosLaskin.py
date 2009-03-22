@@ -115,18 +115,18 @@ class TulosLaskin :
 
     def interpoloi(self,param):
         """
-        Neljä parametriä: Interpoloitava syöte, kerroin, keskimmäisen laskutapa , maksimipisteet, sekä arvo jolla saa suurimmat pisteet.
+        Neljä parametriä: Interpoloitava syöte, nollan kerroin, keskimmäisen laskutapa , arvo jolla saa maksimipisteet, sekä maksimipisteet.
         Keskimmäisen laskutapa on joko "med"=mediaani tai "kesk"=keskimääräinen
-        Arvo jolla saa parhaat pisteet voi olla myös "s" tai "p" Jolloin haetaan syöte joukon suurin tai pienin.
+        Arvo jolla saa parhaat pisteet voi olla myös "s","suurin" tai "p","pienin" Jolloin haetaan syöte joukon suurin tai pienin.
         """
         p=param[0]
         k=param[1]
         tapa="med"
-        maxp=param[3]
-        pm=param[4]
-        if pm =="s":
+        pm=param[3]
+        maxp=param[4]
+        if pm =="s" or  pm =="suurin" :
            pm="suurin("+p+")"
-        elif pm == "p":
+        elif pm == "p" or pm == "pienin" :
            pm="pienin("+p+")"
 
         #min(0,(maxp/(pm-k*med(p)))*(p-k*med(p)))
@@ -179,9 +179,7 @@ class TulosLaskin :
         self.muuttujaKirja=muuttujaKirja
         self.funktioKirja=funktioKirja
         muokattu=kaava
-
         haku= ""
-        
         if funktioKirja:
             for i, j in funktioKirja.iteritems():  
                 haku=haku+i+r"\("+r"|"
