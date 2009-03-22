@@ -1,7 +1,8 @@
 #coding: latin-1
 from decimal import *
 import re
-import peruslaskin
+import AritmeettinenLaskin
+from logger import lokkeri
 
 def haeSulku(lause):
     """
@@ -63,7 +64,7 @@ def pilkoParametreiksi(merkkijono):
     else: 
         return merkkijono
 
-class Laskin :
+class TulosLaskin :
     """
     Luokka jonka objektit laskevat tulospalvelun tulokset yhdelle vartiolle yhteen tehtävään
     """
@@ -73,8 +74,11 @@ class Laskin :
         Palauttaa arvon mikäli se on maksimiarvoa pienempi. Muussa tapauksessa maksimiarvon, 
         tai None jos lausekkeet eivät ole laskettavissa. 
         """
+        lokkeri.setMessage( param[0] + "," )
+        lokkeri.push()
         arvo=self.laske(param[1],self.muuttujaKirja,self.funktioKirja)
         suurin=self.laske(param[0],self.muuttujaKirja,self.funktioKirja)
+        lokkeri.pop()
         if arvo and suurin and Decimal(arvo) > Decimal(suurin) :
             return suurin
         elif arvo and suurin:
@@ -88,9 +92,13 @@ class Laskin :
         Palauttaa arvon mikäli se on minimiarvoa suurempi. Muussa tapauksessa minimiarvon,
         tai None jos lausekkeet eivät ole laskettavissa.
         """
+
+        lokkeri.setMessage( param[0] + "," )
+        lokkeri.push()
         arvo=self.laske(param[1],self.muuttujaKirja,self.funktioKirja)
         pienin=self.laske(param[0],self.muuttujaKirja,self.funktioKirja)
-         
+        lokkeri.pop()        
+
         if not arvo:
             return None
         elif Decimal(arvo) < Decimal(pienin) :
@@ -113,7 +121,7 @@ class Laskin :
         """
         p=param[0]
         k=param[1]
-        tapa=param[2]
+        tapa="med"
         maxp=param[3]
         pm=param[4]
         if pm =="s":
@@ -172,9 +180,8 @@ class Laskin :
         self.funktioKirja=funktioKirja
         muokattu=kaava
 
-
         haku= ""
-
+        
         if funktioKirja:
             for i, j in funktioKirja.iteritems():  
                 haku=haku+i+r"\("+r"|"
@@ -185,15 +192,22 @@ class Laskin :
               sulut=haeSulku( muokattu[kohdassa.end()-1:])
               alku=muokattu[:kohdassa.start()]
               runko=funktioKirja[kohdassa.group(0)[:-1]]+"(pilkoParametreiksi('"+  muokattu[ sulut[0]+kohdassa.end() :sulut[1]+kohdassa.end()-2]+ "'))"
+              
+              lokkeri.setMessage( alku + kohdassa.group(0) )
+              lokkeri.push()
               funktio= str(eval(runko)) 
+              lokkeri.pop()
               loppu= muokattu[kohdassa.end()-1+sulut[1]:]
               muokattu=alku+funktio+loppu
               kohdassa=re.search(haku, muokattu )
+              lokkeri.setMessage( muokattu ).logMessage()
         
         if muuttujaKirja:
             for i, j in muuttujaKirja.iteritems():  
                 muokattu = muokattu.replace(i, j)  
-        tulos= peruslaskin.laske(muokattu)
+            lokkeri.setMessage( muokattu ).logMessage()
+
+        tulos= AritmeettinenLaskin.laske(muokattu)
         return tulos
 
     def laskePisteet(self,syotteet,tehtava):
@@ -202,14 +216,20 @@ class Laskin :
         Palauttaa tuloksen jos tulos oli laskettavissa.
         Muuten None.
         """
+     
         self.syot=syotteet
         self.teht=tehtava
+        lokkeri.setMessage( "Kaava: " + str(self.teht.kaava) ).logMessage()
         # Tulkataan muuttujat
         muuttujat=[]
         for s in syotteet:
+           lokkeri.setMessage( "    " + s.maarite.nimi + " = "+ str(s.arvo) ).logMessage()
            muuttujat.append( (s.maarite.nimi , str(s.arvo) ) )
         # Lasketaan tulokset
-        return self.laske(self.teht.kaava, dict(muuttujat), { "interpoloi" : "self.interpoloi" ,"minmax" : "self.minmax" ,"max" : "self.max", "min" : "self.min" , "med" : "self.mediaani","kesk" : "self.keskiarvo" , "pienin" : "self.pienin" , "suurin" : "self.suurin" } ) 
+        lokkeri.setMessage( "" )
+        tulos = self.laske(self.teht.kaava, dict(muuttujat), { "interpoloi" : "self.interpoloi" ,"minmax" : "self.minmax" ,"max" : "self.max", "min" : "self.min" , "med" : "self.mediaani","kesk" : "self.keskiarvo" , "pienin" : "self.pienin" , "suurin" : "self.suurin" } ) 
+        lokkeri.setMessage( "Pisteet: " + str(tulos) ).logMessage()
+        return tulos
 
     def laskeSarja(self,sarja):
         """
@@ -233,6 +253,10 @@ class Laskin :
                 for m in maaritteet :
                      for s in m.syote_set.filter(vartio=v):
                           syotteet.append( s )
+
+                lokkeri.setMessage("\nTehtävä: " + t.nimi).logMessage()
+                lokkeri.setMessage("Vartio: " + v.nimi).logMessage()
+                
                 pisteet= self.laskePisteet( syotteet, t )
                 #Tuomarineuvos ylimääritys
                 tuomarineuvostonTulos=v.tuomarineuvostulos_set.filter(tehtava=t)

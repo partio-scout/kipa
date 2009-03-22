@@ -1,7 +1,7 @@
 from django.db import models
 
 from random import uniform
-from laskin import *
+from TulosLaskin import *
 from django import newforms as forms
 
 class Allergia(models.Model) :
@@ -48,7 +48,7 @@ class Sarja(models.Model) :
     class Meta:
         verbose_name_plural = "Sarjat"
     def laskeTulokset(self) :
-        return Laskin().laskeSarja(self)
+        return TulosLaskin().laskeSarja(self)
 
 class Vartio(models.Model) :
     #gen_dia_class Vartio
@@ -61,7 +61,8 @@ class Vartio(models.Model) :
     puhelinnro = models.CharField(maxlength=255, blank=True )
     sahkoposti = models.CharField(maxlength=255, blank=True )
     osoite = models.CharField(maxlength=255, blank=True )
-    ulkopuolella = models.IntegerField(blank=True, null=True )
+    keskeyttanyt = models.IntegerField(blank=True, null=True )
+    ulkopuolella = models.IntegerField(blank=True , null=True )
 
     #end_dia_class
     def __str__(self) :

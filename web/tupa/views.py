@@ -9,6 +9,8 @@ from django.forms import *
 from django import oldforms
 from django import newforms as forms
 import django.template
+from logger import lokkeri
+
 
 def index(request):
       kisat = Kisa.objects.all()
@@ -46,6 +48,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id) :
 
 def tulostaSarja(request, kisa_nimi, sarja_id) :
       sarja = Sarja.objects.filter(id=sarja_id)[0]
+      lokkeri.clearLog()
       tulokset= sarja.laskeTulokset()
       return render_to_response('tupa/tulokset2.html', {'tulos_taulukko' : tulokset }  )
 
@@ -64,8 +67,9 @@ def syotto(request,sarja_id):
 #tulosten syotto rumalla tavalla
 def lisaa_syote(request):
 
-    SyoteForm = forms.models.form_for_model(Lopputulos)
-    
+    SyoteForm = forms.models.form_for_model(Kisa)
+    t = django.template.loader.get_template('tupa/syota666.html')
+    c = None
     if request.method == 'POST':
 
         form = SyoteForm(request.POST)
@@ -78,22 +82,20 @@ def lisaa_syote(request):
             
             form = SyoteForm()
  
-            t = django.template.loader.get_template('tupa/syota666.html')
  
             c = Context({
             'form': form,
             })
+            c.push()
             return HttpResponse(t.render(c))
 
     else:
         
         form = SyoteForm()
  
-        t = django.template.loader.get_template('tupa/syota666.html')
- 
         c = Context({
         'form': form,
-    })
+        })
     
     return HttpResponse(t.render(c))
 
