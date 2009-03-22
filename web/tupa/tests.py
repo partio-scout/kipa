@@ -132,6 +132,7 @@ class tietokanta_test(unittest.TestCase):
         assert Decimal(haeTulos(self.tulokset,self.parasVartio,tehtava)) == Decimal("5")
         assert Decimal(haeTulos(self.tulokset,self.keskimmainenVartio,tehtava)) == Decimal("2.50")
         assert Decimal(haeTulos(self.tulokset,self.huonoinVartio,tehtava)) == Decimal("0")
+    
     def testInterpoloiPisteet(self):
         tehtava= Tehtava.objects.filter(nimi="interpoloi_pisteet")[0]
         assert Decimal(haeTulos(self.tulokset,self.parasVartio,tehtava)) == Decimal("5")
