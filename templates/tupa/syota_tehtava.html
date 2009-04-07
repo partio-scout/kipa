@@ -1,0 +1,65 @@
+<h1>Tehtävä: {{tehtava.nimi}} </h2>
+
+<form action="." method="post">     
+   
+    <table >
+        <tr>
+            <td>
+            Syötteen nimi:
+            </td>
+            {% for maarite in maaritteet %}
+               <td>
+                   {{ maarite.nimi }} 
+               </td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td>
+            Syötteen tyyppi
+            </td>
+            {% for maarite in maaritteet %}
+               <td>
+                   {{ maarite.tyyppi }} 
+               </td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td>
+            Syötteen kuvaus:
+            </td>
+            {% for maarite in maaritteet %}
+               <td>
+                   {{ maarite.kali_vihje }} 
+               </td>
+            {% endfor %}
+        </tr>
+        <tr>
+               <td>
+               Vartiot:
+               </td>
+        </tr>
+
+        {% for vartio in syotteet %}
+            <tr>
+                  <td>
+                  {{ vartio.0.nimi }}
+                  </td>
+                  {% for kentta in vartio.1 %}
+                         <td>
+                         {{kentta.errors}}
+                         {{kentta.arvo}}
+                         {% if kentta.h %}
+                             {{kentta.h}}:
+                             {{kentta.min}}: 
+                             {{kentta.s}}
+                         {% endif %}
+                         </td>
+                  {% endfor %}
+            </tr>
+        {% endfor %}
+
+     
+    </table>
+    <input type="submit"name="syote" value="Tallenna" >
+    </form>
+

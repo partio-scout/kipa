@@ -14,6 +14,12 @@ erikoisFunktiot = {
     "pienin" : "self.pienin" , 
     "suurin" : "self.suurin" }
 
+def stringDecimaaliksi(merkkijono) :
+    if re.search(r'^\d*\Z|^\d*\.\d*\Z', merkkijono ) :
+       return Decimal(merkkijono)
+    else : 
+       return None
+
 def haeSulku(lause):
     """
     Hakee lauseesta ensimmäisten sulkujen välissä olevan merkkijonon.
@@ -48,6 +54,7 @@ def haeSulku(lause):
     else: 
         return None
 
+
 def pilkoParametreiksi(merkkijono):
     """
     Pilkkoo merkkijonon listaksi pilkkujen kohdalta.
@@ -72,7 +79,8 @@ def pilkoParametreiksi(merkkijono):
         parametrit.append(merkkijono[edellinenKohta :])
         return parametrit
     else: 
-        return merkkijono
+        return [merkkijono]
+
 
 class TulosLaskin :
     """
@@ -150,7 +158,7 @@ class TulosLaskin :
         Palauttaa mediaanin. Mikäli syötteitä ei löydy lainkaan palauttaa None
         Mediaaniin ei oteta mukaan ulkopuolella olevien vartioiden syötteitä. 
         """
-        mediaani = str(self.teht.mediaani(param))
+        mediaani = str(self.teht.mediaani(param[0]))
         return mediaani
     def keskiarvo(self,param):
         """
@@ -158,7 +166,7 @@ class TulosLaskin :
         Palauttaa Keskiarvon. Mikäli syötteitä ei löydy lainkaan palauttaa None
         Keskiarvoon ei oteta tehtävässä ulkopuolella olevien vartoiden syötteitä.
         """
-        keskiarvo = str(self.teht.keskiarvo(param))
+        keskiarvo = str(self.teht.keskiarvo(param[0]))
         return keskiarvo
 
     def suurin(self,param):
@@ -167,7 +175,7 @@ class TulosLaskin :
         Palauttaa joukon suurimman. Mikäli syötteitä ei löydy ollenkaan, palauttaa None.
         Suurinta arvoa ei haeta tehtävässä ulkopuolella olevien vartioiden syötteistä.
         """
-        arvo=str(self.teht.suurin(param))
+        arvo=str(self.teht.suurin(param[0]))
         return arvo
 
     def pienin(self,param):
@@ -176,8 +184,20 @@ class TulosLaskin :
         Palauttaa joukon pienimmän. mikäli syötteitä ei löydy ollenkaan, palauttaa None
         Pienintä arvoa ei haeta tehtävässä ulkopuolella olevien vartioiden syötteistä.
         """
-        arvo=str(self.teht.pienin(param) )
+        arvo=str(self.teht.pienin(param[0]) )
         return arvo
+    
+    def suoritaFunktio(self,funktionNimi,parametrit) :
+        """
+        Suorittaa nimetyn erikoisfunktion
+        Antaa funktiolle parametit merkkijonosta, jossa parametrit on eroteltu pilkulla.
+        """
+        listaParametreista= pilkoParametreiksi( parametrit )
+        for p in listaParametreista :
+            print "parmetri = " + p
+            if len(p.strip()) == 0 :
+                return None
+        return str(eval( erikoisFunktiot[funktionNimi] + "(listaParametreista)" ) )
 
     def laske(self,kaava,muuttujaKirja=None,funktioKirja=None) :
         """
@@ -200,20 +220,24 @@ class TulosLaskin :
         while kohdassa  :
               sulut=haeSulku( muokattu[kohdassa.end()-1:])
               alku=muokattu[:kohdassa.start()]
-              runko=funktioKirja[kohdassa.group(0)[:-1]]+"(pilkoParametreiksi('"+  muokattu[ sulut[0]+kohdassa.end() :sulut[1]+kohdassa.end()-2]+ "'))"
+              
+              #suoritaFunktio(
+              #runko=funktioKirja[kohdassa.group(0)[:-1]]+"(pilkoParametreiksi('"+  muokattu[ sulut[0]+kohdassa.end() :sulut[1]+kohdassa.end()-2]+ "'))"
               
               lokkeri.setMessage( alku + kohdassa.group(0) )
               lokkeri.push()
-              funktio= str(eval(runko)) 
+              funktionNimi = kohdassa.group(0)[:-1]
+              funktionParametrit=muokattu[ sulut[0]+kohdassa.end() :sulut[1]+kohdassa.end()-2]
+              funktionTulos = self.suoritaFunktio( funktionNimi , funktionParametrit ) 
               lokkeri.pop()
               loppu= muokattu[kohdassa.end()-1+sulut[1]:]
-              muokattu=alku+funktio+loppu
+              muokattu=alku+funktionTulos+loppu
               lokkeri.setMessage( muokattu ).logMessage()
               kohdassa=re.search(haku, muokattu )
         
         if muuttujaKirja:
             for i, j in muuttujaKirja.iteritems():  
-                muokattu = muokattu.replace(i, j)  
+                muokattu = muokattu.replace(i, j.strip())  
             
         tulos= AritmeettinenLaskin.laske(muokattu)
         return tulos
@@ -231,8 +255,9 @@ class TulosLaskin :
         # Tulkataan muuttujat
         muuttujat=[]
         for s in syotteet:
-           lokkeri.setMessage( "    " + s.maarite.nimi + " = "+ str(s.arvo) ).logMessage()
-           muuttujat.append( (s.maarite.nimi , str(s.arvo) ) )
+           lokkeri.setMessage( "    " + s.maarite.nimi + ' = "'+ str(s.arvo) + '"' ).logMessage()
+           muuttuja=str(s.arvo)
+           muuttujat.append( (s.maarite.nimi , muuttuja ) )
         # Lasketaan tulokset
         lokkeri.setMessage( "" )
         tulos = self.laske(self.teht.kaava, dict(muuttujat), erikoisFunktiot ) 
@@ -275,3 +300,4 @@ class TulosLaskin :
             tulokset.append(rivi)
         return tulokset
 
+ 

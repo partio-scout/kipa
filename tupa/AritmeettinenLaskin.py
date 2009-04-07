@@ -21,6 +21,8 @@ def operoi(alku,operaattori,loppu) :
     lauseke=lauseke + operaattori 
     lauseke=lauseke +"Decimal('" + numeroB + "'))"
     tulos = eval(lauseke)
+    print lauseke
+    print tulos
     lauseke=  re.sub(numeronHakuLopusta,"", alku) + tulos 
     lauseke=lauseke + re.sub(numeronHakuAlusta,"", loppu)
     return lauseke    
@@ -46,10 +48,13 @@ def suorita(kaava) :
                 if laskettu[i] == o :
                         laskettu= operoi(laskettu[:i], o, laskettu[i+1:])
     
-    if re.search(r'\*|/|\+|\-',laskettu[1:]) :
-        return suorita(laskettu)   
+    if laskettu :
+        if re.search(r'\*|/|\+|\-',laskettu[1:]) :
+            return suorita(laskettu)
+        else  :
+            return laskettu
     else:
-        return laskettu
+        return None
 
 
 def laskeRekursiivisesti(kaava) :
@@ -68,11 +73,12 @@ def laskeRekursiivisesti(kaava) :
         lokkeri.setMessage(muokattu[:i+1])
         lokkeri.push()
         ratkaistuSulku=laskeRekursiivisesti(muokattu[i+1:])
-        lokkeri.setMessage(ratkaistuSulku).logMessage()
-        lokkeri.pop()
         if ratkaistuSulku :
+            lokkeri.setMessage(ratkaistuSulku).logMessage()
             muokattu=muokattu[:i]+ratkaistuSulku
+            lokkeri.pop()
         else : 
+            lokkeri.pop()
             return None
     sulku=re.search( r"\)" , muokattu)
     if sulku :
