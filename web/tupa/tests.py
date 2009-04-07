@@ -61,6 +61,9 @@ class aritmeettinen_laskin_test(unittest.TestCase):
 
     def testLaskettuNegatiivinenOperandi(self):
         assert    laske('3*(1-5)') == "-12"
+    def testTuntematonVirheA(self):
+        assert not laske('-0.008333333333333333333333333333*0.0') == None
+
 
        
 class lasketulos_test(unittest.TestCase):

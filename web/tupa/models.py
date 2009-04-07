@@ -119,7 +119,6 @@ class Tehtava(models.Model) :
     rasti = models.ForeignKey(Rasti)
 
     #end_dia_class
-
     def __str__(self) :
         return self.nimi
     class Admin:
@@ -132,10 +131,10 @@ class Tehtava(models.Model) :
         suurin=None
         if syotteet :
             for s in syotteet :
-                arvo=Decimal(s.arvo)
+                arvo = stringDecimaaliksi(s.arvo)
                 if not s.vartio.ulkopuolella == None and s.maarite.tehtava.jarjestysnro <= s.vartio.ulkopuolella :
                     pass #Vartio on ulkopuolella joten se on poissa hausta.
-                elif s.arvo==None :
+                elif arvo==None :
                     pass #
                 elif suurin ==None :
                     suurin = arvo
@@ -148,11 +147,10 @@ class Tehtava(models.Model) :
         pienin=None
         if syotteet :
             for s in syotteet :
-                arvo=Decimal(s.arvo)
-                
+                arvo = stringDecimaaliksi(s.arvo)
                 if not s.vartio.ulkopuolella == None and s.maarite.tehtava.jarjestysnro <= s.vartio.ulkopuolella :
                     pass #Vartio on ulkopuolella joten se on poissa hausta.
-                elif s.arvo==None :
+                elif arvo==None :
                     pass #
                 elif pienin==None :
                     pienin = arvo
@@ -169,7 +167,7 @@ class Tehtava(models.Model) :
 	        if not s.vartio.ulkopuolella == None and s.maarite.tehtava.jarjestysnro <= s.vartio.ulkopuolella:
                     pass #Vartio on ulkopuolella joten se on poissa mediaanista.
                 elif not s.arvo==None :
-                    arvot.append( Decimal( str(s.arvo) ) )
+                    arvot.append(stringDecimaaliksi(s.arvo) ) 
         
         arvot.sort()
         if len(arvot) % 2 == 1:
@@ -221,7 +219,7 @@ class Syote(models.Model) :
     #end_dia_class
 
     def __str__(self) :
-        return self.vartio.nimi + " " + self.maarite.nimi + " " + self.maarite.tehtava.nimi
+        return self.vartio.nimi     
     class Admin:
         pass
     class Meta:
