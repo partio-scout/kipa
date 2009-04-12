@@ -1,0 +1,63 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Teht&auml;v&auml;n sy&ouml;tt&ouml;</title>
+<link rel="stylesheet" type="text/css" href="http://vuorinen.hopto.org/kipamedia/main.css" />
+<link rel="stylesheet" type="text/css" href="http://vuorinen.hopto.org/kipamedia/tabcontent.css" />
+
+<script type="text/javascript" src="http://vuorinen.hopto.org/kipamedia/tabcontent.js">
+/***********************************************
+* Tab Content script v2.2- � Dynamic Drive DHTML code library (www.dynamicdrive.com)
+* This notice MUST stay intact for legal use
+* Visit Dynamic Drive at http://www.dynamicdrive.com/ for full source code
+***********************************************/
+</script>
+</head>
+
+<body>
+<A href='../../'>taakse</A> <br>
+<h2>Vartioiden määritys</h2>
+<h3>Valitse sarja ja syötä vartiot</h3>
+
+{% if sarja_vartiot %} 
+        <form action="." method="post">     
+	<ul id="sarjatabs" class="shadetabs">
+		{% for sarja in sarja_vartiot%}
+		    {% ifequal sarja sarja_vartiot.0  %}
+			    <li><a href="#" rel="sarja{{ sarja.0.id }}" class="selected">{{ sarja.0.nimi }}</a></li>
+	            {% else %}
+			    <li><a href="#" rel="sarja{{ sarja.0.id }}">{{ sarja.0.nimi }}</a></li>
+		    {% endifequal %}
+		{% endfor %}
+	</ul>
+       
+	<div style="border:1px solid gray; width:800px; margin-bottom: 1em; padding: 10px">
+	
+		{% for sarja in sarja_vartiot%}
+		<div id="sarja{{ sarja.0.id }}" class="tabcontent">
+			<ul id="tehtavatabs" class="">
+				{% for vartio in sarja.1 %}
+				    {{vartio}} <br>
+                                {% endfor %}
+			</ul>
+		</div>
+		{% endfor %}
+	</div>
+        <input type="submit"name="syote" value="Tallenna" >
+        </form>
+
+
+
+{% else %}
+    <p>Ei määriteltyjä sarjoja.</p>
+{% endif %}
+
+<script type="text/javascript">
+	var sarjat=new ddtabcontent("sarjatabs")
+	sarjat.setpersist(true)
+	sarjat.setselectedClassTarget("link") //"link" or "linkparent"
+	sarjat.init()
+</script>
+
+</body>
+</html>

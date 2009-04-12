@@ -7,7 +7,12 @@ from models import *
 
 def luoPostista(Malli,objekti,Form,forminNimi,post):
      """
-     LuoFormit post datasta.
+     Luo formeja listaan post datasta.
+     Malli = Tietokanta taulu jonka dataa formi muokkaa.
+     objekti = Tietokanta objekti joka liittyy jokaiseen formiin (formin konstruktorin 1 parametri)
+     Form = Formi luokka jonka instansseja tullaan luomaan listaan
+     forminNimi = nimi jolla kyseinen formi identifioidaan post datassa.
+     post = post data josta formit luodaan.
      """
      formit=[]
      tiedot=set()
@@ -22,29 +27,10 @@ def luoPostista(Malli,objekti,Form,forminNimi,post):
                models = Malli.objects.filter(id=haku.group(2))
                if models:
                    model=models[0]
-               formi= Form(objekti,data=post,model=model,id=haku.group(1))
+               formi= Form(objekti,model,post,id=haku.group(1))
                formit.append(formi)
      return formit
 
-def luoMaariteFormit(tehtavalle,post=None,tyhjia=0):
-    formit=[]
-    formi_id=0
-    maaritteet= SyoteMaarite.objects.filter(tehtava=tehtavalle)
-    if post:
-        formit=luoPostista(SyoteMaarite,tehtavalle,MaariteForm,"maarite",post)
-        for f in formit:
-            if formi_id<=int(f.id) :
-                formi_id = int(f.id)
-    else :
-        for m in maaritteet :
-            formi= MaariteForm(tehtavalle,model=m,id=formi_id)
-            formi_id=formi_id+1
-            formit.append(formi)
-    for i in range(tyhjia) :
-        formi= MaariteForm(tehtavalle,id=formi_id)
-        formi_id=formi_id+1
-        formit.append(formi)
-    return formit
 
 tyypit= (("piste","luku"),("aika","aika"))
 class MaariteForm(forms.Form) :
@@ -83,16 +69,42 @@ class MaariteForm(forms.Form) :
                     self.maarite.kali_vihje=vihje
                     self.maarite.save()
                     self.prefix="maarite_"+ str(self.id) + "_" + str(self.maarite.id)
-                    initial={'nimi': self.maarite.nimi,
-                            'tyyppi': self.maarite.tyyppi, 
-                            'vihje': self.maarite.kali_vihje }
-                    super(forms.Form, self).__init__(prefix=self.prefix,initial=initial)
+                    super(forms.Form, self).__init__(prefix=self.prefix,initial=self.clean_data)
        def empty(self) :
            if self.is_valid():
                if self.clean_data['nimi'] :
                    return False
                else : 
                    return True
+
+def luoMaariteFormit(tehtavalle,post=None,tyhjia=0):
+    """
+    Luo listaan määriteiden formit haluttusta tehtävästä. 
+    Mikäli post data on määritelty, täytetään formien sisältö sieltä, muutoin tietokannasta.
+    Halutessa lisää listan loppuun tyhjiä formeja.
+    """
+    formit=[]
+    formi_id=1
+    maaritteet= SyoteMaarite.objects.filter(tehtava=tehtavalle)
+    # Luodaan post datasta:
+    if post:
+        formit=luoPostista(SyoteMaarite,tehtavalle,MaariteForm,"maarite",post)
+        for f in formit:
+            if formi_id<=int(f.id) :
+                formi_id = int(f.id)
+    # Tai tietokannan tehtävän määritteistä:
+    else :
+        for m in maaritteet :
+            formi= MaariteForm(tehtavalle,model=m,id=formi_id)
+            formi_id=formi_id+1
+            formit.append(formi)
+    # Lisätään tyhjät:
+    for i in range(tyhjia) :
+        formi= MaariteForm(tehtavalle,id=formi_id)
+        formi_id=formi_id+1
+        formit.append(formi)
+
+    return formit
 
 class TehtavaForm(forms.Form) :
        nimi = forms.CharField(max_length=255)
@@ -222,5 +234,87 @@ class AikaSyoteForm(forms.Form) :
 
 class AikaValiForm(forms.Form):
       pass
-          
+
+def luoNimi(forminNimi,objektinID=None,id=None):
+        prefix = forminNimi
+        if id :
+            prefix= prefix +"_" + str(id)
+        else :
+            prefix= prefix +"_#"
+        if objektinID:
+            prefix= prefix +"_" + str(objektinID)
+        else :
+            prefix= prefix +"_#"
+        return prefix
+
+class VartioForm(forms.Form):
+    numero = forms.IntegerField(required=False,widget=forms.TextInput(attrs={'size':'2'}))
+    nimi = forms.CharField(max_length=50,required=False)
+    def __init__(self,sarja,vartio=None,post=None,id=None):
+        self.sarja=sarja
+        self.vartio=vartio
+        self.id=id
+        initial={}
+        objektinID = None
+        if self.vartio:
+             objektinID = vartio.id 
+             initial={'nimi': self.vartio.nimi , 'numero' : self.vartio.nro }
+        prefix= luoNimi("vartio",objektinID,id=self.id)
+        super(forms.Form, self).__init__(post,prefix=prefix,initial=initial)
+    def __cmp__(self,other) :
+        if self.is_valid() and other.is_valid():
+            return cmp(self.clean_data["numero"],other.clean_data['numero'] )
+        else :
+            return 0 
+    def save(self) :
+        if self.is_valid() :
+             nimi=self.clean_data["nimi"]
+             numero=self.clean_data["numero"]
+             if nimi:
+                 if not self.vartio:
+                     self.vartio=Vartio()
+                     self.vartio.sarja=self.sarja
+                 self.vartio.nimi=nimi
+                 self.vartio.nro=numero
+                 self.vartio.save()
+                 prefix= luoNimi("vartio",self.vartio.id,self.id)
+                 super(forms.Form, self).__init__(prefix=prefix,initial=self.clean_data)
+             elif self.vartio :
+                 self.vartio.delete()
+                 self.vartio = None
+    def empty(self) :
+        if self.is_valid() :
+            if self.clean_data["nimi"] and self.clean_data["numero"] :
+                return False
+            else: 
+                return True
+        else: 
+            return False
+
+def luoVartioFormit(sarjalle,post=None,tyhjia=0):
+    formit=[]
+    formi_id=1
+    vartiot = Vartio.objects.filter(sarja=sarjalle)
+    # Luodaan post datasta:
+    if post:
+        formit=luoPostista(Vartio,sarjalle,VartioForm,"vartio",post)
+        formit.sort()
+        for f in formit:
+            if formi_id<=int(f.id) :
+                formi_id = int(f.id)
+    # Tai tietokannan tehtävän määritteistä:
+    else :
+        for v in vartiot :
+            formi= VartioForm(sarjalle,v,id=formi_id)
+            formi_id=formi_id+1
+            formit.append(formi)
+    # Lisätään tyhjät:
+    for i in range(tyhjia) :
+        formi= VartioForm(sarjalle,id=formi_id)
+        formi_id=formi_id+1
+        formit.append(formi)
+
+    return formit
+
+
 

@@ -34,7 +34,20 @@ def maaritaValitseTehtava(request,kisa_nimi):
       return render_to_response('tupa/maaritaValitseTehtava.html', {'sarja_tehtavat': sarjaTehtavat })
 
 def maaritaVartiot(request,kisa_nimi):
-      return render_to_response('tupa/maaritaVartiot.html', { })
+      sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
+      sarjaVartiot=[]
+      posti=None
+      if request.method == 'POST':
+          posti=request.POST
+      for s in sarjat :
+         vFormit=luoVartioFormit(s,posti,tyhjia=10)
+         vartioFormit=[]
+         for v in vFormit :
+             v.save()
+             if not v.empty() :
+                 vartioFormit.append( v )
+         sarjaVartiot.append( (s,vartioFormit) )
+      return render_to_response('tupa/maaritaVartiot.html', { 'sarja_vartiot' : sarjaVartiot })
 
 def maaritaTehtava(request, kisa_nimi, tehtava_id):
     tehtava = Tehtava.objects.filter(id=tehtava_id)[0]
