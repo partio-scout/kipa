@@ -25,48 +25,40 @@ def tulosta(request,kisa_nimi):
 def maaritaKisa(request, kisa_nimi):
       return HttpResponse("KISAN " + kisa_nimi + " MÄÄRITYS"  )
 
+def maaritaValitseTehtava(request,kisa_nimi):
+      sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
+      sarjaTehtavat = []
+      for s in sarjat :
+           sarjanTehtavat = Tehtava.objects.filter(rasti__sarja = s )
+           sarjaTehtavat.append( (s,sarjanTehtavat) )   
+      return render_to_response('tupa/maaritaValitseTehtava.html', {'sarja_tehtavat': sarjaTehtavat })
+
+def maaritaVartiot(request,kisa_nimi):
+      return render_to_response('tupa/maaritaVartiot.html', { })
+
 def maaritaTehtava(request, kisa_nimi, tehtava_id):
     tehtava = Tehtava.objects.filter(id=tehtava_id)[0]
     tehtavaForm = TehtavaForm(tehtava)
     maaritteet = SyoteMaarite.objects.filter( tehtava=tehtava )
     maariteFormit = []
-    for i,m in enumerate(maaritteet) :
-        maariteFormit.append( MaariteForm( m ))
-
+    posti=None
     if request.method == 'POST':
-        if request.POST["syote"]=="Lisaa" :
-            uusiSyote = SyoteMaarite()
-            uusiSyote.nimi="Uusi Syote"
-            uusiSyote.kali_vihje="Uusi vihje"
-            uusiSyote.tyyppi="Uusi tyyppi"
-            uusiSyote.tehtava=tehtava
-            uusiSyote.save()
-        elif request.POST["syote"]=="Poista" :
-            syotteet = SyoteMaarite.objects.filter(tehtava = tehtava)
-            poistettavaSyote= syotteet[ len(syotteet)-1 ]
-            poistettavaSyote.delete()
-        else:
-            maaritteet = SyoteMaarite.objects.filter( tehtava=tehtava )
-            for mi in range(len(maaritteet)) :
-                maariteFormit[mi] = MaariteForm(maaritteet[mi],request.POST)
-                if maariteFormit[mi].is_valid() :
-                    maariteFormit[mi].save()
+          posti=request.POST
+    maariteFormit=luoMaariteFormit(tehtava,posti,tyhjia=3)
+    mFormit=[]
+    for m in maariteFormit :
+         m.save()
+         if not m.empty() :
+             mFormit.append(m)
+   
+    tehtavaForm = TehtavaForm(tehtava,posti)
+    teht = Tehtava.objects.filter(id=tehtava_id)[0]
+    if tehtavaForm.is_valid() :
+       teht.nimi=tehtavaForm.clean_data['nimi']
+       teht.kaava=tehtavaForm.clean_data['kaava']
+       teht.save()
 
-        maaritteet = SyoteMaarite.objects.filter( tehtava=tehtava )
-        del maariteFormit[:]
-        for i,m in enumerate(maaritteet) :
-            maariteFormit.append( MaariteForm( m ))
-
-        tehtavaForm = TehtavaForm(tehtava,request.POST)
-        teht = Tehtava.objects.filter(id=tehtava_id)[0]
-        if tehtavaForm.is_valid() :
-            teht.nimi=tehtavaForm.clean_data['nimi']
-            teht.kaava=tehtavaForm.clean_data['kaava']
-            teht.save()
-    else:
-        pass
-
-    return render_to_response('tupa/maarita_tehtava.html', { 'tehtava' : tehtava ,'tehtavaForm' : tehtavaForm , 'maariteFormit' : maariteFormit })
+    return render_to_response('tupa/maarita_tehtava.html', { 'tehtava' : tehtava ,'tehtavaForm' : tehtavaForm , 'maariteFormit' : mFormit })
 
 def syotaKisa(request, kisa_nimi):
       sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)

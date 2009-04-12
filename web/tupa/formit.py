@@ -3,27 +3,100 @@
 from django.newforms.util import ValidationError
 from django import newforms as forms
 from TulosLaskin import *
-from models import*
-class MaariteForm(forms.Form) :
-       nimi = forms.CharField(max_length=255)
-       tyyppi = forms.CharField(max_length=255)
-       vihje = forms.CharField(max_length=255)
+from models import *
 
-       def __init__(self,model,data=None) :  
-           self.model=model
-           prefix="maarite_" + str(self.model.id)
-           initial={'nimi': self.model.nimi, 'tyyppi': self.model.tyyppi, 'vihje': self.model.kali_vihje }
+def luoPostista(Malli,objekti,Form,forminNimi,post):
+     """
+     LuoFormit post datasta.
+     """
+     formit=[]
+     tiedot=set()
+     for k,v in post.items() :
+           haku = re.search(r'^(' + forminNimi + '_\d*_.*?)-.*', k ) 
+           if haku:
+               tiedot.add( haku.group(1) )
+     for f in tiedot :
+           haku = re.search(r'^' + forminNimi + '_(\d*)_(.*)', f ) 
+           model=None
+           if haku :
+               models = Malli.objects.filter(id=haku.group(2))
+               if models:
+                   model=models[0]
+               formi= Form(objekti,data=post,model=model,id=haku.group(1))
+               formit.append(formi)
+     return formit
+
+def luoMaariteFormit(tehtavalle,post=None,tyhjia=0):
+    formit=[]
+    formi_id=0
+    maaritteet= SyoteMaarite.objects.filter(tehtava=tehtavalle)
+    if post:
+        formit=luoPostista(SyoteMaarite,tehtavalle,MaariteForm,"maarite",post)
+        for f in formit:
+            if formi_id<=int(f.id) :
+                formi_id = int(f.id)
+    else :
+        for m in maaritteet :
+            formi= MaariteForm(tehtavalle,model=m,id=formi_id)
+            formi_id=formi_id+1
+            formit.append(formi)
+    for i in range(tyhjia) :
+        formi= MaariteForm(tehtavalle,id=formi_id)
+        formi_id=formi_id+1
+        formit.append(formi)
+    return formit
+
+tyypit= (("piste","luku"),("aika","aika"))
+class MaariteForm(forms.Form) :
+       nimi = forms.CharField(max_length=255,required=False)
+       tyyppi = forms.ChoiceField(required=False,choices=tyypit)
+       vihje = forms.CharField(max_length=255,required=False)
+
+       def __init__(self,tehtava,model=None,data=None,id=None) :  
+           self.tehtava=tehtava
+           self.maarite=model
+           self.id=id
+           prefix= "maarite_" + str(self.id) + "_"
+           initial={}
+           if self.maarite :
+               prefix=prefix + str(self.maarite.id)
+               initial={'nimi': self.maarite.nimi, 'tyyppi': self.maarite.tyyppi, 'vihje': self.maarite.kali_vihje }
+           else : 
+               prefix=prefix + "#"
            super(forms.Form, self).__init__(data,prefix=prefix,initial=initial)
-       
+
        def save(self) :
-           self.model.nimi=self.clean_data['nimi']
-           self.model.tyyppi=self.clean_data['tyyppi']
-           self.model.kali_vihje=self.clean_data['vihje']
-           self.model.save()
+           if self.is_valid():
+                nimi=self.clean_data['nimi'] 
+                tyyppi=self.clean_data['tyyppi']
+                vihje=self.clean_data['vihje']
+                if not nimi :
+                    if self.maarite :
+                        self.maarite.delete()
+                        self.maarite = None
+                else :
+                    if not self.maarite :
+                        self.maarite=SyoteMaarite()
+                        self.maarite.tehtava=self.tehtava
+                    self.maarite.nimi=nimi
+                    self.maarite.tyyppi=tyyppi
+                    self.maarite.kali_vihje=vihje
+                    self.maarite.save()
+                    self.prefix="maarite_"+ str(self.id) + "_" + str(self.maarite.id)
+                    initial={'nimi': self.maarite.nimi,
+                            'tyyppi': self.maarite.tyyppi, 
+                            'vihje': self.maarite.kali_vihje }
+                    super(forms.Form, self).__init__(prefix=self.prefix,initial=initial)
+       def empty(self) :
+           if self.is_valid():
+               if self.clean_data['nimi'] :
+                   return False
+               else : 
+                   return True
 
 class TehtavaForm(forms.Form) :
        nimi = forms.CharField(max_length=255)
-       kaava = forms.CharField(max_length=255)
+       kaava = forms.CharField(max_length=255,widget=forms.TextInput(attrs={'size':'50'}))
 
        def __init__(self,model,data=None) :  
           self.model=model
@@ -39,9 +112,10 @@ class PisteSyoteForm(forms.Form):
       """
       Formi joka ottaa vastaan merkkijonon jossa on luku, tallentaa sen syötteeseen.
       """
-      arvo = forms.CharField( max_length=40, required=False)
+      arvo = forms.CharField( max_length=40, required=False,widget=forms.TextInput(attrs={'size':'2'}))
       def __init__(self,maarite,vartio,post=None) : 
            """
+           Luo formin.
            Pakolliset parametrit ovat:
                -Syötteen määrite jota formi edustaa
                -Vartio jota formi edustaa
@@ -60,11 +134,14 @@ class PisteSyoteForm(forms.Form):
                initial= { "arvo" : self.syote.arvo }    
            super(forms.Form, self).__init__(post,prefix=prefix,initial=initial)
       def clean_arvo(self) :
-          haku = re.search(r'^\d*\Z|^\d*\.\d*\Z', self.clean_data["arvo"] ) 
+          """
+          Syötetyn arvon validiointi funktio. Tarkistaa että on numero, tai h.
+          """
+          haku = re.search(r'^\d*\Z|^\d*\.\d*\Z|^h\Z', self.clean_data["arvo"] ) 
           if haku :   
              return self.clean_data["arvo"]
           else :  
-             raise ValidationError("Syöta Numeroita!")
+             raise ValidationError('Syöta lukuja tai "h"=hylätty')
 
       def save(self) :
            """ 
@@ -142,54 +219,7 @@ class AikaSyoteForm(forms.Form) :
                   if self.syote:
                       self.syote.delete()
                       self.syote = None
-"""
-class SyoteForm( forms.Form ) :
-       def __init__(self,model,data=None) :  
-          self.model=model
-          prefix = "syote_" + str(self.model.id)
-          
-          if self.model.maarite.tyyppi=="piste" :
-              arvo= self.model.arvo 
-          elif self.model.maarite.tyyppi=="aika" :
-              if self.model.arvo and not self.model.arvo == " " :
-                  tunnit=divmod(Decimal(self.model.arvo) , 60*60)[0]
-                  minuutit=divmod(Decimal(self.model.arvo) , 60)[0]- tunnit*60
-                  sekuntit= Decimal(self.model.arvo) - tunnit*60*60 -minuutit*60
-                   self.= tunnit 
-                      = minuutit
-                      = sekuntit
-              else : 
-                  arvo=self.model.arvo
 
-          initial = {'arvo': arvo}
-          super(forms.Form, self).__init__(data,prefix=prefix,initial=initial)
-       
-       arvo = forms.CharField( max_length=40)
-
-       def clean_arvo(self):
-           if not self.tyyppi :
-               raise ValidationError("FORMIN TYYPPIÄ EI OLE MÄÄRÄTTY")
-           elif self.tyyppi=="aika":
-               tunnit = self.clean_data["h"]
-               minuutit = self.clean_data["min"]
-               sekuntit = self.clean_data["sek"]
-               if haku :     
-                    return str(Decimal(tunnit*60*60 + Decimal(minuutit)*60 + Decimal(sekuntit)))
-               else :
-                    raise ValidationError("Syota hh:mm:ss!")
-           elif self.tyyppi=="piste" :
-               haku = re.search(r'^\d*\Z|^\d*\.\d*\Z', self.clean_data["arvo"] ) 
-               if haku :   
-                    return self.clean_data["arvo"]
-               else :  
-                    raise ValidationError("Syöta Numeroita!")
-           else: 
-               raise ValidationError("Syotteen maritteen tyyppi tuntematon.")
-
-       def save(self) :
-          self.model.arvo=self.clean_data['arvo']
-          self.model.save()
-"""
 class AikaValiForm(forms.Form):
       pass
           

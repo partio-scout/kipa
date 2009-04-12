@@ -1,9 +1,9 @@
 <h1>{{kisa_object.nimi}}</h1>	
 <br>
-<h2> Sarjat </h2>
+<A href='../'>taakse</A>
+<h2> Tulokset Sarjoittain </h2>
 
 {%for sarja in sarja_list %}
-      {{sarja.nimi}}
       <A href='./sarja/{{sarja.id}}/' > {{sarja.nimi}} </A> <br>
 
 {% endfor %}

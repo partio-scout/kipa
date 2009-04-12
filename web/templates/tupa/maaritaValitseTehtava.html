@@ -8,25 +8,21 @@
 
 <script type="text/javascript" src="tabcontent.js">
 /***********************************************
-* Tab Content script v2.2- © Dynamic Drive DHTML code library (www.dynamicdrive.com)
+* Tab Content script v2.2- ¬© Dynamic Drive DHTML code library (www.dynamicdrive.com)
 * This notice MUST stay intact for legal use
 * Visit Dynamic Drive at http://www.dynamicdrive.com/ for full source code
 ***********************************************/
 </script>
 </head>
 <body>
+<A href='../../'>taakse</A> <br>
+<h2>Teht√§vien m√§√§ritys</h2>
+<h3>Valitse sarja ja teht√§v√§</h3>
 
-<A href='../'>taakse</A>
-
-<h2>Tulosten syˆttˆ</h2>
-<h3>Valitse sarja ja teht‰v‰</h3>
-
-<br>
-
-{% if tehtava_taulukko %}
+{% if sarja_tehtavat %}
 	<ul id="sarjatabs" class="shadetabs">
-		{% for sarja in tehtava_taulukko%}
-		    {% ifequal sarja tehtava_taulukko.0  %}
+		{% for sarja in sarja_tehtavat%}
+		    {% ifequal sarja sarja_tehtavat.0  %}
 			    <li><a href="#" rel="sarja{{ sarja.0.id }}" class="selected">{{ sarja.0.nimi }}</a></li>
 			{% else %}
 			    <li><a href="#" rel="sarja{{ sarja.0.id }}">{{ sarja.0.nimi }}</a></li>
@@ -36,11 +32,11 @@
        
 	<div style="border:1px solid gray; width:800px; margin-bottom: 1em; padding: 10px">
 	
-		{% for sarja in tehtava_taulukko%}
+		{% for sarja in sarja_tehtavat %}
 		<div id="sarja{{ sarja.0.id }}" class="tabcontent">
 			<ul id="tehtavatabs" class="">
 				{% for tehtava in sarja.1 %}
-					<li><a href="/tupa/{{sarja.0.kisa.nimi}}/syota/tehtava/{{ tehtava.id }}">{{ tehtava.numero }}  {{ tehtava.nimi }}</a></li>
+					<li><a href="/tupa/{{sarja.0.kisa.nimi}}/maarita/tehtava/{{ tehtava.id }}">{{ tehtava.numero }}  {{ tehtava.nimi }}</a></li>
 				{% endfor %}
 			</ul>
 		</div>
@@ -50,7 +46,7 @@
 
 
 {% else %}
-    <p>Ei m‰‰riteltyj‰ sarjoja tai teht‰vi‰.</p>
+    <p>Ei m√§√§riteltyj√§ sarjoja tai teht√§vi√§.</p>
 {% endif %}
 
 <script type="text/javascript">
