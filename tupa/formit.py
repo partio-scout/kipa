@@ -1,9 +1,22 @@
 # coding: latin-1
+from django.core.exceptions import ObjectDoesNotExist
 
 from django.newforms.util import ValidationError
 from django import newforms as forms
 from TulosLaskin import *
 from models import *
+
+def luoNimi(forminNimi,objektinID=None,id=None):
+        prefix = forminNimi
+        if id :
+            prefix= prefix +"_" + str(id)
+        else :
+            prefix= prefix +"_#"
+        if objektinID:
+            prefix= prefix +"_" + str(objektinID)
+        else :
+            prefix= prefix +"_#"
+        return prefix
 
 def luoPostista(Malli,objekti,Form,forminNimi,post):
      """
@@ -38,7 +51,7 @@ class MaariteForm(forms.Form) :
        tyyppi = forms.ChoiceField(required=False,choices=tyypit)
        vihje = forms.CharField(max_length=255,required=False)
 
-       def __init__(self,tehtava,model=None,data=None,id=None) :  
+       def __init__(self,tehtava=None,model=None,data=None,id=None) :  
            self.tehtava=tehtava
            self.maarite=model
            self.id=id
@@ -52,7 +65,7 @@ class MaariteForm(forms.Form) :
            super(forms.Form, self).__init__(data,prefix=prefix,initial=initial)
 
        def save(self) :
-           if self.is_valid():
+           if self.is_valid() and self.tehtava:
                 nimi=self.clean_data['nimi'] 
                 tyyppi=self.clean_data['tyyppi']
                 vihje=self.clean_data['vihje']
@@ -77,7 +90,7 @@ class MaariteForm(forms.Form) :
                else : 
                    return True
 
-def luoMaariteFormit(tehtavalle,post=None,tyhjia=0):
+def luoMaariteFormit(tehtavalle=None,post=None,tyhjia=0):
     """
     Luo listaan määriteiden formit haluttusta tehtävästä. 
     Mikäli post data on määritelty, täytetään formien sisältö sieltä, muutoin tietokannasta.
@@ -85,40 +98,67 @@ def luoMaariteFormit(tehtavalle,post=None,tyhjia=0):
     """
     formit=[]
     formi_id=1
-    maaritteet= SyoteMaarite.objects.filter(tehtava=tehtavalle)
-    # Luodaan post datasta:
-    if post:
-        formit=luoPostista(SyoteMaarite,tehtavalle,MaariteForm,"maarite",post)
-        for f in formit:
-            if formi_id<=int(f.id) :
-                formi_id = int(f.id)
-    # Tai tietokannan tehtävän määritteistä:
-    else :
-        for m in maaritteet :
-            formi= MaariteForm(tehtavalle,model=m,id=formi_id)
-            formi_id=formi_id+1
-            formit.append(formi)
+    if tehtavalle :
+        maaritteet= SyoteMaarite.objects.filter(tehtava=tehtavalle)
+        # Luodaan post datasta:
+        if post:
+            formit=luoPostista(SyoteMaarite,tehtavalle,MaariteForm,"maarite",post)
+            for f in formit:
+                if formi_id<=int(f.id) :
+                    formi_id = int(f.id)
+        # Tai tietokannan tehtävän määritteistä:
+        else :
+            for m in maaritteet :
+                formi= MaariteForm(tehtavalle,model=m,id=formi_id)
+                formi_id=formi_id+1
+                formit.append(formi)
+    
     # Lisätään tyhjät:
     for i in range(tyhjia) :
         formi= MaariteForm(tehtavalle,id=formi_id)
         formi_id=formi_id+1
         formit.append(formi)
-
     return formit
 
 class TehtavaForm(forms.Form) :
-       nimi = forms.CharField(max_length=255)
-       kaava = forms.CharField(max_length=255,widget=forms.TextInput(attrs={'size':'50'}))
+       nimi = forms.CharField(max_length=255,required=False)
+       kaava = forms.CharField(max_length=255,required=False,widget=forms.TextInput(attrs={'size':'50'}))
+       def __init__(self,sarja=None,tehtava=None,post=None,id=None) :  
+          self.tehtava=tehtava
+          self.sarja=sarja
+          if not self.sarja and self.tehtava :
+              self.sarja = self.tehtava.rasti.sarja
+             
 
-       def __init__(self,model,data=None) :  
-          self.model=model
-          prefix = "tehtava_" + str(self.model.id)
-          initial={ 'nimi' : self.model.nimi, 'kaava' : self.model.kaava }
-          super(forms.Form, self).__init__(data,prefix=prefix,initial=initial)
+          self.id = id
+          initial={}
+          objektinID = None
+          if self.tehtava :
+              objektinID = tehtava.id
+              initial={ 'nimi' : self.tehtava.nimi, 'kaava' : self.tehtava.kaava }
+          prefix= luoNimi("tehtava", objektinID , id=self.id)
+          super(forms.Form, self).__init__(post,prefix=prefix,initial=initial)
        def save(self) :
-          self.model.nimi=self.clean_data['nimi']
-          self.model.kaava=self.clean_data['kaava']
-          self.model.save() 
+          if self.is_valid() and self.sarja :
+             nimi=self.clean_data["nimi"]
+             kaava=self.clean_data["kaava"]
+             if nimi:
+                 if not self.tehtava:
+                     self.tehtava=Tehtava()
+                     rasti= Rasti()
+                     rasti.sarja=self.sarja
+                     rasti.nimi="TyhjäRasti"
+                     rasti.save()
+                     self.tehtava.rasti=rasti
+                 self.tehtava.nimi=nimi
+                 self.tehtava.kaava=kaava
+                 self.tehtava.save()
+                 prefix= luoNimi("tehtava",self.tehtava.id,self.id)
+                 super(forms.Form, self).__init__(prefix=prefix,initial=self.clean_data)
+             elif self.tehtava:
+                 self.tehtava.delete()
+                 self.tehtava = None
+
           
 class PisteSyoteForm(forms.Form):
       """
@@ -232,42 +272,32 @@ class AikaSyoteForm(forms.Form) :
                       self.syote.delete()
                       self.syote = None
 
-class AikaValiForm(forms.Form):
-      pass
-
-def luoNimi(forminNimi,objektinID=None,id=None):
-        prefix = forminNimi
-        if id :
-            prefix= prefix +"_" + str(id)
-        else :
-            prefix= prefix +"_#"
-        if objektinID:
-            prefix= prefix +"_" + str(objektinID)
-        else :
-            prefix= prefix +"_#"
-        return prefix
-
 class VartioForm(forms.Form):
     numero = forms.IntegerField(required=False,widget=forms.TextInput(attrs={'size':'2'}))
     nimi = forms.CharField(max_length=50,required=False)
-    def __init__(self,sarja,vartio=None,post=None,id=None):
+    def __init__(self,sarja=None,vartio=None,post=None,id=None):
         self.sarja=sarja
         self.vartio=vartio
         self.id=id
         initial={}
         objektinID = None
+        sarjanNimi="#"
+        if self.sarja :
+           sarjanNimi=self.sarja.nimi
         if self.vartio:
              objektinID = vartio.id 
              initial={'nimi': self.vartio.nimi , 'numero' : self.vartio.nro }
-        prefix= luoNimi("vartio",objektinID,id=self.id)
+        prefix= luoNimi("vartio_"+sarjanNimi,objektinID,id=self.id)
         super(forms.Form, self).__init__(post,prefix=prefix,initial=initial)
+
     def __cmp__(self,other) :
         if self.is_valid() and other.is_valid():
             return cmp(self.clean_data["numero"],other.clean_data['numero'] )
         else :
             return 0 
+
     def save(self) :
-        if self.is_valid() :
+        if self.is_valid() and self.sarja :
              nimi=self.clean_data["nimi"]
              numero=self.clean_data["numero"]
              if nimi:
@@ -277,11 +307,12 @@ class VartioForm(forms.Form):
                  self.vartio.nimi=nimi
                  self.vartio.nro=numero
                  self.vartio.save()
-                 prefix= luoNimi("vartio",self.vartio.id,self.id)
+                 prefix= luoNimi("vartio_"+self.sarja.nimi,self.vartio.id,self.id)
                  super(forms.Form, self).__init__(prefix=prefix,initial=self.clean_data)
              elif self.vartio :
                  self.vartio.delete()
                  self.vartio = None
+
     def empty(self) :
         if self.is_valid() :
             if self.clean_data["nimi"] and self.clean_data["numero"] :
@@ -297,7 +328,8 @@ def luoVartioFormit(sarjalle,post=None,tyhjia=0):
     vartiot = Vartio.objects.filter(sarja=sarjalle)
     # Luodaan post datasta:
     if post:
-        formit=luoPostista(Vartio,sarjalle,VartioForm,"vartio",post)
+        nimi="vartio_"+sarjalle.nimi
+        formit=luoPostista(Vartio,sarjalle,VartioForm,"vartio_"+sarjalle.nimi,post)
         formit.sort()
         for f in formit:
             if formi_id<=int(f.id) :
@@ -316,5 +348,101 @@ def luoVartioFormit(sarjalle,post=None,tyhjia=0):
 
     return formit
 
+class KisaForm(forms.Form):
+    nimi = forms.CharField(max_length=50,required=False)
+    def __init__(self,kisa=None,post=None,id=None):
+        self.kisa=kisa
+        self.id=id
+        initial={}
+        objektinID = None
+        if self.kisa:
+             objektinID = kisa.id 
+             initial={'nimi': self.kisa.nimi  }
+        prefix= luoNimi("kisa",objektinID,id=self.id)
+        super(forms.Form, self).__init__(post,prefix=prefix,initial=initial)
 
+    def save(self) :
+         if self.is_valid() :
+             nimi=self.clean_data["nimi"]
+             if nimi:
+                 if not self.kisa:
+                     self.kisa=Kisa()
+                 self.kisa.nimi=nimi
+                 self.kisa.save()
+                 prefix= luoNimi("kisa",self.kisa.id,self.id)
+                 super(forms.Form, self).__init__(prefix=prefix,initial=self.clean_data)
+             elif self.kisa:
+                 self.kisa.delete()
+                 self.kisa = None
+    def empty(self) :
+        if self.is_valid() :
+            if self.clean_data["nimi"]  :
+                return False
+            else: 
+                return True
+        else: 
+            return False
+
+
+class SarjaForm(forms.Form):
+    nimi = forms.CharField(max_length=50,required=False)
+    def __init__(self,kisa=None,sarja=None,post=None,id=None):
+        self.kisa=kisa
+        self.sarja=sarja
+        self.id=id
+        initial={}
+        objektinID = None
+        if self.sarja:
+             objektinID = sarja.id 
+             initial={'nimi': self.sarja.nimi}
+        prefix= luoNimi("sarja",objektinID,id=self.id)
+        super(forms.Form, self).__init__(post,prefix=prefix,initial=initial)
+    def save(self) :
+           if self.is_valid() and self.kisa:
+             nimi=self.clean_data["nimi"]
+             if nimi :
+                 if not self.sarja:
+                     self.sarja=Sarja()
+                 self.sarja.kisa=self.kisa
+                 self.sarja.nimi=nimi
+                 self.sarja.save()
+                 prefix= luoNimi("sarja",self.sarja.id,self.id)
+                 super(forms.Form, self).__init__(prefix=prefix,initial=self.clean_data)
+             elif self.sarja:
+                 self.sarja.delete()
+                 self.sarja = None
+    def empty(self):
+        if self.is_valid() :
+            if self.clean_data["nimi"]  :
+                return False
+            else: 
+                return True
+        else: 
+            return False
+
+def luoSarjaFormit(kisalle,post=None,tyhjia=0):
+    formit=[]
+    formi_id=1
+    sarjat= Sarja.objects.filter(kisa=kisalle)
+    # Luodaan post datasta:
+    if post:
+        nimi="sarja"
+        formit=luoPostista(Kisa,kisalle,SarjaForm,"sarja",post)
+        formit.sort()
+        for f in formit:
+            if formi_id<=int(f.id) :
+                formi_id = int(f.id)
+    # Tai tietokannan tehtävän määritteistä:
+    else :
+        for s in sarjat :
+            formi= SarjaForm(kisalle,s,id=formi_id)
+            formi_id=formi_id+1
+            formit.append(formi)
+    # Lisätään tyhjät:
+    for i in range(tyhjia) :
+        formi= SarjaForm(kisalle,id=formi_id)
+        formi_id=formi_id+1
+        formit.append(formi)
+
+    return formit
 

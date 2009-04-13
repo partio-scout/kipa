@@ -1,21 +1,26 @@
+{%if tehtava %}
 <A href='../'>taakse</A> <br>
 <h1> Tehtävän {{tehtava}} määritys </h1>
+{%else%}
+<A href='../../../'>taakse</A> <br>
+<h1> Uuden Tehtävän määritys </h1>
+{%endif%}
 
 <form action="." method="post">     
-    <h2>Vartiokohtaiset syötteet: </h2><br>
-    {% for maarite in maariteFormit %}
-        {{maarite.errors}}
-        {{ maarite }} <br>
-    {% endfor %}
-    
-    <h2>Tehtävän tiedot: </h2><br>
     <table class="form">
          {{tehtavaForm.nimi.errors}}
          nimi: {{ tehtavaForm.nimi }} <br>
          {{ tehtavaForm.kaava.errors }}
          kaava: {{ tehtavaForm.kaava }}
     </table>
-    <input type="submit"name="syote" value="Tallenna" />
+
+    <h2>Vartiokohtaiset syötteet: </h2><br>
+    {% for maarite in maariteFormit %}
+        {{maarite.errors}}
+        {{ maarite }} <br>
+    {% endfor %}
+    
+        <input type="submit"name="syote" value="Tallenna" />
     </form>
 
     

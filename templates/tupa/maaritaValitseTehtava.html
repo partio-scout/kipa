@@ -1,21 +1,24 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Teht&auml;v&auml;n sy&ouml;tt&ouml;</title>
-<link href="main.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" type="text/css" href="tabcontent.css" />
+<link rel="stylesheet" type="text/css" href="http://vuorinen.hopto.org/kipamedia/main.css" />
+<link rel="stylesheet" type="text/css" href="http://vuorinen.hopto.org/kipamedia/tabcontent.css" />
 
-<script type="text/javascript" src="tabcontent.js">
+<script type="text/javascript" src="http://vuorinen.hopto.org/kipamedia/tabcontent.js">
 /***********************************************
-* Tab Content script v2.2- © Dynamic Drive DHTML code library (www.dynamicdrive.com)
+* Tab Content script v2.2- � Dynamic Drive DHTML code library (www.dynamicdrive.com)
 * This notice MUST stay intact for legal use
 * Visit Dynamic Drive at http://www.dynamicdrive.com/ for full source code
 ***********************************************/
 </script>
 </head>
+
 <body>
+
+
 <A href='../../'>taakse</A> <br>
+
 <h2>Tehtävien määritys</h2>
 <h3>Valitse sarja ja tehtävä</h3>
 
@@ -39,6 +42,7 @@
 					<li><a href="/tupa/{{sarja.0.kisa.nimi}}/maarita/tehtava/{{ tehtava.id }}">{{ tehtava.numero }}  {{ tehtava.nimi }}</a></li>
 				{% endfor %}
 			</ul>
+			<h3><a href="/tupa/{{sarja.0.kisa.nimi}}/maarita/tehtava/uusi/sarja/{{ sarja.0.id }}/">lisää tehtävä</a> </h3>
 		</div>
 		{% endfor %}
 	</div>
