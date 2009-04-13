@@ -1,0 +1,14 @@
+<A href='../'>taakse</A> <br>
+<h1> Kisan määritys </h1>
+
+<form action="." method="post">     
+    {{kisa_form}}
+    <h2>Sarjat: </h2><br>
+    {% for s in sarja_formit %}
+        {{ s }} <br>
+    {% endfor %}
+    
+    <input type="submit"name="syote" value="Tallenna" />
+    </form>
+
+
