@@ -1,4 +1,5 @@
-{% block content %}
+{% extends "tupa/base.html" %}
+{% block content %} 
 
 <h1> Mihin syotetaan: </h1>
 
@@ -11,6 +12,7 @@
 {{ form.tehtava }}</p>
 <input type="submit" value="Submit"/>
 </form>
+
 {% endblock %}
 
 
