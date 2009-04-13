@@ -1,3 +1,6 @@
+{% extends "tupa/base.html" %}
+{% block content %} 
+
 {%if tehtava %}
 <A href='../'>taakse</A> <br>
 <h1> Tehtävän {{tehtava}} määritys </h1>
@@ -23,4 +26,5 @@
         <input type="submit"name="syote" value="Tallenna" />
     </form>
 
+{% endblock %}
     

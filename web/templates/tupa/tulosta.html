@@ -1,3 +1,6 @@
+{% extends "tupa/base.html" %}
+{% block content %} 
+
 <h1>{{kisa_object.nimi}}</h1>	
 <br>
 <A href='../'>taakse</A>
@@ -7,4 +10,6 @@
       <A href='./sarja/{{sarja.id}}/' > {{sarja.nimi}} </A> <br>
 
 {% endfor %}
+
+{% endblock %}
 

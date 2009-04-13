@@ -1,16 +1,18 @@
-<A href='./admin/'>AdminSivu </A> <br>
+{% extends "tupa/base.html" %}
+{% block content %} 
 
+<A href='uusiKisa/maarita'>Luo uusi kisa</A><br>
 <h1> Kisat:</h1>
-<A href='uusiKisa/maarita'>Luo uusi kisa</A>
 {% if latest_kisa_list %}
-    <ul>
     {% for kisa in latest_kisa_list %}
         <A href='{{kisa.nimi}}/' > {{kisa.nimi}} </A> <br>
     {% endfor %}
-    </ul>
 
 
 {% else %}
     <p>Ei määriteltyjä kisoja.</p>
 {% endif %}
+
+{% endblock %}
+
 

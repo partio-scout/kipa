@@ -1,20 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Teht&auml;v&auml;n sy&ouml;tt&ouml;</title>
-<link href="main.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" type="text/css" href="tabcontent.css" />
-
-<script type="text/javascript" src="tabcontent.js">
-/***********************************************
-* Tab Content script v2.2- © Dynamic Drive DHTML code library (www.dynamicdrive.com)
-* This notice MUST stay intact for legal use
-* Visit Dynamic Drive at http://www.dynamicdrive.com/ for full source code
-***********************************************/
-</script>
-</head>
-<body>
+{% extends "tupa/base.html" %}
+{% block content %} 
 
 <A href='../'>taakse</A>
 
@@ -53,12 +38,5 @@
     <p>Ei m‰‰riteltyj‰ sarjoja tai teht‰vi‰.</p>
 {% endif %}
 
-<script type="text/javascript">
-	var sarjat=new ddtabcontent("sarjatabs")
-	sarjat.setpersist(true)
-	sarjat.setselectedClassTarget("link") //"link" or "linkparent"
-	sarjat.init()
-</script>
-
-</body>
-</html>
+{% endblock %}
+ 
