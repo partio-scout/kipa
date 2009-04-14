@@ -6,7 +6,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 import operator
 from decimal import *
-from django import newforms as forms
+from django import forms
 import django.template
 from logger import lokkeri
 
