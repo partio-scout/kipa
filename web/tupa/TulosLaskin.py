@@ -284,7 +284,7 @@ class TulosLaskin :
                      for s in m.syote_set.filter(vartio=v):
                           syotteet.append( s )
 
-                lokkeri.setMessage("\nTehtävä: " + t.nimi).logMessage()
+                lokkeri.setMessage("\nTehtava: " + t.nimi).logMessage()
                 lokkeri.setMessage("Vartio: " + v.nimi).logMessage()
                 
                 pisteet= self.laskePisteet( syotteet, t )

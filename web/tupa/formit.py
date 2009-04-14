@@ -1,8 +1,8 @@
 # coding: latin-1
 from django.core.exceptions import ObjectDoesNotExist
 
-from django.newforms.util import ValidationError
-from django import newforms as forms
+from django.forms.util import ValidationError
+from django import forms
 from TulosLaskin import *
 from models import *
 
@@ -37,9 +37,8 @@ def luoPostista(Malli,objekti,Form,forminNimi,post):
            haku = re.search(r'^' + forminNimi + '_(\d*)_(.*)', f ) 
            model=None
            if haku :
-               models = Malli.objects.filter(id=haku.group(2))
-               if models:
-                   model=models[0]
+               if haku.group(2).isdigit():
+                   model = Malli.objects.get(id=haku.group(2))
                formi= Form(objekti,model,post,id=haku.group(1))
                formit.append(formi)
      return formit
@@ -66,9 +65,9 @@ class MaariteForm(forms.Form) :
 
        def save(self) :
            if self.is_valid() and self.tehtava:
-                nimi=self.clean_data['nimi'] 
-                tyyppi=self.clean_data['tyyppi']
-                vihje=self.clean_data['vihje']
+                nimi=self.cleaned_data['nimi'] 
+                tyyppi=self.cleaned_data['tyyppi']
+                vihje=self.cleaned_data['vihje']
                 if not nimi :
                     if self.maarite :
                         self.maarite.delete()
@@ -82,10 +81,10 @@ class MaariteForm(forms.Form) :
                     self.maarite.kali_vihje=vihje
                     self.maarite.save()
                     self.prefix="maarite_"+ str(self.id) + "_" + str(self.maarite.id)
-                    super(forms.Form, self).__init__(prefix=self.prefix,initial=self.clean_data)
+                    super(forms.Form, self).__init__(prefix=self.prefix,initial=self.cleaned_data)
        def empty(self) :
            if self.is_valid():
-               if self.clean_data['nimi'] :
+               if self.cleaned_data['nimi'] :
                    return False
                else : 
                    return True
@@ -140,8 +139,8 @@ class TehtavaForm(forms.Form) :
           super(forms.Form, self).__init__(post,prefix=prefix,initial=initial)
        def save(self) :
           if self.is_valid() and self.sarja :
-             nimi=self.clean_data["nimi"]
-             kaava=self.clean_data["kaava"]
+             nimi=self.cleaned_data["nimi"]
+             kaava=self.cleaned_data["kaava"]
              if nimi:
                  if not self.tehtava:
                      self.tehtava=Tehtava()
@@ -150,7 +149,7 @@ class TehtavaForm(forms.Form) :
                  self.tehtava.kaava=kaava
                  self.tehtava.save()
                  prefix= luoNimi("tehtava",self.tehtava.id,self.id)
-                 super(forms.Form, self).__init__(prefix=prefix,initial=self.clean_data)
+                 super(forms.Form, self).__init__(prefix=prefix,initial=self.cleaned_data)
              elif self.tehtava:
                  self.tehtava.delete()
                  self.tehtava = None
@@ -185,9 +184,9 @@ class PisteSyoteForm(forms.Form):
           """
           Syötetyn arvon validiointi funktio. Tarkistaa että on numero, tai h.
           """
-          haku = re.search(r'^\d*\Z|^\d*\.\d*\Z|^h\Z', self.clean_data["arvo"] ) 
+          haku = re.search(r'^\d*\Z|^\d*\.\d*\Z|^h\Z', self.cleaned_data["arvo"] ) 
           if haku :   
-             return self.clean_data["arvo"]
+             return self.cleaned_data["arvo"]
           else :  
              raise ValidationError('Syöta lukuja tai "h"=hylätty')
 
@@ -198,7 +197,7 @@ class PisteSyoteForm(forms.Form):
            Mikäli formi on tyhjä, formia vastaava tietokannan taulu tuhotaan.
            """
            if self.is_valid() :
-              arvo = self.clean_data["arvo"]
+              arvo = self.cleaned_data["arvo"]
               if arvo:
                  if not self.syote:
                      self.syote = Syote()
@@ -244,9 +243,9 @@ class AikaSyoteForm(forms.Form) :
 
        def save(self) :
            if self.is_valid() :
-               tunnit= self.clean_data["h"]
-               minuutit= self.clean_data["min"]
-               sekuntit= self.clean_data["s"]
+               tunnit= self.cleaned_data["h"]
+               minuutit= self.cleaned_data["min"]
+               sekuntit= self.cleaned_data["s"]
                
                if not tunnit==None or not minuutit==None or not sekuntit==None :
                   arvo=Decimal(0)
@@ -288,14 +287,14 @@ class VartioForm(forms.Form):
 
     def __cmp__(self,other) :
         if self.is_valid() and other.is_valid():
-            return cmp(self.clean_data["numero"],other.clean_data['numero'] )
+            return cmp(self.cleaned_data["numero"],other.cleaned_data['numero'] )
         else :
             return 0 
 
     def save(self) :
         if self.is_valid() and self.sarja :
-             nimi=self.clean_data["nimi"]
-             numero=self.clean_data["numero"]
+             nimi=self.cleaned_data["nimi"]
+             numero=self.cleaned_data["numero"]
              if nimi:
                  if not self.vartio:
                      self.vartio=Vartio()
@@ -304,14 +303,14 @@ class VartioForm(forms.Form):
                  self.vartio.nro=numero
                  self.vartio.save()
                  prefix= luoNimi("vartio_"+self.sarja.nimi,self.vartio.id,self.id)
-                 super(forms.Form, self).__init__(prefix=prefix,initial=self.clean_data)
+                 super(forms.Form, self).__init__(prefix=prefix,initial=self.cleaned_data)
              elif self.vartio :
                  self.vartio.delete()
                  self.vartio = None
 
     def empty(self) :
         if self.is_valid() :
-            if self.clean_data["nimi"] and self.clean_data["numero"] :
+            if self.cleaned_data["nimi"] and self.cleaned_data["numero"] :
                 return False
             else: 
                 return True
@@ -359,20 +358,20 @@ class KisaForm(forms.Form):
 
     def save(self) :
          if self.is_valid() :
-             nimi=self.clean_data["nimi"]
+             nimi=self.cleaned_data["nimi"]
              if nimi:
                  if not self.kisa:
                      self.kisa=Kisa()
                  self.kisa.nimi=nimi
                  self.kisa.save()
                  prefix= luoNimi("kisa",self.kisa.id,self.id)
-                 super(forms.Form, self).__init__(prefix=prefix,initial=self.clean_data)
+                 super(forms.Form, self).__init__(prefix=prefix,initial=self.cleaned_data)
              elif self.kisa:
                  self.kisa.delete()
                  self.kisa = None
     def empty(self) :
         if self.is_valid() :
-            if self.clean_data["nimi"]  :
+            if self.cleaned_data["nimi"]  :
                 return False
             else: 
                 return True
@@ -395,7 +394,7 @@ class SarjaForm(forms.Form):
         super(forms.Form, self).__init__(post,prefix=prefix,initial=initial)
     def save(self) :
            if self.is_valid() and self.kisa:
-             nimi=self.clean_data["nimi"]
+             nimi=self.cleaned_data["nimi"]
              if nimi :
                  if not self.sarja:
                      self.sarja=Sarja()
@@ -403,13 +402,13 @@ class SarjaForm(forms.Form):
                  self.sarja.nimi=nimi
                  self.sarja.save()
                  prefix= luoNimi("sarja",self.sarja.id,self.id)
-                 super(forms.Form, self).__init__(prefix=prefix,initial=self.clean_data)
+                 super(forms.Form, self).__init__(prefix=prefix,initial=self.cleaned_data)
              elif self.sarja:
                  self.sarja.delete()
                  self.sarja = None
     def empty(self):
         if self.is_valid() :
-            if self.clean_data["nimi"]  :
+            if self.cleaned_data["nimi"]  :
                 return False
             else: 
                 return True

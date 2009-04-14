@@ -53,7 +53,7 @@ def haeLuokat(objekteista):
             luokat.append(luokka)
     return luokat
 
-dictSqlDjango= {"text":"TextField" , "date":"DateField" , "varchar":"CharField" , "int":"IntegerField" , "float":"FloatField" , "serial":"AutoField" , "boolean":"BooleanField" , "numeric":"FloatField" , "timestamp":"DateTimeField" , "bigint":"IntegerField" , "datetime":"DateTimeField"  , "date":"DateField" , "time" : "TimeField" , "bool" : "BooleanField" , "int" : "IntegerField" , "decimal":"FloatField" }
+dictSqlDjango= {"text":"TextField" , "date":"DateField" , "varchar":"CharField" , "int":"IntegerField" , "float":"FloatField" , "serial":"AutoField" , "boolean":"BooleanField" , "numeric":"FloatField" , "timestamp":"DateTimeField" , "bigint":"IntegerField" , "datetime":"DateTimeField"  , "date":"DateField" , "time" : "TimeField" , "bool" : "BooleanField" , "int" : "IntegerField" , "decimal":"DecimalField" }
 
 varcharRE= re.compile('varchar\((\d+)\)')
 
@@ -68,7 +68,7 @@ def haeLuokanRunko(luokka,rivin_alku) :
          else:
              tyyppi = a.tyyppi
          if varchar:
-             tyyppi = "CharField(maxlength="+varchar.group(1)+")"
+             tyyppi = "CharField(max_length="+varchar.group(1)+")"
          if len(a.arvo)>0 :
              if not re.search(".*\(\)",tyyppi) :
                  tyyppi = tyyppi.replace(")",", "+a.arvo+" )")

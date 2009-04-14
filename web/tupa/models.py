@@ -2,12 +2,11 @@ from django.db import models
 
 from random import uniform
 from TulosLaskin import *
-from django import newforms as forms
 
 class Allergia(models.Model) :
     #gen_dia_class Allergia
 
-    mille = models.CharField(maxlength=255)
+    mille = models.CharField(max_length=255)
 
     #end_dia_class
     def __str__(self) :
@@ -20,9 +19,9 @@ class Allergia(models.Model) :
 class Kisa(models.Model) :
     #gen_dia_class Kisa
 
-    nimi = models.CharField(maxlength=255)
+    nimi = models.CharField(max_length=255)
     aika = models.DateField(blank=True, null=True )
-    paikka = models.CharField(maxlength=255, blank=True )
+    paikka = models.CharField(max_length=255, blank=True )
 
     #end_dia_class
     def __str__(self) :
@@ -35,7 +34,7 @@ class Kisa(models.Model) :
 class Sarja(models.Model) :
     #gen_dia_class Sarja
 
-    nimi = models.CharField(maxlength=255)
+    nimi = models.CharField(max_length=255)
     vartion_maksimikoko = models.IntegerField(blank=True, null=True, default=0 )
     vartion_minimikoko = models.IntegerField(blank=True, null=True,default=0 )
     kisa = models.ForeignKey(Kisa)
@@ -53,14 +52,14 @@ class Sarja(models.Model) :
 class Vartio(models.Model) :
     #gen_dia_class Vartio
 
-    nimi = models.CharField(maxlength=255)
+    nimi = models.CharField(max_length=255)
     nro = models.IntegerField()
     sarja = models.ForeignKey(Sarja)
-    piiri = models.CharField(maxlength=255, blank=True )
-    lippukunta = models.CharField(maxlength=255, blank=True )
-    puhelinnro = models.CharField(maxlength=255, blank=True )
-    sahkoposti = models.CharField(maxlength=255, blank=True )
-    osoite = models.CharField(maxlength=255, blank=True )
+    piiri = models.CharField(max_length=255, blank=True )
+    lippukunta = models.CharField(max_length=255, blank=True )
+    puhelinnro = models.CharField(max_length=255, blank=True )
+    sahkoposti = models.CharField(max_length=255, blank=True )
+    osoite = models.CharField(max_length=255, blank=True )
     keskeyttanyt = models.IntegerField(blank=True, null=True )
     ulkopuolella = models.IntegerField(blank=True , null=True )
 
@@ -75,12 +74,12 @@ class Vartio(models.Model) :
 class Henkilo(models.Model) :
     #gen_dia_class Henkilo
 
-    nimi = models.CharField(maxlength=255)
+    nimi = models.CharField(max_length=255)
     syntymavuosi = models.IntegerField(blank=True , null=True )
-    lippukunta = models.CharField(maxlength=255, blank=True, null=True )
-    jasennumero = models.CharField(maxlength=15, blank=True, null=True )
-    puhelin_nro = models.CharField(maxlength=15, blank=True, null=True )
-    homma = models.CharField(maxlength=255, blank=True, null=True )
+    lippukunta = models.CharField(max_length=255, blank=True, null=True )
+    jasennumero = models.CharField(max_length=15, blank=True, null=True )
+    puhelin_nro = models.CharField(max_length=15, blank=True, null=True )
+    homma = models.CharField(max_length=255, blank=True, null=True )
 
     #end_dia_class
     class Admin:
@@ -93,7 +92,7 @@ class Henkilo(models.Model) :
 class Rasti(models.Model) :
     #gen_dia_class Rasti
 
-    nimi = models.CharField(maxlength=255)
+    nimi = models.CharField(max_length=255)
     sarja = models.ForeignKey(Sarja)
     rastimiehet = models.ManyToManyField(Henkilo, blank=True )
 
@@ -109,13 +108,13 @@ class Rasti(models.Model) :
 class Tehtava(models.Model) :
     #gen_dia_class Tehtava
 
-    nimi = models.CharField(maxlength=255)
-    maksimipisteet = models.FloatField(decimal_places=2, max_digits=5, null=True, blank=True )
-    tehtavaryhma = models.CharField(maxlength=255, blank=True )
-    tehtavaluokka = models.CharField(maxlength=255, blank=True )
+    nimi = models.CharField(max_length=255)
+    maksimipisteet = models.DecimalField(decimal_places=2, null=True, blank=True, max_digits=10 )
+    tehtavaryhma = models.CharField(max_length=255, blank=True )
+    tehtavaluokka = models.CharField(max_length=255, blank=True )
     rastikasky = models.TextField(blank=True )
     jarjestysnro = models.IntegerField(blank=True, null=True )
-    kaava = models.CharField(maxlength=255)
+    kaava = models.CharField(max_length=255)
     sarja = models.ForeignKey(Sarja)
 
     #end_dia_class
@@ -196,9 +195,9 @@ class Rata(models.Model) :
 class SyoteMaarite(models.Model) :
     #gen_dia_class SyoteMaarite
 
-    nimi = models.CharField(maxlength=255)
-    tyyppi = models.CharField(maxlength=255)
-    kali_vihje = models.CharField(maxlength=255)
+    nimi = models.CharField(max_length=255)
+    tyyppi = models.CharField(max_length=255)
+    kali_vihje = models.CharField(max_length=255)
     tehtava = models.ForeignKey(Tehtava)
 
     #end_dia_class
@@ -212,7 +211,7 @@ class SyoteMaarite(models.Model) :
 class Syote(models.Model) :
     #gen_dia_class Syote
 
-    arvo = models.CharField(maxlength=255)
+    arvo = models.CharField(max_length=255)
     vartio = models.ForeignKey(Vartio, blank=True, null=True )
     maarite = models.ForeignKey(SyoteMaarite)
 
@@ -230,7 +229,7 @@ class TuomarineuvosTulos(models.Model) :
 
     vartio = models.ForeignKey(Vartio)
     tehtava = models.ForeignKey(Tehtava)
-    pisteet = models.FloatField(decimal_places=2, max_digits=5 )
+    pisteet = models.DecimalField(decimal_places=2, max_digits=5 )
 
     #end_dia_class
     def __str__(self) :
