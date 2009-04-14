@@ -271,12 +271,9 @@ class TulosLaskin :
         Taulukon ensimmäisissä sarakkeissa on vartio tai tehtävä objekteja muissa pisteitä.
         """
         tulokset=[[sarja]]
-        rastit = sarja.rasti_set.all()
-        tehtavat=[]
-        for r in rastit :
-             for t in r.tehtava_set.all():
-                  tehtavat.append( t )
-                  tulokset[0].append(t)
+        tehtavat=sarja.tehtava_set.all()
+        for t in tehtavat:
+            tulokset[0].append(t)
         vartiot = sarja.vartio_set.all()
         for v in vartiot :
             rivi=[v]

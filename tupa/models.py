@@ -76,7 +76,7 @@ class Henkilo(models.Model) :
     #gen_dia_class Henkilo
 
     nimi = models.CharField(maxlength=255)
-    syntumavuosi = models.IntegerField(blank=True , null=True )
+    syntymavuosi = models.IntegerField(blank=True , null=True )
     lippukunta = models.CharField(maxlength=255, blank=True, null=True )
     jasennumero = models.CharField(maxlength=15, blank=True, null=True )
     puhelin_nro = models.CharField(maxlength=15, blank=True, null=True )
@@ -116,7 +116,7 @@ class Tehtava(models.Model) :
     rastikasky = models.TextField(blank=True )
     jarjestysnro = models.IntegerField(blank=True, null=True )
     kaava = models.CharField(maxlength=255)
-    rasti = models.ForeignKey(Rasti)
+    sarja = models.ForeignKey(Sarja)
 
     #end_dia_class
     def __str__(self) :

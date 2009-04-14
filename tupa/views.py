@@ -66,7 +66,7 @@ def maaritaValitseTehtava(request,kisa_nimi):
       sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
       sarjaTehtavat = []
       for s in sarjat :
-           sarjanTehtavat = Tehtava.objects.filter(rasti__sarja = s )
+           sarjanTehtavat = Tehtava.objects.filter(sarja = s )
            sarjaTehtavat.append( (s,sarjanTehtavat) )   
       return render_to_response('tupa/maaritaValitseTehtava.html', {'sarja_tehtavat': sarjaTehtavat })
 
@@ -135,20 +135,15 @@ def syotaKisa(request, kisa_nimi):
       sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
       taulukko = []
       for s in sarjat :
-          rastit= s.rasti_set.all()
-          rastin_tehtavat=[]
-          for r in rastit :
-              tehtavat=r.tehtava_set.all()
-              for t in tehtavat:
-                   rastin_tehtavat.append( t ) 
-          taulukko.append( ( s ,rastin_tehtavat ) )
+          tehtavat = s.tehtava_set.all()
+          taulukko.append( ( s ,tehtavat) )
       print taulukko
       return render_to_response('tupa/syota_valitse_tehtava.html', { 'tehtava_taulukko' : taulukko } )
 
 def syotaTehtava(request, kisa_nimi , tehtava_id) :
       tehtava = Tehtava.objects.filter(id=tehtava_id)[0]
       maaritteet = SyoteMaarite.objects.filter(tehtava=tehtava)
-      vartiot = Vartio.objects.filter(sarja = tehtava.rasti.sarja )
+      vartiot = Vartio.objects.filter(sarja = tehtava.sarja )
       syoteFormit = []
       posti=None
       if request.method == 'POST':
