@@ -127,7 +127,7 @@ class TehtavaForm(forms.Form) :
           self.tehtava=tehtava
           self.sarja=sarja
           if not self.sarja and self.tehtava :
-              self.sarja = self.tehtava.rasti.sarja
+              self.sarja = self.tehtava.sarja
              
 
           self.id = id
@@ -145,11 +145,7 @@ class TehtavaForm(forms.Form) :
              if nimi:
                  if not self.tehtava:
                      self.tehtava=Tehtava()
-                     rasti= Rasti()
-                     rasti.sarja=self.sarja
-                     rasti.nimi="TyhjäRasti"
-                     rasti.save()
-                     self.tehtava.rasti=rasti
+                     self.tehtava.sarja=self.sarja
                  self.tehtava.nimi=nimi
                  self.tehtava.kaava=kaava
                  self.tehtava.save()
