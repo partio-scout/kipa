@@ -121,6 +121,34 @@ th {
 <td></td>
 </tr>
 <tr>
+<td>${ADMIN PAGE}</td>
+<td><a href="http://localhost:8000/tupa/admin/">http://localhost:8000/tupa/admin/</a></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>${KIPA MAIN PAGE}</td>
+<td><a href="http://localhost:8000/tupa/">http://localhost:8000/tupa/</a></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>${COMPETITION SET}</td>
+<td><a href="http://localhost:8000/tupa/uusiKisa/maarita/">http://localhost:8000/tupa/uusiKisa/maarita/</a></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>${ADMIN PAGE TITLE}</td>
+<td>Kirjaudu sisään | Tupa sivuston ylläpito</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
 <td></td>
 <td></td>
 <td></td>
@@ -142,72 +170,30 @@ th {
 <th>Argument</th>
 </tr>
 <tr>
-<td>Valid Login</td>
+<td>Login To Admin Page Should Succeed</td>
 <td>[Documentation]</td>
-<td>SImpplei log-in testi, lähinnä proof of consept käyttöön.</td>
+<td>This test case tries to login to admin page an after that create new competition on normal GUI.</td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td></td>
-<td>Open Browser</td>
-<td><a href="http://localhost:8000/tupa/admin">http://localhost:8000/tupa/admin</a></td>
-<td>${BROWSER}</td>
+<td>Login To Admin Page</td>
 <td></td>
-</tr>
-<tr>
-<td></td>
-<td>Location Should Be</td>
-<td><a href="http://localhost:8000/tupa/admin/">http://localhost:8000/tupa/admin/</a></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td></td>
-<td>Title Should Be</td>
-<td>Kirjaudu sisään | Tupa sivuston ylläpito</td>
+<td>Open Kipa Main Page</td>
 <td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>Input Text</td>
-<td>id_username</td>
-<td>tupa</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>Input Text</td>
-<td>id_password</td>
-<td>tupa</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>Click Button</td>
-<td>Kirjaudu sisään</td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td></td>
-<td>Location Should Be</td>
-<td><a href="http://localhost:8000/tupa/admin/">http://localhost:8000/tupa/admin/</a></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>Title Should Be</td>
-<td>Kirjaudu sisään | Tupa sivuston ylläpito</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>Close Browser</td>
-<td></td>
+<td>Create new Competition</td>
+<td>Espoon_Punanen</td>
 <td></td>
 <td></td>
 </tr>
@@ -238,6 +224,181 @@ th {
 <th>Argument</th>
 <th>Argument</th>
 <th>Argument</th>
+</tr>
+<tr>
+<td>Login To Admin Page</td>
+<td>Open Browser</td>
+<td>${ADMIN PAGE}</td>
+<td>${BROWSER}</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Location Should Be</td>
+<td>${ADMIN PAGE}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Title Should Be</td>
+<td>${ADMIN PAGE TITLE}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Input Text</td>
+<td>id_username</td>
+<td>tupa</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Input Text</td>
+<td>id_password</td>
+<td>tupa</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Click Button</td>
+<td>Kirjaudu sisään</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Location Should Be</td>
+<td>${ADMIN PAGE}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Title Should Be</td>
+<td>Sivuston ylläpito | Tupa sivuston ylläpito</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Close Browser</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Open KiPa Main Page</td>
+<td>Open Browser</td>
+<td>${KIPA MAIN PAGE}</td>
+<td>${BROWSER}</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Create New Competition</td>
+<td>[Arguments]</td>
+<td>${competition}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>[Documentation]</td>
+<td>Creates new competition and checks that it exist. Expects Competition name to be given as argument.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Open Browser</td>
+<td>${KIPA MAIN PAGE}</td>
+<td>${BROWSER}</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Click Link</td>
+<td>Luo uusi kisa</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Location Should Be</td>
+<td>${COMPETITION SET}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Input Text</td>
+<td>id_kisa_1_#-nimi</td>
+<td>Espoon_Punanen</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Click Button</td>
+<td>Tallenna</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Close Browser</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Open Browser</td>
+<td>${KIPA MAIN PAGE}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Click Link</td>
+<td>${competition}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Location Should Be</td>
+<td>${KIPA MAIN PAGE}${competition}/</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Close Browser</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 <tr>
 <td></td>
