@@ -92,7 +92,7 @@ def maaritaVartiot(request,kisa_nimi):
          return HttpResponseRedirect(reverse('web.tupa.views.maaritaVartiot', args=(kisa_nimi,)))
       else:
          return render_to_response('tupa/maaritaVartiot.html', { 'sarja_vartiot' : sarjaVartiot })
-
+"""
 def maaritaUusiTehtava(request, kisa_nimi, sarja_id) :
         kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
         sarja = get_object_or_404(Sarja, id=sarja_id)
@@ -120,17 +120,29 @@ def maaritaUusiTehtava(request, kisa_nimi, sarja_id) :
                                             'tehtavaForm' : tehtavaForm , 
                                             'maariteFormit' : maariteFormit })
 
+"""
 
-def maaritaTehtava(request, kisa_nimi, tehtava_id):
-    tehtava = get_object_or_404(Tehtava, id=tehtava_id)
-    sarja= tehtava.sarja
 
-    maaritteet = SyoteMaarite.objects.filter( tehtava=tehtava )
-    maariteFormit = []
+def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None):
+    tehtava = None
+    sarja = None
+    if tehtava_id:
+         tehtava=get_object_or_404(Tehtava, id=tehtava_id)
+         sarja= tehtava.sarja
+    else :
+         sarja=get_object_or_404(Sarja, id=sarja_id)
+
     posti=None
     if request.method == 'POST':
           posti=request.POST
+    # Tehtävä
     tehtavaForm = TehtavaForm( posti,instance=tehtava )
+    if tehtavaForm.is_valid() :
+       tehtava=tehtavaForm.save(commit=False)
+       tehtava.sarja=sarja
+       tehtava.save()
+
+    # Määritteet
     maariteFormit=luoMaariteFormit(tehtava,posti,tyhjia=3)
     if maariteFormit.is_valid() :
          instances = maariteFormit.save(commit=False) 
@@ -139,17 +151,20 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id):
              instance.save()
     maariteFormit=luoMaariteFormit(tehtava,tyhjia=3)
 
-    if tehtavaForm.is_valid() :
-       tehtava=tehtavaForm.save(commit=False)
-       tehtava.sarja=sarja
-       tehtava.save()
+    # Osapisteiden kaavat:
+    """kaavaFormit = luoKaavaFormit(tehtava,posti,tyhjia=3)
+    if kaavaFormit.is_valid() :
+         kaavat = kaavaFormit.save(commit=False)
+         for kaava in kaavat: 
+             kaava.tehtava=tehtava
+             kaava.save()
+    """
+    kaavaFormit=None
 
-    if not tehtava:
-       return HttpResponseRedirect(reverse('web.tupa.views.maaritaValitseTehtava', args=(kisa_nimi, )))
-    elif posti and tehtavaForm.is_valid() and maariteFormit.is_valid() :
-       return HttpResponseRedirect(reverse('web.tupa.views.maaritaTehtava', args=(kisa_nimi,tehtava_id, )))
+    if posti and tehtavaForm.is_valid() :
+       return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/tehtava/"+str(tehtava.id)+'/' )
     else:
-       return render_to_response('tupa/maarita_tehtava.html', { 'tehtava' : tehtava ,'tehtavaForm' : tehtavaForm , 'maariteFormit' : maariteFormit })
+       return render_to_response('tupa/maarita_tehtava.html', { 'tehtava' : tehtava ,'tehtavaForm' : tehtavaForm , 'maariteFormit' : maariteFormit , 'kaavaFormit' : kaavaFormit })
 
 def syotaKisa(request, kisa_nimi):
       sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
@@ -207,44 +222,4 @@ def sarja(request,sarja_id) :
 
 def piirit(request,kisa_nimi) :
       return HttpResponse(kisa_nimi + " PIIRIN TULOSTUS" )
-
-#tulosten syotto  
-def syotto(request,sarja_id):
-    request.POST["pisteet"]
-    return render_to_response('tupa/syotto.html', {})
-
-#tulosten syotto rumalla tavalla
-def lisaa_syote(request):
-
-    SyoteForm = forms.models.form_for_model(Kisa)
-    t = django.template.loader.get_template('tupa/syota666.html')
-    c = None
-    if request.method == 'POST':
-
-        form = SyoteForm(request.POST)
-
-        if form.is_valid():
-
-            entry = form.save(commit=False)
-            entry.owner = request.user
-            entry.save()
-            
-            form = SyoteForm()
- 
- 
-            c = Context({
-            'form': form,
-            })
-            c.push()
-            return HttpResponse(t.render(c))
-
-    else:
-        
-        form = SyoteForm()
- 
-        c = Context({
-        'form': form,
-        })
-    
-    return HttpResponse(t.render(c))
 

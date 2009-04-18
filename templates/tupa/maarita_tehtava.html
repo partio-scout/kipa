@@ -14,13 +14,19 @@
          {{ tehtavaForm }}
     </table>
 
+    <h2>Osapisteiden Kaavat: </h2><br>
+    {{ kaavaFormit.management_form }}
+    {% for kaava in kaavaFormit.forms %}
+        {{ kaava }} <br>
+    {% endfor %}
+
     <h2>Vartiokohtaiset syötteet: </h2><br>
     {{ maariteFormit.management_form }}
     {% for maarite in maariteFormit.forms %}
         {{ maarite }} <br>
     {% endfor %}
-    
-        <input type="submit"name="syote" value="Tallenna" />
+       
+       {% include "tupa/tallenna.html" %}
     </form>
 
 {% endblock %}

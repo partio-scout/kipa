@@ -9,11 +9,9 @@
         <form action="." method="post">     
 	<ul id="sarjatabs" class="shadetabs">
 		{% for sarja in sarja_vartiot%}
-		    {% ifequal sarja sarja_vartiot.0  %}
-			    <li><a href="#" rel="sarja{{ sarja.0.id }}" class="selected">{{ sarja.0.nimi }}</a></li>
-	            {% else %}
-			    <li><a href="#" rel="sarja{{ sarja.0.id }}">{{ sarja.0.nimi }}</a></li>
-		    {% endifequal %}
+			    <li><a href="#" rel="sarja{{ sarja.0.id }}"
+                                {% if forloop.first %} class="selected"{% endif %}
+                                >{{ sarja.0.nimi }}</a></li>
 		{% endfor %}
 	</ul>
 
@@ -30,10 +28,8 @@
 		</div>
 		{% endfor %}
 	</div>
-        <input type="submit"name="syote" value="Tallenna" >
-        </form>
-
-
+        
+        {% include "tupa/tallenna.html" %}
 
 {% else %}
     <p>Ei määriteltyjä sarjoja.</p>

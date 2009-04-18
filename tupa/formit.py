@@ -10,11 +10,33 @@ from django.forms import ModelForm
 class TehtavaForm(ModelForm):
     class Meta:
           model = Tehtava
-          exclude = ('sarja',)
+          fields = ('nimi', 'jarjestysnro','kaava')
+
 
 class PisteSyoteForm(ModelForm):
     class Meta:
           model = Syote
+
+def luoKaavaFormit(tehtavalle=None,post=None,tyhjia=0):
+    KaavaFormSet = modelformset_factory( OsapisteKaava,extra=tyhjia,can_delete=True,exclude=('tehtava',))
+    return KaavaFormSet(post,queryset=OsapisteKaava.objects.filter(tehtava=tehtavalle) )
+
+def luoMaariteFormit(tehtavalle=None,post=None,tyhjia=0):
+    MaariteFormSet = modelformset_factory( SyoteMaarite,extra=tyhjia,can_delete=True,exclude=('tehtava',))
+    return MaariteFormSet(post,queryset=SyoteMaarite.objects.filter(tehtava=tehtavalle) )
+
+def luoVartioFormit(sarjalle,post=None,tyhjia=0):
+    VartioFormSet = modelformset_factory( Vartio,fields=('nro', 'nimi'),extra=tyhjia,can_delete=True)
+    return VartioFormSet(post,queryset=Vartio.objects.filter(sarja=sarjalle),prefix=sarjalle.nimi )
+    
+class KisaForm(ModelForm):
+     class Meta:
+        model = Kisa
+
+def luoSarjaFormit(kisalle,post=None,tyhjia=0):
+    SarjaFormSet = modelformset_factory( Sarja,exclude=('kisa',),extra=tyhjia,can_delete=True )
+    formit=SarjaFormSet(post, queryset=Sarja.objects.filter(kisa=kisalle) )
+    return formit
 
 class AikaSyoteForm(forms.Form) :
        h = forms.IntegerField(required=False,widget=forms.TextInput(attrs={'size':'1'}))
@@ -72,21 +94,4 @@ class AikaSyoteForm(forms.Form) :
                   if self.syote:
                       self.syote.delete()
                       self.syote = None
-
-def luoMaariteFormit(tehtavalle=None,post=None,tyhjia=0):
-    MaariteFormSet = modelformset_factory( SyoteMaarite,extra=tyhjia,can_delete=True,exclude=('tehtava',))
-    return MaariteFormSet(post,queryset=SyoteMaarite.objects.filter(tehtava=tehtavalle) )
-
-def luoVartioFormit(sarjalle,post=None,tyhjia=0):
-    VartioFormSet = modelformset_factory( Vartio,fields=('nro', 'nimi'),extra=tyhjia,can_delete=True)
-    return VartioFormSet(post,queryset=Vartio.objects.filter(sarja=sarjalle),prefix=sarjalle.nimi )
-    
-class KisaForm(ModelForm):
-     class Meta:
-        model = Kisa
-
-def luoSarjaFormit(kisalle,post=None,tyhjia=0):
-    SarjaFormSet = modelformset_factory( Sarja,exclude=('kisa',),extra=tyhjia,can_delete=True )
-    formit=SarjaFormSet(post, queryset=Sarja.objects.filter(kisa=kisalle) )
-    return formit
 
