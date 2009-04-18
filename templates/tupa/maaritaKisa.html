@@ -7,7 +7,9 @@
 <form action="." method="post">     
     {{kisa_form}}
     <h2>Sarjat: </h2><br>
-    {% for s in sarja_formit %}
+    {{sarja_formit.management_form}}
+    {% for s in sarja_formit.forms %}
+        {{ s.errors}}
         {{ s }} <br>
     {% endfor %}
     

@@ -11,15 +11,12 @@
 
 <form action="." method="post">     
     <table class="form">
-         {{tehtavaForm.nimi.errors}}
-         nimi: {{ tehtavaForm.nimi }} <br>
-         {{ tehtavaForm.kaava.errors }}
-         kaava: {{ tehtavaForm.kaava }}
+         {{ tehtavaForm }}
     </table>
 
     <h2>Vartiokohtaiset syötteet: </h2><br>
-    {% for maarite in maariteFormit %}
-        {{maarite.errors}}
+    {{ maariteFormit.management_form }}
+    {% for maarite in maariteFormit.forms %}
         {{ maarite }} <br>
     {% endfor %}
     
