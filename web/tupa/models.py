@@ -52,8 +52,8 @@ class Sarja(models.Model) :
 class Vartio(models.Model) :
     #gen_dia_class Vartio
 
-    nimi = models.CharField(max_length=255)
     nro = models.IntegerField()
+    nimi = models.CharField(max_length=255)
     sarja = models.ForeignKey(Sarja)
     piiri = models.CharField(max_length=255, blank=True )
     lippukunta = models.CharField(max_length=255, blank=True )
@@ -197,7 +197,7 @@ class SyoteMaarite(models.Model) :
 
     nimi = models.CharField(max_length=255)
     tyyppi = models.CharField(max_length=255)
-    kali_vihje = models.CharField(max_length=255)
+    kali_vihje = models.CharField(max_length=255, blank=True , null=True )
     tehtava = models.ForeignKey(Tehtava)
 
     #end_dia_class

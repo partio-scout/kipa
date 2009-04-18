@@ -1,8 +1,11 @@
 from django.conf.urls.defaults import *
 
+from django.contrib import admin
+admin.autodiscover()
+
 urlpatterns = patterns('web.tupa.views.',
      (r'^tupa/$', 'index'),
-     (r'^tupa/admin/', include('django.contrib.admin.urls')),
+     (r'^tupa/admin/(.*)', admin.site.root ),
      (r'^tupa/lisaasyote/$', 'lisaa_syote'),
      (r'^tupa/(?P<kisa_nimi>\w+)/$', 'kisa'),
      (r'^tupa/(?P<kisa_nimi>\w+)/maarita/$', 'maaritaKisa'),

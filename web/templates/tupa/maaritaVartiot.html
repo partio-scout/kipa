@@ -16,14 +16,15 @@
 		    {% endifequal %}
 		{% endfor %}
 	</ul>
-       
+
 	<div style="border:1px solid gray; width:800px; margin-bottom: 1em; padding: 10px">
 	
 		{% for sarja in sarja_vartiot%}
 		<div id="sarja{{ sarja.0.id }}" class="tabcontent">
 			<ul id="tehtavatabs" class="">
-				{% for vartio in sarja.1 %}
-				    {{vartio}} <br>
+                                {{sarja.1.management_form}}
+				{% for vartio in sarja.1.forms %}
+				   {{vartio}} <br>
                                 {% endfor %}
 			</ul>
 		</div>

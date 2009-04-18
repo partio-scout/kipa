@@ -43,24 +43,25 @@ def maaritaKisa(request, kisa_nimi):
           posti=request.POST
      
      # Luodaan Kisa formi
-     kisaForm = KisaForm(kisa,post=posti,id=1)
-     kisaForm.save()
+     kisaForm = KisaForm(posti,instance=kisa)
+     if kisaForm.is_valid():
+         kisa=kisaForm.save()
     
      # Luodaan Sarja formi
      sarjaFormit=[]
      
-     if kisaForm.kisa : 
-         kisa=kisaForm.kisa
      sFormit=luoSarjaFormit(kisa,posti,tyhjia=4)
-     for s in sFormit :
-             s.save()
-             if not s.empty() :
-                 sarjaFormit.append(s)
-     
-     if request.method == 'POST' and kisaForm.kisa:
-         return HttpResponseRedirect(reverse('web.tupa.views.kisa', args=(kisaForm.kisa.nimi,)))
+
+     if sFormit.is_valid():
+         instances = sFormit.save(commit=False) 
+         for instance in instances:
+             instance.kisa=kisa
+             instance.save()
+          
+     if request.method == 'POST' and sFormit.is_valid():
+         return HttpResponseRedirect(reverse('web.tupa.views.maaritaKisa', args=(kisa.nimi,)))
      else :
-         return render_to_response('tupa/maaritaKisa.html', { 'kisa_form' : kisaForm, 'sarja_formit' : sarjaFormit })
+         return render_to_response('tupa/maaritaKisa.html', { 'kisa_form' : kisaForm, 'sarja_formit' : sFormit })
 
 def maaritaValitseTehtava(request,kisa_nimi):
       sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
@@ -74,34 +75,45 @@ def maaritaVartiot(request,kisa_nimi):
       sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
       sarjaVartiot=[]
       posti=None
+      post_ok=True
       if request.method == 'POST':
           posti=request.POST
       for s in sarjat :
          vFormit=luoVartioFormit(s,posti,tyhjia=10)
-         vartioFormit=[]
-         for v in vFormit :
-             v.save()
-             if not v.empty() :
-                 vartioFormit.append( v )
-         sarjaVartiot.append( (s,vartioFormit) )
-      return render_to_response('tupa/maaritaVartiot.html', { 'sarja_vartiot' : sarjaVartiot })
+         if vFormit.is_valid():
+             instances = vFormit.save(commit=False) 
+             for instance in instances:
+                 instance.sarja=s
+                 instance.save()
+         else :
+             post_ok=False
+         sarjaVartiot.append( (s,vFormit) )
+      if posti and post_ok:
+         return HttpResponseRedirect(reverse('web.tupa.views.maaritaVartiot', args=(kisa_nimi,)))
+      else:
+         return render_to_response('tupa/maaritaVartiot.html', { 'sarja_vartiot' : sarjaVartiot })
 
 def maaritaUusiTehtava(request, kisa_nimi, sarja_id) :
         kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
         sarja = get_object_or_404(Sarja, id=sarja_id)
-        tehtavaForm = TehtavaForm(sarja)
+        tehtavaForm = TehtavaForm()
         tehtava=None
         maariteFormit = luoMaariteFormit(tyhjia=5)
         if request.method == 'POST':
-             tehtavaForm = TehtavaForm(sarja,post=request.POST)
-             tehtavaForm.save()
-             
-             if tehtavaForm.tehtava:
-                 maariteFormit = luoMaariteFormit(tehtavaForm.tehtava,request.POST,tyhjia=5)
-                 for m in maariteFormit :
-                     m.save()
+             tehtavaForm = TehtavaForm(request.POST)
+             tehtava = tehtavaForm.save(commit=False)
+             tehtava.sarja=sarja
+             tehtava.save()        
+
+             if tehtava:
+                 maariteFormit = luoMaariteFormit(tehtava,request.POST,tyhjia=5)
+                 if maariteFormit.is_valid() : 
+                    instances = maariteFormit.save(commit=False) 
+                    for instance in instances:
+                        instance.tehtava=tehtava
+                        instance.save()
                  return HttpResponseRedirect(reverse('web.tupa.views.maaritaTehtava', 
-                                                args=(kisa_nimi,tehtavaForm.tehtava.id )))
+                                                args=(kisa_nimi,tehtava.id )))
         
         return render_to_response('tupa/maarita_tehtava.html', 
                                             { 'tehtava' : tehtava ,
@@ -111,25 +123,33 @@ def maaritaUusiTehtava(request, kisa_nimi, sarja_id) :
 
 def maaritaTehtava(request, kisa_nimi, tehtava_id):
     tehtava = get_object_or_404(Tehtava, id=tehtava_id)
+    sarja= tehtava.sarja
 
     maaritteet = SyoteMaarite.objects.filter( tehtava=tehtava )
     maariteFormit = []
     posti=None
     if request.method == 'POST':
           posti=request.POST
-    tehtavaForm = TehtavaForm(tehtava=tehtava,post=posti)
+    tehtavaForm = TehtavaForm( posti,instance=tehtava )
     maariteFormit=luoMaariteFormit(tehtava,posti,tyhjia=3)
-    mFormit=[]
-    for m in maariteFormit :
-         m.save()
-         if not m.empty() :
-             mFormit.append(m)
-   
+    if maariteFormit.is_valid() :
+         instances = maariteFormit.save(commit=False) 
+         for instance in instances:
+             instance.tehtava=tehtava
+             instance.save()
+    maariteFormit=luoMaariteFormit(tehtava,tyhjia=3)
+
     if tehtavaForm.is_valid() :
-       tehtavaForm.save()
-    if not tehtavaForm.tehtava:
+       tehtava=tehtavaForm.save(commit=False)
+       tehtava.sarja=sarja
+       tehtava.save()
+
+    if not tehtava:
        return HttpResponseRedirect(reverse('web.tupa.views.maaritaValitseTehtava', args=(kisa_nimi, )))
-    return render_to_response('tupa/maarita_tehtava.html', { 'tehtava' : tehtava ,'tehtavaForm' : tehtavaForm , 'maariteFormit' : mFormit })
+    elif posti and tehtavaForm.is_valid() and maariteFormit.is_valid() :
+       return HttpResponseRedirect(reverse('web.tupa.views.maaritaTehtava', args=(kisa_nimi,tehtava_id, )))
+    else:
+       return render_to_response('tupa/maarita_tehtava.html', { 'tehtava' : tehtava ,'tehtavaForm' : tehtavaForm , 'maariteFormit' : maariteFormit })
 
 def syotaKisa(request, kisa_nimi):
       sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
@@ -154,6 +174,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id) :
          for m in maaritteet :
               syotteet = Syote.objects.filter(vartio = v ).filter(maarite=m)
               syote=None
+              formi=None
               if syotteet:
                   syote=syotteet[0]
               if m.tyyppi=="aika":
@@ -162,10 +183,9 @@ def syotaTehtava(request, kisa_nimi , tehtava_id) :
                      formi.save()
                      formi = AikaSyoteForm(m,v)
               elif m.tyyppi=="piste":
-                  formi = PisteSyoteForm(m,v,posti)
+                  formi = PisteSyoteForm(posti,instance=syote)
                   if formi.is_valid() :
                      formi.save()
-                     formi = PisteSyoteForm(m,v)
               
               rivi.append( formi )
          syoteFormit.append( (v,rivi))
