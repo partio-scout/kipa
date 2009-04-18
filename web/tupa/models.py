@@ -113,7 +113,7 @@ class Tehtava(models.Model) :
     tehtavaryhma = models.CharField(max_length=255, blank=True )
     tehtavaluokka = models.CharField(max_length=255, blank=True )
     rastikasky = models.TextField(blank=True )
-    jarjestysnro = models.IntegerField(blank=True, null=True )
+    jarjestysnro = models.IntegerField()
     kaava = models.CharField(max_length=255)
     sarja = models.ForeignKey(Sarja)
 
@@ -193,10 +193,15 @@ class Rata(models.Model) :
         verbose_name_plural = "Radat"
 
 class SyoteMaarite(models.Model) :
+    TYYPPI_VAIHTOEHDOT = (
+        ('aika', 'aika'),
+        ('piste', 'piste'),
+    )
+
     #gen_dia_class SyoteMaarite
 
     nimi = models.CharField(max_length=255)
-    tyyppi = models.CharField(max_length=255)
+    tyyppi = models.CharField(max_length=255, choices=TYYPPI_VAIHTOEHDOT )
     kali_vihje = models.CharField(max_length=255, blank=True , null=True )
     tehtava = models.ForeignKey(Tehtava)
 
@@ -238,6 +243,21 @@ class TuomarineuvosTulos(models.Model) :
         pass
     class Meta:
         verbose_name_plural = "Tuomarineuvoston tulokset"
+
+
+class OsapisteKaava(models.Model) :
+    #gen_dia_class OsapisteKaava
+
+    kaava = models.CharField(max_length=255)
+    tehtava = models.ForeignKey(Tehtava)
+
+    #end_dia_class
+    def __str__(self) :
+        return self.kaava
+    class Admin:
+        pass
+    class Meta:
+        verbose_name_plural = "Osapisteiden kaavat"
 
 
 
