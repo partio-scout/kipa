@@ -1,8 +1,6 @@
 {% extends "tupa/base.html" %}
 {% block content %} 
 
-
-
 <A href='../../'>taakse</A>
 <h1>Tehtävä: {{tehtava.nimi}} </h2>
 
@@ -54,11 +52,6 @@
                          <td>
                          {{kentta.errors}}
                          {{kentta.arvo}}
-                         {% if kentta.h %}
-                             {{kentta.h}}:
-                             {{kentta.min}}: 
-                             {{kentta.s}}
-                         {% endif %}
                          </td>
                   {% endfor %}
             </tr>

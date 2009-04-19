@@ -1,0 +1,28 @@
+{% extends "tupa/base.html" %}
+{% block content %} 
+
+<A href='{{taakse}}'>taakse</A><br>
+
+<h1> {{ heading }}</h1>
+
+<form method="POST" action="">
+
+{% if forms %}
+    {% for form in forms%}
+        {{form}} <br>
+    {% endfor%}
+{% endif %}
+{% if formsets %}
+    {% for formset in formsets %}
+        <h2>{{formset.label}}</h2>
+        {{ formset.management_form }}
+        {% for form in formset.forms %}
+        {{ form }} <br>
+        {% endfor %}
+    {% endfor%}
+{% endif %}
+<br>
+{% include "tupa/tallenna.html" %}
+</form>
+{% endblock %}
+
