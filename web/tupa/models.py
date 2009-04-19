@@ -11,8 +11,6 @@ class Allergia(models.Model) :
     #end_dia_class
     def __str__(self) :
         return self.mille
-    class Admin:
-       pass
     class Meta:
         verbose_name_plural = "Allergiat"
 
@@ -26,8 +24,6 @@ class Kisa(models.Model) :
     #end_dia_class
     def __str__(self) :
         return self.nimi
-    class Admin:
-        pass
     class Meta:
         verbose_name_plural = "Kisat"
 
@@ -42,8 +38,6 @@ class Sarja(models.Model) :
     #end_dia_class
     def __str__(self) :
         return self.nimi
-    class Admin:
-        pass
     class Meta:
         verbose_name_plural = "Sarjat"
     def laskeTulokset(self) :
@@ -66,8 +60,6 @@ class Vartio(models.Model) :
     #end_dia_class
     def __str__(self) :
         return self.nimi
-    class Admin:
-        pass
     class Meta:
         verbose_name_plural = "Vartiot"
 
@@ -82,8 +74,6 @@ class Henkilo(models.Model) :
     homma = models.CharField(max_length=255, blank=True, null=True )
 
     #end_dia_class
-    class Admin:
-        pass
     def __str__(self) :
         return self.nimi
     class Meta:
@@ -99,8 +89,6 @@ class Rasti(models.Model) :
     #end_dia_class
     def __str__(self) :
         return self.sarja.nimi + " " + self.nimi
-    class Admin:
-        pass
     class Meta:
         verbose_name_plural = "Rastit"
 
@@ -120,8 +108,6 @@ class Tehtava(models.Model) :
     #end_dia_class
     def __str__(self) :
         return self.nimi
-    class Admin:
-        pass
     class Meta:
         verbose_name_plural = "Tehtavat"
 
@@ -187,8 +173,6 @@ class Rata(models.Model) :
 
     #end_dia_class
 
-    class Admin:
-        pass
     class Meta:
         verbose_name_plural = "Radat"
 
@@ -208,8 +192,6 @@ class SyoteMaarite(models.Model) :
     #end_dia_class
     def __str__(self) :
         return self.nimi
-    class Admin:
-        pass
     class Meta:
         verbose_name_plural = "Syotteen maaritteet"
 
@@ -224,8 +206,6 @@ class Syote(models.Model) :
 
     def __str__(self) :
         return self.vartio.nimi     
-    class Admin:
-        pass
     class Meta:
         verbose_name_plural = "Syotteet"
 
@@ -239,8 +219,6 @@ class TuomarineuvosTulos(models.Model) :
     #end_dia_class
     def __str__(self) :
         return self.tehtava.nimi + " " + self.vartio.nimi
-    class Admin:
-        pass
     class Meta:
         verbose_name_plural = "Tuomarineuvoston tulokset"
 
@@ -254,8 +232,6 @@ class OsapisteKaava(models.Model) :
     #end_dia_class
     def __str__(self) :
         return self.kaava
-    class Admin:
-        pass
     class Meta:
         verbose_name_plural = "Osapisteiden kaavat"
 
