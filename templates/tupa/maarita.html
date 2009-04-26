@@ -9,6 +9,7 @@
 
 {% if forms %}
     {% for form in forms%}
+        <h2>{{form.label}}</h2>
         {{form}} <br>
     {% endfor%}
 {% endif %}
