@@ -226,6 +226,7 @@ class TuomarineuvosTulos(models.Model) :
 class OsapisteKaava(models.Model) :
     #gen_dia_class OsapisteKaava
 
+    nimi = models.CharField(max_length=255)
     kaava = models.CharField(max_length=255)
     tehtava = models.ForeignKey(Tehtava)
 

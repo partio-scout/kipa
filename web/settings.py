@@ -84,5 +84,6 @@ INSTALLED_APPS = (
     'web.tupa',
     'django.contrib.admin',
     'django.contrib.formtools',
-    'django.template'
+    'django.template',
+    'django.contrib.databrowse'
 )

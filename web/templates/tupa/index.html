@@ -3,11 +3,10 @@
 
 <A href='uusiKisa/maarita'>Luo uusi kisa</A><br>
 <h1> Kisat:</h1>
-{% if latest_kisa_list %}
-    {% for kisa in latest_kisa_list %}
+{% if object_list %}
+    {% for kisa in object_list %}
         <A href='{{kisa.nimi}}/' > {{kisa.nimi}} </A> <br>
     {% endfor %}
-
 
 {% else %}
     <p>Ei määriteltyjä kisoja.</p>

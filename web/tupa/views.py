@@ -12,10 +12,7 @@ from logger import lokkeri
 
 import re
 from formit import *
-
-def index(request):
-      kisat = Kisa.objects.all()
-      return render_to_response('tupa/index.html', {'latest_kisa_list': kisat })
+from apina import *
 
 def kisa(request,kisa_nimi) :
       kisa = get_object_or_404(Kisa, nimi=kisa_nimi) 
@@ -107,6 +104,16 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None):
     tehtavaForm = TehtavaForm( posti,instance=tehtava,sarja=sarja )
     if tehtavaForm.is_valid() :
        tehtava=tehtavaForm.save()
+    # Osapiste
+    osaForm= kisapiste(tehtava, posti, prefix="osapiste")
+    if osaForm.is_valid() :
+       osaForm.save()
+    osaForm.label="Kisapiste generaatio:"
+    # Interpolointi
+    interForm= interpoloi(tehtava, posti, prefix="interpoloi")
+    if interForm.is_valid() :
+       interForm.save()
+    interForm.label="Interpolinti generaatio:"
     # Määritteet
     maariteFormit=MaariteFormSet(posti,instance=tehtava,prefix="maarite")
     if maariteFormit.is_valid() :
@@ -125,8 +132,8 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None):
        return render_to_response('tupa/maarita.html', 
                                       { 'heading' : "Maarita Tehtava" ,
                                       'taakse' : "../../../" ,
-                                      'forms' : (tehtavaForm,) ,
-                                      'formsets' : ( maariteFormit,kaavaFormit,) })
+                                      'forms' : (tehtavaForm,osaForm,interForm,) ,
+                                      'formsets' : ( maariteFormit,kaavaFormit,)})
 
 def syotaKisa(request, kisa_nimi):
       sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
@@ -159,7 +166,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id) :
               formi=None
               if syotteet:
                   syote=syotteet[0]
-              formi = PisteSyoteForm(m,v,posti,instance=syote,prefix=v.nimi+m.nimi,)
+              formi = SyoteForm(m,v,posti,instance=syote,prefix=v.nimi+m.nimi,)
               if formi.is_valid() :
                  formi.save()
               
