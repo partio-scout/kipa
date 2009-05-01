@@ -4,57 +4,44 @@ import re
 import AritmeettinenLaskin
 from logger import lokkeri
 
+"""
+Sanakirja erikoisfunktioista joita voi kutsua kaavoissa,
+Ensimmäisenä nimi jolla viitataan kaavassa , jälkimmäisenä todellisen funktion nimi
+"""
 erikoisFunktiot = { 
         "interpoloi" : "self.interpoloi" ,
         "minmax" : "self.minmax" ,
         "max" : "self.max", 
         "min" : "self.min" , 
         "med" : "self.mediaani",
+        "med" : "self.mediaani",
         "kesk" : "self.keskiarvo" , 
         "pienin" : "self.pienin" , 
         "suurin" : "self.suurin" }
 
 def stringDecimaaliksi(merkkijono) :
+        """
+        Muuntaa merkkijonon Decimal objektiksi.
+        Palauttaa None mikäli merkkijono ei ole muunnettavissa.
+        """
         if re.search(r'^\d*\Z|^\d*\.\d*\Z', merkkijono ) :
                 return Decimal(merkkijono)
         else : 
                 return None
 
-def haeSulku(lause):
+def sijoitaMuuttujat(kaava,muuttujaKirja):
         """
-        Hakee lauseesta ensimmäisten sulkujen välissä olevan merkkijonon.
-        palauttaa (alkuosa,sulkujenväli,loppuosa)
-        Jos sulkuja ei löydy palauttaa None
+        Korvaa kaavasta löytyvät muuttujaKirjan mukaiset muuttujat.
+        Muuttujan molemmilla puolilla kaavassa tulee olla joko operaattori, sulku tai merkkijonon alku tahi loppu.
+        Palauttaa sijoitetun kaavan.
         """
-        auki=lause.find('(')
-        index=0
-        auenneita=0 
-        if auki>=0:
-                index=auki 
-                auenneita=1
-        auki_i=index
-        while auenneita > 0 :
-                kiini=lause[index:].find(')')
-                auki=lause[index+1:].find('(')
-                if kiini>=0 :
-                        if auki>=0:
-                                if kiini<auki :
-                                        index=index+kiini+1
-                                        auenneita=auenneita-1
-                                else:
-                                        index=index+auki+1
-                                        auenneita=auenneita+1
-                        else:
-                                index=index+kiini+1
-                                auenneita=auenneita-1
-                else:
-                        assert 0
-    
-        if not auki_i==index:
-                return (lause[:auki_i],lause[auki_i+1:index-1],lause[index:])
-        else: 
-                return None
-
+        muokattu=kaava
+        for i, j in muuttujaKirja.iteritems():  
+                muokattu = re.sub("(?<=[-+/*()])"+i+"(?=[-+/*()])",j.strip(),muokattu)  
+                muokattu = re.sub("(?<=^)"+i+"(?=[-+/*()])",j.strip(),muokattu)  
+                muokattu = re.sub("(?<=^)"+i+"(?=$)",j.strip(),muokattu)  
+                muokattu = re.sub("(?<=[-+/*()])"+i+"(?=$)",j.strip(),muokattu)
+        return muokattu
 
 def pilkoParametreiksi(merkkijono):
         """
@@ -84,19 +71,18 @@ def pilkoParametreiksi(merkkijono):
 
 class TulosLaskin :
         """
-        Luokka jonka objektit laskevat tulospalvelun tulokset yhdelle sarjalle yhteen tehtävään
+        Luokka jonka objektit laskevat tuloksia.
         """
+        funktioKirja = erikoisFunktiot
+
         def max(self,param) :
                 """
                 Kasksi parametriä, maksimiarvo ja arvo. Molemmat voivat olla lausekkeita. 
                 Palauttaa arvon mikäli se on maksimiarvoa pienempi. Muussa tapauksessa maksimiarvon, 
                 tai None jos lausekkeet eivät ole laskettavissa. 
                 """
-                lokkeri.setMessage( param[0] + "," )
-                lokkeri.push()
-                arvo=self.laske(param[1],self.muuttujaKirja,self.funktioKirja)
-                suurin=self.laske(param[0],self.muuttujaKirja,self.funktioKirja)
-                lokkeri.pop()
+                arvo=self.laske(param[1])
+                suurin=param[0]
                 if arvo and suurin and Decimal(arvo) > Decimal(suurin) :
                         return suurin
                 elif arvo and suurin:
@@ -110,12 +96,8 @@ class TulosLaskin :
                 Palauttaa arvon mikäli se on minimiarvoa suurempi. Muussa tapauksessa minimiarvon,
                 tai None jos lausekkeet eivät ole laskettavissa.
                 """
-                lokkeri.setMessage( param[0] + "," )
-                lokkeri.push()
-                arvo=self.laske(param[1],self.muuttujaKirja,self.funktioKirja)
-                pienin=self.laske(param[0],self.muuttujaKirja,self.funktioKirja)
-                lokkeri.pop()        
-
+                arvo=self.laske(param[1])
+                pienin=param[0]
                 if not arvo:
                         return None
                 elif Decimal(arvo) < Decimal(pienin) :
@@ -128,7 +110,10 @@ class TulosLaskin :
                 Palauttaa arvon rajattuna minimiarvon ja maksimiarvon väliin. 
                 Jos lauseet eivät ole laskettavissa palauttaa None.
                 """
-                return "min("+param[0]+",max("+param[1]+","+param[2]+"))"
+                a = param[0]
+                b = param[1]
+                c = param[2]
+                return "min("+a+",max("+b+","+c+"))"
 
         def interpoloi(self,param):
                 """
@@ -183,7 +168,7 @@ class TulosLaskin :
                 """
                 Yksi parametri: Tehtävän syötteiden nimi joista haetaan pienin arvo.
                 Palauttaa joukon pienimmän. mikäli syötteitä ei löydy ollenkaan, palauttaa None
-                Pienintä arvoa ei haeta tehtävässä ulkopuolella olevien vartioiden syötteistä.
+                Pienintä arvoa ei määritetä tehtävässä ulkopuolella olevien vartioiden syötteistä.
                 """
                 arvo=str(self.teht.pienin(param[0]) )
                 return arvo
@@ -197,51 +182,76 @@ class TulosLaskin :
                 for p in listaParametreista :
                         if len(p.strip()) == 0 :
                                 return None
-                return str(eval( erikoisFunktiot[funktionNimi] + "(listaParametreista)" ) )
-
-        def laske(self,kaava,muuttujaKirja=None,funktioKirja=None):
+                        p = self.laske(p)
+                tulos = str(eval( erikoisFunktiot[funktionNimi] + "(listaParametreista)" ) )
+                return tulos
+        
+        def haeFunktio(self , lause):
                 """
-                Laskee lausekkeen jossa on funktioita, muuttujia, sulkuja */ laskuja sekä +- laskuja.
-                -Suorittaa ensin funktiot joiden nimet löytyvät funktioKirjasta.
+                Hakee seuraavan funktiokirjasta löytyvän funktion lauseesta.
+                palauttaa (funktiota edeltävä osa,funktion nimi)
+                esim haeFunktio(5+5+5*Funktio(A)+4)
+                palauttaa ("5+5+5*","Funktio")
+                jos funktiota ei löydy palauttaa None
+                """
+                funktioHaku= "(\A|.*[-+*/(),])("
+                if self.funktioKirja:
+                        for i, j in self.funktioKirja.iteritems():  
+                                funktioHaku=funktioHaku+i+"$"+"|"
+                else :
+                        funktioHaku=FunktioHaku+")"
+                funktioHaku=funktioHaku[:-1]+")"
+                funktio = re.search(funktioHaku, lause )
+                if funktio :
+                        return (funktio.group(1), funktio.group(2))
+                else :
+                        return None
+
+        def ratkaiseSulku(self,lause) :
+                """
+                Ratkaisee ensimmäisen sulkuparin joka ei sisällä muita sulkuja.
+                Jos sulut kuuluvat funktiolle, suoritetaan kyseinen funktio
+                Muuten lasketaan sulkujen välinen lause Aritmeettisella laskimella.
+                Palauttaa muokatun lauseen. 
+                """
+                muokattu = lause
+                parsittu = AritmeettinenLaskin.parsiSulku(muokattu)
+                if parsittu:
+                        tulos=None
+                        funktio=self.haeFunktio( parsittu[0] )
+                        if funktio:
+                                tulos = self.suoritaFunktio( funktio[1] , parsittu[1])
+                                muokattu= funktio[0] + tulos + parsittu[2]
+                        else:
+                                laskettava=parsittu[1]
+                                if self.muuttujaKirja:
+                                        laskettava=sijoitaMuuttujat(laskettava,self.muuttujaKirja)
+                                tulos = AritmeettinenLaskin.laske( laskettava )
+                                muokattu=str(parsittu[0]) + str(tulos) + str(parsittu[2])
+                                lokkeri.setMessage( muokattu ).logMessage()
+                return muokattu
+
+        def laske(self,kaava):
+                """
+                Laskee lausekkeen jossa on funktioita, muuttujia, sulkuja, */ sekä +- laskuja.
+                -Suorittaa funktioKirjasta löytyvät erikoisfunktiot.
                 -Sijoittaa muuttujat, joille löytyy arvo muuttujaKirjasta.
                 -Laskee sulkujen mukaan */ ensin sitten +-.
                 -Mikäli lauseke oli laskettavissa palauttaa tuloksen. Muussa tapauksessa None.
                 """
-                self.muuttujaKirja=muuttujaKirja
-                self.funktioKirja=funktioKirja
                 muokattu=kaava
-                
-                print "KAAVA:" + muokattu
-                funktioHaku= ""
-                if funktioKirja:
-                        for i, j in funktioKirja.iteritems():  
-                                funktioHaku=funktioHaku+i+r"\("+r"|"
-                funktioHaku=funktioHaku[:-1]
-                funktio=re.search(funktioHaku, muokattu )
-
-                while funktio:
-                        sulut = haeSulku( muokattu[funktio.end()-1:])
-                        funktionParametrit = sulut[1]
-                        alku=muokattu[:funktio.start()]
-              
-                        #lokkeri.setMessage( alku + kohdassa.group(0) )
-                        #lokkeri.push()
-                        funktionNimi = funktio.group(0)[:-1]
-                        funktionTulos = self.suoritaFunktio( funktionNimi , funktionParametrit ) 
-                        #lokkeri.pop()
-                        loppu= sulut[2]
-                        muokattu=alku+funktionTulos+loppu
-                        lokkeri.setMessage( muokattu ).logMessage()
-                        funktio=re.search(funktioHaku, muokattu )
-        
-                if muuttujaKirja:
-                        for i, j in muuttujaKirja.iteritems():  
-                                muokattu = re.sub("(?<=[-+/*()])"+i+"(?=[-+/*()])",j.strip(),muokattu)  
-                                muokattu = re.sub("(?<=^)"+i+"(?=[-+/*()])",j.strip(),muokattu)  
-                                muokattu = re.sub("(?<=[-+/*()])"+i+"(?=$)",j.strip(),muokattu)  
-            
-                tulos= AritmeettinenLaskin.laske(muokattu)
-                return tulos
+                # Suoritetaan sulkeet:
+                sulkuja = muokattu.count("(") 
+                while sulkuja:
+                        muokattu = self.ratkaiseSulku(muokattu)
+                        if muokattu :
+                            sulkuja = muokattu.count("(") 
+                        else :
+                            sulkuja = 0
+                # Lasketaan loppu :
+                muokattu = sijoitaMuuttujat(muokattu,self.muuttujaKirja)
+                muokattu = AritmeettinenLaskin.laske( muokattu)
+                return muokattu
 
         def laskePisteet(self,syotteet,tehtava):
                 """
@@ -249,20 +259,20 @@ class TulosLaskin :
                 Palauttaa tuloksen jos tulos oli laskettavissa.
                 Muuten None.
                 """
-     
                 self.syot=syotteet
                 self.teht=tehtava
-                
                 lokkeri.setMessage( "Kaava: " + str(self.teht.kaava) ).logMessage()
+                
                 # Tulkataan muuttujat
                 muuttujat=[]
                 for s in syotteet:
                         lokkeri.setMessage( "    " + s.maarite.nimi + ' = "'+ str(s.arvo) + '"' ).logMessage()
                         muuttuja=str(s.arvo)
                         muuttujat.append( (s.maarite.nimi , muuttuja ) )
-                # Lasketaan tulokset
-                lokkeri.setMessage( "" )
-                tulos = self.laske(self.teht.kaava, dict(muuttujat), erikoisFunktiot ) 
+                self.muuttujaKirja = dict(muuttujat)
+                
+                # Lasketaan tulos
+                tulos = self.laske(self.teht.kaava) 
                 lokkeri.setMessage( "Pisteet: " + str(tulos) ).logMessage()
                 return tulos
 
@@ -273,15 +283,21 @@ class TulosLaskin :
                 Taulukon ensimmäisissä sarakkeissa on vartio tai tehtävä objekteja muissa pisteitä.
                 Taulukon vasemmassa ylänurkassa on sarjan objekti
                 """
+
+                # Vasempaan ylänurkkaan sarjan objekti  
                 tulokset=[[sarja]]
+
+                #Luodaan ensimmäinen rivi, jossa on tehtävä objektit
                 tehtavat=sarja.tehtava_set.all()
                 for t in tehtavat:
                         tulokset[0].append(t)
                 vartiot = sarja.vartio_set.all()
                 
                 for v in vartiot :
+                        # Lisätään ensimmäiseen sarakkeeseen vartio objekti
                         rivi=[v]
                         for t in tehtavat:
+                                # Haetaan vartion syötteet tehtävälle
                                 maaritteet = t.syotemaarite_set.all()
                                 syotteet = []
                                 for m in maaritteet :
@@ -290,16 +306,18 @@ class TulosLaskin :
 
                                 lokkeri.setMessage("\nTehtava: " + t.nimi).logMessage()
                                 lokkeri.setMessage("Vartio: " + v.nimi).logMessage()
-                
+                                
+                                # Lasketaan tulos
                                 pisteet= self.laskePisteet( syotteet, t )
                                 if pisteet:
-                                        pisteet= str(Decimal(pisteet).quantize(Decimal('0.01'), rounding=ROUND_UP))
+                                        pisteet= str(Decimal(pisteet).quantize(Decimal('0.1'), rounding=ROUND_UP))
 
                                 #Tuomarineuvos ylimääritys
                                 tuomarineuvostonTulos=v.tuomarineuvostulos_set.filter(tehtava=t)
                                 if len( tuomarineuvostonTulos ) == 1:
                                         pisteet =  tuomarineuvostonTulos[0].pisteet
-                                #Tuloksen lisäys
+
+                                #Tuloksen lisäys taulukkoon
                                 rivi.append( pisteet )
                         tulokset.append(rivi)
                 return tulokset

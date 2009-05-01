@@ -10,7 +10,10 @@ class Logger:
         self.file=fileName
         return self
     def setMessage(self,message) :
-        self.stack[-1]=message
+        if message :
+                self.stack[-1]=message
+        else:
+                self.stack[-1]="None"
         return self
     def push(self) :
         self.stack.append("")
