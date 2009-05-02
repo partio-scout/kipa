@@ -261,18 +261,40 @@ class TulosLaskin :
                 """
                 self.syot=syotteet
                 self.teht=tehtava
-                lokkeri.setMessage( "Kaava: " + str(self.teht.kaava) ).logMessage()
                 
                 # Tulkataan muuttujat
                 muuttujat=[]
+                lokkeri.setMessage( "Syötteet: " ).logMessage()
                 for s in syotteet:
                         lokkeri.setMessage( "    " + s.maarite.nimi + ' = "'+ str(s.arvo) + '"' ).logMessage()
                         muuttuja=str(s.arvo)
                         muuttujat.append( (s.maarite.nimi , muuttuja ) )
                 self.muuttujaKirja = dict(muuttujat)
-                
+
+                # Ratkaistaan OsaTehtävät sekä suoran summan kaava:
+                osatehtavat = self.teht.osapistekaava_set.all()
+                ssKaava = ""
+                lokkeri.setMessage( "Osatehtavat: " ).logMessage()
+                lokkeri.push()
+                lokkeri.setMessage( "    " ).logMessage()
+                for osa in osatehtavat :
+                        lokkeri.setMessage("    " + osa.nimi + " = " + osa.kaava ).logMessage()
+                        osaPiste= self.laske(osa.kaava)
+                        if osaPiste:
+                            muuttujat.append( (osa.nimi,osaPiste) )
+                        ssKaava=ssKaava + osa.nimi + "+"
+                lokkeri.pop()
+                self.muuttujaKirja = dict(muuttujat)
+                ssKaava=ssKaava[:-1]
                 # Lasketaan tulos
-                tulos = self.laske(self.teht.kaava) 
+                tulos = None
+                lokkeri.setMessage( "Kaava: " + str(self.teht.kaava) ).logMessage()
+                if self.teht.kaava == "ss":
+                        lokkeri.setMessage( str(ssKaava) ).logMessage()
+                        tulos = self.laske(ssKaava) 
+                else :
+                        tulos = self.laske(self.teht.kaava) 
+
                 lokkeri.setMessage( "Pisteet: " + str(tulos) ).logMessage()
                 return tulos
 
