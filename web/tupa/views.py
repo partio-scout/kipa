@@ -104,16 +104,17 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None):
     tehtavaForm = TehtavaForm( posti,instance=tehtava,sarja=sarja )
     if tehtavaForm.is_valid() :
        tehtava=tehtavaForm.save()
-    # Osapiste
-    osaForm= kisapiste(tehtava, posti, prefix="osapiste")
-    if osaForm.is_valid() :
-       osaForm.save()
-    osaForm.label="Kisapiste generaatio:"
     # Interpolointi
     interForm= interpoloi(tehtava, posti, prefix="interpoloi")
     if interForm.is_valid() :
        interForm.save()
     interForm.label="Interpolinti generaatio:"
+    # Raakapiste
+    raakaForm= raakapiste(tehtava, posti, prefix="raakapiste")
+    if raakaForm.is_valid() :
+       raakaForm.save()
+    raakaForm.label="Raakapiste generaatio:"
+
     # Määritteet
     maariteFormit=MaariteFormSet(posti,instance=tehtava,prefix="maarite")
     if maariteFormit.is_valid() :
@@ -132,7 +133,7 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None):
        return render_to_response('tupa/maarita.html', 
                                       { 'heading' : "Maarita Tehtava" ,
                                       'taakse' : "../../../" ,
-                                      'forms' : (tehtavaForm,osaForm,interForm,) ,
+                                      'forms' : (tehtavaForm,interForm,raakaForm,) ,
                                       'formsets' : ( maariteFormit,kaavaFormit,)})
 
 def syotaKisa(request, kisa_nimi):
