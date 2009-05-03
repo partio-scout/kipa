@@ -19,17 +19,6 @@ VartioFormSet = inlineformset_factory(Sarja,Vartio,extra=10,fields=('nro','nimi'
 SarjaFormSet = inlineformset_factory(Kisa,Sarja,extra=4 )
 
 
-"""
-class FileForm(forms.ModelForm):
-    keskeyttanyt = forms.integerField(widget=)
-    class Meta:
-        fields=('nro','nimi',"ulkopuolella","keskeyttanyt")
-        model = File
-
-FileFormSet = inlineformset_factory(Version, File, extra=1,
-form=VersionForm)
-"""
-
 
 #TehtavaForm
 def tupaform_factory(model,overrides,excludeFields=None,fields=None) :
@@ -57,7 +46,7 @@ class TehtavaForm(ModelForm):
         model = Tehtava
 
 class PisteSyoteForm(ModelForm):
-    arvo = forms.FloatField(required=False)
+    arvo = forms.FloatField(required=False,widget=forms.TextInput(attrs={'size':'2'} ) )
     def __init__(self,maarite,vartio,*argv,**argkw) :
           self.arvo=forms.TimeField(required=False)
           super(ModelForm,self).__init__(*argv,**argkw)
@@ -67,7 +56,7 @@ class PisteSyoteForm(ModelForm):
           syote = super(ModelForm,self).save(commit=False)
           syote.maarite=self.maarite
           syote.vartio=self.vartio
-          if self.cleaned_data['arvo'] :
+          if not self.cleaned_data['arvo']== None :
               syote.arvo = self.cleaned_data['arvo']
               syote.save()
           elif syote.id :
@@ -77,7 +66,7 @@ class PisteSyoteForm(ModelForm):
           model = Syote
 
 class AikaSyoteForm(PisteSyoteForm) :
-       arvo=forms.CharField(required=False)
+       arvo=forms.CharField(required=False,widget=forms.TextInput(attrs={'size':'4'}))
        def clean_arvo(self):
            arvo=self.cleaned_data['arvo']
            haku = re.match(r"^(\d*):(\d*):(\d*)\Z",arvo)    

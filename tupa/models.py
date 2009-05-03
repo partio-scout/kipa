@@ -3,6 +3,21 @@ from django.db import models
 from random import uniform
 from TulosLaskin import *
 
+def poistaUlkopuoliset(syotteet) :
+        mukana = []
+        if syotteet:
+                for s in syotteet:
+                        laskennassa = True
+                        if not s.vartio.ulkopuolella==None:
+                                if s.maarite.tehtava.jarjestysnro >= s.vartio.ulkopuolella:
+                                         laskennassa = False
+                        if not s.vartio.keskeyttanyt == None :
+                                if s.maarite.tehtava.jarjestysnro >= s.vartio.keskeyttanyt:
+                                         laskennassa = False
+                        if laskennassa : 
+                                mukana.append(s)
+        return mukana
+        
 class Allergia(models.Model) :
     #gen_dia_class Allergia
 
@@ -146,14 +161,10 @@ class Tehtava(models.Model) :
 
     def mediaani(self,syotteen_nimi):
         syotteet=Syote.objects.filter(maarite__tehtava=self).filter(maarite__nimi=syotteen_nimi)
-        arvot=[]
-        if syotteet:
-            for s in syotteet :
-	        if not s.vartio.ulkopuolella == None and s.maarite.tehtava.jarjestysnro <= s.vartio.ulkopuolella:
-                    pass #Vartio on ulkopuolella joten se on poissa mediaanista.
-                elif not s.arvo==None :
-                    arvot.append(stringDecimaaliksi(s.arvo) ) 
-        
+        mukana = poistaUlkopuoliset(syotteet)
+        arvot = []
+        for m in mukana :
+                arvot.append( stringDecimaaliksi(m.arvo) )
         arvot.sort()
         if len(arvot) % 2 == 1:
             return arvot[(len(arvot)+1)/2-1]
@@ -163,6 +174,19 @@ class Tehtava(models.Model) :
             return (lower + upper) / 2  
         else :
             return None
+
+    def keskiarvo(self,syotteen_nimi) :
+        syotteet=Syote.objects.filter(maarite__tehtava=self).filter(maarite__nimi=syotteen_nimi)
+        mukana = poistaUlkopuoliset(syotteet)
+        yhteensa = Decimal()
+        for m in mukana :
+                yhteensa = yhteensa + stringDecimaaliksi(m.arvo)
+        tulos = yhteensa / len(mukana)
+        if tulos :
+                return str( tulos )
+        else :
+                return None
+
 
 class Rata(models.Model) :
     #gen_dia_class Rata

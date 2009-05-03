@@ -49,23 +49,24 @@ class interpoloi(apina):
         kaava.save()
         maarite.save()
     
-class kisapiste(apina):
-    nimi = forms.CharField() 
-    kuvaus = forms.CharField()
-    
+class raakapiste(apina):
+    syotteita= forms.IntegerField()
+    raakapisteita_yhteensa=forms.FloatField()
+    jaettavat_pisteet = forms.FloatField()
     def save(self):
         kaava = self.tallenna()
-        kaava.kaava = self.maarite.nimi
-        maariteet = SyoteMaarite.objects.filter(tehtava=self.tehtava).filter(nimi="op_"+kaava.nimi)
-        if not maariteet :
-            maarite = SyoteMaarite()
-        else : 
-            maarite = maaritteet[0]
-        self.maarite.nimi="op_"+kaava.nimi
-        self.maarite.tehtava = self.tehtava
-        self.maarite.kali_vihje=self.cleaned_data['kuvaus']
-        self.maarite.tyyppi="piste"
-        
+        maaritteet = []
+        maara = self.cleaned_data['syotteita']
+        kaava.kaava = "("
+        for i in range(maara):
+                maarite = SyoteMaarite()
+                maarite.nimi = "rp_" + kaava.nimi + str(i)
+                maarite.tehtava=self.tehtava
+                maarite.tyyppi="piste"
+                maarite.save()
+                kaava.kaava=kaava.kaava + maarite.nimi + "+"
+        rp_yht=self.cleaned_data['raakapisteita_yhteensa']
+        kaava.kaava=kaava.kaava[:-1]+")/"+str(rp_yht)+"*"+str(self.cleaned_data['jaettavat_pisteet'] )
         kaava.save()
-        self.maarite.save()
+            
 
