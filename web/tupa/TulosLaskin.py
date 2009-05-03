@@ -3,6 +3,7 @@ from decimal import *
 import re
 import AritmeettinenLaskin
 from logger import lokkeri
+import math
 
 """
 Sanakirja erikoisfunktioista joita voi kutsua kaavoissa,
@@ -17,7 +18,10 @@ erikoisFunktiot = {
         "med" : "self.mediaani",
         "kesk" : "self.keskiarvo" , 
         "pienin" : "self.pienin" , 
-        "suurin" : "self.suurin" }
+        "suurin" : "self.suurin" ,
+        "itseisarvo" : "self.itseisarvo" ,
+        "log10" : "self.log10" ,
+        "if" : "self.ifSentence"}
 
 def stringDecimaaliksi(merkkijono) :
         """
@@ -42,6 +46,16 @@ def sijoitaMuuttujat(kaava,muuttujaKirja):
                 muokattu = re.sub("(?<=^)"+i+"(?=$)",j.strip(),muokattu)  
                 muokattu = re.sub("(?<=[-+/*()])"+i+"(?=$)",j.strip(),muokattu)
         return muokattu
+def vertaa(a,operaattori,b) :
+        """
+        Vertaa a ja b keskenään operaattorilla 
+        palauttaa True tai False
+        parametrit merkkijonoja
+        """
+        vertailu = "Decimal(a)" + operaattori + "Decimal(b)"
+        if eval(vertailu) :
+                return True
+        return False
 
 def pilkoParametreiksi(merkkijono):
         """
@@ -172,7 +186,58 @@ class TulosLaskin :
                 """
                 arvo=str(self.teht.pienin(param[0]) )
                 return arvo
-    
+        def log10(self,param) :
+                """
+                10 kantainen logaritmi.
+                1 parametri : Syöte taikka lause josta logaritmi lasketaan.
+                """
+                parametri= self.laske( param[0] )
+                return str( Decimal( parametri ).log10() )
+
+        def ifSentence(self,param) :
+                """
+                If lause.
+                Kaksi pakollista parametriä. 
+                Enismmäinen on testilause joka sisältää joko "==","<",">","<=",">=" vertaajia
+                Toinen on arvo joka sijoitetaan jos testilause on totta.
+                Samassa lauseessa voi verrata useampia muuttujia tai samaa useaan kertaan.
+                esim. 
+                if(1<A<2,1)
+                if(A<B>C,666)
+                If lauseessa voi olla myös optionaalinen kolmas parametri, 
+                joka sijoitetaan jos vertailulause on epätosi.
+                """
+                operaattorit = "==|<=|>=|<|>"
+                vertailulause=param[0]
+                totta = param[1]
+                tarua = None
+                if len(param)>= 3 :
+                        tarua = param[2]
+                haku = "(^[^=<>]*)(" + operaattorit + ")(.*?)(" + operaattorit + "|$)(.*)"
+                operoitavaa = re.search(haku,vertailulause)
+                while operoitavaa :
+                        verrattava1 = self.laske( operoitavaa.group(1) )
+                        vertaaja =  operoitavaa.group(2)
+                        verrattava2 = self.laske( operoitavaa.group(3) )
+                        if verrattava1 == None or verrattava2 == None :
+                                return None
+                        if not vertaa(verrattava1,vertaaja,verrattava2) :
+                                if tarua :
+                                        return tarua
+                                else :
+                                        return 0
+                        vertailulause = operoitavaa.group(3)+operoitavaa.group(4)+operoitavaa.group(5)
+                        operoitavaa = re.search(haku,vertailulause)
+                return totta
+
+        def itseisarvo(self,param) :
+                """
+                Muuttaa negatiiviset arvot positiiviseksi.
+                -Yksi parametri
+                """
+                parametri = self.laske(param[0])
+                return str( abs( Decimal( parametri ) ) )
+
         def suoritaFunktio(self,funktionNimi,parametrit) :
                 """
                 Suorittaa nimetyn erikoisfunktion
