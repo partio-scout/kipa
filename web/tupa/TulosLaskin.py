@@ -57,6 +57,7 @@ def vertaa(a,operaattori,b) :
                 return True
         return False
 
+
 def pilkoParametreiksi(merkkijono):
         """
         Pilkkoo merkkijonon listaksi pilkkujen kohdalta.
@@ -345,8 +346,12 @@ class TulosLaskin :
                 for osa in osatehtavat :
                         lokkeri.setMessage("    " + osa.nimi + " = " + osa.kaava ).logMessage()
                         osaPiste= self.laske(osa.kaava)
-                        if osaPiste:
-                            muuttujat.append( (osa.nimi,osaPiste) )
+                        if osaPiste :
+                            if osaPiste == "h" :
+                                muuttujat.append( (osa.nimi,"0") )
+                            else :
+                                muuttujat.append( (osa.nimi,osaPiste) )
+
                         ssKaava=ssKaava + osa.nimi + "+"
                 lokkeri.pop()
                 self.muuttujaKirja = dict(muuttujat)
@@ -384,19 +389,32 @@ class TulosLaskin :
                         # Lisätään ensimmäiseen sarakkeeseen vartio objekti
                         rivi=[v]
                         for t in tehtavat:
+                                pisteet =None
                                 # Haetaan vartion syötteet tehtävälle
                                 maaritteet = t.syotemaarite_set.all()
                                 syotteet = []
                                 for m in maaritteet :
-                                        for s in m.syote_set.filter(vartio=v):
-                                                syotteet.append( s )
+                                        maaritteenSyotteet = m.syote_set.filter(vartio=v)
+                                        if maaritteenSyotteet :
+                                                if len(maaritteenSyotteet)==1 :
+                                                        syotteet.append( maaritteenSyotteet[0] )
+                                        else :
+                                                # Syöttämättä
+                                                pisteet = "S"    
 
                                 lokkeri.setMessage("\nTehtava: " + t.nimi).logMessage()
                                 lokkeri.setMessage("Vartio: " + v.nimi).logMessage()
                                 
+                                # Keskeyttänyt
+                                if v.keskeyttanyt and v.keskeyttanyt<= t.jarjestysnro:
+                                        pisteet = "K"
+
                                 # Lasketaan tulos
-                                pisteet= self.laskePisteet( syotteet, t )
-                                if pisteet:
+                                if not pisteet :
+                                        pisteet= self.laskePisteet( syotteet, t )
+                                
+                                # Pyöristys
+                                if pisteet and not pisteet == "S" and not pisteet == "K" :
                                         pisteet= str(Decimal(pisteet).quantize(Decimal('0.1'), rounding=ROUND_UP))
 
                                 #Tuomarineuvos ylimääritys

@@ -7,10 +7,29 @@ from django.forms.models import inlineformset_factory
 from decimal import *
 import re
 
+class VartioForm(ModelForm):
+        ulkopuolella = forms.IntegerField(widget=forms.TextInput(attrs={'size':'2'} ) ,required=False)
+        keskeyttanyt = forms.IntegerField(widget=forms.TextInput(attrs={'size':'2'} ) ,required=False)
+        class Meta:
+                model = Vartio
+
 KaavaFormSet = inlineformset_factory(Tehtava,OsapisteKaava,extra=3 )
 MaariteFormSet = inlineformset_factory(Tehtava,SyoteMaarite,extra=3 )
-VartioFormSet = inlineformset_factory(Sarja,Vartio,extra=10,fields=('nro','nimi') )
+VartioFormSet = inlineformset_factory(Sarja,Vartio,extra=10,fields=('nro','nimi',"ulkopuolella","keskeyttanyt",),form=VartioForm )
 SarjaFormSet = inlineformset_factory(Kisa,Sarja,extra=4 )
+
+
+"""
+class FileForm(forms.ModelForm):
+    keskeyttanyt = forms.integerField(widget=)
+    class Meta:
+        fields=('nro','nimi',"ulkopuolella","keskeyttanyt")
+        model = File
+
+FileFormSet = inlineformset_factory(Version, File, extra=1,
+form=VersionForm)
+"""
+
 
 #TehtavaForm
 def tupaform_factory(model,overrides,excludeFields=None,fields=None) :
