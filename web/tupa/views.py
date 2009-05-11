@@ -13,6 +13,7 @@ from logger import lokkeri
 import re
 from formit import *
 from apina import *
+from duplicate import *
 
 def kisa(request,kisa_nimi) :
       kisa = get_object_or_404(Kisa, nimi=kisa_nimi) 
@@ -27,6 +28,7 @@ def maaritaKisa(request, kisa_nimi=None):
      kisa = None
      if kisa_nimi:
          kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
+     
      # Post data
      posti=None
      if request.method == 'POST':
@@ -55,9 +57,9 @@ def maaritaValitseTehtava(request,kisa_nimi):
       taulukko = []
       for s in sarjat :
            taulut = Tehtava.objects.filter(sarja = s )
-           for taulu in taulut:
-               taulu.linkki = str(taulu.id)+"/"
-               taulu.nimi = str(taulu.nimi)
+           for taulu in taulut :
+                taulu.linkki = str(taulu.id)+"/"
+                taulu.nimi = unicode(taulu.jarjestysnro)+u" "+unicode(taulu.nimi)
            taulut.otsikko=s.nimi
            taulut.id=s.id
            taulukko.append(taulut)
@@ -96,6 +98,7 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None):
          sarja= tehtava.sarja
     else :
          sarja=get_object_or_404(Sarja, id=sarja_id)
+         
     # Post Data
     posti=None
     if request.method == 'POST':
@@ -132,7 +135,7 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None):
     else:
        return render_to_response('tupa/maarita.html', 
                                       { 'heading' : "Maarita Tehtava" ,
-                                      'taakse' : "../../../" ,
+                                      'taakse' : "/tupa/"+kisa_nimi+"/maarita/tehtava" ,
                                       'forms' : (tehtavaForm,interForm,raakaForm,) ,
                                       'formsets' : ( maariteFormit,kaavaFormit,)})
 
@@ -191,4 +194,42 @@ def sarja(request,sarja_id) :
 
 def piirit(request,kisa_nimi) :
       return HttpResponse(kisa_nimi + " PIIRIN TULOSTUS" )
+
+def kopioiTehtavia(request,kisa_nimi,sarja_id ):
+        kisa =get_object_or_404(Kisa, nimi=kisa_nimi)
+        sarjaan= get_object_or_404(Sarja, id=sarja_id)
+        sarjat = Sarja.objects.filter(kisa=kisa)
+        redirect=True
+        posti=None
+        if request.method == 'POST':
+                posti=request.POST
+        
+        formit=[]
+        for s in sarjat :
+                vaiht = [] 
+                tehtavat = Tehtava.objects.filter(sarja=s)
+                for t in tehtavat:
+                        vaiht.append( (t.id,t.nimi) )
+                class KopioiForm(forms.Form):
+                        kopioitavat_tehtavat = forms.MultipleChoiceField(choices=vaiht,widget=forms.CheckboxSelectMultiple,required=False)
+                sarjaForm = KopioiForm(posti,prefix=s.nimi)
+                formit.append(sarjaForm)
+                sarjaForm.otsikko=s.nimi
+                sarjaForm.id=s.id
+
+                if posti and sarjaForm.is_valid():
+                        kopioitavat = sarjaForm.cleaned_data['kopioitavat_tehtavat']
+                        for k in kopioitavat:
+                                tehtava= get_object_or_404(Tehtava, id=k)
+                                kopioiTehtava(tehtava,sarjaan)
+                else:
+                        redirect=False
+        if redirect:
+                return HttpResponseRedirect("/tupa/"+kisa.nimi+"/maarita/tehtava/")
+        else:
+                return render_to_response('tupa/valitse_form.html', 
+                                      { 'heading' : u"Kopioi Tehtavia sarjaan: "+sarjaan.nimi ,
+                                      'taulukko' : formit ,
+                                      'taakse' : "../../../../tehtava/" })
+
 

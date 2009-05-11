@@ -24,7 +24,7 @@ class Allergia(models.Model) :
     mille = models.CharField(max_length=255)
 
     #end_dia_class
-    def __str__(self) :
+    def __unicode__(self) :
         return self.mille
     class Meta:
         verbose_name_plural = "Allergiat"
@@ -37,7 +37,7 @@ class Kisa(models.Model) :
     paikka = models.CharField(max_length=255, blank=True )
 
     #end_dia_class
-    def __str__(self) :
+    def __unicode__(self) :
         return self.nimi
     class Meta:
         verbose_name_plural = "Kisat"
@@ -51,7 +51,7 @@ class Sarja(models.Model) :
     kisa = models.ForeignKey(Kisa)
 
     #end_dia_class
-    def __str__(self) :
+    def __unicode__(self) :
         return self.nimi
     class Meta:
         verbose_name_plural = "Sarjat"
@@ -73,7 +73,7 @@ class Vartio(models.Model) :
     ulkopuolella = models.IntegerField(blank=True , null=True )
 
     #end_dia_class
-    def __str__(self) :
+    def __unicode__(self) :
         return self.nimi
     class Meta:
         verbose_name_plural = "Vartiot"
@@ -89,7 +89,7 @@ class Henkilo(models.Model) :
     homma = models.CharField(max_length=255, blank=True, null=True )
 
     #end_dia_class
-    def __str__(self) :
+    def __unicode__(self) :
         return self.nimi
     class Meta:
         verbose_name_plural = "Henkilot"
@@ -102,7 +102,7 @@ class Rasti(models.Model) :
     rastimiehet = models.ManyToManyField(Henkilo, blank=True )
 
     #end_dia_class
-    def __str__(self) :
+    def __unicode__(self) :
         return self.sarja.nimi + " " + self.nimi
     class Meta:
         verbose_name_plural = "Rastit"
@@ -121,7 +121,7 @@ class Tehtava(models.Model) :
     sarja = models.ForeignKey(Sarja)
 
     #end_dia_class
-    def __str__(self) :
+    def __unicode__(self) :
         return self.nimi
     class Meta:
         verbose_name_plural = "Tehtavat"
@@ -183,7 +183,7 @@ class Tehtava(models.Model) :
                 yhteensa = yhteensa + stringDecimaaliksi(m.arvo)
         tulos = yhteensa / len(mukana)
         if tulos :
-                return str( tulos )
+                return unicode( tulos )
         else :
                 return None
 
@@ -214,7 +214,7 @@ class SyoteMaarite(models.Model) :
     tehtava = models.ForeignKey(Tehtava)
 
     #end_dia_class
-    def __str__(self) :
+    def __unicode__(self) :
         return self.nimi
     class Meta:
         verbose_name_plural = "Syotteen maaritteet"
@@ -228,7 +228,7 @@ class Syote(models.Model) :
 
     #end_dia_class
 
-    def __str__(self) :
+    def __unicode__(self) :
         return self.vartio.nimi     
     class Meta:
         verbose_name_plural = "Syotteet"
@@ -241,7 +241,7 @@ class TuomarineuvosTulos(models.Model) :
     pisteet = models.DecimalField(decimal_places=2, max_digits=5 )
 
     #end_dia_class
-    def __str__(self) :
+    def __unicode__(self) :
         return self.tehtava.nimi + " " + self.vartio.nimi
     class Meta:
         verbose_name_plural = "Tuomarineuvoston tulokset"
@@ -255,7 +255,7 @@ class OsapisteKaava(models.Model) :
     tehtava = models.ForeignKey(Tehtava)
 
     #end_dia_class
-    def __str__(self) :
+    def __unicode__(self) :
         return self.kaava
     class Meta:
         verbose_name_plural = "Osapisteiden kaavat"
