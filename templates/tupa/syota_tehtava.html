@@ -2,7 +2,9 @@
 {% block content %} 
 
 <A href='../../'>taakse</A>
+
 <h1>Tehtävä: {{tehtava.nimi}} </h2>
+<h1>Sarja: {{tehtava.sarja.nimi}} </h2>
 
 <form action="." method="post">     
    
@@ -46,6 +48,7 @@
         {% for vartio in syotteet %}
             <tr>
                   <td>
+                  {{ vartio.0.nro}}
                   {{ vartio.0.nimi }}
                   </td>
                   {% for kentta in vartio.1 %}

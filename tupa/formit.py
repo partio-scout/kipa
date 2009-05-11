@@ -13,11 +13,16 @@ class VartioForm(ModelForm):
         class Meta:
                 model = Vartio
 
-KaavaFormSet = inlineformset_factory(Tehtava,OsapisteKaava,extra=3 )
+class KaavaForm(ModelForm):
+        kaava = forms.CharField(widget=forms.Textarea)
+        class Meta:
+                model = OsapisteKaava
+
+KaavaFormSet = inlineformset_factory(Tehtava,OsapisteKaava,extra=3 ,form=KaavaForm)
 MaariteFormSet = inlineformset_factory(Tehtava,SyoteMaarite,extra=3 )
 VartioFormSet = inlineformset_factory(Sarja,Vartio,extra=10,fields=('nro','nimi',"ulkopuolella","keskeyttanyt",),form=VartioForm )
 SarjaFormSet = inlineformset_factory(Kisa,Sarja,extra=4 )
-
+TehtavaValintaFormSet = inlineformset_factory(Sarja,Tehtava,fields='jarjestysnro')
 
 
 #TehtavaForm
@@ -33,6 +38,8 @@ def tupaform_factory(model,overrides,excludeFields=None,fields=None) :
     return uusi
 
 class TehtavaForm(ModelForm):
+    kaava = forms.CharField(widget=forms.TextInput(attrs={'size':'40'} ) ,required=True)
+    
     def __init__(self,post,instance=None,sarja=None) :
         self.sarja=sarja
         super(ModelForm,self).__init__(post,instance=instance)
@@ -46,7 +53,7 @@ class TehtavaForm(ModelForm):
         model = Tehtava
 
 class PisteSyoteForm(ModelForm):
-    arvo = forms.FloatField(required=False,widget=forms.TextInput(attrs={'size':'2'} ) )
+    arvo = forms.FloatField(required=False,widget=forms.TextInput(attrs={'size':'8'} ) )
     def __init__(self,maarite,vartio,*argv,**argkw) :
           self.arvo=forms.TimeField(required=False)
           super(ModelForm,self).__init__(*argv,**argkw)
@@ -66,7 +73,7 @@ class PisteSyoteForm(ModelForm):
           model = Syote
 
 class AikaSyoteForm(PisteSyoteForm) :
-       arvo=forms.CharField(required=False,widget=forms.TextInput(attrs={'size':'4'}))
+       arvo=forms.CharField(required=False,widget=forms.TextInput(attrs={'size':'8'}))
        def clean_arvo(self):
            arvo=self.cleaned_data['arvo']
            haku = re.match(r"^(\d*):(\d*):(\d*)\Z",arvo)    
@@ -81,7 +88,7 @@ def SyoteForm(*argv,**argkw) :
     if argv[0].tyyppi=="aika":
        syotteet=Syote.objects.filter(maarite=argv[0]).filter(vartio=argv[1])
        aikaVakio= None
-       if syotteet :
+       if syotteet and syotteet[0].arvo :
            arvo = Decimal(syotteet[0].arvo)
            h = divmod(arvo , 60*60)[0]
            min = divmod(arvo , 60)[0]- h*60
@@ -94,4 +101,9 @@ def SyoteForm(*argv,**argkw) :
 class KisaForm(ModelForm):
      class Meta:
         model = Kisa
+
+class PoistaTehtavaForm(ModelForm):
+        class Meta:
+                model = Tehtava
+
 
