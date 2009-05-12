@@ -1,0 +1,11 @@
+{% extends "tupa/valitse.html" %}
+
+{% block sarake %} 
+    {{ sarake }}
+{% endblock%}
+{% block content %}
+<form method="POST" action="">
+{{ block.super }}
+{% include "tupa/tallenna.html" %}
+</form>
+{% endblock %}
