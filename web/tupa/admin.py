@@ -38,4 +38,5 @@ admin.site.register(Syote)
 admin.site.register(SyoteMaarite)
 admin.site.register(Allergia)
 admin.site.register(TuomarineuvosTulos)
+admin.site.register(TestausTulos)
 
