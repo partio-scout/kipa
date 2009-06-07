@@ -18,6 +18,8 @@ databrowse.site.register(Vartio)
 databrowse  =  patterns('',(r'^tupa/databrowse/(.*)', databrowse.site.root),)
 urlpatterns = genericViews + databrowse +patterns('web.tupa.views.',
      (r'^tupa/admin/(.*)', admin.site.root ),
+     (r'^tupa/(?P<kisa_nimi>\w+)/tallenna/$', 'tallennaKisa'), 
+     (r'^tupa/kantaan/$', 'tietokantaan'), 
      (r'^tupa/(?P<kisa_nimi>\w+)/$', 'kisa'),
      (r'^tupa/uusiKisa/maarita/$', 'maaritaKisa'),
      (r'^tupa/(?P<kisa_nimi>\w+)/maarita/$', 'maaritaKisa'),
@@ -30,4 +32,4 @@ urlpatterns = genericViews + databrowse +patterns('web.tupa.views.',
      (r'^tupa/(?P<kisa_nimi>\w+)/syota/tehtava/(?P<tehtava_id>\d+)/$', 'syotaTehtava'),
      (r'^tupa/(?P<kisa_nimi>\w+)/tulosta/$', 'tulosta'),
      (r'^tupa/(?P<kisa_nimi>\w+)/tulosta/sarja/(?P<sarja_id>\d+)/$', 'tulostaSarja'),
-     (r'^tupa/(?P<kisa_nimi>\w+)/tulosta/piirit/$', 'piirit'),) 
+     (r'^tupa/(?P<kisa_nimi>\w+)/tulosta/piirit/$', 'piirit'), )
