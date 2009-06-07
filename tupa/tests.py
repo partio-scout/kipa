@@ -5,6 +5,9 @@ from models import *
 from AritmeettinenLaskin import *
 from TulosLaskin import *
 import decimal
+from django.test import TestCase
+
+import os
 
 class aritmeettinen_laskin_test(unittest.TestCase):
     """
@@ -64,50 +67,6 @@ class aritmeettinen_laskin_test(unittest.TestCase):
     def testTuntematonVirheA(self):
         assert not laske('-0.008333333333333333333333333333*0.0') == None
 
-
-       
-class lasketulos_test(unittest.TestCase):
-    """
-    Laskimen lasketulos luokan (eli ns. p√§√§tason) unit testit
-    """
-    def testLaske_muuttujat(self):
-        perusKisa=Kisa()
-        perusKisa.nimi="Peruskisa"
-        perusKisa.save()
-        perusSarja = Sarja()
-        perusSarja.kisa=perusKisa
-        perusSarja.nimi="PerusSarja"
-        perusSarja.save()
-        perusRasti = Rasti()
-        perusRasti.sarja=perusSarja
-        perusRasti.nimi="PerusRasti"
-        perusRasti.save()
-        perusTehtava = Tehtava()
-        perusTehtava.rasti=perusRasti
-        perusTehtava.nimi="PerusTehtava"
-        perusTehtava.save()
-        a = Syote()
-        b = Syote()
-        maariteA=SyoteMaarite()
-        maariteB=SyoteMaarite()
-        maariteA.nimi = "a"
-        maariteB.nimi = "b"
-        maariteA.tehtava = perusTehtava
-        maariteB.tehtava = perusTehtava
-        maariteA.save()
-        maariteB.save()
-        a.maarite=maariteA
-        b.maarite=maariteB
-        a.save()
-        b.save()
-        laskia = TulosLaskin()
-        a.arvo=5
-        b.arvo=2
-        perusTehtava.kaava="a+b"
-        assert  laskia.laskePisteet([a,b],perusTehtava) == '7'
-    
-   
-
 def haeTulos(sarjanTulokset, vartio, tehtava) :
     """
     Hakee Vartion pisteet teht‰v‰lle m‰‰ritellyst‰ tulostaulukosta
@@ -118,29 +77,65 @@ def haeTulos(sarjanTulokset, vartio, tehtava) :
             if sarjanTulokset[vart_nro+1][0] ==vartio and sarjanTulokset[0][teht_nro+1] ==tehtava:
                  return tulokset
 
-class tietokanta_test(unittest.TestCase):
-    """
-    Testataan laskimen kyky‰ ronkkia tietokantaa ja laskea saatu data j‰rkev‰sti. Setupissa m‰‰ritell‰‰n testitietokanta jota k‰ytet‰‰n kaikissa muissa testeiss‰.
-    """
-    fixtures = ['laskenta_tests.xml']
-    def setUp(self):
-        sarja=Sarja.objects.filter(nimi="Funktiot")[0]
-        self.parasVartio=Vartio.objects.filter(nimi="ParasVartio")[0]
-        self.keskimmainenVartio=Vartio.objects.filter(nimi="KeskimmainenVartio")[0]
-        self.huonoinVartio=Vartio.objects.filter(nimi="HuonoinVartio")[0]
-        self.tulokset=sarja.laskeTulokset()
-    
-    def testInterpoloiAika(self):
-        tehtava= Tehtava.objects.filter(nimi="interpoloi_aika")[0]
-        assert Decimal(haeTulos(self.tulokset,self.parasVartio,tehtava)) == Decimal("5")
-        assert Decimal(haeTulos(self.tulokset,self.keskimmainenVartio,tehtava)) == Decimal("2.50")
-        assert Decimal(haeTulos(self.tulokset,self.huonoinVartio,tehtava)) == Decimal("0")
-    
-    def testInterpoloiPisteet(self):
-        tehtava= Tehtava.objects.filter(nimi="interpoloi_pisteet")[0]
-        assert Decimal(haeTulos(self.tulokset,self.parasVartio,tehtava)) == Decimal("5")
-        assert Decimal(haeTulos(self.tulokset,self.keskimmainenVartio,tehtava)) == Decimal("2.50")
-        assert Decimal(haeTulos(self.tulokset,self.huonoinVartio,tehtava)) == Decimal("0")
-        
-     
-        
+def TulosTestFactory(fixture_name):
+        class testi(TestCase) :
+                fixtures = [fixture_name]
+                def testTulokset(self):
+                        self.sarjat=Sarja.objects.all()
+                        virheet=[]
+                        for s in self.sarjat:
+                                virheilmoitus=""
+                                for f in self.fixtures:
+                                        virheilmoitus=virheilmoitus+f+" " 
+                                        
+                                virheilmoitus=virheilmoitus+"\nSarja: "+s.nimi+""
+                                self.testausTulokset=TestausTulos.objects.filter(tehtava__sarja=s)
+                                tulokset=s.laskeTulokset()
+                                for t in self.testausTulokset :
+                                        tulos=haeTulos(tulokset,t.vartio,t.tehtava)
+                                        vaadittava = t.pisteet
+                                        if not tulos==None:
+                                               tulos = Decimal(tulos)
+                                        if not vaadittava==None:
+                                                vaadittava = Decimal(vaadittava)
+                                        if not tulos == vaadittava:
+                                                ilmoitus= virheilmoitus
+                                                ilmoitus=ilmoitus + "\nTehtava: " + t.tehtava.nimi
+                                                ilmoitus=ilmoitus + "\nSyotteet: "
+                                                for s in Syote.objects.filter(maarite__tehtava=t.tehtava).filter(vartio=t.vartio):
+                                                        ilmoitus=ilmoitus + s.maarite.nimi+"="+ s.arvo + " "
+                                                ilmoitus=ilmoitus + "\nKaava: " + t.tehtava.kaava
+                                                ilmoitus=ilmoitus + "\nOstatehtavien kaavat: " 
+                                                for k in OsapisteKaava.objects.filter(tehtava=t.tehtava):
+                                                        ilmoitus=ilmoitus + k.nimi +"="+ k.kaava + " "
+                                                ilmoitus=ilmoitus + "\nVartio: "  + t.vartio.nimi  
+                                                ilmoitus=ilmoitus + "\nTulos: "   + str(tulos)+' != '+str(vaadittava)
+                                                virheet.append(ilmoitus) 
+                        virhe= str(len(virheet)) + " errors"
+                        for v in virheet:
+                                virhe=virhe + "\n--------------------------------\n" + v 
+                        self.failUnless( len(virheet) == 0 , virhe)
+        return testi
+
+testit=[aritmeettinen_laskin_test]
+
+# haetaan kaikki xml fixtuurien nimet.
+test_fixtures=[]
+for f in os.listdir(os.curdir+"/tupa/fixtures/tests/"):
+        if not f.find(".xml") == -1:
+                test_fixtures.append("tests/"+f)
+
+# luodaan tulostestit fixtuureista.
+for t in test_fixtures:
+        print t
+        testit.append( TulosTestFactory(t) )
+
+# luodaan testsuite jossa on kaikki testit.
+def suite():
+        suites = [] 
+        for t in testit :
+                suites.append(unittest.TestLoader().loadTestsFromTestCase(t))
+        suite=unittest.TestSuite(suites)
+        return suite
+
+

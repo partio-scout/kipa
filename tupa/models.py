@@ -112,7 +112,6 @@ class Tehtava(models.Model) :
     #gen_dia_class Tehtava
 
     nimi = models.CharField(max_length=255)
-    maksimipisteet = models.DecimalField(decimal_places=2, null=True, blank=True, max_digits=10 )
     tehtavaryhma = models.CharField(max_length=255, blank=True )
     tehtavaluokka = models.CharField(max_length=255, blank=True )
     rastikasky = models.TextField(blank=True )
@@ -233,18 +232,28 @@ class Syote(models.Model) :
     class Meta:
         verbose_name_plural = "Syotteet"
 
-class TuomarineuvosTulos(models.Model) :
-    #gen_dia_class TuomarineuvosTulos
+
+class TulosTaulu(models.Model) :
+    #gen_dia_class TulosTaulu
 
     vartio = models.ForeignKey(Vartio)
     tehtava = models.ForeignKey(Tehtava)
-    pisteet = models.DecimalField(decimal_places=2, max_digits=5 )
+    pisteet = models.CharField(max_length=255)
 
     #end_dia_class
     def __unicode__(self) :
         return self.tehtava.nimi + " " + self.vartio.nimi
     class Meta:
+        abstract = True
         verbose_name_plural = "Tuomarineuvoston tulokset"
+
+class TuomarineuvosTulos(TulosTaulu) :
+        class Meta :
+                verbose_name_plural = "Tuomarineuvoston tulokset"
+
+class TestausTulos(TulosTaulu):
+        class Meta:
+                verbose_name_plural = "Testattavat tulokset"
 
 
 class OsapisteKaava(models.Model) :

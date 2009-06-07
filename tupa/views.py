@@ -232,4 +232,46 @@ def kopioiTehtavia(request,kisa_nimi,sarja_id ):
                                       'taulukko' : formit ,
                                       'taakse' : "../../../../tehtava/" })
 
+def tallennaKisa(request, kisa_nimi):
+        """
+        Palauttaa käyttäjälle valitun kisan xml formaatissa.
+        Jättää henkilöt ja allergiat tallentamatta.
+        """
+        from django.core import serializers
+        kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
+        objects=[kisa,]
+        for s in kisa.sarja_set.all():
+                objects.append(s)
+                for v in s.vartio_set.all():
+                        objects.append(v)
+                for t in s.tehtava_set.all():
+                        objects.append(t)
+                        for te in t.testaustulos_set.all():
+                                objects.append(te)
+                        for tt in t.tuomarineuvostulos_set.all():
+                                objects.append(tt)
+                        for sm in t.syotemaarite_set.all():
+                                objects.append(sm)
+                                for s in sm.syote_set.all():
+                                        objects.append(s)
+                        for ok in t.osapistekaava_set.all():
+                                objects.append(ok)
+        response = HttpResponse(serializers.serialize("xml", objects , indent=4), mimetype='application/xml')
+        response['Content-Disposition'] = 'attachment; filename=tietokanta.xml'
+        return response
+
+
+def tietokantaan(request):
+        """
+        Palauttaa tupa tietokannan kokonaisuudessaan xml formaatissa käyttäjälle talletettavaksi.
+        """
+        from django.db.models import get_app, get_apps, get_models
+        from django.core import serializers
+        objects=[]
+        for model in get_models(get_app("tupa")):
+                objects.extend(model._default_manager.all())
+        response = HttpResponse(serializers.serialize("xml", objects , indent=4), mimetype='application/xml')
+        response['Content-Disposition'] = 'attachment; filename=tietokanta.xml'
+        return response
+
 

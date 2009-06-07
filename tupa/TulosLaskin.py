@@ -228,7 +228,6 @@ class TulosLaskin :
                 """
                 operaattorit = "==|<=|>=|<|>"
                 vertailulause=param[0]
-                print vertailulause
                 totta = param[1]
                 tarua = None
                 if len(param)>= 3 :
@@ -275,7 +274,6 @@ class TulosLaskin :
                 max= self.laske(param[2])
                 pisteet=self.laske(param[3])
                 kaava="interpoloi("+s+",1,"+min+","+ max+","+pisteet +")"
-                print kaava
                 return kaava
 
         def suoritaFunktio(self,funktionNimi,parametrit) :
@@ -289,8 +287,6 @@ class TulosLaskin :
                                 return None
                         p = self.laske(p)
                 tulos = unicode(eval( erikoisFunktiot[funktionNimi] + "(listaParametreista)" ) )
-                print funktionNimi +"("+ parametrit +")"
-                print "tulos " + tulos
                 return tulos
         def sioitus(param):
                 """
