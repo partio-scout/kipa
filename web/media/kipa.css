@@ -1,0 +1,216 @@
+@charset "utf-8";
+/* CSS Document */
+
+BODY {
+	FONT-SIZE: 11px; 
+	LINE-HEIGHT: 120%; 
+	FONT-FAMILY: Tahoma, Verdana, Arial, Helvetica, sans-serif; 
+	BACKGROUND-COLOR: white;
+	background-image: url("bg-body.gif");
+	background-repeat: repeat-x;
+	background-attachment: scroll;
+	background-position: 100% 0pt;
+	margin-top: 15px;
+	margin-left: 20px;
+}
+TABLE {
+	BORDER-RIGHT: 0px;
+	BORDER-TOP: 0px;
+	MARGIN-LEFT: 0px;
+	BORDER-LEFT: 0px;
+	MARGIN-RIGHT: 0px;
+	BORDER-BOTTOM: 0px;
+}
+TD {
+	FONT-SIZE: 11px;
+}
+SELECT {
+	FONT-SIZE: 10px; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif
+}
+INPUT {
+	FONT-SIZE: 10px;
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	text-align: left;
+}
+TEXTAREA {
+	FONT-SIZE: 10px; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif
+}
+
+h1, h2, h3, h4, h5 {
+	margin-top: 10pt;
+	margin-right: 0pt;
+	margin-bottom: 5pt;
+	margin-left: 0pt;
+	text-transform: lowercase;
+	font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif; 
+	font-weight: normal;
+	color: #006ea6;
+}
+
+h1 {
+	/* tämä on sivuotsikko	*/
+	margin-bottom: 20px;
+	text-transform: uppercase;
+	color:#FFF;
+}
+
+h2 {
+	text-transform:capitalize;
+	margin-top:20px;
+}
+
+.etusivunOtsikko {
+	font: 2em / 1.4em Georgia,Helvetica,"Lucida Sans Unicode",Tahoma,Verdana,Arial,Helvetica,sans-serif;
+	letter-spacing:0;
+	border:0;
+	color:#006ea6;
+	margin:1.3em 0 0 0;
+}
+
+.etusivunLinkit {
+	padding-left:50px;
+	letter-spacing:0;
+	border:0;
+	color:#006ea6;
+	margin:1.3em 0 0 0;
+}
+
+.etusivunOtsikko img{
+	padding: 10px;
+	padding-left:40px;
+	text-align:left;
+	vertical-align:middle;
+}
+
+#etusivu th {
+	font-size: 13px;
+	font-weight: normal;
+	background-color: #b9c9fe;
+	background-image: none;
+	background-repeat: repeat;
+	background-attachment: scroll;
+	background-position: 0% 0%;
+	border-top-width: 4px;
+	border-top-style: solid;
+	border-top-color: #aabcfe;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #ffffff;
+	color: #003399;
+	padding-top: 8px;
+	padding-right: 8px;
+	padding-bottom: 8px;
+	padding-left: 8px;
+}
+
+#taulukko th {
+	font-size: 13px;
+	font-weight: normal;
+	background-color: #b9c9fe;
+	background-image: none;
+	background-repeat: repeat;
+	background-attachment: scroll;
+	background-position: 0% 0%;
+	border-top-width: 4px;
+	border-top-style: solid;
+	border-top-color: #aabcfe;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #ffffff;
+	color: #003399;
+	padding-top: 8px;
+	padding-right: 8px;
+	padding-bottom: 8px;
+	padding-left: 8px;
+}
+
+#taulukko .odd {
+	background:#e8edff;
+}
+
+#taulukko .odd:hover, .even:hover {
+	background:#FFFF99;
+}
+
+.top {
+	background-image:url(logo-leima.png);
+	background-position:right;
+	background-repeat:no-repeat;
+	padding-left:50px;
+	padding-top:80px;
+}
+
+#box-table-a tr:hover td {
+	background-color: #d0dafd;
+	background-image: none;
+	background-repeat: repeat;
+	background-attachment: scroll;
+	background-position: 0% 0%;
+	color: #333399;
+}
+.tauluOtsikko {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: x-small;
+	font-weight: bold;
+	color: #000;
+	background-color: #b9c9fe;
+	vertical-align: top;
+}
+.keskeyttanyt {
+	font-style: italic;
+	color: #666; 
+	background-color:#CCC;
+}
+
+#tehtava-taulukko {
+	font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	/*font-size:12px;*/
+	/*width:480px;*/
+	text-align:center;
+	border-collapse:collapse;
+	border-top:7px solid #9baff1;
+	border-bottom:7px solid #9baff1;
+	margin:20px;
+}
+
+#tehtava-taulukko th {
+	font-size:13px;
+	font-weight:normal;
+	background:#b9c9fe;
+	border-right:1px solid #9baff1;
+	border-left:1px solid #9baff1;
+	color:#039;
+	padding:8px;
+	text-transform:capitalize;
+}
+
+#tehtava-taulukko td {
+	background:#e8edff;
+	border-right:1px solid #aabcfe;
+	border-left:1px solid #aabcfe;
+	color:#669;
+	padding:3px;
+	text-align: left;
+	vertical-align:top;
+}
+
+#tehtava-taulukko a, a:visited {
+	text-decoration:none;
+	color:#669;
+	cursor:pointer;
+}
+
+#tehtava-taulukko a:hover {
+	text-decoration:underline;
+}
+
+.tehtavan_tila {
+	background-color: #b9c9fe;
+	width: 400px;
+}
+
+/* TOOLTIP */
+#tt {position:absolute; display:block; background:url(http://www.isokirahvi.com/tupa/tooltip/images/tt_left.gif) top left no-repeat}
+#tttop {display:block; height:5px; margin-left:5px; background:url(http://www.isokirahvi.com/tupa/tooltip/images/tt_top.gif) top right no-repeat; overflow:hidden}
+#ttcont {display:block; padding:2px 12px 3px 7px; margin-left:5px; background:#666; color:#FFF}
+#ttbot {display:block; height:5px; margin-left:5px; background:url(http://www.isokirahvi.com/tupa/tooltip/images/tt_bottom.gif) top right no-repeat; overflow:hidden}

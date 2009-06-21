@@ -3,20 +3,16 @@ from tupa.models import *
 from django.contrib import admin
 admin.autodiscover()
 from django.views.generic.simple import direct_to_template
+from django.conf import settings
 
 genericViews = patterns('django.views.generic.list_detail',
      (r'^tupa/$','object_list', {'template_name': 'tupa/index.html', 'queryset': Kisa.objects.all() } ),) 
-from django.contrib import databrowse
 
-databrowse.site.register(Kisa)
-databrowse.site.register(Sarja)
-databrowse.site.register(Tehtava)
-databrowse.site.register(SyoteMaarite)
-databrowse.site.register(Syote)
-databrowse.site.register(Vartio)
+media=patterns('django.views.static',
+        (r'^kipamedia/(?P<path>.*)$', 'serve',
+        {'document_root': settings.STATIC_DOC_ROOT}),)
 
-databrowse  =  patterns('',(r'^tupa/databrowse/(.*)', databrowse.site.root),)
-urlpatterns = genericViews + databrowse +patterns('web.tupa.views.',
+urlpatterns = genericViews + media + patterns('web.tupa.views.',
      (r'^tupa/admin/(.*)', admin.site.root ),
      (r'^tupa/(?P<kisa_nimi>\w+)/tallenna/$', 'tallennaKisa'), 
      (r'^tupa/kantaan/$', 'tietokantaan'), 
