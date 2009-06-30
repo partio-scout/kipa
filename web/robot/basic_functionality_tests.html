@@ -56,10 +56,10 @@ th {
   font-style: normal;
 }
 </style>
-<title>Simple Login</title>
+<title>Basic Functionality Tests</title>
 </head>
 <body>
-<h1>Simple Login</h1>
+<h1>Basic Functionality Tests</h1>
 
 <table border="1">
 <colgroup span="99">
@@ -74,7 +74,7 @@ th {
 </tr>
 <tr>
 <td>Documentation</td>
-<td>simple login</td>
+<td>Test for basic functionalities such as login to KiPa main page, admin Page and creation (and removing) competition with different kind of parameter sets.</td>
 <td></td>
 <td></td>
 <td></td>
@@ -191,7 +191,7 @@ th {
 <th>Argument</th>
 </tr>
 <tr>
-<td>Login to admin page should succeed</td>
+<td>Login To Admin Page Should Succeed</td>
 <td>[Documentation]</td>
 <td>This test case tries to login to admin page, check that login has succees and then logs out</td>
 <td></td>
@@ -226,7 +226,7 @@ th {
 <td></td>
 </tr>
 <tr>
-<td>Login to KiPa page should succeed</td>
+<td>Login To KiPa Page Should Succeed</td>
 <td>Open Kipa Main Page</td>
 <td></td>
 <td></td>
@@ -247,7 +247,7 @@ th {
 <td></td>
 </tr>
 <tr>
-<td>Creation of single competiton with just a competition name defined Should Succeed</td>
+<td>Creation Of Single Competiton With Just A Competition Name Defined Should Succeed</td>
 <td>[Documentation]</td>
 <td>Creates single scout competition with just a name, all other values are left empty</td>
 <td></td>
@@ -289,11 +289,60 @@ th {
 <td></td>
 </tr>
 <tr>
-<td>Creation of single competition, with time and place</td>
+<td>Creation Of Single Competition, With Time And Place should succeed</td>
 <td>Create New Competition</td>
 <td>Espoon_Punanen</td>
 <td>2009-09-12</td>
 <td>Mainila</td>
+</tr>
+<tr>
+<td></td>
+<td>Remove Competition</td>
+<td>Espoon_Punanen</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Log Out From Admin Page</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Close Browser</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Creation of single competition with competition name, 2 series and place should succeed</td>
+<td>Create New Competition</td>
+<td>Espoon_Punanen</td>
+<td></td>
+<td>Mainila</td>
+</tr>
+<tr>
+<td></td>
+<td>...</td>
+<td>sininen</td>
+<td>punainen</td>
+<td>ruskea</td>
+</tr>
+<tr>
+<td></td>
+<td>...</td>
+<td>harmaa</td>
+<td></td>
+<td></td>
 </tr>
 <tr>
 <td></td>
@@ -444,9 +493,24 @@ th {
 </tr>
 <tr>
 <td></td>
+<td>...</td>
+<td>${serie1}=\</td>
+<td>${serie2}=\</td>
+<td>${serie3}=\</td>
+</tr>
+<tr>
+<td></td>
+<td>...</td>
+<td>${serie4}=\</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
 <td>[Documentation]</td>
-<td>Creates new competition and checks that it exist. Expects arguments:<br />
-| competition name | competition time | competition place |</td>
+<td>Creates new competition and checks that it exist. Expects arguments: | competition name | competition time | competition place | serie | serie | serie | serie |<br />
+<br />
+All arguments, except copetition name, can be left empty</td>
 <td></td>
 <td></td>
 </tr>
