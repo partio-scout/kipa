@@ -1,0 +1,722 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="RobotIDE" /> 
+<style type="text/css">
+html {
+  font-family: Arial,Helvetica,sans-serif;
+  background-color: white;
+  color: black;
+}
+p {
+  max-width: 60em;
+}
+table {
+  border-collapse: collapse;
+  empty-cells: show;
+  margin: 1em 0em;
+  border: 0.1em solid black;
+}
+th, td {
+  border-style: solid;
+  border-width: 0.05em 0.1em;
+  border-color: black;
+  padding: 0.1em 0.2em;
+  height: 1.5em;
+}
+th {
+  background-color: rgb(192, 192, 192);
+  color: black;
+  border-width: 0.1em;
+  font-weight: bold;
+  text-align: center;
+  text-transform: capitalize;
+  letter-spacing: 0.1em;
+}
+/* Widths of named columns */
+col.name {
+  width: 10em;
+}
+.action, .value, .arg {
+  width: 15em;
+}
+/* Properties for the name column 
+- td:first-child should work in CSS 2.1 avare browsers (tested in Firefox)
+- col.name is against specs but works in IE
+*/
+td:first-child, col.name {
+  background-color: rgb(240, 240, 240);
+  text-transform: capitalize;
+  letter-spacing: 0.1em;
+}
+/* required for IE */
+th {
+  font-style: normal;
+}
+</style>
+<title>Simple Login</title>
+</head>
+<body>
+<h1>Simple Login</h1>
+
+<table border="1">
+<colgroup span="99">
+<col class="name">
+<col class="value" span="4"></colgroup>
+<tr>
+<th>Setting</th>
+<th>Value</th>
+<th>Value</th>
+<th>Value</th>
+<th>Value</th>
+</tr>
+<tr>
+<td>Documentation</td>
+<td>simple login</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Force Tags</td>
+<td>regression</td>
+<td>smoke</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Suite Setup</td>
+<td>Start selenium server with delay if needed</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Suite Teardown</td>
+<td>Shut Down Selenium Server</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Library</td>
+<td>SeleniumLibrary</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+<table border="1">
+<colgroup span="99">
+<col class="name">
+<col class="value" span="4"></colgroup>
+<tr>
+<th>Variable</th>
+<th>Value</th>
+<th>Value</th>
+<th>Value</th>
+<th>Value</th>
+</tr>
+<tr>
+<td>${BROWSER}</td>
+<td>Firefox</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>${ADMIN PAGE}</td>
+<td><a href="http://localhost:8000/tupa/admin/">http://localhost:8000/tupa/admin/</a></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>${KIPA MAIN PAGE}</td>
+<td><a href="http://localhost:8000/tupa/">http://localhost:8000/tupa/</a></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>${COMPETITION SET}</td>
+<td><a href="http://localhost:8000/tupa/uusiKisa/maarita/">http://localhost:8000/tupa/uusiKisa/maarita/</a></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>${ADMIN PAGE TITLE}</td>
+<td>Site administration | Django site admin</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>${ADMIN LOGIN PAGE TITLE}</td>
+<td>Log in | Django site admin</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+<table border="1">
+<colgroup span="99">
+<col class="name">
+<col class="action">
+<col class="arg" span="3"></colgroup>
+<tr>
+<th>Test Case</th>
+<th>Action</th>
+<th>Argument</th>
+<th>Argument</th>
+<th>Argument</th>
+</tr>
+<tr>
+<td>Login to admin page should succeed</td>
+<td>[Documentation]</td>
+<td>This test case tries to login to admin page, check that login has succees and then logs out</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Login To Admin Page</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Log Out from Admin Page</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Close Browser</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Login to KiPa page should succeed</td>
+<td>Open Kipa Main Page</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Close Browser</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Creation of single competiton with just a competition name defined Should Succeed</td>
+<td>[Documentation]</td>
+<td>Creates single scout competition with just a name, all other values are left empty</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Create New Competition</td>
+<td>Espoon_Punanen</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Remove Competition</td>
+<td>Espoon_Punanen</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Log Out From Admin Page</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Close Browser</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Creation of single competition, with time and place</td>
+<td>Create New Competition</td>
+<td>Espoon_Punanen</td>
+<td>2009-09-12</td>
+<td>Mainila</td>
+</tr>
+<tr>
+<td></td>
+<td>Remove Competition</td>
+<td>Espoon_Punanen</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Log Out From Admin Page</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Close Browser</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+<table border="1">
+<colgroup span="99">
+<col class="name">
+<col class="action">
+<col class="arg" span="3"></colgroup>
+<tr>
+<th>Keyword</th>
+<th>Action</th>
+<th>Argument</th>
+<th>Argument</th>
+<th>Argument</th>
+</tr>
+<tr>
+<td>Login To Admin Page</td>
+<td>Open Browser</td>
+<td>${ADMIN PAGE}</td>
+<td>${BROWSER}</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Location Should Be</td>
+<td>${ADMIN PAGE}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Title Should Be</td>
+<td>${ADMIN LOGIN PAGE TITLE}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Input Text</td>
+<td>id_username</td>
+<td>tupa</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Input Text</td>
+<td>id_password</td>
+<td>tupa</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Click Button</td>
+<td>Log in</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Location Should Be</td>
+<td>${ADMIN PAGE}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Title Should Be</td>
+<td>${ADMIN PAGE TITLE}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Open KiPa Main Page</td>
+<td>Open Browser</td>
+<td>${KIPA MAIN PAGE}</td>
+<td>${BROWSER}</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Location Should Be</td>
+<td>${KIPA MAIN PAGE}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Page Should Contain Link</td>
+<td>Luo uusi kisa</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Create New Competition</td>
+<td>[Arguments]</td>
+<td>${competition}</td>
+<td>${time}=\</td>
+<td>${place}=\</td>
+</tr>
+<tr>
+<td></td>
+<td>[Documentation]</td>
+<td>Creates new competition and checks that it exist. Expects arguments:<br />
+| competition name | competition time | competition place |</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Open Browser</td>
+<td>${KIPA MAIN PAGE}</td>
+<td>${BROWSER}</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Click Link</td>
+<td>Luo uusi kisa</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Location Should Be</td>
+<td>${COMPETITION SET}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Input Text</td>
+<td>id_nimi</td>
+<td>${competition}</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Input Text</td>
+<td>id_aika</td>
+<td>${time}</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Input Text</td>
+<td>id_paikka</td>
+<td>${place}</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Click Button</td>
+<td>Tallenna -&gt;</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Close Browser</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Open Browser</td>
+<td>${KIPA MAIN PAGE}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Click Link</td>
+<td>${competition}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Location Should Be</td>
+<td>${KIPA MAIN PAGE}${competition}/</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Page Should Contain Link</td>
+<td>./maarita/</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Page Should Contain Link</td>
+<td>./maarita/vartiot</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Page Should Contain Link</td>
+<td>./syota/</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Page Should Contain Link</td>
+<td>./tallenna/</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Close Browser</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Remove Competition</td>
+<td>[Arguments]</td>
+<td>${competition}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>[Documentation]</td>
+<td>Removes competition given by ${competition} variable</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Login To Admin Page</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Click Link</td>
+<td>Kisat</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Click Link</td>
+<td>${competition}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Page Should Contain</td>
+<td>${competition}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Click Link</td>
+<td>Delete</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Page Should Contain</td>
+<td>Are you sure you want to delete the kisa "${competition}"</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Click Button</td>
+<td>Yes, I'm sure</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Page Should Contain</td>
+<td>"${competition}" was deleted successfully</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Page Should Not Contain Link</td>
+<td>${competition}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Log Out From Admin Page</td>
+<td>Click Link</td>
+<td>Log out</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Location Should Be</td>
+<td>${ADMIN PAGE}logout/</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Page Should Contain Link</td>
+<td>Log in again</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Start Selenium Server With Delay If Needed</td>
+<td>Start Selenium Server</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Open Browser</td>
+<td>${KIPA MAIN PAGE}</td>
+<td>${BROWSER}</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>comment</td>
+<td>Set Selenium Speed</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+</body>
+</html>
