@@ -114,7 +114,6 @@ def TulosTestFactory(fixture_name):
                         virhe= str(len(virheet)) + " errors"
                         for v in virheet:
                                 virhe=virhe + "\n--------------------------------\n" + v 
-                        print virhe
                         self.failUnless( len(virheet) == 0 , unicode(virhe).encode('ascii', 'replace')
 )
         return testi
