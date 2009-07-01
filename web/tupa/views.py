@@ -84,7 +84,7 @@ def maaritaVartiot(request,kisa_nimi):
          vartioFormit.id=s.id
          taulukko.append( vartioFormit )
       if posti and post_ok:
-         return HttpResponseRedirect(reverse('web.tupa.views.maaritaVartiot', args=(kisa_nimi,)))
+         return HttpResponseRedirect(reverse('tupa.views.maaritaVartiot', args=(kisa_nimi,)))
       else:
          return render_to_response('tupa/valitse_formset.html', { 'taulukko' : taulukko ,
                                                                   'heading' : "Määritä vartiot",
@@ -181,6 +181,35 @@ def syotaTehtava(request, kisa_nimi , tehtava_id) :
              { 'tehtava' : tehtava ,
                'maaritteet' : maaritteet ,
                'syotteet' : syoteFormit } )
+
+def testiTulos(request, kisa_nimi):
+        taulukko=[]
+        sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
+        taulukko = []
+        posti=None
+        if request.method == 'POST':
+                posti=request.POST
+        
+        for s in sarjat :
+                taulut=s
+                taulut.tiedot=Vartio.objects.filter(sarja=s)
+                tehtavat=Tehtava.objects.filter(sarja = s )
+
+                for v in taulut.tiedot:
+                        v.tehtavat=tehtavat
+                        v.formit=[]
+                        for t in tehtavat:
+                                formi=TestiTulosForm(posti,v,t,prefix=kisa_nimi+s.nimi+t.nimi+v.nimi)
+                                if formi.is_valid():
+                                        formi.save()
+                                v.formit.append( formi )
+                taulut.otsikko=s.nimi
+                taulut.id=s.id
+                taulukko.append(taulut)
+        return render_to_response('tupa/testitulos.html',
+                { 'taulukko' : taulukko ,
+                'heading' : "Otsikko" ,
+                'taakse' : "../" })
 
 def tulostaSarja(request, kisa_nimi, sarja_id) :
       sarja = Sarja.objects.get(id=sarja_id)
