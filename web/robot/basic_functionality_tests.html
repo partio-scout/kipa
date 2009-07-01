@@ -262,23 +262,16 @@ th {
 </tr>
 <tr>
 <td></td>
-<td>Remove Competition</td>
-<td>Espoon_Punanen</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>Log Out From Admin Page</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
 <td>Close Browser</td>
 <td></td>
 <td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>[Teardown]</td>
+<td>Remove Competition</td>
+<td>Espoon_Punanen</td>
 <td></td>
 </tr>
 <tr>
@@ -297,23 +290,16 @@ th {
 </tr>
 <tr>
 <td></td>
-<td>Remove Competition</td>
-<td>Espoon_Punanen</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>Log Out From Admin Page</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
 <td>Close Browser</td>
 <td></td>
 <td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>[Teardown]</td>
+<td>Remove Competition</td>
+<td>Espoon_Punanen</td>
 <td></td>
 </tr>
 <tr>
@@ -346,15 +332,71 @@ th {
 </tr>
 <tr>
 <td></td>
-<td>Remove Competition</td>
-<td>Espoon_Punanen</td>
+<td>Close Browser</td>
+<td></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td></td>
-<td>Log Out From Admin Page</td>
+<td>[Teardown]</td>
+<td>Remove Competition</td>
+<td>Espoon_Punanen</td>
 <td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Creation of single competition, with 2 series and 2 groups should succeed</td>
+<td>[Documentation]</td>
+<td>This test case creates one competition with two series, adds two groups; one on each serie checks that adding has been successfull. At the end, test case cleans up by removing competition.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Create New Competition</td>
+<td>Espoon_Punanen</td>
+<td></td>
+<td>Jossain</td>
+</tr>
+<tr>
+<td></td>
+<td>...</td>
+<td>punainen</td>
+<td>sininen</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Add New Group</td>
+<td>Espoon_Punanen</td>
+<td>trikoopellet</td>
+<td>401</td>
+</tr>
+<tr>
+<td></td>
+<td>...</td>
+<td>punainen</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Add New Group</td>
+<td>Espoon_Punanen</td>
+<td>trikookeijut</td>
+<td>501</td>
+</tr>
+<tr>
+<td></td>
+<td>...</td>
+<td>sininen</td>
 <td></td>
 <td></td>
 </tr>
@@ -363,6 +405,13 @@ th {
 <td>Close Browser</td>
 <td></td>
 <td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>[Teardown]</td>
+<td>Remove Competition</td>
+<td>Espoon_Punanen</td>
 <td></td>
 </tr>
 <tr>
@@ -556,6 +605,34 @@ th {
 </tr>
 <tr>
 <td></td>
+<td>Input Text</td>
+<td>id_sarja_set-0-nimi</td>
+<td>${serie1}</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Input Text</td>
+<td>id_sarja_set-1-nimi</td>
+<td>${serie2}</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Input Text</td>
+<td>id_sarja_set-2-nimi</td>
+<td>${serie3}</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Input Text</td>
+<td>id_sarja_set-3-nimi</td>
+<td>${serie4}</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
 <td>Click Button</td>
 <td>Tallenna -&gt;</td>
 <td></td>
@@ -710,6 +787,20 @@ th {
 </tr>
 <tr>
 <td></td>
+<td>Log Out From Admin Page</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Close Browser</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -761,6 +852,154 @@ th {
 <td></td>
 <td>comment</td>
 <td>Set Selenium Speed</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Add New Group</td>
+<td>[Arguments]</td>
+<td>${competition}</td>
+<td>${group name}</td>
+<td>${group number}</td>
+</tr>
+<tr>
+<td></td>
+<td>...</td>
+<td>${serie}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>[Documentation]</td>
+<td>Add new group to competition, needs following arguments:<br />
+| competition | group name | group number | group serie |</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Open Browser</td>
+<td>${KIPA MAIN PAGE}</td>
+<td>${BROWSER}</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Click Link</td>
+<td>${competition}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Location Should Contain</td>
+<td>${competition}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Page Should Contain Link</td>
+<td>./maarita/</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Page Should Contain Link</td>
+<td>./maarita/vartiot</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Page Should Contain Link</td>
+<td>./syota/</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Page Should Contain Link</td>
+<td>./tallenna/</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Click Link</td>
+<td>./maarita/vartiot</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Location Should Contain</td>
+<td>vartiot</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Input Text</td>
+<td>id_${serie}-0-nro</td>
+<td>${group number}</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Input Text</td>
+<td>id_${serie}-0-nimi</td>
+<td>${group name}</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Click Button</td>
+<td>Tallenna -&gt;</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Click Link</td>
+<td>taakse</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Click Link</td>
+<td>Tulokset</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Click Link</td>
+<td>${serie}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Page Should Contain</td>
+<td>${group name}</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Close Browser</td>
+<td></td>
 <td></td>
 <td></td>
 </tr>
