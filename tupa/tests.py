@@ -71,10 +71,10 @@ def haeTulos(sarjanTulokset, vartio, tehtava) :
     """
     Hakee Vartion pisteet teht‰v‰lle m‰‰ritellyst‰ tulostaulukosta
     """
-    for vart_nro in range(len(sarjanTulokset)-1) :
-        for teht_nro in range(len(sarjanTulokset[0])-1):
-            tulokset =sarjanTulokset[vart_nro+1][teht_nro+1]
-            if sarjanTulokset[vart_nro+1][0] ==vartio and sarjanTulokset[0][teht_nro+1] ==tehtava:
+    for vart_nro in range(1,len(sarjanTulokset)-1) :
+        for teht_nro in range(2,len(sarjanTulokset[vart_nro])-1):
+            tulokset =sarjanTulokset[vart_nro][teht_nro]
+            if sarjanTulokset[vart_nro][0] ==vartio and sarjanTulokset[0][teht_nro] ==tehtava:
                  return tulokset
 
 def TulosTestFactory(fixture_name):
@@ -94,9 +94,9 @@ def TulosTestFactory(fixture_name):
                                 for t in self.testausTulokset :
                                         tulos=haeTulos(tulokset,t.vartio,t.tehtava)
                                         vaadittava = t.pisteet
-                                        if not tulos==None:
+                                        if not tulos==None and is_number(tulos):
                                                tulos = Decimal(tulos)
-                                        if not vaadittava==None:
+                                        if not vaadittava==None and is_number(vaadittava):
                                                 vaadittava = Decimal(vaadittava)
                                         if not tulos == vaadittava:
                                                 ilmoitus= virheilmoitus
@@ -114,7 +114,9 @@ def TulosTestFactory(fixture_name):
                         virhe= str(len(virheet)) + " errors"
                         for v in virheet:
                                 virhe=virhe + "\n--------------------------------\n" + v 
-                        self.failUnless( len(virheet) == 0 , virhe)
+                        print virhe
+                        self.failUnless( len(virheet) == 0 , unicode(virhe).encode('ascii', 'replace')
+)
         return testi
 
 testit=[aritmeettinen_laskin_test]

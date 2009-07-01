@@ -1,0 +1,25 @@
+{% extends "tupa/valitse.html" %}
+
+{% block sarake %} 
+    <form action="." method="post">     
+	<table width="600" border="1">
+        <tr>
+        <th></th>
+                {% for kentta in sarake.tiedot.0.tehtavat %}
+                        <th>
+                                {{ kentta.nimi }}
+                        </th>
+                {% endfor %}
+        </tr>
+		{% for rivi in sarake.tiedot %}
+                <tr>
+                <th>{{rivi.nimi}}</th>
+			    {% for kentta in rivi.formit%}
+			         <td>{{ kentta.pisteet }}{{kentta.errors}}</td>
+			    {% endfor %}    
+		      </tr>    
+		{% endfor %}
+	</table>
+        {% include "tupa/tallenna.html" %}
+    </form>
+{% endblock%}
