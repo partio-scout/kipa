@@ -1,6 +1,6 @@
 import os
-hakemisto=os.getcwd()
-
+#hakemisto=os.getcwd()
+hakemisto = "/var/local/web"
 # Django settings for sivut project.
 
 DEBUG = True

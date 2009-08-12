@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from tupa.models import *
+from models import *
 from django.contrib import admin
 admin.autodiscover()
 from django.views.generic.simple import direct_to_template
@@ -9,7 +9,7 @@ genericViews = patterns('django.views.generic.list_detail',
      (r'^$','object_list', {'template_name': 'tupa/index.html', 'queryset': Kisa.objects.all() } ),) 
 
 
-urlpatterns = genericViews +  patterns('tupa.views.',
+urlpatterns = genericViews +  patterns('web.tupa.views.',
      (r'^admin/(.*)', admin.site.root ),
      (r'^(?P<kisa_nimi>\w+)/tallenna/$', 'tallennaKisa'), 
      (r'^kantaan/$', 'tietokantaan'), 
