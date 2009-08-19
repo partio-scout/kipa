@@ -9,17 +9,24 @@
 
 {% if forms %}
     {% for form in forms%}
-        <h2>{{form.label}}</h2>
+        <fieldset>
+        <legend>{{form.label}}</legend>
         {{form}} <br>
+        </fieldset>
     {% endfor%}
 {% endif %}
 {% if formsets %}
     {% for formset in formsets %}
-        <h2>{{formset.label}}</h2>
+
+        <fieldset>
+        <legend>{{formset.label}}</legend>
         {{ formset.management_form }}
         {% for form in formset.forms %}
-        {{ form }} <br>
+                <fieldset>
+                        {{ form }} <br>
+                </fieldset>
         {% endfor %}
+        </fieldset>
     {% endfor%}
 {% endif %}
 <br>

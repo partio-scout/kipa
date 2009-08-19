@@ -3,7 +3,6 @@ from models import *
 from django.shortcuts import render_to_response
 from django.shortcuts import get_object_or_404
 from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.core.urlresolvers import reverse
 import operator
 from decimal import *
 from django import forms
@@ -12,7 +11,7 @@ from logger import lokkeri
 
 import re
 from formit import *
-from apina import *
+from TehtavanMaaritys import *
 from duplicate import *
 
 def kisa(request,kisa_nimi) :
@@ -84,7 +83,7 @@ def maaritaVartiot(request,kisa_nimi):
          vartioFormit.id=s.id
          taulukko.append( vartioFormit )
       if posti and post_ok:
-         return HttpResponseRedirect(reverse('tupa.views.maaritaVartiot', args=(kisa_nimi,)))
+         return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/vartiot/")
       else:
          return render_to_response('tupa/valitse_formset.html', { 'taulukko' : taulukko ,
                                                                   'heading' : "Määritä vartiot",
@@ -103,41 +102,27 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None):
     posti=None
     if request.method == 'POST':
           posti=request.POST
-    # Tehtävä
+    
     tehtavaForm = TehtavaForm( posti,instance=tehtava,sarja=sarja )
     if tehtavaForm.is_valid() :
        tehtava=tehtavaForm.save()
-    # Interpolointi
-    interForm= interpoloi(tehtava, posti, prefix="interpoloi")
-    if interForm.is_valid() :
-       interForm.save()
-    interForm.label="Interpolinti generaatio:"
-    # Raakapiste
-    raakaForm= raakapiste(tehtava, posti, prefix="raakapiste")
-    if raakaForm.is_valid() :
-       raakaForm.save()
-    raakaForm.label="Raakapiste generaatio:"
+    taulukko=[]
+    for ot in tehtavaForm.osaTehtavat:
+            ot.otsikko=ot.instance.nimi
+            ot.id=ot.instance.id
+            taulukko.append(ot)
 
-    # Määritteet
-    maariteFormit=MaariteFormSet(posti,instance=tehtava,prefix="maarite")
-    if maariteFormit.is_valid() :
-         maariteFormit.save() 
-    maariteFormit.label="Syöteiden Määritteet"
-    # Osapisteiden kaavat:
-    kaavaFormit = KaavaFormSet(posti,instance=tehtava,prefix="kaava")
-    if kaavaFormit.is_valid() :
-         kaavaFormit.save()    
-    kaavaFormit.label="Osapisteiden Kaavat"
-    # Selaimelle:
- 
+        
+
     if posti and tehtavaForm.is_valid() :
        return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/tehtava/"+str(tehtava.id)+'/' )
     else:
-       return render_to_response('tupa/maarita.html', 
+       return render_to_response('tupa/valitse_form.html', 
                                       { 'heading' : "Maarita Tehtava" ,
                                       'taakse' : "/tupa/"+kisa_nimi+"/maarita/tehtava" ,
-                                      'forms' : (tehtavaForm,interForm,raakaForm,) ,
-                                      'formsets' : ( maariteFormit,kaavaFormit,)})
+                                      'taulukko' : taulukko,
+                                      'form' : tehtavaForm,
+                                      })
 
 def syotaKisa(request, kisa_nimi):
       sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
@@ -170,7 +155,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id) :
               formi=None
               if syotteet:
                   syote=syotteet[0]
-              formi = SyoteForm(m,v,posti,instance=syote,prefix=v.nimi+m.nimi,)
+              formi = myoteForm(m,v,posti,instance=syote,prefix=v.nimi+m.nimi,)
               if formi.is_valid() :
                  formi.save()
               
@@ -215,7 +200,7 @@ def tulostaSarja(request, kisa_nimi, sarja_id) :
       sarja = Sarja.objects.get(id=sarja_id)
       lokkeri.clearLog()
       tulokset= sarja.laskeTulokset()
-      return render_to_response('tupa/tulokset2.html', {'tulos_taulukko' : tulokset }  )
+      return render_to_response('tupa/tulokset.html', {'tulos_taulukko' : tulokset }  )
 
 def sarja(request,sarja_id) :
       sarja= Kisa.objects.get(id=sarja_id)
@@ -279,12 +264,14 @@ def tallennaKisa(request, kisa_nimi):
                                 objects.append(te)
                         for tt in t.tuomarineuvostulos_set.all():
                                 objects.append(tt)
-                        for sm in t.syotemaarite_set.all():
-                                objects.append(sm)
-                                for s in sm.syote_set.all():
-                                        objects.append(s)
-                        for ok in t.osapistekaava_set.all():
-                                objects.append(ok)
+                        for ot in t.osatehtava_set.all() :
+                                for sm in ot.syotemaarite_set.all():
+                                        objects.append(sm)
+                                        for s in sm.syote_set.all():
+                                                objects.append(s)
+                                for p in ot.parametri_set.all():
+                                        objects.append(p)
+                                objects.append(ot)
         response = HttpResponse(serializers.serialize("xml", objects , indent=4), mimetype='application/xml')
         response['Content-Disposition'] = 'attachment; filename=tietokanta.xml'
         return response

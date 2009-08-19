@@ -1,0 +1,8 @@
+{{ form.as_p }}
+{% for parametri in parametrit %}
+<fieldset>
+        <legend> {{ parametri.label }} </legend>
+        {{ parametri}}
+</fieldset>
+{% endfor %}
+
