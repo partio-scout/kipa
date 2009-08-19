@@ -1,37 +1,34 @@
 {% extends "tupa/base.html" %}
 {% block content %} 
 
-<A href='../../admin/'>AdminSivu </A>
+<A href='../../'>taakse</A>
 
-<h1> Tulokset </h1>
-{{ sarja_objekti.kisa.nimi }} <br> 
-<br>
+<h1>NÄYTÄ TULOKSET</h1>
+ {{ tulos_taulukko.0.0.kisa.nimi}} <br>  
+
+<br
 <p>
-Sarja: {{ sarja_objekti.nimi }} 
 {% if tulos_taulukko %}
-       <table>
-       <ul>
-       {% for rivi in tulos_taulukko %}
-           <tr>
-           {% for sarake in rivi %}
-               <td>
-               {{ sarake }}     
-               </td>
-           {% endfor %}    
-           </tr>    
-       {% endfor %}
-       </ul>
-       </table>
+	<table width="600" border="1">
+		{% for rivi in tulos_taulukko%}
+                      <tr>
+			    {% for sarake in rivi %}
+			         <td>{{ sarake }}</td>
+			    {% endfor %}    
+		      </tr>    
+		{% endfor %}
+	</table>
        
 {% else %}
-    <p>Ei Tuloksia.</p>
+    <p>Ei tuloksia.</p>
 {% endif %}
 
 <p>
- p = vartion suoritusta ei ole vielä syötetty <br>
- ? = vartion pisteitä ei voida vielä laskea <br>
- - = vartio ei ole tehnyt tehtävää <br>
+ S = syöttämättä <br>
+ H = vartion suoritus hylatty<br>
+ K = vartio keskeyttanyt<br>
+ None = Laskentavirhe
 </p>
 
+</form>
 {% endblock %}
-

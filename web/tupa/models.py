@@ -199,6 +199,26 @@ class Rata(models.Model) :
     class Meta:
         verbose_name_plural = "Radat"
 
+
+class OsaTehtava(models.Model) :
+        OSA_TYYPIT=(    ("kp","kisapisteita"),
+                        ("rp","raakapisteita"),
+                        ("ka","kokonaisaika"),
+                        ("ala","alkuaika ja loppuaika"),
+                        ("vk","vapaa kaava"), )
+        #gen_dia_class OsaTehtava
+
+        nimi = models.CharField(max_length=255)
+        tyyppi = models.CharField(max_length=255, choices = OSA_TYYPIT )
+        kaava = models.CharField(max_length=255)
+        tehtava = models.ForeignKey(Tehtava)
+
+        #end_dia_class
+        def __unicde__(self) :
+                return self.nimi
+        class Meta:
+                verbose_name_plural = "Osatehtavat"
+
 class SyoteMaarite(models.Model) :
     TYYPPI_VAIHTOEHDOT = (
         ('aika', 'aika'),
@@ -210,7 +230,7 @@ class SyoteMaarite(models.Model) :
     nimi = models.CharField(max_length=255)
     tyyppi = models.CharField(max_length=255, choices=TYYPPI_VAIHTOEHDOT )
     kali_vihje = models.CharField(max_length=255, blank=True , null=True )
-    tehtava = models.ForeignKey(Tehtava)
+    tehtava = models.ForeignKey(OsaTehtava)
 
     #end_dia_class
     def __unicode__(self) :
@@ -255,19 +275,15 @@ class TestausTulos(TulosTaulu):
         class Meta:
                 verbose_name_plural = "Testattavat tulokset"
 
+class Parametri(models.Model) :
+        #gen_dia_class Parametri
 
-class OsapisteKaava(models.Model) :
-    #gen_dia_class OsapisteKaava
+        nimi = models.CharField(max_length=255)
+        arvo = models.CharField(max_length=255)
+        tehtava = models.ForeignKey(OsaTehtava)
 
-    nimi = models.CharField(max_length=255)
-    kaava = models.CharField(max_length=255)
-    tehtava = models.ForeignKey(Tehtava)
-
-    #end_dia_class
-    def __unicode__(self) :
-        return self.kaava
-    class Meta:
-        verbose_name_plural = "Osapisteiden kaavat"
-
+        #end_dia_class
+        class Meta:
+                verbose_name_plural = "OsaTehtavan Paramentrit" 
 
 

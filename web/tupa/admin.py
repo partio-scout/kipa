@@ -15,7 +15,7 @@ class KisaAdmin(admin.ModelAdmin):
     inlines = [SarjaInline]
 
 class KaavaInline(admin.TabularInline):
-    model = OsapisteKaava
+    model = OsaTehtava
     extra = 1
 
 class SyoteMaariteInline(admin.TabularInline):
@@ -39,4 +39,5 @@ admin.site.register(SyoteMaarite)
 admin.site.register(Allergia)
 admin.site.register(TuomarineuvosTulos)
 admin.site.register(TestausTulos)
+admin.site.register(OsaTehtava)
 

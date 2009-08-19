@@ -122,7 +122,7 @@ testit=[aritmeettinen_laskin_test]
 
 # haetaan kaikki xml fixtuurien nimet.
 test_fixtures=[]
-for f in os.listdir(os.curdir+"/tupa/fixtures/tests/"):
+for f in os.listdir(os.curdir+"/fixtures/tests/"):
         if not f.find(".xml") == -1:
                 test_fixtures.append("tests/"+f)
 
