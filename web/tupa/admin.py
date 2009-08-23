@@ -27,7 +27,6 @@ class TehtavaAdmin(admin.ModelAdmin) :
         (None,               {'fields': ['nimi','kaava','jarjestysnro']}),
         ('Optionaalinen informaatio', {'fields': ['tehtavaryhma','tehtavaluokka','rastikasky'], 'classes': ['collapse']}),
     ]
-    inlines = [SyoteMaariteInline,KaavaInline]
 
 
 admin.site.register(Kisa, KisaAdmin)
@@ -40,4 +39,5 @@ admin.site.register(Allergia)
 admin.site.register(TuomarineuvosTulos)
 admin.site.register(TestausTulos)
 admin.site.register(OsaTehtava)
+admin.site.register(Parametri)
 

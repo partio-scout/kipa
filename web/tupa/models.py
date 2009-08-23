@@ -3,21 +3,6 @@ from django.db import models
 from random import uniform
 from TulosLaskin import *
 
-def poistaUlkopuoliset(syotteet) :
-        mukana = []
-        if syotteet:
-                for s in syotteet:
-                        laskennassa = True
-                        if not s.vartio.ulkopuolella==None:
-                                if s.maarite.tehtava.jarjestysnro >= s.vartio.ulkopuolella:
-                                         laskennassa = False
-                        if not s.vartio.keskeyttanyt == None :
-                                if s.maarite.tehtava.jarjestysnro >= s.vartio.keskeyttanyt:
-                                         laskennassa = False
-                        if laskennassa : 
-                                mukana.append(s)
-        return mukana
-        
 class Allergia(models.Model) :
     #gen_dia_class Allergia
 
@@ -120,72 +105,29 @@ class Tehtava(models.Model) :
     sarja = models.ForeignKey(Sarja)
 
     #end_dia_class
+    def mukanaOlevatVartiot(self):
+        """
+        Palauttaa listan Vartioista jotka ovat mukana tehtavan interpoloinneissa.
+        """
+        vartiot = self.sarja.vartio_set.all()
+        mukana = []
+        if vartiot:
+                for v in vartiot:
+                        laskennassa = True
+                        if not v.ulkopuolella==None:
+                                if self.jarjestysnro >= v.ulkopuolella:
+                                         laskennassa = False
+                        if not v.keskeyttanyt == None :
+                                if self.jarjestysnro >= v.keskeyttanyt:
+                                         laskennassa = False
+                        if laskennassa : 
+                                mukana.append(v)
+        return mukana
+
     def __unicode__(self) :
         return self.nimi
     class Meta:
         verbose_name_plural = "Tehtavat"
-
-    def suurin(self,syotteen_nimi) :
-        syotteet=Syote.objects.filter(maarite__tehtava=self).filter(maarite__nimi=syotteen_nimi)
-        suurin=None
-        if syotteet :
-            for s in syotteet :
-                arvo = stringDecimaaliksi(s.arvo)
-                if not s.vartio.ulkopuolella == None and s.maarite.tehtava.jarjestysnro <= s.vartio.ulkopuolella :
-                    pass #Vartio on ulkopuolella joten se on poissa hausta.
-                elif arvo==None :
-                    pass #
-                elif suurin ==None :
-                    suurin = arvo
-                elif arvo > suurin :
-                    suurin = arvo
-        return suurin
-
-    def pienin(self,syotteen_nimi) :
-        syotteet=Syote.objects.filter(maarite__tehtava=self).filter(maarite__nimi=syotteen_nimi)
-        pienin=None
-        if syotteet :
-            for s in syotteet :
-                arvo = stringDecimaaliksi(s.arvo)
-                if not s.vartio.ulkopuolella == None and s.maarite.tehtava.jarjestysnro <= s.vartio.ulkopuolella :
-                    pass #Vartio on ulkopuolella joten se on poissa hausta.
-                elif arvo==None :
-                    pass #
-                elif pienin==None :
-                    pienin = arvo
-                elif arvo < pienin :
-                    pienin = arvo
-                    
-        return pienin
-
-    def mediaani(self,syotteen_nimi):
-        syotteet=Syote.objects.filter(maarite__tehtava=self).filter(maarite__nimi=syotteen_nimi)
-        mukana = poistaUlkopuoliset(syotteet)
-        arvot = []
-        for m in mukana :
-                arvot.append( stringDecimaaliksi(m.arvo) )
-        arvot.sort()
-        if len(arvot) % 2 == 1:
-            return arvot[(len(arvot)+1)/2-1]
-        elif len(arvot):
-            lower = arvot[len(arvot)/2-1]
-            upper = arvot[len(arvot)/2]
-            return (lower + upper) / 2  
-        else :
-            return None
-
-    def keskiarvo(self,syotteen_nimi) :
-        syotteet=Syote.objects.filter(maarite__tehtava=self).filter(maarite__nimi=syotteen_nimi)
-        mukana = poistaUlkopuoliset(syotteet)
-        yhteensa = Decimal()
-        for m in mukana :
-                yhteensa = yhteensa + stringDecimaaliksi(m.arvo)
-        tulos = yhteensa / len(mukana)
-        if tulos :
-                return unicode( tulos )
-        else :
-                return None
-
 
 class Rata(models.Model) :
     #gen_dia_class Rata
@@ -230,7 +172,7 @@ class SyoteMaarite(models.Model) :
     nimi = models.CharField(max_length=255)
     tyyppi = models.CharField(max_length=255, choices=TYYPPI_VAIHTOEHDOT )
     kali_vihje = models.CharField(max_length=255, blank=True , null=True )
-    tehtava = models.ForeignKey(OsaTehtava)
+    osa_tehtava = models.ForeignKey(OsaTehtava)
 
     #end_dia_class
     def __unicode__(self) :
@@ -280,10 +222,12 @@ class Parametri(models.Model) :
 
         nimi = models.CharField(max_length=255)
         arvo = models.CharField(max_length=255)
-        tehtava = models.ForeignKey(OsaTehtava)
+        osa_tehtava = models.ForeignKey(OsaTehtava)
 
         #end_dia_class
         class Meta:
                 verbose_name_plural = "OsaTehtavan Paramentrit" 
 
+        def __unicode__(self):
+                return self.osa_tehtava.tehtava.nimi+ " " +self.osa_tehtava.nimi+" "+ self.nimi
 
