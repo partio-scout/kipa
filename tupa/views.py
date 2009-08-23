@@ -140,7 +140,7 @@ def syotaKisa(request, kisa_nimi):
 
 def syotaTehtava(request, kisa_nimi , tehtava_id) :
       tehtava = Tehtava.objects.filter(id=tehtava_id)[0]
-      maaritteet = SyoteMaarite.objects.filter(tehtava=tehtava)
+      maaritteet = SyoteMaarite.objects.filter(osa_tehtava__tehtava=tehtava)
       vartiot = Vartio.objects.filter(sarja = tehtava.sarja )
       syoteFormit = []
       posti=None
@@ -155,7 +155,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id) :
               formi=None
               if syotteet:
                   syote=syotteet[0]
-              formi = myoteForm(m,v,posti,instance=syote,prefix=v.nimi+m.nimi,)
+              formi = SyoteForm(m,v,posti,instance=syote,prefix=v.nimi+str(m.pk),)
               if formi.is_valid() :
                  formi.save()
               
