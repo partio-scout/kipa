@@ -1,8 +1,73 @@
-{{ form.as_p }}
-{% for parametri in parametrit %}
+{% extends "tupa/forms/valitse.html" %}
+
+
+{% for parametri in taulukko %}
+
+<tr >
+<td>
+{% ifequal "Kisapisteita" parametri.0.label %}
+        {{ form.tyyppi }}
+{% endifequal %}
+{% ifequal "Raakapisteita" parametri.0.label %}
+        {{ form.tyyppi_rp }}
+{% endifequal %}
+{% ifequal "Kokonaisaika" parametri.0.label %}
+        {{ form.tyyppi_ka }}
+{% endifequal %}
+{% ifequal "Alkuaika ja loppuaika" parametri.0.label %}
+        {{ form.tyyppi_ala }}
+{% endifequal %}
+{% ifequal "Vapaa kaava" parametri.0.label %}
+        {{ form.tyyppi_vk}}
+{% endifequal %}
+</td>
+<td>
 <fieldset>
-        <legend> {{ parametri.label }} </legend>
-        {{ parametri}}
+        <legend>{{ parametri.0.label }}</legend>
+        {% for kohta in parametri %}
+                <fieldset>
+                        {{ kohta }}
+                </fieldset>
+        {% endfor %}
 </fieldset>
+</td>
+</tr>
 {% endfor %}
+</table>
+
+
+{% block sarake %} 
+
+<table border="0">
+<tr >
+<td>
+{% ifequal "Kisapisteita" sarake.0.label %}
+        {{ form.tyyppi }}
+{% endifequal %}
+{% ifequal "Raakapisteita" sarake.0.label %}
+        {{ form.tyyppi_rp }}
+{% endifequal %}
+{% ifequal "Kokonaisaika" sarake.0.label %}
+        {{ form.tyyppi_ka }}
+{% endifequal %}
+{% ifequal "Alkuaika ja loppuaika" sarake.0.label %}
+        {{ form.tyyppi_ala }}
+{% endifequal %}
+{% ifequal "Vapaa kaava" sarake.0.label %}
+        {{ form.tyyppi_vk}}
+{% endifequal %}
+</td>
+<td>
+
+<fieldset>
+        <legend>{{ sarake.0.label }}</legend>
+
+    {% for taulu in sarake %}
+                <fieldset>
+                        {{taulu}}
+                </fieldset>
+    {% endfor %}
+</fieldset>
+</table>
+{% endblock%}
 

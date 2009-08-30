@@ -18,11 +18,24 @@
 {% block content %}{% endblock %}
 </body>
 
-<script type="text/javascript">
-	var sarjat=new ddtabcontent("sarjatabs")
-	sarjat.setpersist(true)
-	sarjat.setselectedClassTarget("link") //"link" or "linkparent"
-	sarjat.init()
-</script>
+
+{% if tabs %}
+        {% for tab in tabs %}
+                <script type="text/javascript">
+	                    var sarjat=new ddtabcontent("{{tab}}")
+	                    sarjat.setpersist(true)
+	                    sarjat.setselectedClassTarget("link") //"link" or "linkparent"
+	                    sarjat.init()
+                </script>
+
+        {% endfor %}
+{% else %}
+        <script type="text/javascript">
+	            var sarjat=new ddtabcontent("sarjatabs")
+	            sarjat.setpersist(true)
+	            sarjat.setselectedClassTarget("link") //"link" or "linkparent"
+	            sarjat.init()
+        </script>
+{% endif %}
 
 </html>
