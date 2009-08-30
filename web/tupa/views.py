@@ -102,26 +102,26 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None):
     posti=None
     if request.method == 'POST':
           posti=request.POST
-    
     tehtavaForm = TehtavaForm( posti,instance=tehtava,sarja=sarja )
     if tehtavaForm.is_valid() :
        tehtava=tehtavaForm.save()
     taulukko=[]
-    for ot in tehtavaForm.osaTehtavat:
+    taulukko.append( tehtavaForm )
+    tabit=[]
+    for ot in tehtavaForm.osaTehtavaFormit:
             ot.otsikko=ot.instance.nimi
             ot.id=ot.instance.id
+            tabit.append ("ot_tab_id_" + str(ot.instance.id) )
             taulukko.append(ot)
-
-        
 
     if posti and tehtavaForm.is_valid() :
        return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/tehtava/"+str(tehtava.id)+'/' )
     else:
-       return render_to_response('tupa/valitse_form.html', 
+       return render_to_response('tupa/maarita.html', 
                                       { 'heading' : "Maarita Tehtava" ,
                                       'taakse' : "/tupa/"+kisa_nimi+"/maarita/tehtava" ,
-                                      'taulukko' : taulukko,
-                                      'form' : tehtavaForm,
+                                      'forms' : taulukko,
+                                      'tabs' : tabit,
                                       })
 
 def syotaKisa(request, kisa_nimi):

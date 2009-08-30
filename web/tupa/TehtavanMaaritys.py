@@ -7,8 +7,16 @@ from django.utils.safestring import SafeUnicode
 from django.template.loader import render_to_string
 import re 
 import string
+
 class RadioBRWidget(forms.RadioSelect):
+        """
+        Widget for drawing radiobuttons separated with <br> tags.
+        Works with forms being drawn as_ul().
+        """
         def render(self, name, *args, **kwargs):
+                """
+                Renders field with all <li><ul> tags removed and replaced with <br> tags.
+                """
                 html = super(RadioBRWidget, self).render(name, *args, **kwargs)
                 muokattu = html.replace("<li>","")
                 muokattu = muokattu.replace("</li>","<br>")
@@ -17,15 +25,50 @@ class RadioBRWidget(forms.RadioSelect):
                 ilman=muokattu.rpartition("<br>")
                 return SafeUnicode(ilman[0]+ilman[2])
 
+class PartRadioWidget(forms.RadioSelect):
+        """
+        Widget for separating radio buttons with custom positions for single choices.
+        (to position radio buttons of the same choice set separately anywhere in the page)
+        """
+        def __init__(self,choice_name,field_name,*args, **kwargs):
+                """
+                Takes 2 required parameters
+                choice_name = name of the choice that the widget is only going to render.
+                field_name = name of the orginal field that this field is based on.
+                """
+                super(forms.RadioSelect, self).__init__( *args, **kwargs)
+                self.choice_name=choice_name
+                self.field_name=field_name
 
-class TextBR(forms.TextInput):
+        def render(self, name,data ,*args, **kwargs):
+                """
+                Renders only the radio button specified in self.choice_name.
+                Renames the field name as self.field_name.
+                """
+                id=kwargs['attrs']['id']+"_"+self.field_name
+                checked=""
+                nimi=name
+                if self.field_name:
+                        oikea = re.search(r"(.*?"+self.field_name+").*", name )
+                        if oikea:
+                                nimi= oikea.group(1)
+                if self.choice_name==data :
+                        checked='checked="checked"'
+                html = '<input '+checked+' type="radio" id="'+id+'" value="'+self.choice_name+'" name="'+nimi+'" />'
+                return SafeUnicode(html)
+
+class TextBRWidget(forms.TextInput):
+        """
+        Widget for rendering text input field ending with <br> tag.
+        """
         def render(self, name, *args, **kwargs):
-                html = super(TextBR, self).render(name, *args, **kwargs)
-                muokattu = html.replace("<li>","")
-                muokattu = muokattu.replace("</li>","")
+                html = super(TextBRWidget, self).render(name, *args, **kwargs)
+                muokattu = html.replace("<p>","")
+                muokattu = muokattu.replace("</p>","")
                 return SafeUnicode(muokattu + "<br>")
 
 class OsaTehtavaParametri(forms.Form):
+        
         label="parametri"
         def __init__(self,posti,osaTehtava,*argv,**argkw ):
                 super(forms.Form,self).__init__(posti,*argv,**argkw)
@@ -35,49 +78,71 @@ class OsaTehtavaParametri(forms.Form):
 
 
 class KisaPiste(ModelForm):
-        def __init__(self,posti,osaTehtava,*argv,**argkw ):
-                sm= SyoteMaarite.objects.filter(nimi="kp")
-                if len(sm)==1 : 
-                        super(KisaPiste,self).__init__(posti,instance=sm[0],*argv,**argkw)
-                else:
-                        super(KisaPiste,self).__init__(posti,*argv,**argkw)
-                self.osaTehtava=osaTehtava
-        kali_vihje=forms.CharField(label="Syotteen kuvaus",widget=TextBR)
+        kali_vihje=forms.CharField(label="Syotteen kuvaus",widget=TextBRWidget)
         minArvo=forms.CharField(label="Sallitut Arvot",required=False)
         maxArvo=forms.CharField(label=" - ",required=False)
         label="Kisapisteita"
+
+        def __init__(self,posti,osaTehtava,*argv,**argkw ):
+                sm= SyoteMaarite.objects.get_or_create(nimi="a",osa_tehtava=osaTehtava )[0]
+                if osaTehtava.tyyppi== "kp" :
+                        super(KisaPiste,self).__init__(posti,instance=sm,*argv,**argkw)
+                else :
+                        super(KisaPiste,self).__init__(posti,instance=SyoteMaarite(pk=sm.pk),*argv,**argkw)
+                self.osaTehtava=osaTehtava
         def save(self,commit=True):
                 maarite=super(KisaPiste,self).save(commit=False)
                 maarite.nimi = "a"
                 maarite.tyyppi = "piste"
                 maarite.osa_tehtava = self.osaTehtava
-                return maarite.save(commit)
+                return maarite.save()
+        def __unicode__(self):
+                html=self.as_p()
+                muokattu=html.replace("<p>","")
+                muokattu=muokattu.replace("</p>","")
+                return SafeUnicode(muokattu)
         class Meta:
                 fields=("kali_vihje","minArvo","maxArvo")
                 model=SyoteMaarite
 
 class RaakaPiste(ModelForm):
-        kali_vihje=forms.CharField(label="Syotteen kuvaus",widget=TextBR)
+        kali_vihje=forms.CharField(label="Syotteen kuvaus",widget=TextBRWidget)
         minArvo=forms.CharField(label="Sallitut Arvot",required=False)
         maxArvo=forms.CharField(label=" - ",required=False)
         label="Raakapisteita"
         def __init__(self,posti,osaTehtava,*argv,**argkw ):
                 sm= SyoteMaarite.objects.get_or_create(nimi="a",osa_tehtava=osaTehtava )[0]
-                super(ModelForm,self).__init__(posti,instance=sm,*argv,**argkw)
+                if osaTehtava.tyyppi== "rp" :
+                        super(ModelForm,self).__init__(posti,instance=sm,*argv,**argkw)
+                else :
+                        super(ModelForm,self).__init__(posti,instance=SyoteMaarite(pk=sm.pk),*argv,**argkw)
                 self.osaTehtava=osaTehtava
-
+        
         def save(self,commit=True):
                 maarite = super(ModelForm,self).save(commit=False)
                 maarite.nimi="a"
                 maarite.tyyppi = "piste"
                 maarite.osa_tehtava = self.osaTehtava
                 maarite.save()
+        def __unicode__(self):
+                html=self.as_p()
+                muokattu=html.replace("<p>","")
+                muokattu=muokattu.replace("</p>","")
+                return SafeUnicode(muokattu)
         class Meta:
                 fields=("kali_vihje","minArvo","maxArvo")
                 model=SyoteMaarite
 
 class KokonaisAika(RaakaPiste):
         label="Kokonaisaika"
+        def __init__(self,posti,osaTehtava,*argv,**argkw ):
+                sm= SyoteMaarite.objects.get_or_create(nimi="a",osa_tehtava=osaTehtava )[0]
+                if osaTehtava.tyyppi== "ka" :
+                        super(ModelForm,self).__init__(posti,instance=sm,*argv,**argkw)
+                else :
+                        super(ModelForm,self).__init__(posti,instance=SyoteMaarite(pk=sm.pk),*argv,**argkw)
+                self.osaTehtava=osaTehtava
+
         def save(self,commit=True):
                 maarite = super(ModelForm,self).save(commit=False)
                 maarite.nimi="a"
@@ -87,9 +152,11 @@ class KokonaisAika(RaakaPiste):
 
 
 class AlkuLoppuAika(OsaTehtavaParametri):
-        alkuaika=forms.CharField(label="Alkuajan kuvaus: (esim. alkuaika)",widget=TextBR)
+        alkuaika=forms.CharField(label="Alkuajan kuvaus: (esim. alkuaika)",widget=TextBRWidget)
         loppuaika=forms.CharField(label="Loppuajan kuvaus: (esim. loppuaika)")
         label="Alkuaika ja loppuaika"
+        def __unicode__(self):
+                return self.as_p()
 
 class VapaaKaava(OsaTehtavaParametri):
         kaava = forms.CharField()
@@ -100,7 +167,7 @@ class VapaaKaava(OsaTehtavaParametri):
 class MaksimiSuoritus(forms.Form):
         parhaatChoices= (("p","pienin:"),("s","suurin:"),("k","kiitea:"))
         parhaat=  forms.ChoiceField(choices=parhaatChoices,widget=forms.RadioSelect)
-        kiintea= forms.CharField(label="",widget=TextBR,required=False)
+        kiintea= forms.CharField(label="",widget=TextBRWidget,required=False)
         jaettavat = forms.CharField( )
         label="Maksimisuoritus"
         def __init__(self,posti,osaTehtava,*argv,**argkw ):
@@ -119,7 +186,9 @@ class MaksimiSuoritus(forms.Form):
                 else :
                         kiintea_a=parhaat
                         parhaat="k"
-                initial= {'parhaat' : parhaat , 'kiintea' : kiintea_a , 'jaettavat' : jaettavat }
+                initial= { }
+                if re.match(".*?"+osaTehtava.tyyppi+".*?",argkw['prefix']) :
+                        initial= {'parhaat' : parhaat , 'kiintea' : kiintea_a , 'jaettavat' : jaettavat }
                 super(MaksimiSuoritus,self).__init__(posti,initial=initial,*argv,**argkw)
                 self.osaTehtava=osaTehtava
         def save(self) :
@@ -146,7 +215,12 @@ class NollaSuoritus(forms.Form):
                         ("m","muu"))
         valintaChoices=(("ki","kiintea"),("ke","kerroin"))
         valinta= forms.ChoiceField(choices=valintaChoices,widget=forms.RadioSelect)
-        kiintea= forms.CharField(label="kiintea suoritus",widget=TextBR,required=False)
+        valinta_ki= forms.ChoiceField(widget=PartRadioWidget("ki","valinta"),
+                                choices=OsaTehtava.OSA_TYYPIT,label="",required=False)
+        valinta_ke= forms.ChoiceField(widget=PartRadioWidget("ke","valinta"),
+                                choices=OsaTehtava.OSA_TYYPIT,label="",required=False)
+
+        kiintea= forms.CharField(label="kiintea suoritus",widget=TextBRWidget,required=False)
         kerroin= forms.ChoiceField(choices=kerroinChoices,widget=RadioBRWidget,required=False)
         muu= forms.CharField(label="muu",required=False)
         label="NollaSuoritus"
@@ -170,8 +244,15 @@ class NollaSuoritus(forms.Form):
                 else :
                         aValinta = "ki"
                         aKiintea= self.nolla.arvo
-                
-                aInitial= { 'kiintea' : aKiintea , 'kerroin' : aKerroin, 'muu' : aMuu , 'valinta': aValinta  }
+ 
+                aInitial= { }
+                if re.match(".*?"+osaTehtava.tyyppi+".*?",argkw['prefix']) :
+                        aInitial= { 'kiintea' : aKiintea ,
+                                'kerroin' : aKerroin, 
+                                'muu' : aMuu ,
+                                'valinta': aValinta ,
+                                'valinta_ki' : aValinta ,
+                                'valinta_ke' : aValinta }
                 if posti:
                         super(NollaSuoritus,self).__init__(posti,*argv,**argkw)
                 else:
@@ -199,58 +280,125 @@ class Arviointi(OsaTehtavaParametri):
         kaytossa=forms.BooleanField()
         oikea=forms.CharField(label="Oikea vastaus",help_text=help_text)
         label="Arviointi"
+        def __unicode__(self):
+                
+                return self.as_p()
 
+class test(list) :
+        id = None
+        otsikko = "testi"
 
 class OsaTehtavaForm(ModelForm) :
-        tyyppi= forms.ChoiceField(widget=forms.RadioSelect,choices=OsaTehtava.OSA_TYYPIT,label="",required=False)
+        tyyppi= forms.ChoiceField(widget=PartRadioWidget("kp","tyyppi"),
+                                choices=OsaTehtava.OSA_TYYPIT,label="",required=False)
+        tyyppi_rp= forms.ChoiceField(widget=PartRadioWidget("rp","tyyppi"),
+                                choices=OsaTehtava.OSA_TYYPIT,label="",required=False)
+        tyyppi_ka= forms.ChoiceField(widget=PartRadioWidget("ka","tyyppi"),
+                                choices=OsaTehtava.OSA_TYYPIT,label="",required=False)
+        tyyppi_ala= forms.ChoiceField(widget=PartRadioWidget("ala","tyyppi"),
+                                choices=OsaTehtava.OSA_TYYPIT,label="",required=False)
+        tyyppi_vk= forms.ChoiceField(widget=PartRadioWidget("vk","tyyppi"),
+                                choices=OsaTehtava.OSA_TYYPIT,label="",required=False)
+
         def __init__(self,posti,*args,**kwargs) :
                 super(OsaTehtavaForm, self).__init__(posti,*args, **kwargs)
-                self.parametrit=[]
+                #Vakiopalluran ruksaus
+                tyyppi_i = self.initial['tyyppi']
+                init= { 'tyyppi_rp' : tyyppi_i,'tyyppi_ka' : tyyppi_i,
+                        'tyyppi_ala' : tyyppi_i,'tyyppi_vk' : tyyppi_i }
+                super(OsaTehtavaForm, self).__init__(posti,initial=init,*args, **kwargs)
+                self.taulukko=[]
+                self.prefixID=""
+                        
+                # Parametri formien lisaaminen:
                 if self.instance :
-                        prefixID=str(self.instance.pk)
-                        if self.instance.tyyppi=="kp" :
-                                self.parametrit.append( KisaPiste( posti,self.instance ,prefix="kp_"+prefixID ) )
-                        elif self.instance.tyyppi=="rp" :
-                                self.parametrit.append( RaakaPiste( posti,self.instance ,prefix="rp"+prefixID) )
-                        elif self.instance.tyyppi=="ka":
-                                self.parametrit.append( KokonaisAika( posti,self.instance ,prefix="ka_"+prefixID) )
-                        elif self.instance.tyyppi=="ala":
-                                self.parametrit.append( AlkuLoppuAika( posti,self.instance ,prefix="ala_"+prefixID) )
-                        elif self.instance.tyyppi=="vk":
-                                self.parametrit.append( VapaaKaava( posti,self.instance ,prefix="vk_"+prefixID) )
-                        if self.instance.tyyppi and not self.instance.tyyppi=="kp":
-                                self.parametrit.append( MaksimiSuoritus( posti,self.instance, prefix="maksimi_suoritus_"+prefixID ) )
-                                self.parametrit.append( NollaSuoritus( posti,self.instance,prefix="nolla_suoritus_"+prefixID ) )
-                                self.parametrit.append( Arviointi( posti,self.instance ) )
-
-        def __unicode__(self) :
-                return render_to_string("tupa/forms/osa_tehtava.html", { 'form': self,'parametrit' : self.parametrit })
+                        self.prefixID=str(self.instance.pk)
+                        
+                        
+                        def lisaaMaxNolla(parametrit,prefixID):
+                                """
+                                # Funktio joka nopeuttaa samankaltaisten maksimi,nolla,arviointi 
+                                -parametrien lisaamista
+                                """
+                                parametrit[-1].append( MaksimiSuoritus( posti,self.instance, 
+                                                prefix="maksimi_suoritus_"+prefixID ) )
+                                parametrit[-1].append( NollaSuoritus( posti,self.instance,
+                                                prefix="nolla_suoritus_"+prefixID ) )
+                                parametrit[-1].append( Arviointi( posti,self.instance,
+                                                prefix="arviointi_"+prefixID ) )
+                        # KisaPiste
+                        prefixID="kp_"+self.prefix
+                        self.parametrit=test()
+                        self.parametrit.append( test([KisaPiste( posti,self.instance ,prefix=prefixID )]) )
+                        self.parametrit[-1].id=prefixID
+                        self.parametrit[-1].otsikko="Kisapiste"
+                        # RaakaPiste
+                        prefixID="rp_"+self.prefixID
+                        self.parametrit.append( test([RaakaPiste( posti,self.instance ,prefix=prefixID),]) )
+                        lisaaMaxNolla( self.parametrit,prefixID )
+                        self.parametrit[-1].id=prefixID
+                        self.parametrit[-1].otsikko="Raakapiste"
+                        # KokonaisAika
+                        prefixID="ka_"+self.prefixID
+                        self.parametrit.append( test([KokonaisAika( posti,self.instance ,prefix=prefixID),]) )
+                        lisaaMaxNolla( self.parametrit,prefixID )
+                        self.parametrit[-1].id=prefixID
+                        self.parametrit[-1].otsikko="Kokonaisaika"
+                        # Alku ja loppuaika
+                        prefixID="ala_"+self.prefixID
+                        self.parametrit.append( test([AlkuLoppuAika( posti,self.instance ,prefix=prefixID),]) )
+                        lisaaMaxNolla( self.parametrit,prefixID )
+                        self.parametrit[-1].id=prefixID
+                        self.parametrit[-1].otsikko="Alkuaika ja loppuaika"
+                        # Vapaa Kaava
+                        prefixID="vk_"+self.prefixID
+                        self.parametrit.append( test([VapaaKaava( posti,self.instance ,prefix=prefixID),]) )
+                        lisaaMaxNolla( self.parametrit, prefixID )
+                        self.parametrit[-1].id=prefixID
+                        self.parametrit[-1].otsikko="Vapaa Kaava"
+                       
         def save(self):
                 osatehtava=super(OsaTehtavaForm,self).save(commit=False)
-                for p in self.parametrit:
-                        if p.is_valid() :
-                                p.save()
+                for param in self.parametrit:
+                        for p in param:
+                                if p.is_valid() :
+                                        # Talletetaan ainoastaan ne formit joita kaytetaan tassa tyypissa.
+                                        if re.match(".*?"+osatehtava.tyyppi+".*?",p.prefix) : 
+                                                p.save()
+                # Eroitellaan sellaiset osatehtavatyypit joiden kaava eroaa vakiosta.
                 if osatehtava.tyyppi=="kp":
+                        # Kisapisteita, suora summa
                         osatehtava.kaava="ss"
-                if osatehtava.tyyppi=="ala":
-                        maksimiKaava = Parametri.objects.get_or_create(nimi="maksimi_kaava",osa_tehtava=osatehtava)[0]
+                elif osatehtava.tyyppi=="ala":
+                        # Alku ja loppu aika (loppuaika-alkuaika)
+                        maksimiKaava = Parametri.objects.get_or_create(nimi="maksimi_kaava",
+                                                osa_tehtava=osatehtava)[0]
                         maksimiKaava.arvo="a-b"
                         maksimiKaava.save()
-                        nollaKaava = Parametri.objects.get_or_create(nimi="nolla_kaava",osa_tehtava=osatehtava)[0]
+                        nollaKaava = Parametri.objects.get_or_create(nimi="nolla_kaava",
+                                                osa_tehtava=osatehtava)[0]
                         nollaKaava.arvo="a-b"
                         nollaKaava.save()
                         osatehtava.kaava="interpoloi(a-b,aMax,maxP,nolla_kerroin*nolla)"
 
                 else :
-                        
-                        maksimiKaava = Parametri.objects.get_or_create(nimi="maksimi_kaava",osa_tehtava=osatehtava)[0]
+                        # Yleiskaava suurimmalle osalle osa tehtavista
+                        maksimiKaava = Parametri.objects.get_or_create(nimi="maksimi_kaava",
+                                                osa_tehtava=osatehtava)[0]
                         maksimiKaava.arvo="a"
                         maksimiKaava.save()
-                        nollaKaava = Parametri.objects.get_or_create(nimi="nolla_kaava",osa_tehtava=osatehtava)[0]
+                        nollaKaava = Parametri.objects.get_or_create(nimi="nolla_kaava",
+                                                osa_tehtava=osatehtava)[0]
                         nollaKaava.arvo="a"
                         nollaKaava.save()
                         osatehtava.kaava="interpoloi(a,aMax,maxP,nolla_kerroin*nolla)"
                 osatehtava.save()
+        def __unicode__(self) :
+                tab_id = "ot_tab_id_" + self.prefixID
+                return render_to_string("tupa/forms/osa_tehtava.html", 
+                                        { 'form': self,
+                                        'tab_id' : tab_id ,
+                                        'taulukko' : self.parametrit})
 
         class Meta :
                 fields=("tyyppi")
@@ -263,11 +411,12 @@ class TehtavaForm(ModelForm):
     def __init__(self,posti,instance=None,sarja=None) :
         self.sarja=sarja
         osatehtavia=1 
+        self.posti=posti
         if instance :
                 osatehtavia=len(OsaTehtava.objects.filter(tehtava=instance) )
-        self.osaTehtavat= []
+        self.osaTehtavaFormit= []
         for ot in OsaTehtava.objects.filter(tehtava=instance):
-                self.osaTehtavat.append(OsaTehtavaForm(posti,instance=ot,prefix="osatehtava_"+str(ot.pk)))
+                self.osaTehtavaFormit.append(OsaTehtavaForm(posti,instance=ot,prefix="osatehtava_"+str(ot.pk)))
 
         super(ModelForm,self).__init__(posti,instance=instance,initial={'osatehtavia': osatehtavia })
     def save(self):
@@ -277,7 +426,7 @@ class TehtavaForm(ModelForm):
         osa_tehtavat= OsaTehtava.objects.filter(tehtava=tehtava)
         
         osatehtavia=self.cleaned_data['osatehtavia']
-        for ot in self.osaTehtavat :
+        for ot in self.osaTehtavaFormit :
                 ot.save()
 
         valmiit_osatehtavat = 0
@@ -300,7 +449,7 @@ class TehtavaForm(ModelForm):
                 pass
         return tehtava
     def __unicode__(self) :
-                return render_to_string("tupa/forms/tehtava.html", {'form': self, 'osa_tehtavat' : self.osaTehtavat})
+                return render_to_string("tupa/forms/tehtava.html", {'form': self, 'osa_tehtavat' : self.osaTehtavaFormit})
     class Meta:
         fields =  ('nimi', 'jarjestysnro','kaava')
         model = Tehtava

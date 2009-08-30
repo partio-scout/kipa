@@ -3,22 +3,29 @@
 Tässä kerrotaan suoritus, jolla saa nolla pistettä. Tämä voi olla jokin kiinteä suoritus tai interpoloinnissa keskimmäisestä tuloksesta laskettu.
 </p>
 <tr valign="top">
-                {{form.valinta}}
-                <td><fieldset>
+                <td>
+                {{form.valinta_ki}}
+                </td>
+                <td>
+                <fieldset>
                   <legend>Kiinteä</legend>
-                  <p>Kiinteä suoritus:
+                  <p>
+                  Kiinteä suoritus:
                     {{form.kiintea}}
                   </p>
                 </fieldset>
-                  <p>&nbsp;</p></td>
-                <td><fieldset>
+                  </td>
+                <td>
+                {{form.valinta_ke}}
+                </td><td>
+                <fieldset>
                 
                 <legend>Kerroin</legend>
                    <p>
                         {{form.kerroin}}
                       {{form.muu}}
                     </p>
-                </fieldset></td>
+                </fieldset>
       </tr>
 </table>
 
