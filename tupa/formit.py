@@ -39,6 +39,12 @@ class AikaWidget(forms.TextInput):
                         pass
                 return super(AikaWidget,self).render(name,newValue,attrs)
 
+class PisteField(forms.FloatField) :
+        def clean(self, value) :
+                if value=="kesk":
+                        return value
+                else:
+                        return super(PisteField, self).clean(value)
 class AikaField(forms.CharField):
         """
         Validates field input as "hh:mm:ss" 
@@ -57,9 +63,8 @@ class AikaField(forms.CharField):
                         raise forms.ValidationError('Syota aikaa muodossa: (hh:mm:ss)')
 
 class PisteSyoteForm(ModelForm):
-    arvo = forms.FloatField(required=False,widget=forms.TextInput(attrs={'size':'8'} ) )
+    arvo = PisteField(required=False,widget=forms.TextInput(attrs={'size':'8'} ) )
     def __init__(self,maarite,vartio,*argv,**argkw) :
-          #self.arvo=forms.TimeField(required=False)
           super(ModelForm,self).__init__(*argv,**argkw)
           self.maarite=maarite
           self.vartio=vartio
