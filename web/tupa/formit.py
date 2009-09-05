@@ -51,6 +51,8 @@ class AikaField(forms.CharField):
                         return str(int(haku.group(1))*60*60 + int(haku.group(2))*60 + int(haku.group(3)))
                 elif not value :
                         return None
+                elif value=="kesk":
+                        return value
                 else :
                         raise forms.ValidationError('Syota aikaa muodossa: (hh:mm:ss)')
 
@@ -72,7 +74,9 @@ class PisteSyoteForm(ModelForm):
           syote = super(ModelForm,self).save(commit=False)
           syote.maarite=self.maarite
           syote.vartio=self.vartio
-          if not self.cleaned_data['arvo']== None :
+          if self.cleaned_data['arvo'] == "kesk":
+              pass
+          elif not self.cleaned_data['arvo']== None :
               syote.arvo = self.cleaned_data['arvo']
               syote.save()
           elif syote.id :
