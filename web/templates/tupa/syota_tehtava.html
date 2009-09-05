@@ -1,10 +1,10 @@
 {% extends "tupa/base.html" %}
 {% block content %} 
 
-<A href='../../'>taakse</A>
+<h1>Tehtävä: {{tehtava.nimi}} </h1>
+<h2>Sarja: {{tehtava.sarja.nimi}} </h2>
 
-<h1>Tehtävä: {{tehtava.nimi}} </h2>
-<h1>Sarja: {{tehtava.sarja.nimi}} </h2>
+<A href='../../'>taakse</A>
 
 <form action="." method="post">     
    
