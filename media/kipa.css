@@ -68,6 +68,16 @@ h2 {
 }
 
 .etusivunLinkit {
+	text-decoration:none;
+	padding-left:50px;
+	letter-spacing:0;
+	border:0;
+	color:#006ea6;
+	margin:1.3em 0 0 0;
+}
+
+.etusivunLinkit a, a:visited {
+	text-decoration:none;
 	padding-left:50px;
 	letter-spacing:0;
 	border:0;
@@ -208,6 +218,48 @@ h2 {
 	background-color: #b9c9fe;
 	width: 400px;
 }
+
+.etusivuloota {
+	/* ei käytössä, tarkoitus tuunata etusivun linkit laatikoihin*/
+	background-attachment: scroll;
+	background-color: white;
+	background-image: none;
+	background-position: 0% 0%;
+	background-repeat: repeat;
+	border-bottom-color: #cccccc;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	border-left-color-ltr-source: physical;
+	border-left-color-rtl-source: physical;
+	border-left-color-value: #cccccc;
+	border-left-style-ltr-source: physical;
+	border-left-style-rtl-source: physical;
+	border-left-style-value: solid;
+	border-left-width-ltr-source: physical;
+	border-left-width-rtl-source: physical;
+	border-left-width-value: 1px;
+	border-right-color-ltr-source: physical;
+	border-right-color-rtl-source: physical;
+	border-right-color-value: #cccccc;
+	border-right-style-ltr-source: physical;
+	border-right-style-rtl-source: physical;
+	border-right-style-value: solid;
+	border-right-width-ltr-source: physical;
+	border-right-width-rtl-source: physical;
+	border-right-width-value: 1px;
+	border-top-color: #cccccc;
+	border-top-style: solid;
+	border-top-width: 1px;
+	margin-bottom: 5px;
+	margin-left: 0pt;
+	margin-right: 0pt;
+	margin-top: 0pt;
+	padding-bottom: 9px;
+	padding-left: 9px;
+	padding-right: 9px;
+	padding-top: 9px;
+}
+
 
 /* TOOLTIP */
 #tt {position:absolute; display:block; background:url(http://www.isokirahvi.com/tupa/tooltip/images/tt_left.gif) top left no-repeat}
