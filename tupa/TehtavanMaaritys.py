@@ -113,7 +113,7 @@ class KisaPiste(ModelForm):
                 maarite.nimi = "a"
                 maarite.tyyppi = "piste"
                 maarite.osa_tehtava = self.osaTehtava
-                return maarite.save(commit)
+                return maarite.save()
         def __unicode__(self):
                 html=self.as_p()
                 muokattu=html.replace("<p>","")
