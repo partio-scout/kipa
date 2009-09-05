@@ -162,7 +162,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id) :
                  validi=False
               rivi.append( formi )
          syoteFormit.append( (v,rivi))
-
+      print posti
       if posti and validi  :
                 return HttpResponseRedirect("/tupa/"+kisa_nimi+"/syota/tehtava/"+str(tehtava.id)+'/' )
       else:
