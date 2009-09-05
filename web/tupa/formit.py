@@ -27,12 +27,16 @@ class AikaWidget(forms.TextInput):
         """
         def render(self, name, value,attrs=None):
                 newValue=value
-                if newValue:
+                if newValue :
+                     try:
+                        float(newValue)
                         arvo = Decimal(newValue)
                         h = divmod(arvo , 60*60)[0]
                         min = divmod(arvo , 60)[0]- h*60
                         sec = arvo - (h*60*60) - (min*60)
                         newValue = str(h) +":"+str(min) +":"+str(sec)
+                     except ValueError:
+                        pass
                 return super(AikaWidget,self).render(name,newValue,attrs)
 
 class AikaField(forms.CharField):
@@ -42,11 +46,11 @@ class AikaField(forms.CharField):
         """
         def clean(self, value) :
                 super(AikaField, self).clean(value)
-                haku = re.match(r"^(\d*):(\d*):(\d*)\Z",value)    
+                haku = re.match(r"^(\d+):(\d+):(\d+)$",value)    
                 if haku:
                         return str(int(haku.group(1))*60*60 + int(haku.group(2))*60 + int(haku.group(3)))
                 elif not value :
-                        return value
+                        return None
                 else :
                         raise forms.ValidationError('Syota aikaa muodossa: (hh:mm:ss)')
 
@@ -57,6 +61,11 @@ class PisteSyoteForm(ModelForm):
           super(ModelForm,self).__init__(*argv,**argkw)
           self.maarite=maarite
           self.vartio=vartio
+          kesk= self.vartio.keskeyttanyt
+          nro = self.maarite.osa_tehtava.tehtava.jarjestysnro
+          if kesk and nro :
+                if kesk <= nro :
+                        self.fields['arvo'].widget.attrs['readonly'] = True
     def save(self):
           syote = super(ModelForm,self).save(commit=False)
           syote.maarite=self.maarite
