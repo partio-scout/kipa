@@ -57,7 +57,7 @@ class AikaField(forms.CharField):
 class PisteSyoteForm(ModelForm):
     arvo = forms.FloatField(required=False,widget=forms.TextInput(attrs={'size':'8'} ) )
     def __init__(self,maarite,vartio,*argv,**argkw) :
-          self.arvo=forms.TimeField(required=False)
+          #self.arvo=forms.TimeField(required=False)
           super(ModelForm,self).__init__(*argv,**argkw)
           self.maarite=maarite
           self.vartio=vartio
@@ -66,6 +66,8 @@ class PisteSyoteForm(ModelForm):
           if kesk and nro :
                 if kesk <= nro :
                         self.fields['arvo'].widget.attrs['readonly'] = True
+                        self.initial['arvo']= "kesk"
+
     def save(self):
           syote = super(ModelForm,self).save(commit=False)
           syote.maarite=self.maarite
@@ -80,7 +82,7 @@ class PisteSyoteForm(ModelForm):
           model = Syote
 
 class AikaSyoteForm(PisteSyoteForm) :
-        arvo=AikaField(required=False,widget=AikaWidget())
+        arvo=AikaField(required=False,widget=AikaWidget( attrs={'id': 'aika'} ))
            
 def SyoteForm(*argv,**argkw) :
         if argv[0].tyyppi=="aika":
