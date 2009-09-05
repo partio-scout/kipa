@@ -142,6 +142,7 @@ class TulosLaskin :
                 a = param[0]
                 b = param[1]
                 c = param[2]
+                lokkeri.setMessage( c ).logMessage()
                 return "min("+a+",max("+b+","+c+"))"
 
         def interpoloi(self,param):
@@ -303,7 +304,6 @@ class TulosLaskin :
                                         laskettava=sijoitaMuuttujat(laskettava,self.muuttujaKirja)
                                 tulos = AritmeettinenLaskin.laske( laskettava )
                                 muokattu=unicode(parsittu[0]) + unicode(tulos) + unicode(parsittu[2])
-                                lokkeri.setMessage( muokattu ).logMessage()
                 return muokattu
 
         def laske(self,kaava):
@@ -327,7 +327,7 @@ class TulosLaskin :
                 # Lasketaan loppu :
                 muokattu = sijoitaMuuttujat(muokattu,self.muuttujaKirja)
                 muokattu = AritmeettinenLaskin.laske( muokattu)
-                lokkeri.setMessage( kaava ).logMessage()
+                #lokkeri.setMessage( kaava ).logMessage()
                 return muokattu
 
         def laskePisteet(self):
@@ -362,7 +362,9 @@ class TulosLaskin :
                                         otk=otk+sm.nimi+"+"
                                 otk=otk[:-1]
                                 osaPiste= self.laske(otk)
+                                lokkeri.setMessage( "ot "+osa.nimi +" = " + otk ).logMessage()
                         else :
+                                lokkeri.setMessage( "ot "+osa.nimi +" = " + osa_kaava ).logMessage()
                                 osaPiste= self.laske(osa_kaava)
                                 
 
@@ -371,6 +373,7 @@ class TulosLaskin :
                                 muuttujat.append( (osa.nimi,"0") )
                             else :
                                 muuttujat.append( (osa.nimi,osaPiste) )
+                                muuttujat.append( (osa.nimi.upper(),osaPiste) )
 
                         ssKaava=ssKaava + osa.nimi + "+"
                 self.muuttujaKirja = dict(muuttujat)
@@ -378,8 +381,10 @@ class TulosLaskin :
                 # Lasketaan tulos
                 tulos = None
                 if self.teht.kaava == "ss":
+                        lokkeri.setMessage( "teht kaava: " + ssKaava ).logMessage()
                         tulos = self.laske(ssKaava) 
                 else :
+                        lokkeri.setMessage( "teht kaava: " + self.teht.kaava ).logMessage()
                         tulos = self.laske(self.teht.kaava) 
 
                 lokkeri.setMessage( "Pisteet: " + unicode(tulos) ).logMessage()
@@ -422,7 +427,7 @@ class TulosLaskin :
                                 
                                 # Pyöristys
                                 if pisteet and not pisteet == "S" and not pisteet == "K" :
-                                        pisteet= unicode(Decimal(pisteet).quantize(Decimal('0.1'), rounding=ROUND_UP))
+                                        pisteet= unicode(Decimal(pisteet).quantize(Decimal('0.1')))
                                 #Tuomarineuvos ylimääritys
                                 tuomarineuvostonTulos=v.tuomarineuvostulos_set.filter(tehtava=t)
                                 if len( tuomarineuvostonTulos ) == 1:
