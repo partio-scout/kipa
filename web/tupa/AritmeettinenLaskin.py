@@ -15,12 +15,16 @@ def operoi(alku,operaattori,loppu) :
         numeroB = re.search( numeronHakuAlusta,loppu).group(0)
         if operaattori=='/' and numeroB=='0' :
                 return None
-        if len(numeroA)==0 or len(numeroB)==0 :
+        if not len(numeroA) or not len(numeroB) :
                 return None
-        lauseke="str( Decimal('" + numeroA + "')" 
+        lauseke=" Decimal('" + numeroA + "')" 
         lauseke=lauseke + operaattori 
-        lauseke=lauseke +"Decimal('" + numeroB + "'))"
+        lauseke=lauseke +"Decimal('" + numeroB + "')"
         tulos = eval(lauseke)
+        tulos = str(tulos)
+        print "lause:" + lauseke
+         
+
         lauseke=  re.sub(numeronHakuLopusta,"", alku) + tulos 
         lauseke=lauseke + re.sub(numeronHakuAlusta,"", loppu)
         return lauseke    
@@ -44,7 +48,9 @@ def suorita(kaava) :
                         if haku:
                                 i=haku.start()+1
                                 if laskettu[i] == o :
+                                        print "lasketaan:" +laskettu[:i]+ o +laskettu[i+1:]
                                         laskettu= operoi(laskettu[:i], o, laskettu[i+1:])
+                                        print "laskettu:"+str(laskettu) +"\n"
     
         if laskettu :
                 if re.search(r'\*|/|\+|\-',laskettu[1:]) :
@@ -76,6 +82,7 @@ def laskeSuluilla(kaava) :
         """
         muokattu=kaava
         sulkuja = muokattu.count("(") 
+        print kaava
         for sulku in range(sulkuja) :
                 parsittu = parsiSulku(muokattu)
                 if parsittu :
@@ -114,9 +121,9 @@ def validioi(kaava) :
 
 def laske(kaava) :
         """
-        Laskee kaavan sulkujen kanssa
-        Suortittaa +-*/ toimitukset.
-        Palauttaa tuloksen jos kaava on laskettavissa. 
+        Laskee lausekkeen sulkujen kanssa
+        Suortittaa +-*/ toimitukset, sisimmät sulut ensimmäisenä.
+        Palauttaa tuloksen jos lauseke on laskettavissa. 
         Muussa tapauksessa palautusarvo on None.
         """
         if validioi(kaava)==False :

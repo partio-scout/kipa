@@ -20,6 +20,36 @@ SarjaFormSet = inlineformset_factory(Kisa,Sarja,extra=4 )
 TehtavaValintaFormSet = inlineformset_factory(Sarja,Tehtava,fields='jarjestysnro')
 
 
+
+class AikaWidget(forms.TextInput):
+        """
+        Text input widget, exept for value formatting field values are converted from total seconds to "hh:mm:ss"
+        """
+        def render(self, name, value,attrs=None):
+                newValue=value
+                if newValue:
+                        arvo = Decimal(newValue)
+                        h = divmod(arvo , 60*60)[0]
+                        min = divmod(arvo , 60)[0]- h*60
+                        sec = arvo - (h*60*60) - (min*60)
+                        newValue = str(h) +":"+str(min) +":"+str(sec)
+                return super(AikaWidget,self).render(name,newValue,attrs)
+
+class AikaField(forms.CharField):
+        """
+        Validates field input as "hh:mm:ss" 
+        Converts input to an string number, time in seconds.
+        """
+        def clean(self, value) :
+                super(AikaField, self).clean(value)
+                haku = re.match(r"^(\d*):(\d*):(\d*)\Z",value)    
+                if haku:
+                        return str(int(haku.group(1))*60*60 + int(haku.group(2))*60 + int(haku.group(3)))
+                elif not value :
+                        return value
+                else :
+                        raise forms.ValidationError('Syota aikaa muodossa: (hh:mm:ss)')
+
 class PisteSyoteForm(ModelForm):
     arvo = forms.FloatField(required=False,widget=forms.TextInput(attrs={'size':'8'} ) )
     def __init__(self,maarite,vartio,*argv,**argkw) :
@@ -41,30 +71,13 @@ class PisteSyoteForm(ModelForm):
           model = Syote
 
 class AikaSyoteForm(PisteSyoteForm) :
-       arvo=forms.CharField(required=False,widget=forms.TextInput(attrs={'size':'8'}))
-       def clean_arvo(self):
-           arvo=self.cleaned_data['arvo']
-           haku = re.match(r"^(\d*):(\d*):(\d*)\Z",arvo)    
-           if haku:
-              return str(int(haku.group(1))*60*60 + int(haku.group(2))*60 + int(haku.group(3)))
-           elif not arvo :
-              return arvo
-           else :
-              raise forms.ValidationError('Syota aikaa muodossa: (hh:mm:ss)')
-
+        arvo=AikaField(required=False,widget=AikaWidget())
+           
 def SyoteForm(*argv,**argkw) :
-    if argv[0].tyyppi=="aika":
-       syotteet=Syote.objects.filter(maarite=argv[0]).filter(vartio=argv[1])
-       aikaVakio= None
-       if syotteet and syotteet[0].arvo :
-           arvo = Decimal(syotteet[0].arvo)
-           h = divmod(arvo , 60*60)[0]
-           min = divmod(arvo , 60)[0]- h*60
-           sec = arvo - (h*60*60) - (min*60)
-           aikaVakio = str(h) +":"+str(min) +":"+str(sec)
-       return AikaSyoteForm(initial={ 'arvo': aikaVakio },*argv,**argkw)
-    else :
-       return PisteSyoteForm(*argv,**argkw)
+        if argv[0].tyyppi=="aika":
+                return AikaSyoteForm(*argv,**argkw)
+        else :
+                return PisteSyoteForm(*argv,**argkw)
 
 class TestiTulosForm(ModelForm):
         pisteet=pisteet = forms.CharField(required=False)

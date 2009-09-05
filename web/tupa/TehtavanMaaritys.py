@@ -1,4 +1,5 @@
 from models import *
+from formit import *
 from django.forms import ModelForm
 from django import forms
 from django.forms.models import inlineformset_factory
@@ -66,6 +67,15 @@ class TextBRWidget(forms.TextInput):
                 muokattu = html.replace("<p>","")
                 muokattu = muokattu.replace("</p>","")
                 return SafeUnicode(muokattu + "<br>")
+class AikaBRWidget(AikaWidget):
+        """
+        Widget for rendering aika input field ending with <br> tag.
+        """
+        def render(self, name, *args, **kwargs):
+                html = super(AikaBRWidget, self).render(name, *args, **kwargs)
+                muokattu = html.replace("<p>","")
+                muokattu = muokattu.replace("</p>","")
+                return SafeUnicode(muokattu + "<br>")
 
 class OsaTehtavaParametri(forms.Form):
         
@@ -78,12 +88,20 @@ class OsaTehtavaParametri(forms.Form):
 
 
 class KisaPiste(ModelForm):
+        """
+        Formi Kisapiste osatehtavan tarvittaan syotteen maaritteen tekoon
+        """
         kali_vihje=forms.CharField(label="Syotteen kuvaus",widget=TextBRWidget)
         minArvo=forms.CharField(label="Sallitut Arvot",required=False)
         maxArvo=forms.CharField(label=" - ",required=False)
         label="Kisapisteita"
 
         def __init__(self,posti,osaTehtava,*argv,**argkw ):
+                """
+                kaksi pakollista parametria
+                -post_data
+                -osaTehtava jolle maaritetta tehdaan
+                """
                 sm= SyoteMaarite.objects.get_or_create(nimi="a",osa_tehtava=osaTehtava )[0]
                 if osaTehtava.tyyppi== "kp" :
                         super(KisaPiste,self).__init__(posti,instance=sm,*argv,**argkw)
@@ -95,7 +113,7 @@ class KisaPiste(ModelForm):
                 maarite.nimi = "a"
                 maarite.tyyppi = "piste"
                 maarite.osa_tehtava = self.osaTehtava
-                return maarite.save()
+                return maarite.save(commit)
         def __unicode__(self):
                 html=self.as_p()
                 muokattu=html.replace("<p>","")
@@ -209,6 +227,10 @@ class MaksimiSuoritus(forms.Form):
                 fields= ("parhaat","kiintea","jaettavat")
                 model= OsaTehtava
 
+class MaksimiAika(MaksimiSuoritus):
+        kiintea= AikaField(label="",widget=AikaBRWidget,required=False)
+
+
 class NollaSuoritus(forms.Form):
         kerroinChoices=(("1.5","1.5 (pienin tulos saa parhaat pisteet)"),
                         ("0.5","0.5 (suurin tulos saa parhaat pisteet)"),
@@ -274,6 +296,9 @@ class NollaSuoritus(forms.Form):
 
         def __unicode__(self,*args,**kwargs):
                 return render_to_string("tupa/forms/nolla_suoritus.html", {'form': self})
+
+class NollaAika(NollaSuoritus):
+        kiintea= AikaField(label="kiintea suoritus",widget=AikaWidget,required=False)
 
 class Arviointi(OsaTehtavaParametri):
         help_text="""Jos kyseessa on tavallinen tehtava, tata ei valita. Mikali kyseessa on arivointitehtava, tulee tassa ilmoittaa tehtavan oikea vastaus. Talloin vartioiden suoritukset taman arvon molemmin puolin ovat samanarvoisia."""        
@@ -341,7 +366,14 @@ class OsaTehtavaForm(ModelForm) :
                         # KokonaisAika
                         prefixID="ka_"+self.prefixID
                         self.parametrit.append( test([KokonaisAika( posti,self.instance ,prefix=prefixID),]) )
-                        lisaaMaxNolla( self.parametrit,prefixID )
+                        #lisaaMaxNolla( self.parametrit,prefixID )
+                        self.parametrit[-1].append( MaksimiAika( posti,self.instance, 
+                                                prefix="maksimi_suoritus_"+prefixID ) )
+                        self.parametrit[-1].append( NollaAika( posti,self.instance,
+                                                prefix="nolla_suoritus_"+prefixID ) )
+                        self.parametrit[-1].append( Arviointi( posti,self.instance,
+                                                prefix="arviointi_"+prefixID ) )
+
                         self.parametrit[-1].id=prefixID
                         self.parametrit[-1].otsikko="Kokonaisaika"
                         # Alku ja loppuaika
