@@ -1,7 +1,7 @@
 @charset "utf-8";
 /* CSS Document */
 
-BODY, A {
+BODY {
 	FONT-SIZE: 11px; 
 	LINE-HEIGHT: 120%; 
 	FONT-FAMILY: Tahoma, Verdana, Arial, Helvetica, sans-serif; 
@@ -13,6 +13,13 @@ BODY, A {
 	margin-top: 15px;
 	margin-left: 20px;
 }
+
+P, A {
+	FONT-SIZE: 11px; 
+	LINE-HEIGHT: 120%; 
+	FONT-FAMILY: Tahoma, Verdana, Arial, Helvetica, sans-serif; 
+}
+
 TABLE {
 	BORDER-RIGHT: 0px;
 	BORDER-TOP: 0px;

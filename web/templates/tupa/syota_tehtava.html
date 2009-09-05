@@ -1,14 +1,24 @@
 {% extends "tupa/base.html" %}
+{% block header %}
+{{ block.super }}
+<script type="text/javascript" src="/kipamedia/enter-as-tab2.js"></script>
+<script type="text/javascript" src="/kipamedia/keyhandler.js"></script>
+<script type="text/javascript" src="/kipamedia/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="/kipamedia/jquery.maskedinput-1.2.2.min.js"></script>
+<script type="text/javascript" src="/kipamedia/highlight-active-input.js"></script>
+{% endblock header%}
+
 {% block content %} 
+<body onLoad="document.forms.form1.textfield.focus()">
 
 <h1>Tehtävä: {{tehtava.nimi}} </h1>
 <h2>Sarja: {{tehtava.sarja.nimi}} </h2>
 
 <A href='../../'>taakse</A>
 
-<form action="." method="post">     
+<form action="." name="form1" method="post">     
    
-    <table >
+    <table id="taulukko">
         <tr>
             <td>
             Syötteen nimi:
@@ -46,7 +56,7 @@
         </tr>
 
         {% for vartio in syotteet %}
-            <tr>
+            <tr valign="top" class="{% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
                   <td>
                   {{ vartio.0.nro}}
                   {{ vartio.0.nimi }}
@@ -64,6 +74,37 @@
     </table>
     {% include "tupa/tallenna.html" %}
     </form>
+
+<p><a href="">Katso tämän tehtävän tulokset</a></p>
+
+<p>
+e - vartio ei ole tehnyt tehtävää<br />
+h - vartion suoritus on hylätty<br />
+</p>
+
+
+<!-- tarvitaan, jotta enterillä pääsisi seuraavaan kenttään, pitää olla sivun lopussa, formin pitää olla nimeltään form1 -->
+<script type='text/javascript'>	
+enterToTab(document.forms.form1, false);
+document.forms.form1.elements[0].focus();
+
+</script>
+
+	
+<script type="text/javascript" language="javascript" src="/kipamedia/tooltip.js"></script>
+
+<script type="text/javascript">
+jQuery(function($){
+   $("#aika1").mask("9:99");
+   $("#aika2").mask("9:99:99");
+   $("#aika3").mask("9:99");
+});
+</script>
+
+<script type="text/javascript">
+// Initialize the input highlight script
+initInputHighlightScript();
+</script> 
 
 {% endblock %}
 
