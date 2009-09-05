@@ -146,7 +146,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id) :
       posti=None
       if request.method == 'POST':
           posti=request.POST
-
+      validi=True
       for v in vartiot :
          rivi=[]
          for m in maaritteet :
@@ -158,14 +158,18 @@ def syotaTehtava(request, kisa_nimi , tehtava_id) :
               formi = SyoteForm(m,v,posti,instance=syote,prefix=v.nimi+str(m.pk),)
               if formi.is_valid() :
                  formi.save()
-              
+              else :
+                 validi=False
               rivi.append( formi )
          syoteFormit.append( (v,rivi))
 
-      return render_to_response('tupa/syota_tehtava.html', 
-             { 'tehtava' : tehtava ,
-               'maaritteet' : maaritteet ,
-               'syotteet' : syoteFormit } )
+      if posti and validi  :
+                return HttpResponseRedirect("/tupa/"+kisa_nimi+"/syota/tehtava/"+str(tehtava.id)+'/' )
+      else:
+                return render_to_response('tupa/syota_tehtava.html', 
+                        { 'tehtava' : tehtava ,
+                        'maaritteet' : maaritteet ,
+                        'syotteet' : syoteFormit } )
 
 def testiTulos(request, kisa_nimi):
         taulukko=[]
