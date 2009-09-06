@@ -75,7 +75,7 @@
     {% include "tupa/tallenna.html" %}
     </form>
 
-<p><a href="">Katso tämän tehtävän tulokset</a></p>
+<p><a href=""><span onmouseover="tooltip.show('Syötä vartion tulos: Raakap.');" onmouseout="tooltip.hide();">Katso tämän tehtävän tulokset</span></a></p>
 
 <p>
 e - vartio ei ole tehnyt tehtävää<br />
@@ -93,11 +93,10 @@ document.forms.form1.elements[0].focus();
 	
 <script type="text/javascript" language="javascript" src="/kipamedia/tooltip.js"></script>
 
+<!-- Maskaus vaikuttaa niihin tekstikenttiin, joiden ID on listattu alla -->
 <script type="text/javascript">
 jQuery(function($){
-   $("#aika1").mask("9:99");
-   $("#aika2").mask("9:99:99");
-   $("#aika3").mask("9:99");
+   $("#aika").mask("9:99:99");
 });
 </script>
 
