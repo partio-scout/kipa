@@ -9,10 +9,11 @@ def operoi(alku,operaattori,loppu) :
         Suorittaa niille valitun lasku operaation. 
         Palauttaa merkkijonon jossa numerot ja operaattori on korvattu kyseisen operaation tuloksella.
         """ 
-        numeronHakuLopusta=r'^\-\d*\.\d*\Z|^\-\d*\Z|\d*\.\d*\Z|\d*\Z|\d*\Z'
+        numeronHakuLopusta = r'^\-\d*\.\d*\Z|^\-\d*\Z|\d*\.\d*\Z|\d*\Z|\d*\Z'
         numeronHakuAlusta =r'^\-\d*\.\d*|^\-\d*|\A\d*\.\d*|\A\d*|\A\d*'
         numeroA = re.search( numeronHakuLopusta,alku).group(0)
         numeroB = re.search( numeronHakuAlusta,loppu).group(0)
+        
         if operaattori=='/' and numeroB=='0' :
                 return None
         if not len(numeroA) or not len(numeroB) :
@@ -21,9 +22,12 @@ def operoi(alku,operaattori,loppu) :
         lauseke=lauseke + operaattori 
         lauseke=lauseke +"Decimal('" + numeroB + "')"
         tulos = eval(lauseke)
+        
         tulos = str(tulos)
-        print "lause:" + lauseke
-         
+        
+        # Potenssimuotoisessa funktiossa pyöristetään
+        if re.search( r"\dE[+-]\d",tulos ):
+                tulos= str(Decimal(tulos).quantize(Decimal("1.0000")))
 
         lauseke=  re.sub(numeronHakuLopusta,"", alku) + tulos 
         lauseke=lauseke + re.sub(numeronHakuAlusta,"", loppu)
@@ -48,9 +52,7 @@ def suorita(kaava) :
                         if haku:
                                 i=haku.start()+1
                                 if laskettu[i] == o :
-                                        print "lasketaan:" +laskettu[:i]+ o +laskettu[i+1:]
                                         laskettu= operoi(laskettu[:i], o, laskettu[i+1:])
-                                        print "laskettu:"+str(laskettu) +"\n"
     
         if laskettu :
                 if re.search(r'\*|/|\+|\-',laskettu[1:]) :
@@ -82,7 +84,6 @@ def laskeSuluilla(kaava) :
         """
         muokattu=kaava
         sulkuja = muokattu.count("(") 
-        print kaava
         for sulku in range(sulkuja) :
                 parsittu = parsiSulku(muokattu)
                 if parsittu :
@@ -129,6 +130,7 @@ def laske(kaava) :
         if validioi(kaava)==False :
                 return None
         else : 
-                return laskeSuluilla(kaava)
+                stripattu = re.sub(" ","",kaava)
+                return laskeSuluilla(stripattu)
 
 

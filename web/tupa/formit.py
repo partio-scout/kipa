@@ -8,12 +8,18 @@ from decimal import *
 import re
 
 class VartioForm(ModelForm):
-        ulkopuolella = forms.IntegerField(widget=forms.TextInput(attrs={'size':'2'} ) ,required=False)
+        ulkopuolella = forms.IntegerField(
+                        widget=forms.TextInput(attrs={'size':'2'} ) ,
+                        required=False)
         keskeyttanyt = forms.IntegerField(widget=forms.TextInput(attrs={'size':'2'} ) ,required=False)
         class Meta:
                 model = Vartio
 
-VartioFormSet = inlineformset_factory(Sarja,Vartio,extra=10,fields=('nro','nimi',"ulkopuolella","keskeyttanyt",),form=VartioForm )
+VartioFormSet = inlineformset_factory(Sarja,
+                                Vartio,
+                                extra=10,
+                                fields=('nro','nimi',"ulkopuolella", "keskeyttanyt",),
+                                form=VartioForm )
 
 MaariteFormSet = inlineformset_factory(OsaTehtava,SyoteMaarite,extra=3 )
 SarjaFormSet = inlineformset_factory(Kisa,Sarja,extra=4 )
@@ -28,23 +34,27 @@ class AikaWidget(forms.TextInput):
         def render(self, name, value,attrs=None):
                 newValue=value
                 if newValue :
-                     try:
-                        float(newValue)
-                        arvo = Decimal(newValue)
-                        h = divmod(arvo , 60*60)[0]
-                        min = divmod(arvo , 60)[0]- h*60
-                        sec = arvo - (h*60*60) - (min*60)
-                        newValue = str(h) +":"+str(min) +":"+str(sec)
-                     except ValueError:
-                        pass
+                        try:
+                                float(newValue)
+                                arvo = Decimal(newValue)
+                                h = divmod(arvo , 60*60)[0]
+                                min = divmod(arvo , 60)[0]- h*60
+                                sec = arvo - (h*60*60) - (min*60)
+                                newValue = str(h) +":"+str(min) +":"+str(sec)
+                        except ValueError:
+                                pass
                 return super(AikaWidget,self).render(name,newValue,attrs)
 
 class PisteField(forms.FloatField) :
+        """
+        Floatfield accepting "kesk"
+        """
         def clean(self, value) :
                 if value=="kesk":
                         return value
                 else:
                         return super(PisteField, self).clean(value)
+
 class AikaField(forms.CharField):
         """
         Validates field input as "hh:mm:ss" 
@@ -63,32 +73,33 @@ class AikaField(forms.CharField):
                         raise forms.ValidationError('Syota aikaa muodossa: (hh:mm:ss)')
 
 class PisteSyoteForm(ModelForm):
-    arvo = PisteField(required=False,widget=forms.TextInput(attrs={'size':'8'} ) )
-    def __init__(self,maarite,vartio,*argv,**argkw) :
-          super(ModelForm,self).__init__(*argv,**argkw)
-          self.maarite=maarite
-          self.vartio=vartio
-          kesk= self.vartio.keskeyttanyt
-          nro = self.maarite.osa_tehtava.tehtava.jarjestysnro
-          if kesk and nro :
-                if kesk <= nro :
-                        self.fields['arvo'].widget.attrs['readonly'] = True
-                        self.initial['arvo']= "kesk"
+        arvo = PisteField(required=False,widget=forms.TextInput(attrs={'size':'8'} ) )
+        
+        def __init__(self,maarite,vartio,*argv,**argkw) :
+                super(ModelForm,self).__init__(*argv,**argkw)
+                self.maarite=maarite
+                self.vartio=vartio
+                kesk= self.vartio.keskeyttanyt
+                nro = self.maarite.osa_tehtava.tehtava.jarjestysnro
+                if kesk and nro :
+                        if kesk <= nro :
+                                self.fields['arvo'].widget.attrs['readonly'] = True
+                                self.initial['arvo']= "kesk"
 
-    def save(self):
-          syote = super(ModelForm,self).save(commit=False)
-          syote.maarite=self.maarite
-          syote.vartio=self.vartio
-          if self.cleaned_data['arvo'] == "kesk":
-              pass
-          elif not self.cleaned_data['arvo']== None :
-              syote.arvo = self.cleaned_data['arvo']
-              syote.save()
-          elif syote.id :
-              syote.delete()
-    class Meta:
-          exclude = ('maarite','vartio')
-          model = Syote
+        def save(self):
+                syote = super(ModelForm,self).save(commit=False)
+                syote.maarite=self.maarite
+                syote.vartio=self.vartio
+                if self.cleaned_data['arvo'] == "kesk":
+                        pass
+                elif not self.cleaned_data['arvo']== None :
+                        syote.arvo = self.cleaned_data['arvo']
+                        syote.save()
+                elif syote.id :
+                        syote.delete()
+        class Meta:
+                exclude = ('maarite','vartio')
+                model = Syote
 
 class AikaSyoteForm(PisteSyoteForm) :
         arvo=AikaField(required=False,widget=AikaWidget( attrs={'id': 'aika'} ))
@@ -128,8 +139,8 @@ class TestiTulosForm(ModelForm):
                 model = TestausTulos
 
 class KisaForm(ModelForm):
-     class Meta:
-        model = Kisa
+        class Meta:
+                model = Kisa
 
 class PoistaTehtavaForm(ModelForm):
         class Meta:
