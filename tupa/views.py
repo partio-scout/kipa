@@ -66,7 +66,7 @@ def maaritaValitseTehtava(request,kisa_nimi):
         return render_to_response('tupa/maaritaValitseTehtava.html', 
                                         { 'taulukko' : taulukko,
                                         'heading' : "Valitse tehtävä",
-                                        'taakse' : "../" })
+                                        'taakse' : "/tupa/"+kisa_nimi+"/" })
 
 def maaritaVartiot(request,kisa_nimi):
         sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)

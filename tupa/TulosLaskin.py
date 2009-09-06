@@ -169,6 +169,9 @@ class TulosLaskin :
                 Palauttaa mediaanin. Mikäli syötteitä ei löydy lainkaan palauttaa None
                 Mediaaniin ei oteta mukaan ulkopuolella olevien vartioiden syötteitä. 
                 """
+                if 'med_'+param[0] in self.muuttujaKirja:
+                        # Optimointi: mediaani lasketaan vain kerran saman tehtävän sisällä
+                        return self.muuttujaKirja['med_'+param[0]]
                 syote=param[0]
                 vartiot = self.teht.mukanaOlevatVartiot()
                 tulokset=[]
@@ -188,7 +191,9 @@ class TulosLaskin :
                                 lower = theValues[len(theValues)/2-1]
                                 upper = theValues[len(theValues)/2]
                         return (Decimal(lower + upper)) / 2  
-                return str(getMedian(tulokset))
+                mediaani= str(getMedian(tulokset))
+                self.muuttujaKirja['med_'+param[0]]=mediaani
+                return mediaani
 
         def keskiarvo(self,param):
                 """
@@ -204,6 +209,10 @@ class TulosLaskin :
                 Palauttaa mukana olevista vartioista suurimman. Mikäli syötteitä ei löydy ollenkaan, palauttaa None.
                 Suurinta arvoa ei lasketa tehtävässä ulkopuolella olevien vartioiden syötteistä.
                 """
+                if 'suurin_'+param[0] in self.muuttujaKirja:
+                        # Optimointi: suurin haetaan vain kerran samassa tehtavassa
+                        return self.muuttujaKirja['suurin_'+param[0]]
+
                 syote=param[0]
                 vartiot = self.teht.mukanaOlevatVartiot()
                 tulokset=[]
@@ -213,8 +222,9 @@ class TulosLaskin :
                                 vSyote=maarite[0].syote_set.get(vartio=v).arvo
                                 if vSyote:
                                         tulokset.append(Decimal(vSyote))
-                
-                return max(tulokset)
+                sarvo = str(max(tulokset))
+                self.muuttujaKirja['suurin_'+param[0]]=sarvo
+                return sarvo
 
         def pienin(self,param):
                 """
@@ -222,6 +232,9 @@ class TulosLaskin :
                 Palauttaa mukana olevista vartioista pienimmän. mikäli syötteitä ei löydy ollenkaan, palauttaa None
                 Pienintä arvoa ei lasketa tehtävässä ulkopuolella olevien vartioiden syötteistä.
                 """
+                if 'pienin_'+param[0] in self.muuttujaKirja:
+                        # Optimointi: pienin haetaan vain kerran samassa tehtavassa
+                        return self.muuttujaKirja['pienin_'+param[0]]
                 syote=param[0]
                 vartiot = self.teht.mukanaOlevatVartiot()
                 tulokset=[]
@@ -231,7 +244,9 @@ class TulosLaskin :
                                 vSyote=maarite[0].syote_set.get(vartio=v).arvo
                                 if vSyote:
                                         tulokset.append(Decimal(vSyote))
-                return min(tulokset)
+                parvo = str(min(tulokset))
+                self.muuttujaKirja['pienin_'+param[0]]=parvo
+                return parvo
 
 
         def itseisarvo(self,param) :
@@ -343,7 +358,7 @@ class TulosLaskin :
                 for osa in osatehtavat :
                         self.osa_teht=osa
                         osa_muuttujat=[]
-
+                        
                         # Lisätään tehtävän parametri muuttujat.
                         for parametri in osa.parametri_set.all():
                                 osa_muuttujat.append( (parametri.nimi,parametri.arvo) )
@@ -354,7 +369,7 @@ class TulosLaskin :
                                 for syote in maarite.syote_set.filter(vartio=self.vartio) :
                                         osa_muuttujat.append( (maarite.nimi,syote.arvo) )
                         
-                        self.muuttujaKirja=dict(osa_muuttujat)
+                        self.muuttujaKirja = dict(osa_muuttujat)
                         
                         if osa.kaava=="ss":
                                 otk=""
@@ -402,13 +417,23 @@ class TulosLaskin :
                 mukana = []
                 ulkona = []
 
+                # Luodaan tyhjä tulostaulukko
                 for v in vartiot :
-                        self.vartio=v
-                        # Lisätään ensimmäiseen sarakkeeseen vartio objekti,toiseen yhteispisteet
-                        rivi=[v,None]
-                        yhteensa=Decimal(0)
+                        rivi=[v,Decimal("0")]
                         for t in tehtavat:
-                                self.teht=t
+                                rivi.append( None)
+                        if v.keskeyttanyt==None and v.ulkopuolella==None:
+                                mukana.append(rivi)
+                        else :
+                                ulkona.append(rivi)
+                
+                for tindex in range(len(tehtavat)):
+                        t= tehtavat[tindex]
+                        self.teht=t
+                        self.muuttujaKirja = {}
+                        for vindex in range(len(vartiot)):
+                                v=vartiot[vindex]
+                                self.vartio=v
                                 pisteet =None
                                 # Haetaan vartion syötteet tehtävälle
                                 
@@ -434,18 +459,21 @@ class TulosLaskin :
                                         pisteet =  tuomarineuvostonTulos[0].pisteet
 
                                 #Tuloksen lisäys taulukkoon
-                                if is_number(pisteet) :
-                                        yhteensa = yhteensa + Decimal(pisteet)
-                                rivi.append( pisteet )
-                        rivi[1] = yhteensa
-                        if v.keskeyttanyt==None and v.ulkopuolella==None:
-                                mukana.append(rivi)
-                        else :
-                                ulkona.append(rivi)
+                                #if is_number(pisteet) :
+                                #        yhteensa = yhteensa + Decimal(pisteet)
+                                if v.keskeyttanyt==None and v.ulkopuolella==None:
+                                        if pisteet:
+                                                lisattava= Decimal(pisteet)
+                                                mukana[vindex][1] += lisattava
+                                        mukana[vindex][tindex+2]=pisteet
+                                else :
+                                        if pisteet:
+                                                lisattava= Decimal(pisteet)
+                                                ulkona[vindex][1] += lisattava
+                                        ulkona[vindex][tindex+2]=pisteet
 
                 mukana.sort( key=operator.itemgetter(1),reverse=True )
                 ulkona.sort( key=operator.itemgetter(1),reverse=True )
-
                 # Vasempaan ylänurkkaan sarjan objekti  
                 tulosTaulu=[[sarja,"Yht."]]
 
