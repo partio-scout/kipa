@@ -1,6 +1,10 @@
+from django.conf import settings
+
 #coding: latin-1
 
-class Logger:
+lokkeri=None
+if settings.DEBUG==True:  
+  class Logger:
     """
     Logger Class
     """
@@ -40,8 +44,26 @@ class Logger:
         log.write("\n")
         log.close()
         return self
-        
-lokkeri=Logger()
+  lokkeri=Logger()
+else :
+  
+  class Logger:
+    def setFileName(self,fileName) :
+        return self
+    def setMessage(self,message) :
+        return self
+    def push(self) :
+        return self
+    def pop(self) :
+        return self
+    def clearStack(self) :
+        return self
+    def clearLog(self) :
+        return self
+    def logMessage(self) :
+        return self
+  lokkeri=Logger()
+
 lokkeri.setFileName("laskenta.log")
 
 

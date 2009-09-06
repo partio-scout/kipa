@@ -3,7 +3,7 @@ hakemisto=os.getcwd()
 #hakemisto = "/var/local/web"
 # Django settings for sivut project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
