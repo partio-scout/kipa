@@ -30,7 +30,20 @@ erikoisFunktiot = {
         "suurin" : "self.suurin" ,
         "itseisarvo" : "self.itseisarvo" , 
         }
-         
+def parsiSulku(lause) :
+        """
+        Parsii lauseesta ensimmäiset sulut joiden sisällä ei ole sulkuja.
+        Palauttaa (lauseen alku,sulkujen sisäpuoli,lauseen loppu)
+        esim. parsiSulku( "5/(2*(3+2))" )
+        palauttaa ( "5/(2*" , "3+2" , ")" )
+        Mikäli sulkua ei löydy palauttaa None.
+        """
+        haku = re.search("(.*?)(?:[(])([^()]*)(?:[)])(.*)"  ,lause)
+        if haku :
+             return (haku.group(1),haku.group(2),haku.group(3))
+        else :
+             return None
+       
 def stringDecimaaliksi(merkkijono) :
         """
         Muuntaa merkkijonon Decimal objektiksi.
@@ -169,9 +182,9 @@ class TulosLaskin :
                 Palauttaa mediaanin. Mikäli syötteitä ei löydy lainkaan palauttaa None
                 Mediaaniin ei oteta mukaan ulkopuolella olevien vartioiden syötteitä. 
                 """
-                if 'med_'+param[0] in self.muuttujaKirja:
+                if 'med_'+param[0] in self.optimoinnit:
                         # Optimointi: mediaani lasketaan vain kerran saman tehtävän sisällä
-                        return self.muuttujaKirja['med_'+param[0]]
+                        return self.optimoinnit['med_'+param[0]]
                 syote=param[0]
                 vartiot = self.teht.mukanaOlevatVartiot()
                 tulokset=[]
@@ -192,7 +205,7 @@ class TulosLaskin :
                                 upper = theValues[len(theValues)/2]
                         return (Decimal(lower + upper)) / 2  
                 mediaani= str(getMedian(tulokset))
-                self.muuttujaKirja['med_'+param[0]]=mediaani
+                self.optimoinnit['med_'+param[0]]=mediaani
                 return mediaani
 
         def keskiarvo(self,param):
@@ -209,9 +222,9 @@ class TulosLaskin :
                 Palauttaa mukana olevista vartioista suurimman. Mikäli syötteitä ei löydy ollenkaan, palauttaa None.
                 Suurinta arvoa ei lasketa tehtävässä ulkopuolella olevien vartioiden syötteistä.
                 """
-                if 'suurin_'+param[0] in self.muuttujaKirja:
+                if 'suurin_'+param[0] in self.optimoinnit:
                         # Optimointi: suurin haetaan vain kerran samassa tehtavassa
-                        return self.muuttujaKirja['suurin_'+param[0]]
+                        return self.optimoinnit['suurin_'+param[0]]
 
                 syote=param[0]
                 vartiot = self.teht.mukanaOlevatVartiot()
@@ -223,7 +236,7 @@ class TulosLaskin :
                                 if vSyote:
                                         tulokset.append(Decimal(vSyote))
                 sarvo = str(max(tulokset))
-                self.muuttujaKirja['suurin_'+param[0]]=sarvo
+                self.optimoinnit['suurin_'+param[0]]=sarvo
                 return sarvo
 
         def pienin(self,param):
@@ -232,9 +245,9 @@ class TulosLaskin :
                 Palauttaa mukana olevista vartioista pienimmän. mikäli syötteitä ei löydy ollenkaan, palauttaa None
                 Pienintä arvoa ei lasketa tehtävässä ulkopuolella olevien vartioiden syötteistä.
                 """
-                if 'pienin_'+param[0] in self.muuttujaKirja:
+                if 'pienin_'+param[0] in self.optimoinnit:
                         # Optimointi: pienin haetaan vain kerran samassa tehtavassa
-                        return self.muuttujaKirja['pienin_'+param[0]]
+                        return self.optimoinnit['pienin_'+param[0]]
                 syote=param[0]
                 vartiot = self.teht.mukanaOlevatVartiot()
                 tulokset=[]
@@ -245,7 +258,7 @@ class TulosLaskin :
                                 if vSyote:
                                         tulokset.append(Decimal(vSyote))
                 parvo = str(min(tulokset))
-                self.muuttujaKirja['pienin_'+param[0]]=parvo
+                self.optimoinnit['pienin_'+param[0]]=parvo
                 return parvo
 
 
@@ -306,7 +319,7 @@ class TulosLaskin :
                 Palauttaa muokatun lauseen. 
                 """
                 muokattu = lause
-                parsittu = AritmeettinenLaskin.parsiSulku(muokattu)
+                parsittu = parsiSulku(muokattu)
                 if parsittu:
                         tulos=None
                         funktio=self.haeFunktio( parsittu[0] )
@@ -430,7 +443,7 @@ class TulosLaskin :
                 for tindex in range(len(tehtavat)):
                         t= tehtavat[tindex]
                         self.teht=t
-                        self.muuttujaKirja = {}
+                        self.optimoinnit= {}
                         for vindex in range(len(vartiot)):
                                 v=vartiot[vindex]
                                 self.vartio=v
