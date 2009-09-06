@@ -73,7 +73,7 @@ def haeTulos(sarjanTulokset, vartio, tehtava) :
     Hakee Vartion pisteet teht‰v‰lle m‰‰ritellyst‰ tulostaulukosta
     """
     for vart_nro in range(1,len(sarjanTulokset)-1) :
-        for teht_nro in range(2,len(sarjanTulokset[vart_nro])-1):
+        for teht_nro in range(2,len(sarjanTulokset[vart_nro])):
             tulokset =sarjanTulokset[vart_nro][teht_nro]
             if sarjanTulokset[vart_nro][0] ==vartio and sarjanTulokset[0][teht_nro] ==tehtava:
                  return tulokset
@@ -103,12 +103,12 @@ def TulosTestFactory(fixture_name):
                                                 ilmoitus= virheilmoitus
                                                 ilmoitus=ilmoitus + "\nTehtava: " + t.tehtava.nimi
                                                 ilmoitus=ilmoitus + "\nSyotteet: "
-                                                for s in Syote.objects.filter(maarite__tehtava=t.tehtava).filter(vartio=t.vartio):
+                                                for s in Syote.objects.filter(maarite__osa_tehtava__tehtava=t.tehtava).filter(vartio=t.vartio):
                                                         ilmoitus=ilmoitus + s.maarite.nimi+"="+ s.arvo + " "
                                                 ilmoitus=ilmoitus + "\nKaava: " + t.tehtava.kaava
                                                 ilmoitus=ilmoitus + "\nOstatehtavien kaavat: " 
-                                                for k in OsapisteKaava.objects.filter(tehtava=t.tehtava):
-                                                        ilmoitus=ilmoitus + k.nimi +"="+ k.kaava + " "
+                                                for k in OsaTehtava.objects.filter(tehtava=t.tehtava):
+                                                        ilmoitus=ilmoitus + "\n    "+k.nimi +"="+ k.kaava + " "
                                                 ilmoitus=ilmoitus + "\nVartio: "  + t.vartio.nimi  
                                                 ilmoitus=ilmoitus + "\nTulos: "   + str(tulos)+' != '+str(vaadittava)
                                                 virheet.append(ilmoitus) 
@@ -125,11 +125,10 @@ testit=[aritmeettinen_laskin_test]
 test_fixtures=[]
 for f in os.listdir(os.curdir+"/fixtures/tests/"):
         if not f.find(".xml") == -1:
-                test_fixtures.append("tests/"+f)
+                test_fixtures.append("fixtures/tests/"+f)
 
 # luodaan tulostestit fixtuureista.
 for t in test_fixtures:
-        print t
         testit.append( TulosTestFactory(t) )
 
 # luodaan testsuite jossa on kaikki testit.

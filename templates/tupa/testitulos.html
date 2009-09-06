@@ -1,7 +1,6 @@
 {% extends "tupa/valitse.html" %}
 
 {% block sarake %} 
-    <form action="." method="post">     
 	<table width="600" border="1">
         <tr>
         <th></th>
@@ -20,6 +19,10 @@
 		      </tr>    
 		{% endfor %}
 	</table>
-        {% include "tupa/tallenna.html" %}
     </form>
+{% endblock%}
+{% block content %}
+        <form action="." method="post">     
+        {{ block.super }}
+        {% include "tupa/tallenna.html" %}
 {% endblock%}
