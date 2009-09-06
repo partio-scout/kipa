@@ -183,6 +183,7 @@ def testiTulos(request, kisa_nimi):
         if request.method == 'POST':
                 posti=request.POST
         
+        
         for s in sarjat :
                 taulut=s
                 taulut.tiedot=Vartio.objects.filter(sarja=s)
@@ -204,7 +205,7 @@ def testiTulos(request, kisa_nimi):
                 taulukko.append(taulut)
         return render_to_response('tupa/testitulos.html',
                         { 'taulukko' : taulukko ,
-                        'heading' : "Otsikko" ,
+                        'heading' : "Testi tuloksien määritys" ,
                         'taakse' : "../" })
 
 def tulostaSarja(request, kisa_nimi, sarja_id) :
