@@ -7,13 +7,13 @@ import math
 import operator
 
 def is_number(s):
-    if not s:
-        return False
-    try:
-        float(s)
-        return True
-    except ValueError:
-        return False
+        if not s:
+                return False
+        try:
+                float(s)
+                return True
+        except ValueError:
+                return False
 
 """
 Sanakirja erikoisfunktioista joita voi kutsua kaavoissa,

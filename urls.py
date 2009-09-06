@@ -2,7 +2,7 @@ from django.conf.urls.defaults import *
 from django.conf import settings
 
 urlpatterns = patterns('',
-    (r'^tupa/',        include('web.tupa.urls')),
+        (r'^tupa/',  include('web.tupa.urls')),
 )
 
 if settings.DEBUG :

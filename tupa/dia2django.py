@@ -5,24 +5,24 @@ import re
 import sys
 
 class Atribuutti:
-    nimi = ""
-    tyyppi = ""
-    arvo = ""
+        nimi = ""
+        tyyppi = ""
+        arvo = ""
 
 class Luokka:
-    nimi = ""
-    atribuutit=[]
+        nimi = ""
+        atribuutit=[]
 
 class Kaavio:
-    luokat=[]
+        luokat=[]
 
 def haeNimi( luokalle) :
-    nimi = ""
-    for c in luokalle.childNodes:
-        if c.nodeType==xml.dom.minidom.Node.ELEMENT_NODE and c.hasAttributes():
-            if c.getAttribute("name")=="name":
-                nimi= c.getElementsByTagName("dia:string")[0].childNodes[0].data[1:-1]
-    return nimi
+        nimi = ""
+        for c in luokalle.childNodes:
+                if c.nodeType==xml.dom.minidom.Node.ELEMENT_NODE and c.hasAttributes():
+                        if c.getAttribute("name")=="name":
+                                nimi= c.getElementsByTagName("dia:string")[0].childNodes[0].data[1:-1]
+        return nimi
 
 def haeAtribuutit( luokalle ) : 
     atribuutit=[]
@@ -58,57 +58,58 @@ dictSqlDjango= {"text":"TextField" , "date":"DateField" , "varchar":"CharField" 
 varcharRE= re.compile('varchar\((\d+)\)')
 
 def haeLuokanRunko(luokka,rivin_alku) :
-     runko = "\n"
-     for a in luokka.atribuutit:
-         varchar=varcharRE.search(a.tyyppi)
-         tyyppi=""
+        runko = "\n"
+        for a in luokka.atribuutit:
+                varchar=varcharRE.search(a.tyyppi)
+                tyyppi=""
         
-         if a.tyyppi.strip(" ") in dictSqlDjango.keys() :
-             tyyppi = dictSqlDjango[a.tyyppi.strip()]+ "()"
-         else:
-             tyyppi = a.tyyppi
-         if varchar:
-             tyyppi = "CharField(max_length="+varchar.group(1)+")"
-         if len(a.arvo)>0 :
-             if not re.search(".*\(\)",tyyppi) :
-                 tyyppi = tyyppi.replace(")",", "+a.arvo+" )")
-             else :
-                 tyyppi = tyyppi.replace(")",a.arvo+" )")
-         runko += rivin_alku + a.nimi + " = models."+ tyyppi + "\n"
-     return runko
+                if a.tyyppi.strip(" ") in dictSqlDjango.keys() :
+                        tyyppi = dictSqlDjango[a.tyyppi.strip()]+ "()"
+                else:
+                        tyyppi = a.tyyppi
+                if varchar:
+                        tyyppi = "CharField(max_length="+varchar.group(1)+")"
+                if len(a.arvo)>0 :
+                        if not re.search(".*\(\)",tyyppi) :
+                                tyyppi = tyyppi.replace(")",", "+a.arvo+" )")
+                        else :
+                                tyyppi = tyyppi.replace(")",a.arvo+" )")
+                runko += rivin_alku + a.nimi + " = models."+ tyyppi + "\n"
+        return runko
 
 
 def korvaaLuokanRunko(koodi,luokka):
-    sisennys_haku =  re.search('.*?(?=#gen_dia_class ' + luokka.nimi +'\n)',koodi)
-    sisennys=""
-    if sisennys_haku:
-       sisennys=len(sisennys_haku.group(0)) * " "
-    runko=haeLuokanRunko(luokka,sisennys)
-    return re.sub(r'(?s)(?<=#gen_dia_class '+ luokka.nimi +'\n).*?#end_dia_class',runko+"\n"+sisennys +"#end_dia_class",koodi)
+        sisennys_haku =  re.search('.*?(?=#gen_dia_class ' + luokka.nimi +'\n)',koodi)
+        sisennys=""
+        if sisennys_haku:
+                sisennys=len(sisennys_haku.group(0)) * " "
+        runko=haeLuokanRunko(luokka,sisennys)
+        return re.sub(r'(?s)(?<=#gen_dia_class '+ luokka.nimi +'\n).*?#end_dia_class',
+                                runko+"\n"+sisennys +"#end_dia_class",koodi)
 
 def luoMallienRungot(kaavion_nimi,koodin_nimi):
-            source=open( koodin_nimi , "r" )
-            koodi=source.read()
-            source.close()            
+        source=open( koodin_nimi , "r" )
+        koodi=source.read()
+        source.close()            
 
-            f=codecs.open(kaavion_nimi,"rb")
-            data = gzip.GzipFile(fileobj=f).read()
-            dataObjectModel =xml.dom.minidom.parseString(data)
-            objektit=dataObjectModel.getElementsByTagName("dia:diagram")[0].getElementsByTagName("dia:layer")[0].getElementsByTagName("dia:object")
+        f=codecs.open(kaavion_nimi,"rb")
+        data = gzip.GzipFile(fileobj=f).read()
+        dataObjectModel =xml.dom.minidom.parseString(data)
+        objektit=dataObjectModel.getElementsByTagName("dia:diagram")[0].getElementsByTagName("dia:layer")[0].getElementsByTagName("dia:object")
 
-            for l in haeLuokat(objektit):
+        for l in haeLuokat(objektit):
                 koodi= korvaaLuokanRunko(koodi,l)
-            source=open( koodin_nimi,"w" )
-            source.write(koodi)
+        source=open( koodin_nimi,"w" )
+        source.write(koodi)
 
 
 if __name__ == '__main__':
         if len(sys.argv) == 3:
-            luoMallienRungot(sys.argv[1],sys.argv[2])            
+                luoMallienRungot(sys.argv[1],sys.argv[2])            
         else :
-            print sys.argv[0] + ' - Generates bodies of django data models to python sources. \n'
-            print ' bodies to be generated have to be tagged in source with comments: '
-            print '    #gen_dia_class CLASSNAME'
-            print '    #end_dia_class \n'
-            print " Use:\n "+sys.argv[0]+" diagram.dia source.py\n\n"
+                print sys.argv[0] + ' - Generates bodies of django data models to python sources. \n'
+                print ' bodies to be generated have to be tagged in source with comments: '
+                print '    #gen_dia_class CLASSNAME'
+                print '    #end_dia_class \n'
+                print " Use:\n "+sys.argv[0]+" diagram.dia source.py\n\n"
 
