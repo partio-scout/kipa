@@ -1,8 +1,15 @@
 import os
-hakemisto=os.path.dirname(__file__)
+
+hakemisto=os.path.normpath(os.path.dirname(__file__))
+tarkistus= os.getcwd()
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+if not hakemisto == tarkistus :
+        #Viittaisi siihen etta kyseessa on apachen alta toimiva joten pakotetaan debugit pois
+        DEBUG=False
+        TEMPLATE_DEBUG = False
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
