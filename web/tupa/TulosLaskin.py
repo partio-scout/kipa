@@ -5,7 +5,8 @@ import AritmeettinenLaskin
 from logger import lokkeri
 import math
 import operator
-
+from django.core.exceptions import ObjectDoesNotExist
+                 
 def is_number(s):
         if not s:
                 return False
@@ -191,9 +192,12 @@ class TulosLaskin :
                 for v in vartiot:
                         maarite = self.osa_teht.syotemaarite_set.filter(nimi=syote)
                         if maarite:
-                                vSyote=maarite[0].syote_set.filter(vartio=v)[0].arvo
-                                if vSyote:
-                                        tulokset.append(Decimal(vSyote))
+                                try:
+                                        vSyote=maarite[0].syote_set.get(vartio=v).arvo
+                                        if vSyote:
+                                                tulokset.append(Decimal(vSyote))
+                                except ObjectDoesNotExist:
+                                        pass
                 def getMedian(numericValues):
                         if not len(numericValues):
                                 return None
@@ -254,9 +258,12 @@ class TulosLaskin :
                 for v in vartiot:
                         maarite = self.osa_teht.syotemaarite_set.filter(nimi=syote)
                         if maarite:
-                                vSyote=maarite[0].syote_set.get(vartio=v).arvo
-                                if vSyote:
-                                        tulokset.append(Decimal(vSyote))
+                                try:
+                                        vSyote=maarite[0].syote_set.get(vartio=v).arvo
+                                        if vSyote:
+                                                tulokset.append(Decimal(vSyote))
+                                except ObjectDoesNotExist:
+                                        pass
                 parvo = str(min(tulokset))
                 self.optimoinnit['pienin_'+param[0]]=parvo
                 return parvo
