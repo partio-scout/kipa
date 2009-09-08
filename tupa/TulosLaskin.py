@@ -418,6 +418,37 @@ class TulosLaskin :
                 lokkeri.setMessage( "Pisteet: " + unicode(tulos) ).logMessage()
                 return tulos
 
+        def laskeVartio(self,vartio) :
+                                v=vartio
+                                t=self.teht
+                                self.vartio=v
+                                pisteet =None
+                                # Haetaan vartion syötteet tehtävälle
+                                
+                                syotteet = []
+                                
+                                lokkeri.setMessage(u"\nTehtava: " + t.nimi).logMessage()
+                                lokkeri.setMessage(u"Vartio: " + v.nimi ).logMessage()
+                                
+                                # Keskeyttänyt
+                                if v.keskeyttanyt and v.keskeyttanyt<= t.jarjestysnro:
+                                        pisteet = u"K"
+
+                                # Lasketaan tulos
+                                if not pisteet :
+                                        pisteet= self.laskePisteet()
+                                
+                                # Pyöristys
+                                if pisteet and not pisteet == "S" and not pisteet == "K" :
+                                        pisteet= unicode(Decimal(pisteet).quantize(Decimal('0.1')))
+                                #Tuomarineuvos ylimääritys
+                                tuomarineuvostonTulos=v.tuomarineuvostulos_set.filter(tehtava=t)
+                                if len( tuomarineuvostonTulos ) == 1:
+                                        pisteet =  tuomarineuvostonTulos[0].pisteet
+
+                                return pisteet
+
+                                
         def laskeSarja(self,sarja):
                 """
                 Laskee tulokset halutulle sarjalle. 
@@ -444,47 +475,28 @@ class TulosLaskin :
                         t= tehtavat[tindex]
                         self.teht=t
                         self.optimoinnit= {}
-                        for vindex in range(len(vartiot)):
-                                v=vartiot[vindex]
-                                self.vartio=v
-                                pisteet =None
-                                # Haetaan vartion syötteet tehtävälle
-                                
-                                syotteet = []
-                                
-                                lokkeri.setMessage(u"\nTehtava: " + t.nimi).logMessage()
-                                lokkeri.setMessage(u"Vartio: " + v.nimi ).logMessage()
-                                
-                                # Keskeyttänyt
-                                if v.keskeyttanyt and v.keskeyttanyt<= t.jarjestysnro:
-                                        pisteet = u"K"
-
-                                # Lasketaan tulos
-                                if not pisteet :
-                                        pisteet= self.laskePisteet()
-                                
-                                # Pyöristys
-                                if pisteet and not pisteet == "S" and not pisteet == "K" :
-                                        pisteet= unicode(Decimal(pisteet).quantize(Decimal('0.1')))
-                                #Tuomarineuvos ylimääritys
-                                tuomarineuvostonTulos=v.tuomarineuvostulos_set.filter(tehtava=t)
-                                if len( tuomarineuvostonTulos ) == 1:
-                                        pisteet =  tuomarineuvostonTulos[0].pisteet
-
+                        for vindex in range(len(mukana)):
+                                pisteet = self.laskeVartio( mukana[vindex][0] )
                                 #Tuloksen lisäys taulukkoon
-                                #if is_number(pisteet) :
-                                #        yhteensa = yhteensa + Decimal(pisteet)
-                                if v.keskeyttanyt==None and v.ulkopuolella==None:
-                                        if pisteet:
-                                                lisattava= Decimal(pisteet)
-                                                mukana[vindex][1] += lisattava
-                                        mukana[vindex][tindex+2]=pisteet
-                                else :
-                                        if pisteet:
-                                                lisattava= Decimal(pisteet)
-                                                ulkona[vindex][1] += lisattava
-                                        ulkona[vindex][tindex+2]=pisteet
-
+                                if pisteet:
+                                                try:
+                                                        lisattava= Decimal(pisteet)
+                                                        mukana[vindex][1] += lisattava
+                                                except InvalidOperation:
+                                                        pass
+                                                mukana[vindex][tindex+2]=pisteet
+                                
+                        for vindex in range(len(ulkona)):
+                                pisteet = self.laskeVartio( ulkona[vindex][0] )
+                                #Tuloksen lisäys taulukkoon
+                                if pisteet:
+                                                try:
+                                                        lisattava= Decimal(pisteet)
+                                                        ulkona[vindex][1] += lisattava
+                                                except InvalidOperation:
+                                                        pass
+                                                ulkona[vindex][tindex+2]=pisteet
+                     
                 mukana.sort( key=operator.itemgetter(1),reverse=True )
                 ulkona.sort( key=operator.itemgetter(1),reverse=True )
                 # Vasempaan ylänurkkaan sarjan objekti  
