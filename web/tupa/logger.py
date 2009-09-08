@@ -3,7 +3,7 @@ from django.conf import settings
 #coding: latin-1
 
 lokkeri=None
-if settings.DEBUG==True:  
+if settings.DEBUG==True and not settings.LOGGING==False:  
   class Logger:
     """
     Logger Class

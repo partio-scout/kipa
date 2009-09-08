@@ -14,6 +14,8 @@ from formit import *
 from TehtavanMaaritys import *
 from duplicate import *
 
+virhe=""
+
 def kisa(request,kisa_nimi) :
         kisa = get_object_or_404(Kisa, nimi=kisa_nimi) 
         return render_to_response('tupa/kisa.html', {'kisa' : kisa })
@@ -303,4 +305,6 @@ def tietokantaan(request):
         response['Content-Disposition'] = 'attachment; filename=tietokanta.xml'
         return response
 
+def error_view(request) :
+        return render_to_response('500.html', {'error' : virhe })
 

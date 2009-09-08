@@ -29,6 +29,7 @@ urlpatterns = genericViews +  patterns('web.tupa.views.',
         (r'^(?P<kisa_nimi>\w+)/tulosta/sarja/(?P<sarja_id>\d+)/$', 'tulostaSarja'),
         (r'^(?P<kisa_nimi>\w+)/tulosta/piirit/$', 'piirit'), )
 
+
 if settings.DEBUG :
         urlpatterns += patterns('',
                 (r'^kipamedia/(?P<path>.*)$', 'django.views.static.serve',
