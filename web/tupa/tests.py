@@ -6,13 +6,14 @@ from AritmeettinenLaskin import *
 from TulosLaskin import *
 import decimal
 from django.test import TestCase
-
+from views import *
 import os
+from django.test.client import Client
+from django.http import HttpRequest
 
 class aritmeettinen_laskin_test(unittest.TestCase):
     """
     Peruslaskimen unit testit
-
     """
     def testYhteenlasku(self):
         assert    laske('5+5') == '10'
@@ -78,10 +79,66 @@ def haeTulos(sarjanTulokset, vartio, tehtava) :
             if sarjanTulokset[vart_nro][0] ==vartio and sarjanTulokset[0][teht_nro] ==tehtava:
                  return tulokset
 
-def TulosTestFactory(fixture_name):
+def ViewSanityCheck(fixture_name):
+        """
+        Luo tescasen tarkistamaan sen etta kaikki nakumat toimivat kaatumatta.
+        fixture name = tietokantafixtuurin nimi jolle testi luodaan.
+        palauttaa TestCase:n
+        """
         class testi(TestCase) :
                 fixtures = [fixture_name]
                 def testTulokset(self):
+                        """
+                        Ajaa jokaisen nakyman testidatalla
+                        Testi antaa virheen jos jokin nakuma kaatuu.
+                        """
+                        kisat=Kisa.objects.all()
+                        sarjat=Sarja.objects.all()
+                        tehtavat=Tehtava.objects.all()
+                        virheet=[]
+                        request =HttpRequest()
+                        tietokantaan(request)
+                        maaritaKisa(request)
+                        for k in kisat :
+                                kisa_nimi=k.nimi
+                                kisa(request,kisa_nimi=kisa_nimi)
+                                maaritaKisa(request,kisa_nimi=kisa_nimi)
+                                maaritaValitseTehtava(request,kisa_nimi=kisa_nimi)
+                                maaritaVartiot(request,kisa_nimi=kisa_nimi)
+                                testiTulos(request,kisa_nimi=kisa_nimi)
+                                syotaKisa(request,kisa_nimi=kisa_nimi)
+                                tulosta(request,kisa_nimi=kisa_nimi)
+                        for s in sarjat:
+                                sarja_id=s.id
+                                kisa_nimi=s.kisa.nimi
+                                maaritaTehtava(request,kisa_nimi=kisa_nimi,sarja_id=sarja_id)
+                                kopioiTehtavia(request,kisa_nimi=kisa_nimi,sarja_id=sarja_id)
+                                tulostaSarja(request,kisa_nimi=kisa_nimi, sarja_id=sarja_id)
+                        for t in tehtavat:
+                                tehtava_id=t.id
+                                kisa_nimi=t.sarja.kisa.nimi
+                                maaritaTehtava(request,kisa_nimi=kisa_nimi,tehtava_id=tehtava_id)
+                                syotaTehtava(request,kisa_nimi=kisa_nimi,tehtava_id=tehtava_id)
+        return testi
+
+
+
+def TulosTestFactory(fixture_name):
+        """
+        Tekee tulostestin halutulle tietokanta fixtuurille.
+        fixture_name = fixtuurin nimi jolle testi tehdaan.
+        palauttaa TestCase:n
+        """
+        class testi(TestCase) :
+                fixtures = [fixture_name]
+                def testTulokset(self):
+                        """
+                        Iteroi jokaisen sarjan ja tehtavan.
+                        Laskee tulokset ja vertaa tuloksia maariteltyihin testituloksiin.
+                        Tunnistaa laskennan kaatavia virheita.
+                        Tunnistaa vaarat tulokset.
+                        Vaarien tulosten kohdalla tulostaa yhteenvedon.
+                        """
                         self.sarjat=Sarja.objects.all()
                         virheet=[]
                         for s in self.sarjat:
@@ -130,6 +187,9 @@ for f in os.listdir(os.curdir+"/fixtures/tests/"):
 # luodaan tulostestit fixtuureista.
 for t in test_fixtures:
         testit.append( TulosTestFactory(t) )
+# luodaan viewtestit fixtuureista.
+for t in test_fixtures:
+        testit.append( ViewSanityCheck(t) )
 
 # luodaan testsuite jossa on kaikki testit.
 def suite():
