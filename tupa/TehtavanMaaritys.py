@@ -2,7 +2,6 @@ from models import *
 from formit import *
 from django.forms import ModelForm
 from django import forms
-from django.forms.models import inlineformset_factory
 
 from django.utils.safestring import SafeUnicode
 from django.template.loader import render_to_string
