@@ -10,3 +10,4 @@ if settings.DEBUG :
                 (r'^kipamedia/(?P<path>.*)$', 'django.views.static.serve',
                 {'document_root': settings.STATIC_DOC_ROOT}),)
 
+handler500 = 'tupa.views.raportti_500'

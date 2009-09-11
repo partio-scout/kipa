@@ -8,13 +8,12 @@ from decimal import *
 from django import forms
 import django.template
 from logger import lokkeri
+from django.utils.safestring import SafeUnicode
 
 import re
 from formit import *
 from TehtavanMaaritys import *
 from duplicate import *
-
-virhe=""
 
 def kisa(request,kisa_nimi) :
         kisa = get_object_or_404(Kisa, nimi=kisa_nimi) 
@@ -32,6 +31,7 @@ def maaritaKisa(request, kisa_nimi=None):
      
         # Post data
         posti=None
+
         if request.method == 'POST':
                 posti=request.POST
         # Kisa formi
@@ -262,11 +262,7 @@ def kopioiTehtavia(request,kisa_nimi,sarja_id ):
                                       'taulukko' : formit ,
                                       'taakse' : "../../../../tehtava/" })
 
-def tallennaKisa(request, kisa_nimi):
-        """
-        Palauttaa käyttäjälle valitun kisan xml formaatissa.
-        Jättää henkilöt ja allergiat tallentamatta.
-        """
+def kisa_xml(kisa_nimi):
         from django.core import serializers
         kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
         objects=[kisa,]
@@ -288,7 +284,15 @@ def tallennaKisa(request, kisa_nimi):
                                 for p in ot.parametri_set.all():
                                         objects.append(p)
                                 objects.append(ot)
-        response = HttpResponse(serializers.serialize("xml", objects , indent=4), mimetype='application/xml')
+        return serializers.serialize("xml", objects , indent=4)
+
+def tallennaKisa(request, kisa_nimi):
+        """
+        Palauttaa käyttäjälle valitun kisan xml formaatissa.
+        Jättää henkilöt ja allergiat tallentamatta.
+        """
+        xml=Document()
+        response = HttpResponse( kisa_xml(kisa_nimi) , mimetype='application/xml')
         response['Content-Disposition'] = 'attachment; filename=tietokanta.xml'
         return response
 
@@ -305,6 +309,32 @@ def tietokantaan(request):
         response['Content-Disposition'] = 'attachment; filename=tietokanta.xml'
         return response
 
-def error_view(request) :
-        return render_to_response('500.html', {'error' : virhe })
+def post_txt(request,parametrit):
+        from xml.dom.minidom import  parseString
+        kisa_nimi = re.search(r'^osoite=/tupa/(\w+)/',parametrit).group(1)
+        test_data=kisa_xml(kisa_nimi)  
+        post_data= parametrit.split("&")
+        doc = parseString( test_data )
+        post_test = doc.createElement('post_request')
+        post_test.setAttribute("address", post_data[0].split('=')[1])
+
+        for p in post_data[1:]:
+                data=p.split('=')
+                elem = doc.createElement('input')
+                elem.setAttribute("name", data[0] )
+                elem.setAttribute("value", data[1] )
+                post_test.appendChild(elem)
+        doc.childNodes[0].appendChild(post_test) 
+        
+        response = HttpResponse(doc.toprettyxml(indent="  "), mimetype='application/xml')
+        response['Content-Disposition'] = 'attachment; filename=tietokanta.xml'
+        return response
+
+def raportti_500(request) :
+        linkki=SafeUnicode('<a href=/tupa/post_txt/'+'osoite='+request.path+'&'+request.raw_post_data+'/"> Post data testaukseen </a>')      
+        return render_to_response('500.html', {'error': linkki})
+
+
+
+
 

@@ -9,7 +9,7 @@ from django.test import TestCase
 from views import *
 import os
 from django.test.client import Client
-from django.http import HttpRequest
+from django.http import HttpRequest,QueryDict
 
 class aritmeettinen_laskin_test(unittest.TestCase):
     """
@@ -172,17 +172,51 @@ def TulosTestFactory(fixture_name):
                         virhe= str(len(virheet)) + " errors"
                         for v in virheet:
                                 virhe=virhe + "\n--------------------------------\n" + v 
-                        self.failUnless( len(virheet) == 0 , unicode(virhe).encode('ascii', 'replace')
-)
+                        self.failUnless( len(virheet) == 0 , unicode(virhe).encode('ascii', 'replace'))
         return testi
 
 testit=[aritmeettinen_laskin_test]
 
 # haetaan kaikki xml fixtuurien nimet.
+# haetaan kaikki post txt:t
 test_fixtures=[]
+test_posts=[]
 for f in os.listdir(os.curdir+"/fixtures/tests/"):
         if not f.find(".xml") == -1:
                 test_fixtures.append("fixtures/tests/"+f)
+        if not f.find(".txt") == -1:
+                test_posts.append("fixtures/tests/"+f)
+
+
+def PostTestFactory(fixture_name):
+        from xml.dom.minidom import parse
+        class testi(TestCase) :
+                fixtures = [fixture_name]
+                def testPost(self):
+                        doc= parse(fixture_name)
+                        post_requests=doc.getElementsByTagName("post_request")
+                        for p in post_requests:
+                                osoite="/"
+                                if p.hasAttribute("address"):
+                                        osoite= p.getAttribute("address")
+                                inputs = p.getElementsByTagName("input")
+                                data=[]
+                                for i in inputs:
+                                        if i.hasAttribute("name"):
+                                                param=[i.getAttribute("name"),None]
+                                                if i.hasAttribute("value"):
+                                                        param[1]=i.getAttribute("value")
+                                                data.append(param)
+                                c = Client()
+                                posti=dict(data)
+                                print posti
+                                c.post(osoite,posti)
+        return testi
+
+#luodaan Post testit tekstitiedostoista
+for t in test_fixtures:
+        testit.append( PostTestFactory(t) )
+
 
 # luodaan tulostestit fixtuureista.
 for t in test_fixtures:
