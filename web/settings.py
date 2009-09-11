@@ -3,7 +3,7 @@ import os
 hakemisto=os.path.normpath(os.path.dirname(__file__))
 tarkistus= os.getcwd()
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 LOGGING=True
 if not hakemisto == tarkistus :
@@ -12,7 +12,7 @@ if not hakemisto == tarkistus :
         TEMPLATE_DEBUG = False
 
 ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+     #('frans korhonen', 'frans.korhonen@gmail.com'),
 )
 
 MANAGERS = ADMINS

@@ -12,6 +12,7 @@ genericViews = patterns('django.views.generic.list_detail',
 
 urlpatterns = genericViews +  patterns('web.tupa.views.',
         (r'^admin/(.*)', admin.site.root ),
+        (r'^post_txt/(?P<parametrit>.+)/$', 'post_txt'), 
         (r'^(?P<kisa_nimi>\w+)/tallenna/$', 'tallennaKisa'), 
         (r'^kantaan/$', 'tietokantaan'), 
         (r'^(?P<kisa_nimi>\w+)/$', 'kisa'),
