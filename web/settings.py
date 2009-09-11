@@ -3,7 +3,7 @@ import os
 hakemisto=os.path.normpath(os.path.dirname(__file__))
 tarkistus= os.getcwd()
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 LOGGING=True
 if not hakemisto == tarkistus :
