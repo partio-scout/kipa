@@ -209,7 +209,6 @@ def PostTestFactory(fixture_name):
                                                 data.append(param)
                                 c = Client()
                                 posti=dict(data)
-                                print posti
                                 c.post(osoite,posti)
         return testi
 

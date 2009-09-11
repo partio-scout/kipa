@@ -16,14 +16,23 @@ from TehtavanMaaritys import *
 from duplicate import *
 
 def kisa(request,kisa_nimi) :
+        """
+        Kisakohtainen päävalikko.
+        """
         kisa = get_object_or_404(Kisa, nimi=kisa_nimi) 
         return render_to_response('tupa/kisa.html', {'kisa' : kisa })
 
 def tulosta(request,kisa_nimi):
+        """
+        Valintalista kisan sarjojen tuloksista.
+        """
         sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
         return render_to_response('tupa/tulosta.html', {'sarja_list': sarjat })
 
 def maaritaKisa(request, kisa_nimi=None):
+        """
+        Kisan ja sarjojen määritys.
+        """
         # Tietokantahaku:
         kisa = None
         if kisa_nimi:
@@ -55,6 +64,9 @@ def maaritaKisa(request, kisa_nimi=None):
                                       'formsets' : ( sarjaFormit,) })
 
 def maaritaValitseTehtava(request,kisa_nimi):
+        """
+        Valitsee tehtävän määritettäväksi.
+        """
         sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
         taulukko = []
         for s in sarjat :
@@ -71,6 +83,9 @@ def maaritaValitseTehtava(request,kisa_nimi):
                                         'taakse' : "/tupa/"+kisa_nimi+"/" })
 
 def maaritaVartiot(request,kisa_nimi):
+        """
+        Määritää kisan vartiot sarjoittain.
+        """
         sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
         sarjaVartiot=[]
         posti=None
@@ -96,6 +111,13 @@ def maaritaVartiot(request,kisa_nimi):
                                         'taakse' : "../../" })
 
 def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None):
+        """
+        Määritää tehtävän.
+        Parametrit:
+                -kisa_nimi:en lisäksi täytyy määrittää joko tehtävä_id tai sarja_id
+                -kun tehtava_id on määritelty, muokataan sen mukaista tehtävää
+                -muuten luodaan uutta tehtävää halutulle sarjalle
+        """
         tehtava = None
         sarja = None
         if tehtava_id:
@@ -131,6 +153,9 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None):
                                       })
 
 def syotaKisa(request, kisa_nimi):
+        """
+        Valitsee kisan tehtävän jonka tuloksia ruvetaan syöttämään.
+        """
         sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
         taulukko = []
         for s in sarjat :
@@ -146,6 +171,9 @@ def syotaKisa(request, kisa_nimi):
                                 'taakse' : "../" })
 
 def syotaTehtava(request, kisa_nimi , tehtava_id) :
+        """
+        Määrittää tehtävän syötteet.
+        """
         tehtava = Tehtava.objects.filter(id=tehtava_id)[0]
         maaritteet = SyoteMaarite.objects.filter(osa_tehtava__tehtava=tehtava)
         vartiot = Vartio.objects.filter(sarja = tehtava.sarja )
@@ -178,6 +206,10 @@ def syotaTehtava(request, kisa_nimi , tehtava_id) :
                         'syotteet' : syoteFormit } )
 
 def testiTulos(request, kisa_nimi):
+        """
+        Määrittää kisalle testitulokset. Eli ns "oikeat" tulokset, 
+        joita voidaan testeissä verrata laskennan tuottamiin tuloksiin.
+        """
         taulukko=[]
         sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
         taulukko = []
@@ -185,7 +217,7 @@ def testiTulos(request, kisa_nimi):
         if request.method == 'POST':
                 posti=request.POST
         
-        
+        validi=True
         for s in sarjat :
                 taulut=s
                 taulut.tiedot=Vartio.objects.filter(sarja=s)
@@ -201,29 +233,38 @@ def testiTulos(request, kisa_nimi):
                                                 prefix=kisa_nimi+s.nimi+t.nimi+v.nimi)
                                 if formi.is_valid():
                                         formi.save()
+                                else :
+                                        validi=False
                                 v.formit.append( formi )
                 taulut.otsikko=s.nimi
                 taulut.id=s.id
                 taulukko.append(taulut)
+        if posti and validi:
+                return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/testitulos/")
         return render_to_response('tupa/testitulos.html',
                         { 'taulukko' : taulukko ,
                         'heading' : "Testi tuloksien määritys" ,
                         'taakse' : "../" })
 
 def tulostaSarja(request, kisa_nimi, sarja_id) :
+        """
+        Sarjan tulokset.
+        """
         sarja = Sarja.objects.get(id=sarja_id)
         lokkeri.clearLog()
         tulokset= sarja.laskeTulokset()
         return render_to_response('tupa/tulokset.html', {'tulos_taulukko' : tulokset }  )
 
-def sarja(request,sarja_id) :
-        sarja= Kisa.objects.get(id=sarja_id)
-        return render_to_response('tupa/sarja.html', {'sarja_object': sarja })
-
 def piirit(request,kisa_nimi) :
+        """
+        Piirikohtaiset tulokset.
+        """
         return HttpResponse(kisa_nimi + " PIIRIN TULOSTUS" )
 
 def kopioiTehtavia(request,kisa_nimi,sarja_id ):
+        """
+        Valitsee ja kopioi valitut saman kisan tehtävät määriteltyyn sarjaan.
+        """
         kisa =get_object_or_404(Kisa, nimi=kisa_nimi)
         sarjaan= get_object_or_404(Sarja, id=sarja_id)
         sarjat = Sarja.objects.filter(kisa=kisa)
@@ -263,6 +304,10 @@ def kopioiTehtavia(request,kisa_nimi,sarja_id ):
                                       'taakse' : "../../../../tehtava/" })
 
 def kisa_xml(kisa_nimi):
+        """
+        Apufunktio -> Luo xml merkkijonon kaikista kisan objekteista.
+        Jättää henkilöt ja allergiat luomatta.
+        """
         from django.core import serializers
         kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
         objects=[kisa,]
@@ -310,6 +355,11 @@ def tietokantaan(request):
         return response
 
 def post_txt(request,parametrit):
+        """
+        Apunäkymä virhetilanteisiin. (error 500,server internal error)
+        -Luo kisan tietokannan xml formaattiin ja lisää perään post_data:n testausta varten.
+        -Palauttaa xml tiedoston.
+        """
         from xml.dom.minidom import  parseString
         kisa_nimi = re.search(r'^osoite=/tupa/(\w+)/',parametrit).group(1)
         test_data=kisa_xml(kisa_nimi)  
@@ -331,8 +381,17 @@ def post_txt(request,parametrit):
         return response
 
 def raportti_500(request) :
-        linkki=SafeUnicode('<a href=/tupa/post_txt/'+'osoite='+request.path+'&'+request.raw_post_data+'/"> Post data testaukseen </a>')      
-        return render_to_response('500.html', {'error': linkki})
+        """
+        Html Error 500 sivu (Server internal error), 
+        Suomeksi: kipa vaan todennäköisesti kaatui.
+        -Sisältää linkin joka palauttaa tietokannan,
+        sekä viimeisimmän post datan xml formaatissa testausta varten.
+        """
+        linkki=SafeUnicode('<a href=/tupa/post_txt/'+'osoite='+request.path )
+        if len(request.raw_post_data):
+                linkki+='&'+request.raw_post_data
+        linkki+='/> Post data testaukseen </a>'      
+        return render_to_response('500.html', {'error': SafeUnicode(linkki) })
 
 
 
