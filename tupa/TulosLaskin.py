@@ -8,13 +8,10 @@ import operator
 from django.core.exceptions import ObjectDoesNotExist
                  
 def is_number(s):
-        if not s:
-                return False
-        try:
-                float(s)
-                return True
-        except ValueError:
-                return False
+        if not s : return False
+        try: float(s)
+        except ValueError: return False
+        return True
 
 """
 Sanakirja erikoisfunktioista joita voi kutsua kaavoissa,
@@ -42,8 +39,7 @@ def parsiSulku(lause) :
         haku = re.search("(.*?)(?:[(])([^()]*)(?:[)])(.*)"  ,lause)
         if haku :
              return (haku.group(1),haku.group(2),haku.group(3))
-        else :
-             return None
+        else : return None
        
 def stringDecimaaliksi(merkkijono) :
         """
@@ -71,20 +67,8 @@ def sijoitaMuuttujat(kaava,muuttujaKirja):
                         muokattu = re.sub("(?<=^)"+i+"(?=[-+/*(),])",j.strip(),muokattu)  
                         muokattu = re.sub("(?<=^)"+i+"(?=$)",j.strip(),muokattu)  
                         muokattu = re.sub("(?<=[-+/*(),])"+i+"(?=$)",j.strip(),muokattu)
-                if alussa==muokattu :
-                        muuttui=False
+                if alussa==muokattu : muuttui=False
         return muokattu
-def vertaa(a,operaattori,b) :
-        """
-        Vertaa a ja b keskenään operaattorilla 
-        palauttaa True tai False
-        parametrit merkkijonoja
-        """
-        vertailu = "Decimal(a)" + operaattori + "Decimal(b)"
-        if eval(vertailu) :
-                return True
-        return False
-
 
 def pilkoParametreiksi(merkkijono):
         """

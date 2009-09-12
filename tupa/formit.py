@@ -114,25 +114,22 @@ class TestiTulosForm(ModelForm):
         pisteet=pisteet = forms.CharField(required=False)
 
         def __init__(self,posti,vartio,tehtava,*argv,**argkw) :
-                objektit=TestausTulos.objects.filter(vartio=vartio,tehtava=tehtava)
+                objekti=None
+                try : objekti=TestausTulos.objects.get(vartio=vartio,tehtava=tehtava)
+                except TestausTulos.DoesNotExist : pass
                 self.vartio=vartio
                 self.tehtava=tehtava
-                if len(objektit):
-                        super(ModelForm,self).__init__(posti,instance=objektit[0],*argv,**argkw)
+                if objekti:
+                        super(ModelForm,self).__init__(posti,instance=objekti,*argv,**argkw)
                 else :
                         super(ModelForm,self).__init__(posti,*argv,**argkw)
         def save(self):
                 tulos = super(ModelForm,self).save(commit=False)
                 tulos.vartio=self.vartio
                 tulos.tehtava=self.tehtava
-                if tulos.pisteet == None :
-                                if tulos.id :
-                                        tulos.delete()
-                elif len(tulos.pisteet)==0 :
-                                if tulos.id :
-                                        tulos.delete()
-                else :
-                        tulos.save()
+                if tulos.pisteet == None or len(tulos.pisteet)==0  and tulos.id  : 
+                        tulos.delete()
+                else : tulos.save()
                 return tulos
         class Meta:
                 fields=("pisteet")

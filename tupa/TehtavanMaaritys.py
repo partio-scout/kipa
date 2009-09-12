@@ -132,7 +132,7 @@ class RaakaPiste(ModelForm):
                 if osaTehtava.tyyppi== "rp" :
                         super(ModelForm,self).__init__(posti,instance=sm,*argv,**argkw)
                 else :
-                        super(ModelForm,self).__init__(posti,instance=SyoteMaarite(pk=sm.pk),*argv,**argkw)
+                        super(ModelForm,self).__init__(posti,instance=SyoteMaarite(pk=sm.pk,tyyppi="piste"),*argv,**argkw)
                 self.osaTehtava=osaTehtava
         
         def save(self,commit=True):
@@ -157,10 +157,10 @@ class KokonaisAika(RaakaPiste):
                 if osaTehtava.tyyppi== "ka" :
                         super(ModelForm,self).__init__(posti,instance=sm,*argv,**argkw)
                 else :
-                        super(ModelForm,self).__init__(posti,instance=SyoteMaarite(pk=sm.pk),*argv,**argkw)
+                        super(ModelForm,self).__init__(posti,instance=SyoteMaarite(pk=sm.pk,tyyppi='aika'),*argv,**argkw)
                 self.osaTehtava=osaTehtava
 
-        def save(self,commit=True):
+        def save(self):
                 maarite = super(ModelForm,self).save(commit=False)
                 maarite.nimi="a"
                 maarite.tyyppi = "aika"
@@ -168,12 +168,18 @@ class KokonaisAika(RaakaPiste):
                 maarite.save()
 
 
-class AlkuLoppuAika(OsaTehtavaParametri):
+class AlkuLoppuAika(forms.Form):
         alkuaika=forms.CharField(label="Alkuajan kuvaus: (esim. alkuaika)",widget=TextBRWidget)
         loppuaika=forms.CharField(label="Loppuajan kuvaus: (esim. loppuaika)")
         label="Alkuaika ja loppuaika"
+        def __init__(self,posti,osaTehtava,*argv,**argkw ):
+                super(forms.Form,self).__init__(posti,*argv,**argkw)
+                self.alkuaika=KokonaisAika(posti,osaTehtava)
+
+        def save(self):
+                self.alkuaika.save()      
         def __unicode__(self):
-                return self.as_p()
+                return self.alkuaika.__unicode__()
 
 class VapaaKaava(OsaTehtavaParametri):
         kaava = forms.CharField()
@@ -392,37 +398,30 @@ class OsaTehtavaForm(ModelForm) :
                 osatehtava=super(OsaTehtavaForm,self).save(commit=False)
                 for param in self.parametrit:
                         for p in param:
-                                if p.is_valid() :
-                                        # Talletetaan ainoastaan ne formit joita kaytetaan tassa tyypissa.
-                                        if re.match(".*?"+osatehtava.tyyppi+".*?",p.prefix) : 
-                                                p.save()
+                                # Talletetaan ainoastaan sellainen formi joita kaytetaan tassa tyypissa.
+                                if p.is_valid() and re.match(".*?"+osatehtava.tyyppi+".*?",p.prefix) :
+                                        p.save()
                 # Eroitellaan sellaiset osatehtavatyypit joiden kaava eroaa vakiosta.
                 if osatehtava.tyyppi=="kp":
                         # Kisapisteita, suora summa
                         osatehtava.kaava="ss"
-                elif osatehtava.tyyppi=="ala":
-                        # Alku ja loppu aika (loppuaika-alkuaika)
-                        maksimiKaava = Parametri.objects.get_or_create(nimi="maksimi_kaava",
-                                                osa_tehtava=osatehtava)[0]
-                        maksimiKaava.arvo="a-b"
-                        maksimiKaava.save()
-                        nollaKaava = Parametri.objects.get_or_create(nimi="nolla_kaava",
-                                                osa_tehtava=osatehtava)[0]
-                        nollaKaava.arvo="a-b"
-                        nollaKaava.save()
-                        osatehtava.kaava="interpoloi(a-b,aMax,maxP,nolla_kerroin*nolla)"
-
                 else :
-                        # Yleiskaava suurimmalle osalle osa tehtavista
+                        # Yleiskaava suurimmalle osalle osa tehtavista :
                         maksimiKaava = Parametri.objects.get_or_create(nimi="maksimi_kaava",
                                                 osa_tehtava=osatehtava)[0]
                         maksimiKaava.arvo="a"
-                        maksimiKaava.save()
                         nollaKaava = Parametri.objects.get_or_create(nimi="nolla_kaava",
                                                 osa_tehtava=osatehtava)[0]
                         nollaKaava.arvo="a"
-                        nollaKaava.save()
                         osatehtava.kaava="interpoloi(a,aMax,maxP,nolla_kerroin*nolla)"
+
+                        if osatehtava.tyyppi=="ala":
+                                # Alku ja loppu aika (loppuaika-alkuaika)
+                                maksimiKaava.arvo="a-b"
+                                nollaKaava.arvo="a-b"
+                                osatehtava.kaava="interpoloi(a-b,aMax,maxP,nolla_kerroin*nolla)"
+                        maksimiKaava.save()
+                        nollaKaava.save()
                 osatehtava.save()
         def __unicode__(self) :
                 tab_id = "ot_tab_id_" + self.prefixID
@@ -430,11 +429,9 @@ class OsaTehtavaForm(ModelForm) :
                                         { 'form': self,
                                         'tab_id' : tab_id ,
                                         'taulukko' : self.parametrit})
-
         class Meta :
                 fields=("tyyppi")
                 model = OsaTehtava
-
 
 class TehtavaForm(ModelForm):
     kaava = forms.CharField(widget=forms.TextInput(attrs={'size':'40'} ) ,required=True)
@@ -476,8 +473,7 @@ class TehtavaForm(ModelForm):
                 for ot in range( osatehtavia , valmiit_osatehtavat ) :
                         if osa_tehtavat[ot].id :
                                 osa_tehtavat[ot].delete()
-        else:
-                pass
+        else:   pass
         return tehtava
     def __unicode__(self) :
                 return render_to_string("tupa/forms/tehtava.html", {'form': self, 'osa_tehtavat' : self.osaTehtavaFormit})

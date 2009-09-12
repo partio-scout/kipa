@@ -30,8 +30,13 @@ def validioi(kaava) :
         return True
 
 def laskeSuluilla(lauseke):
+        """
+        Laskee perus aritmeettisen lauseen pythonilla.
+        """
+        # numeroiden ympärille täytyy lisätä Decimal() määritteet.
+        # näin laskenta tapahtuu 10 järjestelmän mukaan,
+        # eikä heksadesimaaleina kuten esim floatilla. 
         muokattu=re.sub(r"((\d+\.)?\d+)",r"Decimal('\g<1>')",lauseke)
-        #print muokattu
         tulos=""
         try:
                 tulos = str(eval(muokattu))
