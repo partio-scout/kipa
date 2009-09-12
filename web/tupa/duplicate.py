@@ -2,6 +2,9 @@ from models import *
 #coding: latin-1
 
 def kopioiTehtava(tehtava,sarjaan,uusiNimi=None) :
+        """
+        Kopioi määritellyn tehtävän haluttuun sarjaan.
+        """
         # Kopioi itse tehtävä:
         tNimi=tehtava.nimi
         if uusiNimi:

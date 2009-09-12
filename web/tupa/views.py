@@ -174,7 +174,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id) :
         """
         Määrittää tehtävän syötteet.
         """
-        tehtava = Tehtava.objects.filter(id=tehtava_id)[0]
+        tehtava = get_object_or_404(Tehtava, id=tehtava_id)
         maaritteet = SyoteMaarite.objects.filter(osa_tehtava__tehtava=tehtava)
         vartiot = Vartio.objects.filter(sarja = tehtava.sarja )
         syoteFormit = []
@@ -244,7 +244,7 @@ def testiTulos(request, kisa_nimi):
         return render_to_response('tupa/testitulos.html',
                         { 'taulukko' : taulukko ,
                         'heading' : "Testi tuloksien määritys" ,
-                        'taakse' : "../" })
+                        'taakse' : "../../" })
 
 def tulostaSarja(request, kisa_nimi, sarja_id) :
         """
