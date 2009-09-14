@@ -1,4 +1,5 @@
 {% extends "tupa/base.html" %}
+{% block title %}Sarjakohtaiset tulokset{% endblock title %} 
 {% block content %} 
 
 <h1>NÄYTÄ TULOKSET</h1>
@@ -9,7 +10,7 @@
 <br>
 <p>
 {% if tulos_taulukko %}
-	<table width="600" border="1">
+	<table width="100%" border="1">
 		{% for rivi in tulos_taulukko%}
                       <tr>
 			    {% for sarake in rivi %}
@@ -24,11 +25,12 @@
 {% endif %}
 
 <p>
- S = syöttämättä <br>
- H = vartion suoritus hylatty<br>
- K = vartio keskeyttanyt<br>
- None = Laskentavirhe
+ S = syöttämättä<br>
+ H = vartion suoritus hylätty<br>
+ K = vartio keskeyttänyt<br>
+ None = laskentavirhe
 </p>
-
 </form>
+
+<p><a href="../pdf/1/">Tulokset PDF-muodossa</a></p> <!-- MITEN SAAN TOHON YKKÖSEN TILALLE SARJA_ID:N? /JOONAS-->
 {% endblock %}
