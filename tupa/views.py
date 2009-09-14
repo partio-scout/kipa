@@ -15,6 +15,8 @@ from formit import *
 from TehtavanMaaritys import *
 from duplicate import *
 
+from reportlab.pdfgen import canvas
+
 def kisa(request,kisa_nimi) :
         """
         Kisakohtainen päävalikko.
@@ -393,7 +395,63 @@ def raportti_500(request) :
         linkki+='/> Post data testaukseen </a>'      
         return render_to_response('500.html', {'error': SafeUnicode(linkki) })
 
+def tulostaSarjaPDF(request,kisa_nimi,sarja_id):
+	"""
+	Sarjan tulokset PDF:ksi. Tämän laskennan voisi varmaan toteuttaa jossain muualla, mut kokeilin nyt vain /Joonas
+	"""
+	sarja = Sarja.objects.get(id=sarja_id)
+	lokkeri.clearLog()
+	tulokset= sarja.laskeTulokset()
+	# return render_to_response('tupa/tulokset.html', {'tulos_taulukko' : tulokset }  )
 
 
+	# Create the HttpResponse object with the appropriate PDF headers.
+	response = HttpResponse(mimetype='application/pdf')
+	response['Content-Disposition'] = 'attachment; filename='+kisa_nimi+sarja_id
 
+	from reportlab.lib.pagesizes import A4, landscape, portrait
+	width, height = A4 #keep for later
+
+	# Create the PDF object, using the response object as its "file."
+	c = canvas.Canvas(response, pagesize=landscape(A4))
+
+	# Draw things on the PDF. Here's where the PDF generation happens.
+	# See the ReportLab documentation for the full list of functionality.
+	c.drawString(100, 100, "Hello world.")
+
+	'''from reportlab.lib.units import inch
+	# move the origin up and to the left
+	c.translate(inch,inch)
+	# define a large font
+	c.setFont("Helvetica", 14)
+	# choose some colors
+	c.setStrokeColorRGB(0.2,0.5,0.3)
+	c.setFillColorRGB(1,0,1)
+	# draw some lines
+	c.line(0,0,0,1.7*inch)
+	c.line(0,0,1*inch,0)
+	# draw a rectangle
+	c.rect(0.2*inch,0.2*inch,1*inch,1.5*inch, fill=1)
+	# make text go straight up
+	c.rotate(90)
+	# change color
+	c.setFillColorRGB(0,0,0.77)
+	# say hello (note after rotate the y coord needs to be negative!)
+	c.drawString(0.3*inch, -inch, "Hello World")'''
+
+	from reportlab.lib.units import inch
+	from reportlab.lib.colors import magenta, red
+	c.setFont("Times-Roman", 20)
+	c.setFillColor(red)
+	c.drawCentredString(2.75*inch, 2.5*inch, "Font size examples")
+	c.setFillColor(magenta)
+	size = 7
+
+	# PDF:n otsikko
+	c.setTitle('Tulokset')
+
+	# Close the PDF object cleanly, and we're done.
+	c.showPage()
+	c.save()
+	return response
 

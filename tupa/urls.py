@@ -28,6 +28,7 @@ urlpatterns = genericViews +  patterns('web.tupa.views.',
         (r'^(?P<kisa_nimi>\w+)/syota/tehtava/(?P<tehtava_id>\d+)/$', 'syotaTehtava'),
         (r'^(?P<kisa_nimi>\w+)/tulosta/$', 'tulosta'),
         (r'^(?P<kisa_nimi>\w+)/tulosta/sarja/(?P<sarja_id>\d+)/$', 'tulostaSarja'),
+        (r'^(?P<kisa_nimi>\w+)/tulosta/sarja/pdf/(?P<sarja_id>\d+)/$', 'tulostaSarjaPDF'),
         (r'^(?P<kisa_nimi>\w+)/tulosta/piirit/$', 'piirit'), )
 
 
