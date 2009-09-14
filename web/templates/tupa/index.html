@@ -1,8 +1,7 @@
 {% extends "tupa/base.html" %}
 {% block content %} 
 
-<A href='uusiKisa/maarita'>Luo uusi kisa</A><br>
-<h1> Kisat:</h1>
+<h1>Kisat</h1>
 {% if object_list %}
     {% for kisa in object_list %}
         <A href='{{kisa.nimi}}/' > {{kisa.nimi}} </A> <br>
@@ -11,6 +10,8 @@
 {% else %}
     <p>Ei määriteltyjä kisoja.</p>
 {% endif %}
+
+<p><A href='uusiKisa/maarita'>Luo uusi kisa</A><br></p>
 
 {% endblock %}
 
