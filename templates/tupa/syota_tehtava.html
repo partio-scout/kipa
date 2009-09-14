@@ -12,55 +12,77 @@
 <body onLoad="document.forms.form1.textfield.focus()">
 
 <h1>Tehtävä: {{tehtava.nimi}} </h1>
-<h2>Sarja: {{tehtava.sarja.nimi}} </h2>
 
-<A href='../../'>taakse</A>
+<A href='../../'>taakse</A> <br><br>
+
+<table width="600" border="0" cellpadding="2" cellspacing="0">
+  <tr>
+    <td width="100" class="tauluOtsikko">Tehtävä:</td>
+    <td width="25" bgcolor="#E8EDFF">{{tehtava.nro}}nro</td>
+    <td width="91" bgcolor="#E8EDFF">{{tehtava.nimi}}</td>
+    <td bgcolor="#E8EDFF">&nbsp;</td>
+  </tr>
+  <tr>
+
+    <td class="tauluOtsikko">Sarja:</td>
+    <td colspan="3" bgcolor="#E8EDFF">{{tehtava.sarja.nimi}}</td>
+  </tr>
+  <tr>
+    <td valign="middle" class="tauluOtsikko">Yhteyshenkilö:</td>
+    <td colspan="2" valign="middle" bgcolor="#E8EDFF">Johanna Jormakka</td>
+    <td bgcolor="#E8EDFF">040-942 7230</td>
+
+  </tr>
+  <tr valign="middle">
+    <td valign="middle" class="tauluOtsikko">Tehtävän tila:</td>
+    <td colspan="2" valign="middle" bgcolor="#FFFF66"><label>syötetty osittain</label></td>
+    <td bgcolor="#E8EDFF"><label><input type="checkbox" name="checkbox" id="checkbox" />tarkistettu</label></td>
+  </tr>
+</table>
+<br />
 
 <form action="." name="form1" method="post">     
    
-    <table id="taulukko">
+    <table id="taulukko" border="0" cellpadding="2" cellspacing="0">
         <tr>
-            <td>
+            <th colspan="2">
             Syötteen nimi:
-            </td>
+            </th>
             {% for maarite in maaritteet %}
-               <td>
+               <th>
                    {{ maarite.nimi }} 
-               </td>
+               </th>
             {% endfor %}
         </tr>
         <tr>
-            <td>
-            Syötteen tyyppi
-            </td>
+            <th colspan="2">
+            Syötteen tyyppi:
+            </th>
             {% for maarite in maaritteet %}
-               <td>
+               <th>
                    {{ maarite.tyyppi }} 
-               </td>
+               </th>
             {% endfor %}
         </tr>
         <tr>
-            <td>
+            <th colspan="2">
             Syötteen kuvaus:
-            </td>
+            </th>
             {% for maarite in maaritteet %}
-               <td>
+               <th>
                    {{ maarite.kali_vihje }} 
-               </td>
+               </th>
             {% endfor %}
-        </tr>
-        <tr>
-               <td>
-               Vartiot:
-               </td>
         </tr>
 
         {% for vartio in syotteet %}
             <tr valign="top" class="{% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
-                  <td>
+                  <td width="15">
                   {{ vartio.0.nro}}
-                  {{ vartio.0.nimi }}
                   </td>
+		<td width="100">
+                  {{ vartio.0.nimi }}
+		</td>
                   {% for kentta in vartio.1 %}
                          <td>
                          {{kentta.errors}}
@@ -75,19 +97,17 @@
     {% include "tupa/tallenna.html" %}
     </form>
 
-<p><a href=""><span onmouseover="tooltip.show('Syötä vartion tulos: Raakap.');" onmouseout="tooltip.hide();">Katso tämän tehtävän tulokset</span></a></p>
-
 <p>
 e - vartio ei ole tehnyt tehtävää<br />
 h - vartion suoritus on hylätty<br />
 </p>
 
+<p><a href="">Katso tämän tehtävän tulokset</a></p>
 
 <!-- tarvitaan, jotta enterillä pääsisi seuraavaan kenttään, pitää olla sivun lopussa, formin pitää olla nimeltään form1 -->
 <script type='text/javascript'>	
-enterToTab(document.forms.form1, false);
-document.forms.form1.elements[0].focus();
-
+	enterToTab(document.forms.form1, false);
+	document.forms.form1.elements[0].focus();
 </script>
 
 	
