@@ -102,7 +102,7 @@ class PisteSyoteForm(ModelForm):
                 model = Syote
 
 class AikaSyoteForm(PisteSyoteForm) :
-        arvo=AikaField(required=False,widget=AikaWidget( attrs={'id': 'aika'} ))
+        arvo=AikaField(required=False,widget=AikaWidget( attrs={'class': 'TCMask[##:##:##]','value': '##:##:##'} ))
            
 def SyoteForm(*argv,**argkw) :
         if argv[0].tyyppi=="aika":

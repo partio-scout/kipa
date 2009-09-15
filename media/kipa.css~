@@ -141,7 +141,7 @@ h2 {
 	vertical-align: middle;
 }
 
-#taulukko .even {
+#taulukko .odd {
 	vertical-align: middle;
 }
 
