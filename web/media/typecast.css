@@ -1,0 +1,26 @@
+/*
+Typecast 1.4 (release)
+by Ara Pehlivanian (http://arapehlivanian.com)
+
+This work is licensed under a Creative Commons Licence
+http://creativecommons.org/licenses/by-nd/2.5/
+*/
+
+#SuggestOutputArea{
+	border: solid 1px #ccc;
+	background: #fff;
+}
+
+#SuggestOutputArea ul{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#SuggestOutputArea ul li:hover{
+	cursor: pointer;
+}
+#SuggestOutputArea ul li.selected{
+	background-color: #006;
+	color: #fff;
+}
