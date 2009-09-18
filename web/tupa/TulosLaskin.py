@@ -63,10 +63,11 @@ def sijoitaMuuttujat(kaava,muuttujaKirja):
         while muuttui==True :
                 alussa=muokattu
                 for i, j in muuttujaKirja.iteritems():  
-                        muokattu = re.sub("(?<=[-+/*(),])"+i+"(?=[-+/*(),])",j.strip(),muokattu)  
-                        muokattu = re.sub("(?<=^)"+i+"(?=[-+/*(),])",j.strip(),muokattu)  
-                        muokattu = re.sub("(?<=^)"+i+"(?=$)",j.strip(),muokattu)  
-                        muokattu = re.sub("(?<=[-+/*(),])"+i+"(?=$)",j.strip(),muokattu)
+                        if i and j :
+                                muokattu = re.sub("(?<=[-+/*(),])"+i+"(?=[-+/*(),])",j.strip(),muokattu)  
+                                muokattu = re.sub("(?<=^)"+i+"(?=[-+/*(),])",j.strip(),muokattu)  
+                                muokattu = re.sub("(?<=^)"+i+"(?=$)",j.strip(),muokattu)  
+                                muokattu = re.sub("(?<=[-+/*(),])"+i+"(?=$)",j.strip(),muokattu)
                 if alussa==muokattu : muuttui=False
         return muokattu
 
@@ -95,6 +96,17 @@ def pilkoParametreiksi(merkkijono):
                 return parametrit
         else: 
                 return [merkkijono]
+
+def getMedian(numericValues):
+        if not len(numericValues):
+                return None
+        theValues = sorted(numericValues)
+        if len(theValues) % 2 == 1:
+                return theValues[(len(theValues)+1)/2-1]
+        else:
+                lower = theValues[len(theValues)/2-1]
+                upper = theValues[len(theValues)/2]
+                return (Decimal(lower + upper)) / 2  
 
 class TulosLaskin :
         """
@@ -168,33 +180,13 @@ class TulosLaskin :
                 Mediaaniin ei oteta mukaan ulkopuolella olevien vartioiden syötteitä. 
                 """
                 if 'med_'+param[0] in self.optimoinnit:
-                        # Optimointi: mediaani lasketaan vain kerran saman tehtävän sisällä
+                        #Optimointi: mediaani lasketaan vain kerran saman tehtävän sisällä
                         return self.optimoinnit['med_'+param[0]]
-                syote=param[0]
-                vartiot = self.teht.mukanaOlevatVartiot()
-                tulokset=[]
-                for v in vartiot:
-                        maarite = self.osa_teht.syotemaarite_set.filter(nimi=syote)
-                        if maarite:
-                                try:
-                                        vSyote=maarite[0].syote_set.get(vartio=v).arvo
-                                        if vSyote:
-                                                tulokset.append(Decimal(vSyote))
-                                except ObjectDoesNotExist:
-                                        pass
-                def getMedian(numericValues):
-                        if not len(numericValues):
-                                return None
-                        theValues = sorted(numericValues)
-                        if len(theValues) % 2 == 1:
-                                return theValues[(len(theValues)+1)/2-1]
-                        else:
-                                lower = theValues[len(theValues)/2-1]
-                                upper = theValues[len(theValues)/2]
-                        return (Decimal(lower + upper)) / 2  
-                mediaani= str(getMedian(tulokset))
-                self.optimoinnit['med_'+param[0]]=mediaani
-                return mediaani
+                kaava=param[0]
+                tulokset = self.laske_mukana_oleville(kaava)                
+                md= str(getMedian(tulokset))
+                self.optimoinnit['med_'+param[0]]=md
+                return md
 
         def keskiarvo(self,param):
                 """
@@ -203,7 +195,7 @@ class TulosLaskin :
                 Keskiarvoon ei oteta tehtävässä ulkopuolella olevien vartoiden syötteitä.
                 """
                 assert 0
-
+        
         def suurin(self,param):
                 """
                 Yksi parametri: Kaava jonka tuloksista haetaan suurin arvo.
@@ -214,19 +206,13 @@ class TulosLaskin :
                         # Optimointi: suurin haetaan vain kerran samassa tehtavassa
                         return self.optimoinnit['suurin_'+param[0]]
 
-                syote=param[0]
-                vartiot = self.teht.mukanaOlevatVartiot()
-                tulokset=[]
-                for v in vartiot:
-                        maarite = self.osa_teht.syotemaarite_set.filter(nimi=syote)
-                        if maarite:
-                                vSyote=maarite[0].syote_set.get(vartio=v).arvo
-                                if vSyote:
-                                        tulokset.append(Decimal(vSyote))
+                kaava=param[0]
+                tulokset= self.laske_mukana_oleville(kaava)
                 sarvo = str(max(tulokset))
                 self.optimoinnit['suurin_'+param[0]]=sarvo
                 return sarvo
 
+ 
         def pienin(self,param):
                 """
                 Yksi parametri: Tehtävän syötteiden nimi joista haetaan pienin arvo.
@@ -236,21 +222,39 @@ class TulosLaskin :
                 if 'pienin_'+param[0] in self.optimoinnit:
                         # Optimointi: pienin haetaan vain kerran samassa tehtavassa
                         return self.optimoinnit['pienin_'+param[0]]
-                syote=param[0]
-                vartiot = self.teht.mukanaOlevatVartiot()
-                tulokset=[]
-                for v in vartiot:
-                        maarite = self.osa_teht.syotemaarite_set.filter(nimi=syote)
-                        if maarite:
-                                try:
-                                        vSyote=maarite[0].syote_set.get(vartio=v).arvo
-                                        if vSyote:
-                                                tulokset.append(Decimal(vSyote))
-                                except ObjectDoesNotExist:
-                                        pass
+                kaava=param[0]
+                tulokset = self.laske_mukana_oleville(kaava)                
+                if len(tulokset)==0:
+                        return None
                 parvo = str(min(tulokset))
                 self.optimoinnit['pienin_'+param[0]]=parvo
                 return parvo
+
+        def laske_mukana_oleville(self,kaava):
+                """
+                laskee kaavan tulokset kaikille osatehtavassa mukana oleville vartiolle 
+                kayttaa self.osa_tehtava : osatehtavan laskemisessa
+                palauttaa listan tuloksista
+                """
+                vartiot = self.teht.mukanaOlevatVartiot()
+                tulokset=[]
+                vMuuttujat= self.muuttujaKirja.copy()
+                #print vMuuttujat
+                for v in vartiot:
+                        self.muuttujaKirja=vMuuttujat.copy()
+                        maaritteet = self.osa_teht.syotemaarite_set.all()
+                        if maaritteet:
+                                for m in maaritteet :
+                                        try:
+                                                vArvo=vSyote=m.syote_set.get(vartio=v).arvo
+                                                self.muuttujaKirja[m.nimi]=vArvo
+                                        except ObjectDoesNotExist:
+                                                self.muuttujaKirja[m.nimi]=None
+                                tulos = self.laske(kaava)
+                                if is_number(tulos):
+                                        tulokset.append( Decimal( tulos ))
+                self.muuttujaKirja=vMuuttujat.copy()
+                return tulokset
 
 
         def itseisarvo(self,param) :
