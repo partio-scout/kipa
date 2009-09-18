@@ -6,6 +6,7 @@ from django.forms import ModelForm
 from django.forms.models import inlineformset_factory
 from decimal import *
 import re
+from django.utils.safestring import SafeUnicode
 
 class VartioForm(ModelForm):
         ulkopuolella = forms.IntegerField(
@@ -24,6 +25,20 @@ VartioFormSet = inlineformset_factory(Sarja,
 MaariteFormSet = inlineformset_factory(OsaTehtava,SyoteMaarite,extra=3 )
 SarjaFormSet = inlineformset_factory(Kisa,Sarja,extra=4 )
 TehtavaValintaFormSet = inlineformset_factory(Sarja,Tehtava,fields='jarjestysnro')
+
+tuhoaTehtaviaFormset = modelformset_factory(Tehtava,can_delete=True,extra=0,fields=('delete'))
+class TehtavaLinkkilistaFormset(tuhoaTehtaviaFormset):
+        def __unicode__(self) :
+                piirto=unicode(self.management_form)
+                for form in self.forms :
+                        linkki=""
+                        nimi=""
+                        if form.instance:
+                                linkki=str(form.instance.id)+"/"
+                                nimi=str(form.instance.nimi)
+                        piirto=piirto+"<a href="+linkki+">"+nimi+"</a>  "+form.as_p()+"<br>" 
+                        piirto = piirto.replace("<p>","").replace("</p>","")
+                return SafeUnicode(piirto)
 
 
 
