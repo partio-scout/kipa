@@ -338,7 +338,6 @@ def tallennaKisa(request, kisa_nimi):
         Palauttaa käyttäjälle valitun kisan xml formaatissa.
         Jättää henkilöt ja allergiat tallentamatta.
         """
-        xml=Document()
         response = HttpResponse( kisa_xml(kisa_nimi) , mimetype='application/xml')
         response['Content-Disposition'] = 'attachment; filename=tietokanta.xml'
         return response
