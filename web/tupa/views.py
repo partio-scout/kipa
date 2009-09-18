@@ -76,7 +76,9 @@ def maaritaValitseTehtava(request,kisa_nimi):
         sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
         taulukko = []
         for s in sarjat :
-                formsetti = TehtavaLinkkilistaFormset(posti, queryset=Tehtava.objects.filter(sarja = s ) )
+                formsetti = TehtavaLinkkilistaFormset(posti, 
+                                queryset=Tehtava.objects.filter(sarja = s ),
+                                prefix="sarja_"+str(s.id)+"_" )
                 formsetti.otsikko=s.nimi
                 formsetti.id=s.id
 
