@@ -42,7 +42,6 @@ def maaritaKisa(request, kisa_nimi=None):
      
         # Post data
         posti=None
-
         if request.method == 'POST':
                 posti=request.POST
         # Kisa formi
@@ -69,17 +68,27 @@ def maaritaValitseTehtava(request,kisa_nimi):
         """
         Valitsee tehtävän määritettäväksi.
         """
+        # Post data
+        posti=None
+        if request.method == 'POST':
+                posti=request.POST
+
         sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
         taulukko = []
         for s in sarjat :
-                taulut = Tehtava.objects.filter(sarja = s )
-                for taulu in taulut :
-                        taulu.linkki = str(taulu.id)+"/"
-                        taulu.nimi = unicode(taulu.jarjestysnro)+u" "+unicode(taulu.nimi)
-                taulut.otsikko=s.nimi
-                taulut.id=s.id
-                taulukko.append(taulut)
-        return render_to_response('tupa/maaritaValitseTehtava.html', 
+                formsetti = TehtavaLinkkilistaFormset(posti, queryset=Tehtava.objects.filter(sarja = s ) )
+                formsetti.otsikko=s.nimi
+                formsetti.id=s.id
+
+                if posti and formsetti.is_valid():
+                        formsetti.save()
+                else :
+                        taulukko.append(formsetti)
+        
+        if posti :
+                return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/tehtava/")
+        else:
+                return render_to_response('tupa/maaritaValitseTehtava.html', 
                                         { 'taulukko' : taulukko,
                                         'heading' : "Valitse tehtävä",
                                         'taakse' : "/tupa/"+kisa_nimi+"/" })
