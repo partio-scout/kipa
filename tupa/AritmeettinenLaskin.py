@@ -39,7 +39,7 @@ def laskeSuluilla(lauseke):
         muokattu=re.sub(r"((\d+\.)?\d+)",r"Decimal('\g<1>')",lauseke)
         tulos=""
         try:
-                tulos = str(eval(muokattu))
+                tulos = str(eval(muokattu).quantize(Decimal('0.00001')))
         except DivisionByZero :
                 return None
         return tulos
