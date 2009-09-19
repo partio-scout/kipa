@@ -506,3 +506,12 @@ def tulostaSarjaPDF(request,kisa_nimi,sarja_id):
 	c.save()
 	return response
 
+def tulostaSarjaHTML(request, kisa_nimi, sarja_id) :
+        """
+        Sarjan tulokset, sivu muotoiltuna tulostusta varten, ilman turhia grafiikoita.
+        """
+        sarja = Sarja.objects.get(id=sarja_id)
+        lokkeri.clearLog()
+        tulokset= sarja.laskeTulokset()
+        return render_to_response('tupa/tuloksetHTML.html', {'tulos_taulukko' : tulokset }  )
+
