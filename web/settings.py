@@ -8,7 +8,8 @@ TEMPLATE_DEBUG = DEBUG
 LOGGING=True
 if not hakemisto == tarkistus :
         #Viittaisi siihen etta kyseessa on apachen alta toimiva joten pakotetaan debugit pois
-        DEBUG=False
+        LOGGING=False
+        DEBUG=True
         TEMPLATE_DEBUG = False
 
 ADMINS = (

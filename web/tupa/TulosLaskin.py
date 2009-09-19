@@ -26,7 +26,10 @@ erikoisFunktiot = {
         "kesk" : "self.keskiarvo" , 
         "pienin" : "self.pienin" , 
         "suurin" : "self.suurin" ,
-        "itseisarvo" : "self.itseisarvo" , 
+        "itseisarvo" : "self.itseisarvo" ,
+        "aikavali" : "self.aikavali",
+        "med_aikavali" : "self.med_aikavali",
+        "min_aikavali" : "self.min_aikavali",
         }
 def parsiSulku(lause) :
         """
@@ -40,6 +43,7 @@ def parsiSulku(lause) :
         if haku :
              return (haku.group(1),haku.group(2),haku.group(3))
         else : return None
+
        
 def stringDecimaaliksi(merkkijono) :
         """
@@ -97,17 +101,6 @@ def pilkoParametreiksi(merkkijono):
         else: 
                 return [merkkijono]
 
-def getMedian(numericValues):
-        if not len(numericValues):
-                return None
-        theValues = sorted(numericValues)
-        if len(theValues) % 2 == 1:
-                return theValues[(len(theValues)+1)/2-1]
-        else:
-                lower = theValues[len(theValues)/2-1]
-                upper = theValues[len(theValues)/2]
-                return (Decimal(lower + upper)) / 2  
-
 class TulosLaskin :
         """
         Luokka jonka objektit laskevat tuloksia.
@@ -143,6 +136,7 @@ class TulosLaskin :
                         return pienin
                 else :
                         return arvo
+        
         def minmax(self,param):
                 """
                 Kolme parametriä: minimiarvo, maksimiarvo, ja arvo. Ne voivat olla lausekkeita.
@@ -163,13 +157,12 @@ class TulosLaskin :
                           3.maxP = Jaettavat maksimipisteet
                           4.aNolla = arvo jolla saa nollat
                 """
-                a=param[0]
-                aMax=param[1]
+                a = param[0]
+                aMax = param[1]
                 maxP = param[2]
-                aNolla=param[3]
-                
+                aNolla= param[3]
                 #(maxP/(aMax-aNolla))*(a-aNolla)
-                kaava="minmax(0,"+maxP+",("+maxP+"/("+aMax+"-"+aNolla+"))*("+a+"-"+aNolla+ "))"
+                kaava="minmax(0,"+maxP+",("+maxP+"/("+aMax+"-"+aNolla+"))*("+a+"-"+aNolla+"))"
                 lokkeri.setMessage( kaava ).logMessage()
                 return kaava
 
@@ -180,13 +173,23 @@ class TulosLaskin :
                 Mediaaniin ei oteta mukaan ulkopuolella olevien vartioiden syötteitä. 
                 """
                 if 'med_'+param[0] in self.optimoinnit:
-                        #Optimointi: mediaani lasketaan vain kerran saman tehtävän sisällä
+                        # Optimointi: mediaani lasketaan vain kerran saman tehtävän sisällä
                         return self.optimoinnit['med_'+param[0]]
                 kaava=param[0]
                 tulokset = self.laske_mukana_oleville(kaava)                
-                md= str(getMedian(tulokset))
-                self.optimoinnit['med_'+param[0]]=md
-                return md
+                def getMedian(numericValues):
+                        if not len(numericValues):
+                                return None
+                        theValues = sorted(numericValues)
+                        if len(theValues) % 2 == 1:
+                                return theValues[(len(theValues)+1)/2-1]
+                        else:
+                                lower = theValues[len(theValues)/2-1]
+                                upper = theValues[len(theValues)/2]
+                        return (Decimal(lower + upper)) / 2  
+                mediaani= str(getMedian(tulokset))
+                self.optimoinnit['med_'+param[0]]=mediaani
+                return mediaani
 
         def keskiarvo(self,param):
                 """
@@ -195,7 +198,7 @@ class TulosLaskin :
                 Keskiarvoon ei oteta tehtävässä ulkopuolella olevien vartoiden syötteitä.
                 """
                 assert 0
-        
+
         def suurin(self,param):
                 """
                 Yksi parametri: Kaava jonka tuloksista haetaan suurin arvo.
@@ -212,24 +215,7 @@ class TulosLaskin :
                 self.optimoinnit['suurin_'+param[0]]=sarvo
                 return sarvo
 
- 
-        def pienin(self,param):
-                """
-                Yksi parametri: Tehtävän syötteiden nimi joista haetaan pienin arvo.
-                Palauttaa mukana olevista vartioista pienimmän. mikäli syötteitä ei löydy ollenkaan, palauttaa None
-                Pienintä arvoa ei lasketa tehtävässä ulkopuolella olevien vartioiden syötteistä.
-                """
-                if 'pienin_'+param[0] in self.optimoinnit:
-                        # Optimointi: pienin haetaan vain kerran samassa tehtavassa
-                        return self.optimoinnit['pienin_'+param[0]]
-                kaava=param[0]
-                tulokset = self.laske_mukana_oleville(kaava)                
-                if len(tulokset)==0:
-                        return None
-                parvo = str(min(tulokset))
-                self.optimoinnit['pienin_'+param[0]]=parvo
-                return parvo
-
+        
         def laske_mukana_oleville(self,kaava):
                 """
                 laskee kaavan tulokset kaikille osatehtavassa mukana oleville vartiolle 
@@ -238,8 +224,7 @@ class TulosLaskin :
                 """
                 vartiot = self.teht.mukanaOlevatVartiot()
                 tulokset=[]
-                vMuuttujat= self.muuttujaKirja.copy()
-                #print vMuuttujat
+                vMuuttujat=self.muuttujaKirja.copy()
                 for v in vartiot:
                         self.muuttujaKirja=vMuuttujat.copy()
                         maaritteet = self.osa_teht.syotemaarite_set.all()
@@ -256,6 +241,24 @@ class TulosLaskin :
                 self.muuttujaKirja=vMuuttujat.copy()
                 return tulokset
 
+        def pienin(self,param):
+                """
+                Yksi parametri: Tehtävän syötteiden nimi joista haetaan pienin arvo.
+                Palauttaa mukana olevista vartioista pienimmän. mikäli syötteitä ei löydy ollenkaan, palauttaa None
+                Pienintä arvoa ei lasketa tehtävässä ulkopuolella olevien vartioiden syötteistä.
+                """
+                if 'pienin_'+param[0] in self.optimoinnit:
+                        # Optimointi: pienin haetaan vain kerran samassa tehtavassa
+                        return self.optimoinnit['pienin_'+param[0]]
+                kaava=sijoitaMuuttujat(param[0],self.muuttujaKirja)
+                #kaava=param[0]
+                tulokset = self.laske_mukana_oleville(kaava)                
+                if len(tulokset)==0:
+                        return None
+                parvo = str(min(tulokset))
+                self.optimoinnit['pienin_'+param[0]]=parvo
+                return parvo
+
 
         def itseisarvo(self,param) :
                 """
@@ -264,27 +267,32 @@ class TulosLaskin :
                 """
                 parametri = self.laske(param[0])
                 return unicode( abs( Decimal( parametri ) ) )
+        def aikavali(self,param) :
+                arvoa=self.laske(param[0])
+                arvob=self.laske(param[1])
+                if is_number(arvoa) and is_number(arvob):
+                        lukua = Decimal(arvoa)
+                        lukub = Decimal(arvob)
+                else :
+                        return None
+                if lukua > lukub :
+                        lukub = lukub + 24*60*60
+                return str(lukub)+"-"+str(lukua)
 
         def suoritaFunktio(self,funktionNimi,parametrit) :
                 """
                 Suorittaa nimetyn erikoisfunktion
                 Antaa funktiolle parametit merkkijonosta, jossa parametrit on eroteltu pilkulla.
                 """
+                log_r_alku = funktionNimi +"("+ parametrit +") = "
                 listaParametreista= pilkoParametreiksi( parametrit )
                 for p in listaParametreista :
                         if len(p.strip()) == 0 :
                                 return None
                         p = self.laske(p)
                 tulos = unicode(eval( erikoisFunktiot[funktionNimi] + "(listaParametreista)" ) )
+                lokkeri.setMessage( log_r_alku + tulos ).logMessage()
                 return tulos
-        def sioitus(param):
-                """
-                Kertoo lausekkeen sioituksen lasketulla lausekkella. mitä pienempi tulos sen parempi.
-                -1 parametri. syöte tai lauseke jonka pohjalta sijoitetaan.
-                """
-                return self.teht.sijoitus(param[0],)
-                
-
         def haeFunktio(self , lause):
                 """
                 Hakee seuraavan funktiokirjasta löytyvän funktion lauseesta.
@@ -293,7 +301,7 @@ class TulosLaskin :
                 palauttaa ("5+5+5*","Funktio")
                 jos funktiota ei löydy palauttaa None
                 """
-                funktioHaku= "(\A|.*[-+*/(),])("
+                funktioHaku= "(^|.*[-+*/(),])("
                 if self.funktioKirja:
                         for i, j in self.funktioKirja.iteritems():  
                                 funktioHaku=funktioHaku+i+"$"+"|"
@@ -320,7 +328,7 @@ class TulosLaskin :
                         funktio=self.haeFunktio( parsittu[0] )
                         if funktio:
                                 tulos = self.suoritaFunktio( funktio[1] , parsittu[1])
-                                muokattu= funktio[0] + tulos + parsittu[2]
+                                muokattu= unicode(funktio[0]) + unicode(tulos) + unicode(parsittu[2])
                         else:
                                 laskettava=parsittu[1]
                                 if self.muuttujaKirja:
@@ -337,8 +345,7 @@ class TulosLaskin :
                 -Laskee sulkujen mukaan */ ensin sitten +-.
                 -Mikäli lauseke oli laskettavissa palauttaa tuloksen. Muussa tapauksessa None.
                 """
-                muokattu=kaava.rstrip(
-)
+                muokattu=kaava
                 # Suoritetaan sulkeet:
                 sulkuja = muokattu.count("(") 
                 while sulkuja:
@@ -367,16 +374,19 @@ class TulosLaskin :
                         self.osa_teht=osa
                         osa_muuttujat=[]
                         
+                        #osa_parametrit=[]
+
                         # Lisätään tehtävän parametri muuttujat.
                         for parametri in osa.parametri_set.all():
                                 osa_muuttujat.append( (parametri.nimi,parametri.arvo) )
-                        osa_kaava=sijoitaMuuttujat(osa.kaava,dict(osa_muuttujat))
+                                lokkeri.setMessage( "p: "+parametri.nimi +" = " + parametri.arvo ).logMessage()
+                        osa_kaava = sijoitaMuuttujat(osa.kaava.replace(" ",""),dict(osa_muuttujat))
                         
                         # Lisätään vartion syötteet.
                         for maarite in osa.syotemaarite_set.all():
                                 for syote in maarite.syote_set.filter(vartio=self.vartio) :
+                                        lokkeri.setMessage( "s: "+maarite.nimi +" = " + syote.arvo ).logMessage()
                                         osa_muuttujat.append( (maarite.nimi,syote.arvo) )
-                        
                         self.muuttujaKirja = dict(osa_muuttujat)
                         
                         if osa.kaava=="ss":

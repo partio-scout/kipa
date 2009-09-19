@@ -173,8 +173,8 @@ def syotaKisa(request, kisa_nimi):
         taulukko = []
         for s in sarjat :
                 tehtavat = s.tehtava_set.all()
-        for t in tehtavat:
-                t.linkki = "tehtava/"+str(t.id)+"/" 
+                for t in tehtavat:
+                        t.linkki = "tehtava/"+str(t.id)+"/" 
                 tehtavat.id=s.id
                 tehtavat.otsikko=s.nimi
                 taulukko.append( tehtavat )
@@ -257,6 +257,47 @@ def testiTulos(request, kisa_nimi):
         return render_to_response('tupa/testitulos.html',
                         { 'taulukko' : taulukko ,
                         'heading' : "Testi tuloksien määritys" ,
+                        'taakse' : "../../" })
+
+def tuomarineuvos(request, kisa_nimi):
+        """
+        Määrittää kisalle testitulokset. Eli ns "oikeat" tulokset, 
+        joita voidaan testeissä verrata laskennan tuottamiin tuloksiin.
+        """
+        taulukko=[]
+        sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
+        taulukko = []
+        posti=None
+        if request.method == 'POST':
+                posti=request.POST
+        
+        validi=True
+        for s in sarjat :
+                taulut=s
+                taulut.tiedot=Vartio.objects.filter(sarja=s)
+                tehtavat=Tehtava.objects.filter(sarja = s )
+
+                for v in taulut.tiedot:
+                        v.tehtavat=tehtavat
+                        v.formit=[]
+                        for t in tehtavat:
+                                formi=TuomarineuvosForm(posti,
+                                                v,
+                                                t,
+                                                prefix=kisa_nimi+s.nimi+t.nimi+v.nimi)
+                                if formi.is_valid():
+                                        formi.save()
+                                else :
+                                        validi=False
+                                v.formit.append( formi )
+                taulut.otsikko=s.nimi
+                taulut.id=s.id
+                taulukko.append(taulut)
+        if posti and validi:
+                return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/tuomarineuvos/")
+        return render_to_response('tupa/testitulos.html',
+                        { 'taulukko' : taulukko ,
+                        'heading' : "Tuomarineuvos tuloksien määritys" ,
                         'taakse' : "../../" })
 
 def tulostaSarja(request, kisa_nimi, sarja_id) :

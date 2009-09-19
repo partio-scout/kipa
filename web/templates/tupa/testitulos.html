@@ -3,16 +3,16 @@
 {% block sarake %} 
 	<table width="600" border="1">
         <tr>
-        <th></th>
+        <td></td>
                 {% for kentta in sarake.tiedot.0.tehtavat %}
-                        <th>
+                        <td>
                                 {{ kentta.nimi }}
-                        </th>
+                        </td>
                 {% endfor %}
         </tr>
 		{% for rivi in sarake.tiedot %}
                 <tr>
-                <th>{{rivi.nimi}}</th>
+                <td>{{rivi.nimi}}</td>
 			    {% for kentta in rivi.formit%}
 			         <td>{{ kentta.pisteet }}{{kentta.errors}}</td>
 			    {% endfor %}    

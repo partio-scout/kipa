@@ -76,112 +76,100 @@ class AikaBRWidget(AikaWidget):
                 muokattu = muokattu.replace("</p>","")
                 return SafeUnicode(muokattu + "<br>")
 
-class OsaTehtavaParametri(forms.Form):
-        
-        label="parametri"
-        def __init__(self,posti,osaTehtava,*argv,**argkw ):
-                super(forms.Form,self).__init__(posti,*argv,**argkw)
-                self.osaTehtava=osaTehtava
-        class Meta:
-                model=Parametri
-
-
-class KisaPiste(ModelForm):
-        """
-        Formi Kisapiste osatehtavan tarvittaan syotteen maaritteen tekoon
-        """
-        kali_vihje=forms.CharField(label="Syotteen kuvaus",widget=TextBRWidget)
+class PisteMaariteForm(ModelForm):
+        kali_vihje=forms.CharField(label="Syotteen kuvaus",widget=TextBRWidget,required=True)
         minArvo=forms.CharField(label="Sallitut Arvot",required=False)
         maxArvo=forms.CharField(label=" - ",required=False)
-        label="Kisapisteita"
-
-        def __init__(self,posti,osaTehtava,*argv,**argkw ):
-                """
-                kaksi pakollista parametria
-                -post_data
-                -osaTehtava jolle maaritetta tehdaan
-                """
-                sm= SyoteMaarite.objects.get_or_create(nimi="a",osa_tehtava=osaTehtava )[0]
-                if osaTehtava.tyyppi== "kp" :
-                        super(KisaPiste,self).__init__(posti,instance=sm,*argv,**argkw)
-                else :
-                        super(KisaPiste,self).__init__(posti,instance=SyoteMaarite(pk=sm.pk),*argv,**argkw)
-                self.osaTehtava=osaTehtava
-        def save(self,commit=True):
-                maarite=super(KisaPiste,self).save(commit=False)
-                maarite.nimi = "a"
-                maarite.tyyppi = "piste"
-                maarite.osa_tehtava = self.osaTehtava
-                return maarite.save()
-        def __unicode__(self):
-                html=self.as_p()
-                muokattu=html.replace("<p>","")
-                muokattu=muokattu.replace("</p>","")
-                return SafeUnicode(muokattu)
+        maarite_tyyppi="piste"
+        maarite_nimi="a"
+        tyyppi="osatehtavan tyyppi"
         class Meta:
                 fields=("kali_vihje","minArvo","maxArvo")
                 model=SyoteMaarite
 
-class RaakaPiste(ModelForm):
-        kali_vihje=forms.CharField(label="Syotteen kuvaus",widget=TextBRWidget)
-        minArvo=forms.CharField(label="Sallitut Arvot",required=False)
-        maxArvo=forms.CharField(label=" - ",required=False)
-        label="Raakapisteita"
-        def __init__(self,posti,osaTehtava,*argv,**argkw ):
-                sm= SyoteMaarite.objects.get_or_create(nimi="a",osa_tehtava=osaTehtava )[0]
-                if osaTehtava.tyyppi== "rp" :
-                        super(ModelForm,self).__init__(posti,instance=sm,*argv,**argkw)
-                else :
-                        super(ModelForm,self).__init__(posti,instance=SyoteMaarite(pk=sm.pk,tyyppi="piste"),*argv,**argkw)
-                self.osaTehtava=osaTehtava
-        
-        def save(self,commit=True):
-                maarite = super(ModelForm,self).save(commit=False)
-                maarite.nimi="a"
-                maarite.tyyppi = "piste"
-                maarite.osa_tehtava = self.osaTehtava
-                maarite.save()
-        def __unicode__(self):
-                html=self.as_p()
-                muokattu=html.replace("<p>","")
-                muokattu=muokattu.replace("</p>","")
-                return SafeUnicode(muokattu)
-        class Meta:
-                fields=("kali_vihje","minArvo","maxArvo")
-                model=SyoteMaarite
-
-class KokonaisAika(RaakaPiste):
-        label="Kokonaisaika"
-        def __init__(self,posti,osaTehtava,*argv,**argkw ):
-                sm= SyoteMaarite.objects.get_or_create(nimi="a",osa_tehtava=osaTehtava )[0]
-                if osaTehtava.tyyppi== "ka" :
-                        super(ModelForm,self).__init__(posti,instance=sm,*argv,**argkw)
-                else :
-                        super(ModelForm,self).__init__(posti,instance=SyoteMaarite(pk=sm.pk,tyyppi='aika'),*argv,**argkw)
+        def __init__(self,posti,osaTehtava,*argv,**argkw ): 
+                if osaTehtava.tyyppi==self.tyyppi :
+                        try:
+                                sm= SyoteMaarite.objects.get(nimi=self.maarite_nimi,osa_tehtava=osaTehtava)
+                                super(PisteMaariteForm,self).__init__(posti ,instance=sm,*argv,**argkw)
+                        except SyoteMaarite.DoesNotExist :
+                                super(PisteMaariteForm,self).__init__(posti,*argv,**argkw)
+                else:
+                        super(PisteMaariteForm,self).__init__(posti,*argv,**argkw)
                 self.osaTehtava=osaTehtava
 
         def save(self):
-                maarite = super(ModelForm,self).save(commit=False)
-                maarite.nimi="a"
-                maarite.tyyppi = "aika"
-                maarite.osa_tehtava = self.osaTehtava
-                maarite.save()
+                        sm=None
+                        try:
+                                sm= SyoteMaarite.objects.get(nimi=self.maarite_nimi,osa_tehtava=self.osaTehtava)
+                        except SyoteMaarite.DoesNotExist :
+                                sm=None
 
+                        maarite=super(ModelForm,self).save(commit=False)
+                        if sm : maarite.pk = sm.pk
+                        maarite.nimi = self.maarite_nimi
+                        maarite.tyyppi = self.maarite_tyyppi
+                        maarite.osa_tehtava = self.osaTehtava
+                        maarite.save()
+                        return maarite
+
+        def __unicode__(self):
+                html=self.as_p()
+                muokattu=html.replace("<p>","").replace("</p>","")
+                return SafeUnicode(muokattu)
+
+class KisaPisteForm(PisteMaariteForm):
+        tyyppi="kp"
+        label="Kisapisteita"       
+        #def save(self):
+        #        poistettavat_maaritteet= SyoteMaarite.objects.filter(osa_tehtava=self.osaTehtava).exclude(nimi=self.maarite_nimi)
+        #        poistettavat_maaritteet.delete()
+        #        return super(PisteMaariteForm,self).save()
+        
+class RaakaPisteForm(PisteMaariteForm):
+        tyyppi="rp"
+        label="Raakapisteita"   
+
+class AikaForm(PisteMaariteForm) : 
+        tyyppi="ka"
+        minArvo=forms.CharField(widget=forms.HiddenInput(),required=False)
+        maxArvo=forms.CharField(widget=forms.HiddenInput(),required=False)
+        maarite_tyyppi="aika"
+        label="Kokonaisaika"  
+
+class AlkuaikaForm(AikaForm) :
+        tyyppi="ala"
+        kali_vihje=forms.CharField(label="Syotteen 1 kuvaus: (esim. alkuaika)",widget=TextBRWidget)
+
+class LoppuaikaForm(AikaForm) :
+        tyyppi="ala"
+        maarite_nimi="b"
+        kali_vihje=forms.CharField(label="Syotteen 2 kuvaus: (esim. loppuaika)",widget=TextBRWidget)
 
 class AlkuLoppuAika(forms.Form):
-        alkuaika=forms.CharField(label="Alkuajan kuvaus: (esim. alkuaika)",widget=TextBRWidget)
-        loppuaika=forms.CharField(label="Loppuajan kuvaus: (esim. loppuaika)")
+        tyyppi="ala"
         label="Alkuaika ja loppuaika"
         def __init__(self,posti,osaTehtava,*argv,**argkw ):
-                super(forms.Form,self).__init__(posti,*argv,**argkw)
-                self.alkuaika=KokonaisAika(posti,osaTehtava)
-
+                super(forms.Form,self).__init__(*argv,**argkw)
+                prefixi=""
+                if argkw['prefix']: prefixi = argkw['prefix']
+                argkw['prefix']='alkuaika_'+prefixi
+                self.alkuaika=AlkuaikaForm(posti,osaTehtava,*argv,**argkw  )
+                argkw['prefix']="loppuaika_"+prefixi
+                self.loppuaika=LoppuaikaForm(posti,osaTehtava,*argv,**argkw )
+                self.osaTehtava=osaTehtava
         def save(self):
-                self.alkuaika.save()      
+                print self.tyyppi
+                print self.osaTehtava.tyyppi +"\n"
+                if self.tyyppi==self.osaTehtava.tyyppi:
+                        self.alkuaika.save()
+                        self.loppuaika.save()
+        def is_valid(self):
+                return self.alkuaika.is_valid() and self.loppuaika.is_valid()
         def __unicode__(self):
-                return self.alkuaika.__unicode__()
+                return self.alkuaika.__unicode__()+self.loppuaika.__unicode__()
 
-class VapaaKaava(OsaTehtavaParametri):
+class VapaaKaava(forms.Form):
         kaava = forms.CharField()
         def __unicode__(self,*args, **kwargs):
                 return SafeUnicode(render_to_string("tupa/forms/vapaa_kaava.html", {'form': self}))
@@ -305,10 +293,10 @@ class NollaSuoritus(forms.Form):
 class NollaAika(NollaSuoritus):
         kiintea= AikaField(label="kiintea suoritus",widget=AikaWidget,required=False)
 
-class Arviointi(OsaTehtavaParametri):
+class Arviointi(forms.Form):
         help_text="""Jos kyseessa on tavallinen tehtava, tata ei valita. Mikali kyseessa on arivointitehtava, tulee tassa ilmoittaa tehtavan oikea vastaus. Talloin vartioiden suoritukset taman arvon molemmin puolin ovat samanarvoisia."""        
-        kaytossa=forms.BooleanField()
-        oikea=forms.CharField(label="Oikea vastaus",help_text=help_text)
+        kaytossa=forms.BooleanField(required=False)
+        oikea=forms.CharField(label="Oikea vastaus",help_text=help_text,required=False)
         label="Arviointi"
         def __unicode__(self):
                 
@@ -354,30 +342,30 @@ class OsaTehtavaForm(ModelForm) :
                                                 prefix="maksimi_suoritus_"+prefixID ) )
                                 parametrit[-1].append( NollaSuoritus( posti,self.instance,
                                                 prefix="nolla_suoritus_"+prefixID ) )
-                                parametrit[-1].append( Arviointi( posti,self.instance,
-                                                prefix="arviointi_"+prefixID ) )
+                                #parametrit[-1].append( Arviointi( posti,self.instance,
+                                #                prefix="arviointi_"+prefixID ) )
                         # KisaPiste
                         prefixID="kp_"+self.prefix
                         self.parametrit=test()
-                        self.parametrit.append( test([KisaPiste( posti,self.instance ,prefix=prefixID )]) )
+                        self.parametrit.append( test([KisaPisteForm( posti,self.instance ,prefix=prefixID )]) )
                         self.parametrit[-1].id=prefixID
                         self.parametrit[-1].otsikko="Kisapiste"
                         # RaakaPiste
                         prefixID="rp_"+self.prefixID
-                        self.parametrit.append( test([RaakaPiste( posti,self.instance ,prefix=prefixID),]) )
+                        self.parametrit.append( test([RaakaPisteForm( posti,self.instance ,prefix=prefixID),]) )
                         lisaaMaxNolla( self.parametrit,prefixID )
                         self.parametrit[-1].id=prefixID
                         self.parametrit[-1].otsikko="Raakapiste"
                         # KokonaisAika
                         prefixID="ka_"+self.prefixID
-                        self.parametrit.append( test([KokonaisAika( posti,self.instance ,prefix=prefixID),]) )
+                        self.parametrit.append( test([AikaForm( posti,self.instance ,prefix=prefixID),]) )
                         #lisaaMaxNolla( self.parametrit,prefixID )
                         self.parametrit[-1].append( MaksimiAika( posti,self.instance, 
                                                 prefix="maksimi_suoritus_"+prefixID ) )
                         self.parametrit[-1].append( NollaAika( posti,self.instance,
                                                 prefix="nolla_suoritus_"+prefixID ) )
-                        self.parametrit[-1].append( Arviointi( posti,self.instance,
-                                                prefix="arviointi_"+prefixID ) )
+                        #self.parametrit[-1].append( Arviointi( posti,self.instance,
+                        #                        prefix="arviointi_"+prefixID ) )
 
                         self.parametrit[-1].id=prefixID
                         self.parametrit[-1].otsikko="Kokonaisaika"
@@ -416,12 +404,19 @@ class OsaTehtavaForm(ModelForm) :
                         osatehtava.kaava="interpoloi(a,aMax,maxP,nolla_kerroin*nolla)"
 
                         if osatehtava.tyyppi=="ala":
+
                                 # Alku ja loppu aika (loppuaika-alkuaika)
-                                maksimiKaava.arvo="a-b"
-                                nollaKaava.arvo="a-b"
-                                osatehtava.kaava="interpoloi(a-b,aMax,maxP,nolla_kerroin*nolla)"
+                                maksimiKaava.arvo="b-a"
+                                nollaKaava.arvo="b-a"
+                                osatehtava.kaava="interpoloi(b-a,aMax,maxP,nolla_kerroin*nolla)"
+                
                         maksimiKaava.save()
                         nollaKaava.save()
+
+                if not osatehtava.tyyppi=="ala":
+                        p_maaritteet= SyoteMaarite.objects.filter(osa_tehtava=osatehtava).exclude(nimi="a")
+                        p_maaritteet.delete()
+
                 osatehtava.save()
         def __unicode__(self) :
                 tab_id = "ot_tab_id_" + self.prefixID
@@ -476,7 +471,8 @@ class TehtavaForm(ModelForm):
         else:   pass
         return tehtava
     def __unicode__(self) :
-                return render_to_string("tupa/forms/tehtava.html", {'form': self, 'osa_tehtavat' : self.osaTehtavaFormit})
+                return render_to_string("tupa/forms/tehtava.html", {'form': self, 
+                                                'osa_tehtavat' : self.osaTehtavaFormit})
     class Meta:
         fields =  ('nimi', 'jarjestysnro','kaava')
         model = Tehtava

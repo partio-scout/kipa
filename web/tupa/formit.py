@@ -117,7 +117,7 @@ class PisteSyoteForm(ModelForm):
                 model = Syote
 
 class AikaSyoteForm(PisteSyoteForm) :
-        arvo=AikaField(required=False,widget=AikaWidget( attrs={'class': 'TCMask[##:##:##]','value': '##:##:##'} ))
+        arvo=AikaField(required=False,widget=AikaWidget( attrs={'class': 'TCMask[##:##:##]','value': ''} ))
            
 def SyoteForm(*argv,**argkw) :
         if argv[0].tyyppi=="aika":
@@ -126,7 +126,7 @@ def SyoteForm(*argv,**argkw) :
                 return PisteSyoteForm(*argv,**argkw)
 
 class TestiTulosForm(ModelForm):
-        pisteet=pisteet = forms.CharField(required=False)
+        pisteet = forms.CharField(required=False,widget=forms.TextInput(attrs={'size':'4'} ))
 
         def __init__(self,posti,vartio,tehtava,*argv,**argkw) :
                 objekti=None
@@ -149,6 +149,31 @@ class TestiTulosForm(ModelForm):
         class Meta:
                 fields=("pisteet")
                 model = TestausTulos
+
+class TuomarineuvosForm(ModelForm):
+        pisteet = forms.CharField(required=False,widget=forms.TextInput(attrs={'size':'4'} ))
+
+        def __init__(self,posti,vartio,tehtava,*argv,**argkw) :
+                objekti=None
+                try : objekti=TuomarineuvosTulos.objects.get(vartio=vartio,tehtava=tehtava)
+                except TuomarineuvosTulos.DoesNotExist : pass
+                self.vartio=vartio
+                self.tehtava=tehtava
+                if objekti:
+                        super(ModelForm,self).__init__(posti,instance=objekti,*argv,**argkw)
+                else :
+                        super(ModelForm,self).__init__(posti,*argv,**argkw)
+        def save(self):
+                tulos = super(ModelForm,self).save(commit=False)
+                tulos.vartio=self.vartio
+                tulos.tehtava=self.tehtava
+                if tulos.pisteet == None or len(tulos.pisteet)==0  and tulos.id  : 
+                        tulos.delete()
+                else : tulos.save()
+                return tulos
+        class Meta:
+                fields=("pisteet")
+                model = TuomarineuvosTulos
 
 class KisaForm(ModelForm):
         class Meta:

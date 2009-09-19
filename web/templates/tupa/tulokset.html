@@ -13,8 +13,43 @@
 	<table width="100%" border="1">
 		{% for rivi in tulos_taulukko%}
                       <tr>
+                      
+                      <td>
+                      {%if forloop.first %}
+                      {% comment %} vasen ylanurkka {% endcomment %}
+                                sij.
+                      {% else %}
+                      {% comment %} vasen reuna {% endcomment %}
+                                {{forloop.counter0}}.
+                      {% endif %}
+                      </td>
+
 			    {% for sarake in rivi %}
-			         <td>{{ sarake }}</td>
+                     {% if forloop.parentloop.first %}
+                     {% comment %} ylarivi {% endcomment %}
+                                {% if forloop.first  %}
+                                        {% comment %} ylarivin eka {% endcomment %}
+                                        {{ sarake.nimi }} <td><b>vartio:</b></td>
+                                {% else %}
+                                        {% comment %} ylarivin eka {% endcomment %}
+                                        <td><b>{{ sarake }}</b></td>
+                                {% endif %}
+                     {% else %}
+                     {% if forloop.first  %}
+                     {% comment %} ekasarake {% endcomment %}
+                        <td><b>
+                                {{ sarake }}
+                        </b></td>
+                     {% else %}
+                     {% comment %} muut sarakkeet {% endcomment %}
+                        <td>
+                                {{ sarake }}
+                        </td>
+                     {% endif %}
+                     {% endif %}
+                     
+                     
+
 			    {% endfor %}    
 		      </tr>    
 		{% endfor %}
