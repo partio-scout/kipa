@@ -12,6 +12,26 @@
 {% if tulos_taulukko %}
 	<table width="100%" border="1">
 		{% for rivi in tulos_taulukko%}
+                      
+                      <tr>
+                {% for sarake in rivi %}
+                     {% if forloop.parentloop.first %}
+                     {% comment %} ylarivi {% endcomment %}
+                                {% if forloop.first  %}
+                                        {% comment %} ylarivin eka {% endcomment %}
+                                        <td> </td><td></td><td></td>
+                                {% else %}
+                                        {% comment %} ylarivi {% endcomment %}
+
+                                        <td><b>
+                                        {% if sarake.jarjestysnro %}
+                                                {{ sarake.jarjestysnro }}.t
+                                        {% endif %}
+                                        </b></td>
+                                {% endif %}
+                        {% endif %}
+			    {% endfor %}    
+                      </tr>
                       <tr>
                       
                       <td>
@@ -29,16 +49,16 @@
                      {% comment %} ylarivi {% endcomment %}
                                 {% if forloop.first  %}
                                         {% comment %} ylarivin eka {% endcomment %}
-                                        {{ sarake.nimi }} <td><b>vartio:</b></td>
+                                        {{ sarake.nimi }} <td><b>nro:</b></td><td><b>vartio:</b></td>
                                 {% else %}
-                                        {% comment %} ylarivin eka {% endcomment %}
-                                        <td><b>{{ sarake }}</b></td>
+                                        {% comment %} ylarivi {% endcomment %}
+                                        <td><b>{{sarake.nimi|slice:":4"}}</b></td>
                                 {% endif %}
                      {% else %}
                      {% if forloop.first  %}
                      {% comment %} ekasarake {% endcomment %}
-                        <td><b>
-                                {{ sarake }}
+                        <td><b> 
+                             {{ sarake.nro }}</b></td> <td>  {{ sarake }}</td>
                         </b></td>
                      {% else %}
                      {% comment %} muut sarakkeet {% endcomment %}
@@ -66,7 +86,7 @@
  None = laskentavirhe
 </p>
 </form>
-<p><a href="../tuloste/1/">Tulokset tulostusmuodossa</a></p>
+<p><a href="../tuloste/{{tulos_taulukko.0.0.id}}/">Tulokset tulostusmuodossa</a></p>
 
 <p><a href="../pdf/1/">Tulokset PDF-muodossa</a></p> <!-- MITEN SAAN TOHON YKKÖSEN TILALLE SARJA_ID:N? /JOONAS-->
 {% endblock %}

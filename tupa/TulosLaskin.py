@@ -247,11 +247,12 @@ class TulosLaskin :
                 Palauttaa mukana olevista vartioista pienimmän. mikäli syötteitä ei löydy ollenkaan, palauttaa None
                 Pienintä arvoa ei lasketa tehtävässä ulkopuolella olevien vartioiden syötteistä.
                 """
+                
                 if 'pienin_'+param[0] in self.optimoinnit:
                         # Optimointi: pienin haetaan vain kerran samassa tehtavassa
                         return self.optimoinnit['pienin_'+param[0]]
-                kaava=sijoitaMuuttujat(param[0],self.muuttujaKirja)
-                #kaava=param[0]
+                #kaava=sijoitaMuuttujat(param[0],self.muuttujaKirja)
+                kaava=param[0]
                 tulokset = self.laske_mukana_oleville(kaava)                
                 if len(tulokset)==0:
                         return None
@@ -370,12 +371,15 @@ class TulosLaskin :
                 osatehtavat = self.teht.osatehtava_set.all()
                 ssKaava = ""
                 muuttujat= []
+                tehtava_hylatty=True
+                syottamatta=True
                 for osa in osatehtavat :
                         self.osa_teht=osa
                         osa_muuttujat=[]
                         
                         #osa_parametrit=[]
-
+                        
+                        hylatty=False
                         # Lisätään tehtävän parametri muuttujat.
                         for parametri in osa.parametri_set.all():
                                 osa_muuttujat.append( (parametri.nimi,parametri.arvo) )
@@ -385,6 +389,12 @@ class TulosLaskin :
                         # Lisätään vartion syötteet.
                         for maarite in osa.syotemaarite_set.all():
                                 for syote in maarite.syote_set.filter(vartio=self.vartio) :
+                                        # hylatty
+                                        syottamatta = False
+                                        if syote.arvo == "h": 
+                                                hylatty = True
+                                        else: tehtava_hylatty=False
+
                                         lokkeri.setMessage( "s: "+maarite.nimi +" = " + syote.arvo ).logMessage()
                                         osa_muuttujat.append( (maarite.nimi,syote.arvo) )
                         self.muuttujaKirja = dict(osa_muuttujat)
@@ -401,10 +411,9 @@ class TulosLaskin :
                                 osaPiste= self.laske(osa_kaava)
                                 
 
-                        if osaPiste :
-                            if osaPiste == "h" :
+                        if hylatty :
                                 muuttujat.append( (osa.nimi,"0") )
-                            else :
+                        elif osaPiste :
                                 muuttujat.append( (osa.nimi,osaPiste) )
                                 muuttujat.append( (osa.nimi.upper(),osaPiste) )
 
@@ -413,6 +422,12 @@ class TulosLaskin :
                 ssKaava=ssKaava[:-1]
                 # Lasketaan tulos
                 tulos = None
+                
+                if syottamatta:
+                        return "S"
+                if tehtava_hylatty:
+                        lokkeri.setMessage( "Pisteet: H").logMessage()
+                        return "H"
                 if self.teht.kaava == "ss":
                         lokkeri.setMessage( "teht kaava: " + ssKaava ).logMessage()
                         tulos = self.laske(ssKaava) 
@@ -444,12 +459,15 @@ class TulosLaskin :
                                         pisteet= self.laskePisteet()
                                 
                                 # Pyöristys
-                                if pisteet and not pisteet == "S" and not pisteet == "K" :
-                                        pisteet= unicode(Decimal(pisteet).quantize(Decimal('0.1')))
+                                if pisteet and not pisteet == "S" and not pisteet == "K" and not pisteet=="H" :
+                                        pisteet= unicode(Decimal(pisteet).quantize(Decimal('0.1'),
+                                                                rounding=ROUND_HALF_UP ))
                                 #Tuomarineuvos ylimääritys
-                                tuomarineuvostonTulos=v.tuomarineuvostulos_set.filter(tehtava=t)
-                                if len( tuomarineuvostonTulos ) == 1:
-                                        pisteet =  tuomarineuvostonTulos[0].pisteet
+                                try:
+                                        tuomarineuvostonTulos=v.tuomarineuvostulos_set.get(tehtava=t)
+                                        pisteet =  tuomarineuvostonTulos.pisteet
+                                except ObjectDoesNotExist:
+                                        pass                               
 
                                 return pisteet
 

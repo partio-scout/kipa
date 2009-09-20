@@ -176,7 +176,7 @@ class VapaaKaava(forms.Form):
         label="Vapaa kaava"
 
 class MaksimiSuoritus(forms.Form):
-        parhaatChoices= (("p","pienin:"),("s","suurin:"),("k","kiitea:"))
+        parhaatChoices= (("p","pienin:"),("s","suurin:"),("k","kiintea:"))
         parhaat=  forms.ChoiceField(choices=parhaatChoices,widget=forms.RadioSelect)
         kiintea= forms.CharField(label="",widget=TextBRWidget,required=False)
         jaettavat = forms.CharField( )

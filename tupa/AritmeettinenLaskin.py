@@ -37,12 +37,15 @@ def laskeSuluilla(lauseke):
         # näin laskenta tapahtuu 10 järjestelmän mukaan,
         # eikä heksadesimaaleina kuten esim floatilla. 
         muokattu=re.sub(r"((\d+\.)?\d+)",r"Decimal('\g<1>')",lauseke)
-        tulos=""
+        tulos=None
         try:
-                tulos = str(eval(muokattu).quantize(Decimal('0.00001')))
+                tulos = eval(muokattu)
+                haku= re.search(r"\d+E[+-]\d+",str(tulos) ) 
+                if haku :
+                        tulos= tulos.quantize(Decimal('0.00001'))
         except DivisionByZero :
                 return None
-        return tulos
+        return str(tulos)
 
 def laske(kaava) :
         """

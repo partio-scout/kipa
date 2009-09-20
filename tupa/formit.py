@@ -35,7 +35,7 @@ class TehtavaLinkkilistaFormset(tuhoaTehtaviaFormset):
                         nimi=""
                         if form.instance:
                                 linkki=str(form.instance.id)+"/"
-                                nimi=str(form.instance.nimi)
+                                nimi=str(form.instance.jarjestysnro)+". "+str(form.instance.nimi)
                         piirto=piirto+"<a href="+linkki+">"+nimi+"</a>  "+form.as_p()+"<br>" 
                         piirto = piirto.replace("<p>","").replace("</p>","")
                 return SafeUnicode(piirto)
@@ -62,11 +62,15 @@ class AikaWidget(forms.TextInput):
 
 class PisteField(forms.FloatField) :
         """
-        Floatfield accepting "kesk"
+        Floatfield accepting "kesk",h
         """
         def clean(self, value) :
                 if value=="kesk":
                         return value
+                elif value=="h":
+                        return value
+                elif value=="H":
+                        return "h"
                 else:
                         return super(PisteField, self).clean(value)
 
@@ -84,6 +88,10 @@ class AikaField(forms.CharField):
                         return None
                 elif value=="kesk":
                         return value
+                elif value=="h":
+                        return "h"
+                elif value=="H":
+                        return "h"
                 else :
                         raise forms.ValidationError('Syota aikaa muodossa: (hh:mm:ss)')
 
