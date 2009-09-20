@@ -175,6 +175,7 @@ def syotaKisa(request, kisa_nimi):
                 tehtavat = s.tehtava_set.all()
                 for t in tehtavat:
                         t.linkki = "tehtava/"+str(t.id)+"/" 
+                        t.nimi = str(t.jarjestysnro)+". " + t.nimi 
                 tehtavat.id=s.id
                 tehtavat.otsikko=s.nimi
                 taulukko.append( tehtavat )

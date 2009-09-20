@@ -127,6 +127,7 @@ class Tehtava(models.Model) :
         def __unicode__(self) :
                 return self.nimi
         class Meta:
+                ordering=("jarjestysnro",)
                 verbose_name_plural = "Tehtavat"
 
 class Rata(models.Model) :
