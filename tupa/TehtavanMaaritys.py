@@ -77,7 +77,7 @@ class AikaBRWidget(AikaWidget):
                 return SafeUnicode(muokattu + "<br>")
 
 class PisteMaariteForm(ModelForm):
-        kali_vihje=forms.CharField(label="Syotteen kuvaus",widget=TextBRWidget,required=True)
+        kali_vihje=forms.CharField(label="Syotteen kuvaus",widget=TextBRWidget)
         minArvo=forms.CharField(label="Sallitut Arvot",required=False)
         maxArvo=forms.CharField(label=" - ",required=False)
         maarite_tyyppi="piste"
@@ -159,8 +159,6 @@ class AlkuLoppuAika(forms.Form):
                 self.loppuaika=LoppuaikaForm(posti,osaTehtava,*argv,**argkw )
                 self.osaTehtava=osaTehtava
         def save(self):
-                print self.tyyppi
-                print self.osaTehtava.tyyppi +"\n"
                 if self.tyyppi==self.osaTehtava.tyyppi:
                         self.alkuaika.save()
                         self.loppuaika.save()
@@ -169,10 +167,21 @@ class AlkuLoppuAika(forms.Form):
         def __unicode__(self):
                 return self.alkuaika.__unicode__()+self.loppuaika.__unicode__()
 
-class VapaaKaava(forms.Form):
-        kaava = forms.CharField()
+
+MaariteFormset = inlineformset_factory(OsaTehtava,SyoteMaarite,fields=("nimi","kali_vihje","tyyppi"),extra=3 )
+
+class VapaaKaava(MaariteFormset):
+        tyyppi="vk"
+        label="Alkuaika ja loppuaika"
+
+        kaava = forms.CharField(required = False)
+        def __init__(self,posti,osaTehtava,*argv,**argkw ):
+                super(MaariteFormset,self).__init__(posti,instance=osaTehtava,*argv,**argkw)
+                self.osaTehtava=osaTehtava
         def __unicode__(self,*args, **kwargs):
-                return SafeUnicode(render_to_string("tupa/forms/vapaa_kaava.html", {'form': self}))
+                return SafeUnicode(render_to_string("tupa/forms/vapaa_kaava.html", 
+                                                        {'form': self,
+                                                        "maariteFormset" : self }))
         label="Vapaa kaava"
 
 class MaksimiSuoritus(forms.Form):
@@ -308,7 +317,7 @@ class test(list) :
 
 class OsaTehtavaForm(ModelForm) :
         tyyppi= forms.ChoiceField(widget=PartRadioWidget("kp","tyyppi"),
-                                choices=OsaTehtava.OSA_TYYPIT,label="",required=False)
+                                choices=OsaTehtava.OSA_TYYPIT,label="",required=True)
         tyyppi_rp= forms.ChoiceField(widget=PartRadioWidget("rp","tyyppi"),
                                 choices=OsaTehtava.OSA_TYYPIT,label="",required=False)
         tyyppi_ka= forms.ChoiceField(widget=PartRadioWidget("ka","tyyppi"),
@@ -382,6 +391,20 @@ class OsaTehtavaForm(ModelForm) :
                         self.parametrit[-1].id=prefixID
                         self.parametrit[-1].otsikko="Vapaa Kaava"
                        
+        def clean(self):
+                cleaned_data = self.cleaned_data
+                if not 'tyyppi' in self.cleaned_data.keys() :
+                        raise forms.ValidationError("Muista ruksata osatehtavan tyyppi")
+
+                tyyppi=self.cleaned_data['tyyppi']
+                for param in self.parametrit:
+                        for p in param:
+                                # Talletetaan ainoastaan sellainen formi joita kaytetaan tassa tyypissa.
+                                if not p.is_valid() and re.match(".*?"+ tyyppi+".*?",p.prefix) :
+                                        raise forms.ValidationError("Syota kaikki pakolliset kohdat!")
+                return cleaned_data
+
+
         def save(self):
                 osatehtava=super(OsaTehtavaForm,self).save(commit=False)
                 for param in self.parametrit:
@@ -412,8 +435,8 @@ class OsaTehtavaForm(ModelForm) :
                 
                         maksimiKaava.save()
                         nollaKaava.save()
-
-                if not osatehtava.tyyppi=="ala":
+                
+                if not osatehtava.tyyppi=="ala" and not osatehtava.tyyppi=="vk" :
                         p_maaritteet= SyoteMaarite.objects.filter(osa_tehtava=osatehtava).exclude(nimi="a")
                         p_maaritteet.delete()
 
@@ -429,7 +452,7 @@ class OsaTehtavaForm(ModelForm) :
                 model = OsaTehtava
 
 class TehtavaForm(ModelForm):
-    kaava = forms.CharField(widget=forms.TextInput(attrs={'size':'40'} ) ,required=True)
+    kaava = forms.CharField(initial="ss",widget=forms.TextInput(attrs={'size':'40'} ) ,required=True)
     osatehtavia = forms.IntegerField(required=False)
     def __init__(self,posti,instance=None,sarja=None) :
         self.sarja=sarja
@@ -442,6 +465,13 @@ class TehtavaForm(ModelForm):
                 self.osaTehtavaFormit.append(OsaTehtavaForm(posti,instance=ot,prefix="osatehtava_"+str(ot.pk)))
 
         super(ModelForm,self).__init__(posti,instance=instance,initial={'osatehtavia': osatehtavia })
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        for ot in self.osaTehtavaFormit :
+                if not ot.is_valid():
+                        raise forms.ValidationError("Tarkista maaritys!")
+        return cleaned_data
+
     def save(self):
         tehtava = super(ModelForm,self).save(commit=False)
         tehtava.sarja=self.sarja

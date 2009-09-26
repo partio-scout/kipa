@@ -156,6 +156,10 @@ def TulosTestFactory(fixture_name):
                                                tulos = Decimal(tulos)
                                         if not vaadittava==None and is_number(vaadittava):
                                                 vaadittava = Decimal(vaadittava)
+                                        if tulos==None:
+                                                tulos="None"
+                                        if vaadittava==None:
+                                                vaadittava="None"
                                         if not tulos == vaadittava:
                                                 ilmoitus= virheilmoitus
                                                 ilmoitus=ilmoitus + "\nTehtava: " + t.tehtava.nimi
