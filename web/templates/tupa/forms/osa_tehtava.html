@@ -1,45 +1,12 @@
 {% extends "tupa/forms/valitse.html" %}
 
-
-{% for parametri in taulukko %}
-
-<tr >
-<td>
-{% ifequal "Kisapisteita" parametri.0.label %}
-        {{ form.tyyppi }}
-{% endifequal %}
-{% ifequal "Raakapisteita" parametri.0.label %}
-        {{ form.tyyppi_rp }}
-{% endifequal %}
-{% ifequal "Kokonaisaika" parametri.0.label %}
-        {{ form.tyyppi_ka }}
-{% endifequal %}
-{% ifequal "Alkuaika ja loppuaika" parametri.0.label %}
-        {{ form.tyyppi_ala }}
-{% endifequal %}
-{% ifequal "Vapaa kaava" parametri.0.label %}
-        {{ form.tyyppi_vk}}
-{% endifequal %}
-</td>
-<td>
-<fieldset>
-        <legend>{{ parametri.0.label }}</legend>
-        {% for kohta in parametri %}
-                <fieldset>
-                        {{ kohta }}
-                </fieldset>
-        {% endfor %}
-</fieldset>
-</td>
-</tr>
-{% endfor %}
-</table>
-
-
 {% block sarake %} 
 
 <table border="0">
 <tr >
+<td>
+       <font color=red><b> {{ form.tyyppi.errors }}</b></font>
+</td>
 <td>
 {% ifequal "Kisapisteita" sarake.0.label %}
         {{ form.tyyppi }}
@@ -59,15 +26,12 @@
 </td>
 <td>
 
-<fieldset>
-        <legend>{{ sarake.0.label }}</legend>
-
     {% for taulu in sarake %}
                 <fieldset>
+                        <legend> <b>{{taulu.label}}</b> </legend>
                         {{taulu}}
                 </fieldset>
     {% endfor %}
-</fieldset>
 </table>
 {% endblock%}
 

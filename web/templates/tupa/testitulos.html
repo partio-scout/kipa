@@ -10,6 +10,8 @@
                         </td>
                 {% endfor %}
         </tr>
+        <A href="/tupa/{{sarake.tiedot.0.sarja.kisa.nimi}}/luo/sarja/{{sarake.tiedot.0.sarja.id}}/testitulokset/">
+        luo testitulokset sarjalle </A><br>
 		{% for rivi in sarake.tiedot %}
                 <tr>
                 <td>{{rivi.nimi}}</td>

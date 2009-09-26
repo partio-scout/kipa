@@ -1,13 +1,10 @@
-            </legend><p>Syötteen 1 kuvaus: 
-              <input type="text" name="textfield7" id="textfield12" />
-            Viittaa kaavassa kirjaimella A</p>
-            <p>Syötteen 2 kuvaus:
-              <input type="text" name="textfield9" id="textfield23" />
-                Viittaa kaavassa kirjaimella B</p>
-            <p>Syötteen 3 kuvaus:
-              <input type="text" name="textfield10" id="textfield24" />
-
-                Viittaa kaavassa kirjaimella C</p>
+<fieldset>         
+                          
+                {{maariteFormset.management_form}} 
+                {% for form in maariteFormset.forms %}
+                       nimi{{ form.nimi }}syotteen kuvaus {{ form.kali_vihje }} {{form.tyyppi}}{{form.DELETE}}<br>
+                {% endfor %}
+</fieldset>
 <fieldset>
               <legend>Osatehtävän laskentakaava:</legend>
               <p>Tässä kerrotaan kaava, jonka mukaan syötteistä lasketaan osatehtävän pisteet. Syötteisiin viitataan kirjaimilla A-J. Jos kaavan tulos on negatiivinen, se muutetaan nollaksi, koska suorituksesta ei voi saada negatiivisia pisteitä.</p>

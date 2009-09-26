@@ -152,6 +152,7 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None):
         for ot in tehtavaForm.osaTehtavaFormit:
                 ot.otsikko=ot.instance.nimi
                 ot.id=ot.instance.id
+                ot.label="Osatehtava " + ot.instance.nimi.upper()
                 tabit.append ("ot_tab_id_" + str(ot.instance.id) )
                 taulukko.append(ot)
 
@@ -515,4 +516,30 @@ def tulostaSarjaHTML(request, kisa_nimi, sarja_id) :
         lokkeri.clearLog()
         tulokset= sarja.laskeTulokset()
         return render_to_response('tupa/tuloksetHTML.html', {'tulos_taulukko' : tulokset }  )
+
+def luoTestiTulokset(request,kisa_nimi,sarja_id):
+        """
+        Luo testitulokset valitulle sarjalle ja tallentaa ne kantaan
+        """
+        def haeTulos(sarjanTulokset, vartio, tehtava) :
+                """
+                Hakee Vartion pisteet tehtävälle määritellystä tulostaulukosta
+                """
+                for vart_nro in range(1,len(sarjanTulokset)-1) :
+                        for teht_nro in range(2,len(sarjanTulokset[vart_nro])):
+                                tulokset =sarjanTulokset[vart_nro][teht_nro]
+                                if sarjanTulokset[vart_nro][0] ==vartio and sarjanTulokset[0][teht_nro] ==tehtava:
+                                        return tulokset
+        
+        sarja = get_object_or_404(Sarja , id=sarja_id )
+        tulokset= sarja.laskeTulokset()
+        for t in sarja.tehtava_set.all() :
+                for v in sarja.vartio_set.all() :
+                        tulos = haeTulos( tulokset, v , t)
+                        tt , p = TestausTulos.objects.get_or_create(vartio=v,tehtava=t )
+                        tt.pisteet=str(tulos)
+                        print tulos
+                        tt.save()
+        return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/testitulos/" )
+        
 
