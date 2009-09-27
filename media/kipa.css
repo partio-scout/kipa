@@ -254,36 +254,13 @@ tr .odd:hover{
 }
 
 .etusivuloota {
-	/* ei käytössä, tarkoitus tuunata etusivun linkit laatikoihin*/
-	background-attachment: scroll;
-	background-color: white;
-	background-image: none;
-	background-position: 0% 0%;
-	background-repeat: repeat;
-	border-bottom-color: #cccccc;
-	border-bottom-style: solid;
-	border-bottom-width: 1px;
-	border-left-color-ltr-source: physical;
-	border-left-color-rtl-source: physical;
+	background-color: #EEE;
 	border-left-color-value: #cccccc;
-	border-left-style-ltr-source: physical;
-	border-left-style-rtl-source: physical;
 	border-left-style-value: solid;
-	border-left-width-ltr-source: physical;
-	border-left-width-rtl-source: physical;
 	border-left-width-value: 1px;
-	border-right-color-ltr-source: physical;
-	border-right-color-rtl-source: physical;
 	border-right-color-value: #cccccc;
-	border-right-style-ltr-source: physical;
-	border-right-style-rtl-source: physical;
 	border-right-style-value: solid;
-	border-right-width-ltr-source: physical;
-	border-right-width-rtl-source: physical;
 	border-right-width-value: 1px;
-	border-top-color: #cccccc;
-	border-top-style: solid;
-	border-top-width: 1px;
 	margin-bottom: 5px;
 	margin-left: 0pt;
 	margin-right: 0pt;
@@ -292,6 +269,7 @@ tr .odd:hover{
 	padding-left: 9px;
 	padding-right: 9px;
 	padding-top: 9px;
+	border: 1px solid #cccccc;
 }
 
 
