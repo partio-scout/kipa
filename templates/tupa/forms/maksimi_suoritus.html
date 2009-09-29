@@ -1,12 +1,16 @@
                 <p>
                 Tässä kerrotaan suoritus, jolla saa maksimipisteet. Tämä voi olla vartioiden suorituksista pienin, suurin tai jokin kiinteä luku. Kiinteää lukua käytetään arviointitehtävissä.
                 </p>
+                <font color=red><b> 
+                {{form.parhaat.errors}} 
+                </b></font>
                 Parhaat pisteet saa:{{form.parhaat|removetags:"li ul"|safe }}
                 <font color=red><b> 
                 {{form.kiintea.errors}} 
                 </b></font>
 
                 {{form.kiintea}} 
-                Montako kisapistetta jaetaan: {{form.jaettavat.errors}}               
+                 
+                <font color=red><b> {{form.jaettavat.errors}} </b></font>           
                 Montako kisapistetta jaetaan: {{form.jaettavat}}               
 
