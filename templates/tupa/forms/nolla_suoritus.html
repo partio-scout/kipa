@@ -16,8 +16,10 @@ Tässä kerrotaan suoritus, jolla saa nolla pistettä. Tämä voi olla jokin kii
                   <legend>Kiinteä</legend>
                   <p>
                   Kiinteä suoritus:
-                    {{form.kiintea.errors}}
-                    {{form.kiintea}}
+                        <font color=red><b>
+                        {{form.kiintea.errors}}
+                        </b></font>
+                        {{form.kiintea}}
                   </p>
                 </fieldset>
                   </td>
@@ -29,6 +31,9 @@ Tässä kerrotaan suoritus, jolla saa nolla pistettä. Tämä voi olla jokin kii
                 <legend>Kerroin</legend>
                    <p>
                         {{form.kerroin}}
+                        <font color=red><b>
+                      {{form.muu.errors}}
+                        </b></font>
                       {{form.muu}}
                     </p>
                 </fieldset>

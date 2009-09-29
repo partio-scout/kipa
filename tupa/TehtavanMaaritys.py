@@ -254,14 +254,22 @@ class NollaSuoritus(forms.Form):
         label="NollaSuoritus"
         def __init__(self,posti,osaTehtava,*argv,**argkw ):
                 assert osaTehtava
-                self.nolla = Parametri.objects.get_or_create(nimi="nolla",osa_tehtava=osaTehtava )[0]
+                self.osaTehtava=osaTehtava
+                self.nolla=None
+                try:
+                        self.nolla = Parametri.objects.get(nimi="nolla",osa_tehtava=osaTehtava )
+                except Parametri.DoesNotExist:
+                        pass
+                
                 self.nollaKerroin = Parametri.objects.get_or_create(nimi="nolla_kerroin",osa_tehtava=osaTehtava )[0]
                 aKiintea= None
                 aKerroin= None
                 aMuu = None
                 aValinta = None
-
-                rKerroin = re.match( r"med\((.*)\)$"   ,str(self.nolla.arvo) ) 
+                
+                nolla_arvo=None
+                if self.nolla : nolla_arvo=self.nolla.arvo
+                rKerroin = re.match( r"med\((.*)\)$"   ,str( nolla_arvo) ) 
                 if rKerroin :
                         if self.nollaKerroin.arvo=="1.5" or self.nollaKerroin.arvo=="0.5":
                                 aKerroin = self.nollaKerroin.arvo
@@ -271,7 +279,7 @@ class NollaSuoritus(forms.Form):
                         aValinta = "ke"
                 else :
                         aValinta = "ki"
-                        aKiintea= self.nolla.arvo
+                        aKiintea= nolla_arvo
  
                 aInitial= { }
                 if re.match(".*?"+osaTehtava.tyyppi+".*?",argkw['prefix']) :
@@ -285,16 +293,27 @@ class NollaSuoritus(forms.Form):
                         super(NollaSuoritus,self).__init__(posti,*argv,**argkw)
                 else:
                         super(NollaSuoritus,self).__init__(posti,initial=aInitial,*argv,**argkw)
-        def clean(self):
+        def clean_kiintea(self):
                 cleaned_data = self.cleaned_data
-                #if  "valinta" in self.cleaned_data.keys():#and self.cleaned_data["valinta"]=="ki" :
-                        #if self.cleaned_data["kiintea"]==None:
-                #        raise forms.ValidationError("Syota kiitea arvo tai valise kerroin")
-                return cleaned_data
+                if  "valinta" in cleaned_data.keys() and cleaned_data["valinta"]=="ki" :
+                        if not "kiintea" in  cleaned_data.keys() or cleaned_data["kiintea"]=="" :
+                                raise forms.ValidationError("Syota kiitea arvo tai valise kerroin")
+                return cleaned_data["kiintea"]
+        def clean_muu(self):
+                cleaned_data = self.cleaned_data
+                if  "valinta" in cleaned_data.keys() and cleaned_data["valinta"]=="ke" :
+                        if "kerroin" in  cleaned_data.keys() and cleaned_data["kerroin"]=="m" :
+                                raise forms.ValidationError("Syota kiitea arvo tai valise kerroin")
+                return cleaned_data["kerroin"]
 
         def save(self) :
+                if not self.nolla: self.nolla=Parametri()
+                self.nolla.osa_tehtava=self.osaTehtava
+                self.nolla.nimi="nolla"
+
                 if self.cleaned_data['valinta']=="ki":
-                        self.nolla.arvo= self.cleaned_data["kiintea"]
+                        print self.cleaned_data['kiintea']
+                        self.nolla.arvo= self.cleaned_data['kiintea']
                         self.nollaKerroin.arvo="1"
                 else :
                         self.nolla.arvo="med(nolla_kaava)"
@@ -303,6 +322,9 @@ class NollaSuoritus(forms.Form):
                                 self.nollaKerroin.arvo=self.cleaned_data['muu']
                         else :
                                 self.nollaKerroin.arvo=nKerroin
+                print type(self.nolla)
+                print self.nolla.arvo
+                print type(self.nolla.osa_tehtava)
                 self.nolla.save()
                 self.nollaKerroin.save()
 
@@ -405,7 +427,7 @@ class OsaTehtavaForm(ModelForm) :
                 cleaned_data = self.cleaned_data
                 if not 'tyyppi' in self.cleaned_data.keys() :
                         raise forms.ValidationError("Muista ruksata osatehtavan tyyppi")
-
+                
                 tyyppi=self.cleaned_data['tyyppi']
                 for param in self.parametrit:
                         for p in param:
