@@ -78,8 +78,8 @@ class AikaBRWidget(AikaWidget):
 
 class PisteMaariteForm(ModelForm):
         kali_vihje=forms.CharField(label="Syotteen kuvaus",widget=TextBRWidget)
-        minArvo=forms.CharField(label="Sallitut Arvot",required=False)
-        maxArvo=forms.CharField(label=" - ",required=False)
+        #minArvo=forms.CharField(label="Sallitut Arvot",required=False)
+        #maxArvo=forms.CharField(label=" - ",required=False)
         maarite_tyyppi="piste"
         maarite_nimi="a"
         tyyppi="osatehtavan tyyppi"
@@ -99,41 +99,36 @@ class PisteMaariteForm(ModelForm):
                 self.osaTehtava=osaTehtava
 
         def save(self):
+                sm=None
+                try:
+                        sm= SyoteMaarite.objects.get(nimi=self.maarite_nimi,osa_tehtava=self.osaTehtava)
+                except SyoteMaarite.DoesNotExist :
                         sm=None
-                        try:
-                                sm= SyoteMaarite.objects.get(nimi=self.maarite_nimi,osa_tehtava=self.osaTehtava)
-                        except SyoteMaarite.DoesNotExist :
-                                sm=None
 
-                        maarite=super(ModelForm,self).save(commit=False)
-                        if sm : maarite.pk = sm.pk
-                        maarite.nimi = self.maarite_nimi
-                        maarite.tyyppi = self.maarite_tyyppi
-                        maarite.osa_tehtava = self.osaTehtava
-                        maarite.save()
-                        return maarite
+                maarite=super(ModelForm,self).save(commit=False)
+                if sm : maarite.pk = sm.pk
+                maarite.nimi = self.maarite_nimi
+                maarite.tyyppi = self.maarite_tyyppi
+                maarite.osa_tehtava = self.osaTehtava
+                maarite.save()
+                return maarite
 
         def __unicode__(self):
-                html=self.as_p()
-                muokattu=html.replace("<p>","").replace("</p>","")
-                return SafeUnicode(muokattu)
+                return SafeUnicode(render_to_string("tupa/forms/syote_maarite.html", 
+                                                        {'form': self ,}))
 
 class KisaPisteForm(PisteMaariteForm):
         tyyppi="kp"
         label="Kisapisteita"       
-        #def save(self):
-        #        poistettavat_maaritteet= SyoteMaarite.objects.filter(osa_tehtava=self.osaTehtava).exclude(nimi=self.maarite_nimi)
-        #        poistettavat_maaritteet.delete()
-        #        return super(PisteMaariteForm,self).save()
-        
+                
 class RaakaPisteForm(PisteMaariteForm):
         tyyppi="rp"
         label="Raakapisteita"   
 
 class AikaForm(PisteMaariteForm) : 
         tyyppi="ka"
-        minArvo=forms.CharField(widget=forms.HiddenInput(),required=False)
-        maxArvo=forms.CharField(widget=forms.HiddenInput(),required=False)
+        #minArvo=forms.CharField(widget=forms.HiddenInput(),required=False)
+        #maxArvo=forms.CharField(widget=forms.HiddenInput(),required=False)
         maarite_tyyppi="aika"
         label="Kokonaisaika"  
 
@@ -187,7 +182,7 @@ class VapaaKaava(MaariteFormset):
 class MaksimiSuoritus(forms.Form):
         parhaatChoices= (("p","pienin:"),("s","suurin:"),("k","kiintea:"))
         parhaat=  forms.ChoiceField(choices=parhaatChoices,widget=forms.RadioSelect)
-        kiintea= forms.CharField(label="",widget=TextBRWidget,required=False)
+        kiintea= forms.FloatField(label="",widget=TextBRWidget,required=False)
         jaettavat = forms.CharField( )
         label="Maksimisuoritus"
         def __init__(self,posti,osaTehtava,*argv,**argkw ):
@@ -211,6 +206,14 @@ class MaksimiSuoritus(forms.Form):
                         initial= {'parhaat' : parhaat , 'kiintea' : kiintea_a , 'jaettavat' : jaettavat }
                 super(MaksimiSuoritus,self).__init__(posti,initial=initial,*argv,**argkw)
                 self.osaTehtava=osaTehtava
+        
+        def clean_parhaat(self):
+                cleaned_data = self.cleaned_data
+                if  self.cleaned_data["parhaat"]=="k" :
+                        #if self.cleaned_data["kiintea"]=="":
+                        raise forms.ValidationError("Syota kiitea arvo tai valise suurin/pienin!")
+                return cleaned_data
+
         def save(self) :
                 self.maxP.arvo=self.cleaned_data['jaettavat']
                 parhaat= self.cleaned_data['parhaat']
@@ -223,6 +226,7 @@ class MaksimiSuoritus(forms.Form):
 
                 self.maxP.save()
                 self.aMax.save()
+
         def __unicode__(self,*args, **kwargs):
                 return SafeUnicode(render_to_string("tupa/forms/maksimi_suoritus.html", {'form': self}))
         class Meta:
@@ -281,6 +285,12 @@ class NollaSuoritus(forms.Form):
                         super(NollaSuoritus,self).__init__(posti,*argv,**argkw)
                 else:
                         super(NollaSuoritus,self).__init__(posti,initial=aInitial,*argv,**argkw)
+        def clean(self):
+                cleaned_data = self.cleaned_data
+                #if  "valinta" in self.cleaned_data.keys():#and self.cleaned_data["valinta"]=="ki" :
+                        #if self.cleaned_data["kiintea"]==None:
+                #        raise forms.ValidationError("Syota kiitea arvo tai valise kerroin")
+                return cleaned_data
 
         def save(self) :
                 if self.cleaned_data['valinta']=="ki":
@@ -452,58 +462,61 @@ class OsaTehtavaForm(ModelForm) :
                 model = OsaTehtava
 
 class TehtavaForm(ModelForm):
-    kaava = forms.CharField(initial="ss",widget=forms.TextInput(attrs={'size':'40'} ) ,required=True)
-    osatehtavia = forms.IntegerField(required=False)
-    def __init__(self,posti,instance=None,sarja=None) :
-        self.sarja=sarja
-        osatehtavia=1 
-        self.posti=posti
-        if instance :
-                osatehtavia=len(OsaTehtava.objects.filter(tehtava=instance) )
-        self.osaTehtavaFormit= []
-        for ot in OsaTehtava.objects.filter(tehtava=instance):
-                self.osaTehtavaFormit.append(OsaTehtavaForm(posti,instance=ot,prefix="osatehtava_"+str(ot.pk)))
+        kaava = forms.CharField(initial="ss",widget=forms.TextInput(attrs={'size':'40'} ) ,required=True)
+        osatehtavia = forms.IntegerField(required=False)
+        def __init__(self,posti,instance=None,sarja=None) :
+                self.sarja=sarja
+                osatehtavia=1 
+                self.posti=posti
+                if instance :
+                        osatehtavia=len(OsaTehtava.objects.filter(tehtava=instance) )
+                self.osaTehtavaFormit= []
+                for ot in OsaTehtava.objects.filter(tehtava=instance):
+                        self.osaTehtavaFormit.append(OsaTehtavaForm(posti,
+                                                                instance=ot,
+                                                                prefix="osatehtava_"+str(ot.pk)))
 
-        super(ModelForm,self).__init__(posti,instance=instance,initial={'osatehtavia': osatehtavia })
-    def clean(self):
-        cleaned_data = self.cleaned_data
-        for ot in self.osaTehtavaFormit :
-                if not ot.is_valid():
-                        raise forms.ValidationError("Tarkista maaritys!")
-        return cleaned_data
+                super(ModelForm,self).__init__(posti,instance=instance,initial={'osatehtavia': osatehtavia })
+        def clean(self):
+                cleaned_data = self.cleaned_data
+                for ot in self.osaTehtavaFormit :
+                        if not ot.is_valid():
+                                raise forms.ValidationError("Tarkista maaritys!")
+                return cleaned_data
 
-    def save(self):
-        tehtava = super(ModelForm,self).save(commit=False)
-        tehtava.sarja=self.sarja
-        tehtava.save()
-        osa_tehtavat= OsaTehtava.objects.filter(tehtava=tehtava)
+        def save(self):
+                tehtava = super(ModelForm,self).save(commit=False)
+                tehtava.sarja=self.sarja
+                tehtava.save()
+                osa_tehtavat= OsaTehtava.objects.filter(tehtava=tehtava)
         
-        osatehtavia=self.cleaned_data['osatehtavia']
-        for ot in self.osaTehtavaFormit :
-                ot.save()
+                osatehtavia=self.cleaned_data['osatehtavia']
+                for ot in self.osaTehtavaFormit :
+                        ot.save()
 
-        valmiit_osatehtavat = 0
-        if osa_tehtavat :
-                valmiit_osatehtavat=len(osa_tehtavat)
-        # luodaan uusia osatehtavia:
-        if osatehtavia > valmiit_osatehtavat :
-                for ot in range( (osatehtavia-valmiit_osatehtavat ) ) :
-                        uusiOT = OsaTehtava()
-                        uusiOT.nimi=string.letters[ot+valmiit_osatehtavat]
-                        uusiOT.tehtava=tehtava
-                        uusiOT.save()
-        # poistetaan vanhoja osatehtavia:
-        elif valmiit_osatehtavat > osatehtavia :
-                poistettavat=[]
-                for ot in range( osatehtavia , valmiit_osatehtavat ) :
-                        if osa_tehtavat[ot].id :
-                                osa_tehtavat[ot].delete()
-        else:   pass
-        return tehtava
-    def __unicode__(self) :
-                return render_to_string("tupa/forms/tehtava.html", {'form': self, 
+                valmiit_osatehtavat = 0
+                if osa_tehtavat :
+                        valmiit_osatehtavat=len(osa_tehtavat)
+                # luodaan uusia osatehtavia:
+                if osatehtavia > valmiit_osatehtavat :
+                        for ot in range( (osatehtavia-valmiit_osatehtavat ) ) :
+                                uusiOT = OsaTehtava()
+                                uusiOT.nimi=string.letters[ot+valmiit_osatehtavat]
+                                uusiOT.tehtava=tehtava
+                                uusiOT.save()
+                # poistetaan vanhoja osatehtavia:
+                elif valmiit_osatehtavat > osatehtavia :
+                        poistettavat=[]
+                        for ot in range( osatehtavia , valmiit_osatehtavat ) :
+                                if osa_tehtavat[ot].id :
+                                        osa_tehtavat[ot].delete()
+                else:   pass
+                return tehtava
+        def __unicode__(self) :
+                return render_to_string("tupa/forms/tehtava.html", 
+                                                        {'form': self, 
                                                 'osa_tehtavat' : self.osaTehtavaFormit})
-    class Meta:
-        fields =  ('nimi', 'jarjestysnro','kaava')
-        model = Tehtava
+        class Meta:
+                fields =  ('nimi', 'jarjestysnro','kaava')
+                model = Tehtava
 
