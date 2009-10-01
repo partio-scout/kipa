@@ -71,7 +71,7 @@ h2 {
 	letter-spacing:0;
 	border:0;
 	color:#006ea6;
-	margin:1.3em 0 0 0;
+	margin:0 0 0 0;
 }
 
 .etusivunLinkit, .etusivunLinkit a, .etusivunLinkit:visited {
@@ -274,10 +274,10 @@ tr .odd:hover{
 
 
 /* TOOLTIP */
-#tt {position:absolute; display:block; background:url("/kipamedia/tooltip/tt_left.gif") top left no-repeat}
-#tttop {display:block; height:5px; margin-left:5px; background:url("/kipamedia/tooltip/tt_top.gif") top right no-repeat; overflow:hidden}
+#tt {position:absolute; display:block; background:url("/kipamedia/tt_left.gif") top left no-repeat}
+#tttop {display:block; height:5px; margin-left:5px; background:url("/kipamedia/tt_top.gif") top right no-repeat; overflow:hidden}
 #ttcont {display:block; padding:2px 12px 3px 7px; margin-left:5px; background:#666; color:#FFF}
-#ttbot {display:block; height:5px; margin-left:5px; background:url("/kipamedia/tooltip/tt_bottom.gif") top right no-repeat; overflow:hidden}
+#ttbot {display:block; height:5px; margin-left:5px; background:url("/kipamedia/tt_bottom.gif") top right no-repeat; overflow:hidden}
 
 /* NAPPULAT */
 .awesome {
