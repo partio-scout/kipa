@@ -1,11 +1,10 @@
 {% extends "tupa/base.html" %}
+{% block title %}{{kisa.nimi}} - tulokset sarjoittain{% endblock %}
 {% block content %} 
 
-<h1>{{kisa_object.nimi}}</h1>
-<br>
-<h2> Tulokset Sarjoittain </h2>
+<h1>Tulokset sarjoittain</h1>
 
-<p><A href='../'>taakse</A><br></p>
+<p><a href='../'>Etusivu</a> -&gt; tulokset sarjoittain<br></p>
 
 {%for sarja in sarja_list %}
       <A href='./sarja/{{sarja.id}}/' > {{sarja.nimi}} </A> <br>
