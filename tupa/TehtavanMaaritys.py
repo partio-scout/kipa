@@ -183,7 +183,7 @@ class MaksimiSuoritus(forms.Form):
         parhaatChoices= (("p","pienin:"),("s","suurin:"),("k","kiintea:"))
         parhaat=  forms.ChoiceField(choices=parhaatChoices,widget=forms.RadioSelect)
         kiintea= forms.FloatField(label="",widget=TextBRWidget,required=False)
-        jaettavat = forms.CharField( )
+        jaettavat = forms.FloatField( )
         label="Maksimisuoritus"
         def __init__(self,posti,osaTehtava,*argv,**argkw ):
                 assert osaTehtava
@@ -207,12 +207,12 @@ class MaksimiSuoritus(forms.Form):
                 super(MaksimiSuoritus,self).__init__(posti,initial=initial,*argv,**argkw)
                 self.osaTehtava=osaTehtava
         
-        def clean_parhaat(self):
+        def clean_kiintea(self):
                 cleaned_data = self.cleaned_data
-                if  self.cleaned_data["parhaat"]=="k" :
-                        #if self.cleaned_data["kiintea"]=="":
-                        raise forms.ValidationError("Syota kiitea arvo tai valise suurin/pienin!")
-                return cleaned_data
+                if "parhaat" in cleaned_data.keys() and self.cleaned_data["parhaat"]=="k" :
+                        if not "kiintea" in cleaned_data.keys() or not self.cleaned_data["kiintea"]:
+                                raise forms.ValidationError("Syota kiitea arvo tai valise suurin/pienin!")
+                return cleaned_data["kiintea"]
 
         def save(self) :
                 self.maxP.arvo=self.cleaned_data['jaettavat']
@@ -250,7 +250,7 @@ class NollaSuoritus(forms.Form):
 
         kiintea= forms.CharField(label="kiintea suoritus",widget=TextBRWidget,required=False)
         kerroin= forms.ChoiceField(choices=kerroinChoices,widget=RadioBRWidget,required=False)
-        muu= forms.CharField(label="muu",required=False)
+        muu= forms.FloatField(label="muu",required=False)
         label="NollaSuoritus"
         def __init__(self,posti,osaTehtava,*argv,**argkw ):
                 assert osaTehtava
@@ -296,15 +296,16 @@ class NollaSuoritus(forms.Form):
         def clean_kiintea(self):
                 cleaned_data = self.cleaned_data
                 if  "valinta" in cleaned_data.keys() and cleaned_data["valinta"]=="ki" :
-                        if not "kiintea" in  cleaned_data.keys() or cleaned_data["kiintea"]=="" :
+                        if not "kiintea" in  cleaned_data.keys() or not cleaned_data["kiintea"]  :
                                 raise forms.ValidationError("Syota kiitea arvo tai valise kerroin")
                 return cleaned_data["kiintea"]
         def clean_muu(self):
                 cleaned_data = self.cleaned_data
                 if  "valinta" in cleaned_data.keys() and cleaned_data["valinta"]=="ke" :
                         if "kerroin" in  cleaned_data.keys() and cleaned_data["kerroin"]=="m" :
-                                raise forms.ValidationError("Syota kiitea arvo tai valise kerroin")
-                return cleaned_data["kerroin"]
+                                if not "muu" in cleaned_data.keys() or not cleaned_data["muu"]:
+                                        raise forms.ValidationError("Syota kerroin")
+                return cleaned_data["muu"]
 
         def save(self) :
                 if not self.nolla: self.nolla=Parametri()
@@ -413,15 +414,18 @@ class OsaTehtavaForm(ModelForm) :
                         # Alku ja loppuaika
                         prefixID="ala_"+self.prefixID
                         self.parametrit.append( test([AlkuLoppuAika( posti,self.instance ,prefix=prefixID),]) )
-                        lisaaMaxNolla( self.parametrit,prefixID )
+                        self.parametrit[-1].append( MaksimiAika( posti,self.instance, 
+                                                prefix="maksimi_suoritus_"+prefixID ) )
+                        self.parametrit[-1].append( NollaAika( posti,self.instance,
+                                                prefix="nolla_suoritus_"+prefixID ) )
                         self.parametrit[-1].id=prefixID
                         self.parametrit[-1].otsikko="Alkuaika ja loppuaika"
                         # Vapaa Kaava
-                        prefixID="vk_"+self.prefixID
-                        self.parametrit.append( test([VapaaKaava( posti,self.instance ,prefix=prefixID),]) )
-                        lisaaMaxNolla( self.parametrit, prefixID )
-                        self.parametrit[-1].id=prefixID
-                        self.parametrit[-1].otsikko="Vapaa Kaava"
+                        #prefixID="vk_"+self.prefixID
+                        #self.parametrit.append( test([VapaaKaava( posti,self.instance ,prefix=prefixID),]) )
+                        #lisaaMaxNolla( self.parametrit, prefixID )
+                        #self.parametrit[-1].id=prefixID
+                        #self.parametrit[-1].otsikko="Vapaa Kaava"
                        
         def clean(self):
                 cleaned_data = self.cleaned_data
