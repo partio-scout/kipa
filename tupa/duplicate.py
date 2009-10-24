@@ -1,11 +1,36 @@
-from models import *
-#coding: latin-1
+
+def kisa_xml(kisa):
+        """
+        Apufunktio -> Luo xml merkkijonon kaikista kisan objekteista.
+        Jattaa henkilot ja allergiat luomatta.
+        """
+        from django.core import serializers
+        objects=[kisa,]
+        for s in kisa.sarja_set.all():
+                objects.append(s)
+                for v in s.vartio_set.all():
+                        objects.append(v)
+                for t in s.tehtava_set.all():
+                        objects.append(t)
+                        for te in t.testaustulos_set.all():
+                                objects.append(te)
+                        for tt in t.tuomarineuvostulos_set.all():
+                                objects.append(tt)
+                        for ot in t.osatehtava_set.all() :
+                                for sm in ot.syotemaarite_set.all():
+                                        objects.append(sm)
+                                        for s in sm.syote_set.all():
+                                                objects.append(s)
+                                for p in ot.parametri_set.all():
+                                        objects.append(p)
+                                objects.append(ot)
+        return serializers.serialize("xml", objects , indent=4)
 
 def kopioiTehtava(tehtava,sarjaan,uusiNimi=None) :
         """
-        Kopioi määritellyn tehtävän haluttuun sarjaan.
+        Kopioi maaritellyn tehtavan haluttuun sarjaan.
         """
-        # Kopioi itse tehtävä:
+        # Kopioi itse tehtava:
         tNimi=tehtava.nimi
         if uusiNimi:
                 tNimi=uusiNimi
@@ -31,7 +56,7 @@ def kopioiTehtava(tehtava,sarjaan,uusiNimi=None) :
                                         osa_tehtava=uusiot)
                         uusip.save()
 
-                # Kopioi määritteet:
+                # Kopioi maaritteet:
                 maaritteet = ot.syotemaarite_set.all()
                 for m in maaritteet:
                         uusim=SyoteMaarite( nimi=m.nimi,

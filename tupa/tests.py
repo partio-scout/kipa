@@ -184,12 +184,9 @@ testit=[aritmeettinen_laskin_test]
 # haetaan kaikki xml fixtuurien nimet.
 # haetaan kaikki post txt:t
 test_fixtures=[]
-test_posts=[]
 for f in os.listdir(os.curdir+"/fixtures/tests/"):
         if not f.find(".xml") == -1:
                 test_fixtures.append("fixtures/tests/"+f)
-        if not f.find(".txt") == -1:
-                test_posts.append("fixtures/tests/"+f)
 
 
 def PostTestFactory(fixture_name):

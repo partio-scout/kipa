@@ -10,10 +10,12 @@ import django.template
 from logger import lokkeri
 from django.utils.safestring import SafeUnicode
 
+from duplicate import kopioiTehtava
+from duplicate import kisa_xml
+
 import re
 from formit import *
 from TehtavanMaaritys import *
-from duplicate import *
 
 from reportlab.pdfgen import canvas
 
@@ -359,40 +361,15 @@ def kopioiTehtavia(request,kisa_nimi,sarja_id ):
                                       'taulukko' : formit ,
                                       'taakse' : "../../../../tehtava/" })
 
-def kisa_xml(kisa_nimi):
-        """
-        Apufunktio -> Luo xml merkkijonon kaikista kisan objekteista.
-        Jättää henkilöt ja allergiat luomatta.
-        """
-        from django.core import serializers
-        kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
-        objects=[kisa,]
-        for s in kisa.sarja_set.all():
-                objects.append(s)
-                for v in s.vartio_set.all():
-                        objects.append(v)
-                for t in s.tehtava_set.all():
-                        objects.append(t)
-                        for te in t.testaustulos_set.all():
-                                objects.append(te)
-                        for tt in t.tuomarineuvostulos_set.all():
-                                objects.append(tt)
-                        for ot in t.osatehtava_set.all() :
-                                for sm in ot.syotemaarite_set.all():
-                                        objects.append(sm)
-                                        for s in sm.syote_set.all():
-                                                objects.append(s)
-                                for p in ot.parametri_set.all():
-                                        objects.append(p)
-                                objects.append(ot)
-        return serializers.serialize("xml", objects , indent=4)
 
 def tallennaKisa(request, kisa_nimi):
         """
         Palauttaa käyttäjälle valitun kisan xml formaatissa.
         Jättää henkilöt ja allergiat tallentamatta.
         """
-        response = HttpResponse( kisa_xml(kisa_nimi) , mimetype='application/xml')
+        kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
+
+        response = HttpResponse( kisa_xml(kisa) , mimetype='application/xml')
         response['Content-Disposition'] = 'attachment; filename=tietokanta.xml'
         return response
 
@@ -417,7 +394,8 @@ def post_txt(request,parametrit):
         """
         from xml.dom.minidom import  parseString
         kisa_nimi = re.search(r'^osoite=/tupa/(\w+)/',parametrit).group(1)
-        test_data=kisa_xml(kisa_nimi)  
+        kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
+        test_data=kisa_xml(kisa)  
         post_data= parametrit.split("&")
         doc = parseString( test_data )
         post_test = doc.createElement('post_request')
