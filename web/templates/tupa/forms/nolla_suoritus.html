@@ -28,11 +28,14 @@ Tässä kerrotaan suoritus, jolla saa nolla pistettä. Tämä voi olla jokin kii
                 </td><td>
                 <fieldset>
                 
-                <legend>Kerroin</legend>
+                <legend>Kerroin keskimmaisesta</legend>
                    <p>
+                        <font color=red><b>
+                                {{form.kerroin.errors}}
+                        </b></font>
                         {{form.kerroin}}
                         <font color=red><b>
-                      {{form.muu.errors}}
+                                {{form.muu.errors}}
                         </b></font>
                       {{form.muu}}
                     </p>

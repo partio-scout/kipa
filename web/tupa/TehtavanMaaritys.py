@@ -77,7 +77,7 @@ class AikaBRWidget(AikaWidget):
                 return SafeUnicode(muokattu + "<br>")
 
 class PisteMaariteForm(ModelForm):
-        kali_vihje=forms.CharField(label="Syotteen kuvaus",widget=TextBRWidget)
+        kali_vihje=forms.CharField(label="Syotteen kuvaus",widget=TextBRWidget,required=False)
         #minArvo=forms.CharField(label="Sallitut Arvot",required=False)
         #maxArvo=forms.CharField(label=" - ",required=False)
         maarite_tyyppi="piste"
@@ -99,6 +99,7 @@ class PisteMaariteForm(ModelForm):
                 self.osaTehtava=osaTehtava
 
         def save(self):
+
                 sm=None
                 try:
                         sm= SyoteMaarite.objects.get(nimi=self.maarite_nimi,osa_tehtava=self.osaTehtava)
@@ -134,12 +135,12 @@ class AikaForm(PisteMaariteForm) :
 
 class AlkuaikaForm(AikaForm) :
         tyyppi="ala"
-        kali_vihje=forms.CharField(label="Syotteen 1 kuvaus: (esim. alkuaika)",widget=TextBRWidget)
+        kali_vihje=forms.CharField(label="Syotteen 1 kuvaus: (esim. alkuaika)",widget=TextBRWidget,required=False)
 
 class LoppuaikaForm(AikaForm) :
         tyyppi="ala"
         maarite_nimi="b"
-        kali_vihje=forms.CharField(label="Syotteen 2 kuvaus: (esim. loppuaika)",widget=TextBRWidget)
+        kali_vihje=forms.CharField(label="Syotteen 2 kuvaus: (esim. loppuaika)",widget=TextBRWidget,required=False)
 
 class AlkuLoppuAika(forms.Form):
         tyyppi="ala"
@@ -149,7 +150,7 @@ class AlkuLoppuAika(forms.Form):
                 prefixi=""
                 if argkw['prefix']: prefixi = argkw['prefix']
                 argkw['prefix']='alkuaika_'+prefixi
-                self.alkuaika=AlkuaikaForm(posti,osaTehtava,*argv,**argkw  )
+                self.alkuaika=AlkuaikaForm(posti,osaTehtava,*argv,**argkw )
                 argkw['prefix']="loppuaika_"+prefixi
                 self.loppuaika=LoppuaikaForm(posti,osaTehtava,*argv,**argkw )
                 self.osaTehtava=osaTehtava
@@ -181,9 +182,9 @@ class VapaaKaava(MaariteFormset):
 
 class MaksimiSuoritus(forms.Form):
         parhaatChoices= (("p","pienin:"),("s","suurin:"),("k","kiintea:"))
-        parhaat=  forms.ChoiceField(choices=parhaatChoices,widget=forms.RadioSelect)
+        parhaat=  forms.ChoiceField(choices=parhaatChoices,widget=forms.RadioSelect,required=False)
         kiintea= forms.FloatField(label="",widget=TextBRWidget,required=False)
-        jaettavat = forms.FloatField( )
+        jaettavat = forms.FloatField(required=False )
         label="Maksimisuoritus"
         def __init__(self,posti,osaTehtava,*argv,**argkw ):
                 assert osaTehtava
@@ -208,11 +209,17 @@ class MaksimiSuoritus(forms.Form):
                 self.osaTehtava=osaTehtava
         
         def clean_kiintea(self):
-                cleaned_data = self.cleaned_data
-                if "parhaat" in cleaned_data.keys() and self.cleaned_data["parhaat"]=="k" :
-                        if not "kiintea" in cleaned_data.keys() or not self.cleaned_data["kiintea"]:
+                cd= self.cleaned_data
+                if "parhaat" in cd.keys() and cd["parhaat"]=="k" :
+                        if not "kiintea" in cd.keys() or not cd["kiintea"] :
                                 raise forms.ValidationError("Syota kiitea arvo tai valise suurin/pienin!")
-                return cleaned_data["kiintea"]
+                return cd["kiintea"]
+        def clean_parhaat(self):
+                cd= self.cleaned_data
+                if not "parhaat" in cd.keys() or not cd["parhaat"] :
+                                raise forms.ValidationError("Valitse kiitea arvo suurin/pienin!")
+                return cd["parhaat"]
+
 
         def save(self) :
                 self.maxP.arvo=self.cleaned_data['jaettavat']
@@ -242,13 +249,13 @@ class NollaSuoritus(forms.Form):
                         ("0.5","0.5 (suurin tulos saa parhaat pisteet)"),
                         ("m","muu"))
         valintaChoices=(("ki","kiintea"),("ke","kerroin"))
-        valinta= forms.ChoiceField(choices=valintaChoices,widget=forms.RadioSelect)
+        valinta= forms.ChoiceField(initial="" ,choices=valintaChoices,widget=forms.RadioSelect,required=False)
         valinta_ki= forms.ChoiceField(widget=PartRadioWidget("ki","valinta"),
                                 choices=OsaTehtava.OSA_TYYPIT,label="",required=False)
         valinta_ke= forms.ChoiceField(widget=PartRadioWidget("ke","valinta"),
                                 choices=OsaTehtava.OSA_TYYPIT,label="",required=False)
 
-        kiintea= forms.CharField(label="kiintea suoritus",widget=TextBRWidget,required=False)
+        kiintea= forms.FloatField(label="kiintea suoritus",widget=TextBRWidget,required=False)
         kerroin= forms.ChoiceField(choices=kerroinChoices,widget=RadioBRWidget,required=False)
         muu= forms.FloatField(label="muu",required=False)
         label="NollaSuoritus"
@@ -280,25 +287,50 @@ class NollaSuoritus(forms.Form):
                 else :
                         aValinta = "ki"
                         aKiintea= nolla_arvo
- 
-                aInitial= { }
-                if re.match(".*?"+osaTehtava.tyyppi+".*?",argkw['prefix']) :
-                        aInitial= { 'kiintea' : aKiintea ,
-                                'kerroin' : aKerroin, 
-                                'muu' : aMuu ,
-                                'valinta': aValinta ,
-                                'valinta_ki' : aValinta ,
-                                'valinta_ke' : aValinta }
-                if posti:
-                        super(NollaSuoritus,self).__init__(posti,*argv,**argkw)
-                else:
-                        super(NollaSuoritus,self).__init__(posti,initial=aInitial,*argv,**argkw)
+
+                super(NollaSuoritus,self).__init__(posti,*argv,**argkw)
+                
+                pInit=None
+                aInitial= self.initial.copy()
+                if not posti and re.match(".*?"+osaTehtava.tyyppi+".*?",argkw['prefix']) :
+                        aInitial['kiintea']= aKiintea
+                        aInitial['kerroin']= aKerroin
+                        aInitial['muu'] = aMuu 
+                        aInitial['valinta'] = aValinta 
+                        aInitial['valinta_ki'] = aValinta 
+                        aInitial['valinta_ke'] = aValinta 
+                if posti:   
+                        pInit=posti.copy()
+                        prefix=argkw['prefix']
+                        if prefix+'-valinta' in pInit.keys():
+                                arvo= pInit[prefix+'-valinta']
+                                #print "arvo " + arvo
+                                #print prefix+"-valinta"
+                                pInit[prefix+'-valinta'] =arvo#pInit[prefix+'-valinta']
+                                pInit[prefix+'-valinta_ki'] =arvo#pInit[prefix+'-valinta']
+                                pInit[prefix+'-valinta_ke'] =arvo#pInit[prefix+'-valinta']
+                super(NollaSuoritus,self).__init__(pInit,*argv,**argkw)
+        def clean_valinta(self):
+                cd = self.cleaned_data
+                #print cd
+                #if not "valinta" in cd.keys() or not cd["valinta"]:
+                        #print "aaaa" 
+                        #print "valinta " +str(cd["valinta"])
+                        #raise forms.ValidationError("Valitse kiitea arvo tai kerroin")
+                return cd["valinta"]
         def clean_kiintea(self):
                 cleaned_data = self.cleaned_data
                 if  "valinta" in cleaned_data.keys() and cleaned_data["valinta"]=="ki" :
                         if not "kiintea" in  cleaned_data.keys() or not cleaned_data["kiintea"]  :
                                 raise forms.ValidationError("Syota kiitea arvo tai valise kerroin")
                 return cleaned_data["kiintea"]
+        def clean_kerroin(self):
+                cleaned_data = self.cleaned_data
+                if  "valinta" in cleaned_data.keys() and cleaned_data["valinta"]=="ke" :
+                        if not "kerroin" in cleaned_data.keys() or cleaned_data["kerroin"]=="": 
+                                print "ccc"
+                                raise forms.ValidationError("Valitse kerroin")
+                return cleaned_data["kerroin"]
         def clean_muu(self):
                 cleaned_data = self.cleaned_data
                 if  "valinta" in cleaned_data.keys() and cleaned_data["valinta"]=="ke" :
@@ -313,7 +345,6 @@ class NollaSuoritus(forms.Form):
                 self.nolla.nimi="nolla"
 
                 if self.cleaned_data['valinta']=="ki":
-                        print self.cleaned_data['kiintea']
                         self.nolla.arvo= self.cleaned_data['kiintea']
                         self.nollaKerroin.arvo="1"
                 else :
@@ -323,9 +354,6 @@ class NollaSuoritus(forms.Form):
                                 self.nollaKerroin.arvo=self.cleaned_data['muu']
                         else :
                                 self.nollaKerroin.arvo=nKerroin
-                print type(self.nolla)
-                print self.nolla.arvo
-                print type(self.nolla.osa_tehtava)
                 self.nolla.save()
                 self.nollaKerroin.save()
 
@@ -350,7 +378,7 @@ class test(list) :
 
 class OsaTehtavaForm(ModelForm) :
         tyyppi= forms.ChoiceField(widget=PartRadioWidget("kp","tyyppi"),
-                                choices=OsaTehtava.OSA_TYYPIT,label="",required=True)
+                                choices=OsaTehtava.OSA_TYYPIT,label="",required=False)
         tyyppi_rp= forms.ChoiceField(widget=PartRadioWidget("rp","tyyppi"),
                                 choices=OsaTehtava.OSA_TYYPIT,label="",required=False)
         tyyppi_ka= forms.ChoiceField(widget=PartRadioWidget("ka","tyyppi"),
@@ -361,15 +389,31 @@ class OsaTehtavaForm(ModelForm) :
                                 choices=OsaTehtava.OSA_TYYPIT,label="",required=False)
 
         def __init__(self,posti,*args,**kwargs) :
-                super(OsaTehtavaForm, self).__init__(posti,*args, **kwargs)
-                #Vakiopalluran ruksaus
-                tyyppi_i = self.initial['tyyppi']
-                init= { 'tyyppi_rp' : tyyppi_i,'tyyppi_ka' : tyyppi_i,
-                        'tyyppi_ala' : tyyppi_i,'tyyppi_vk' : tyyppi_i }
-                super(OsaTehtavaForm, self).__init__(posti,initial=init,*args, **kwargs)
+                init = None
+                initial={}
+                prefix=kwargs['prefix']
+                if posti:   
+                        init=posti.copy()
+                        tyyppi_name= prefix +'-tyyppi' 
+                        if tyyppi_name in posti.keys():
+                                tyyppi_i = posti[tyyppi_name]
+                                init[tyyppi_name]= tyyppi_i
+                                init[prefix +'-tyyppi_rp'] = tyyppi_i
+                                init[prefix +'-tyyppi_ka'] = tyyppi_i
+                                init[prefix +'-tyyppi_ala'] = tyyppi_i
+                                init[prefix +'-tyyppi_vk'] = tyyppi_i
+                
+                super(OsaTehtavaForm, self).__init__(*args, **kwargs)
+                tyyppi_i=self.instance.tyyppi
+                initial['tyyppi']= tyyppi_i
+                initial['tyyppi_rp'] = tyyppi_i
+                initial['tyyppi_ka'] = tyyppi_i
+                initial['tyyppi_ala'] = tyyppi_i
+                initial['tyyppi_vk'] = tyyppi_i
+
+                super(OsaTehtavaForm, self).__init__(init,initial=initial,*args, **kwargs)
                 self.taulukko=[]
                 self.prefixID=""
-                        
                 # Parametri formien lisaaminen:
                 if self.instance :
                         self.prefixID=str(self.instance.pk)
@@ -387,7 +431,7 @@ class OsaTehtavaForm(ModelForm) :
                                 #parametrit[-1].append( Arviointi( posti,self.instance,
                                 #                prefix="arviointi_"+prefixID ) )
                         # KisaPiste
-                        prefixID="kp_"+self.prefix
+                        prefixID="kp_"+self.prefixID
                         self.parametrit=test()
                         self.parametrit.append( test([KisaPisteForm( posti,self.instance ,prefix=prefixID )]) )
                         self.parametrit[-1].id=prefixID
@@ -421,6 +465,7 @@ class OsaTehtavaForm(ModelForm) :
                         self.parametrit[-1].id=prefixID
                         self.parametrit[-1].otsikko="Alkuaika ja loppuaika"
                         # Vapaa Kaava
+
                         #prefixID="vk_"+self.prefixID
                         #self.parametrit.append( test([VapaaKaava( posti,self.instance ,prefix=prefixID),]) )
                         #lisaaMaxNolla( self.parametrit, prefixID )
@@ -429,14 +474,20 @@ class OsaTehtavaForm(ModelForm) :
                        
         def clean(self):
                 cleaned_data = self.cleaned_data
-                if not 'tyyppi' in self.cleaned_data.keys() :
+                if not 'tyyppi' in cleaned_data.keys() or cleaned_data['tyyppi']=="" :
                         raise forms.ValidationError("Muista ruksata osatehtavan tyyppi")
                 
                 tyyppi=self.cleaned_data['tyyppi']
                 for param in self.parametrit:
                         for p in param:
                                 # Talletetaan ainoastaan sellainen formi joita kaytetaan tassa tyypissa.
-                                if not p.is_valid() and re.match(".*?"+ tyyppi+".*?",p.prefix) :
+                                t= tyyppi+"_" + str(self.instance.id)
+                                if re.match(".*?"+ t+".*?",p.prefix) and not p.is_valid():
+                                        print p.prefix
+                                        print t
+                                        print re.match(".*?"+ t+".*?",p.prefix)
+                                        print param.otsikko
+                                        print "PERKELE!!!"
                                         raise forms.ValidationError("Syota kaikki pakolliset kohdat!")
                 return cleaned_data
 
@@ -446,7 +497,8 @@ class OsaTehtavaForm(ModelForm) :
                 for param in self.parametrit:
                         for p in param:
                                 # Talletetaan ainoastaan sellainen formi joita kaytetaan tassa tyypissa.
-                                if p.is_valid() and re.match(".*?"+osatehtava.tyyppi+".*?",p.prefix) :
+                                t= osatehtava.tyyppi+"_" + str(self.instance.id)
+                                if re.match(".*?"+t+".*?",p.prefix) :
                                         p.save()
                 # Eroitellaan sellaiset osatehtavatyypit joiden kaava eroaa vakiosta.
                 if osatehtava.tyyppi=="kp":

@@ -6,6 +6,7 @@ tarkistus= os.getcwd()
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 LOGGING=True
+RECORDING=True
 if not hakemisto == tarkistus :
         #Viittaisi siihen etta kyseessa on apachen alta toimiva joten pakotetaan debugit pois
         LOGGING=False
@@ -69,9 +70,12 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+
     'django.middleware.common.CommonMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'web.tupa.logger.PostDataRecorder',
     'django.middleware.doc.XViewMiddleware',
 )
 
