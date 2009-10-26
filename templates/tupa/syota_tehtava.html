@@ -1,4 +1,5 @@
 {% extends "tupa/base.html" %}
+{% block title %}{{tehtava.nimi}}{% endblock %}
 {% block header %}
 {{ block.super }}
 <script type="text/javascript" src="/kipamedia/enter-as-tab2.js"></script>
@@ -14,29 +15,25 @@
 
 <h1>Tehtävä: {{tehtava.nimi}} </h1>
 
-<A href='../../'>taakse</A> <br><br>
+<p><a href='../../../'>Etusivu</a> -&gt; <a href='../../'>Valitse tehtävä</a> -&gt; {{ tehtava.nimi }}<br></p>
 
 <table width="600" border="0" cellpadding="2" cellspacing="0">
   <tr>
     <td width="100" class="tauluOtsikko">Tehtävä:</td>
-    <td width="25" bgcolor="#E8EDFF">{{tehtava.jarjestysnro}}</td>
-    <td width="91" bgcolor="#E8EDFF">{{tehtava.nimi}}</td>
-    <td bgcolor="#E8EDFF">&nbsp;</td>
+    <td colspan="2" bgcolor="#E8EDFF">{{tehtava.jarjestysnro}} &nbsp; &nbsp; {{tehtava.nimi}}</td>
   </tr>
   <tr>
-
     <td class="tauluOtsikko">Sarja:</td>
-    <td colspan="3" bgcolor="#E8EDFF">{{tehtava.sarja.nimi}}</td>
+    <td colspan="2" bgcolor="#E8EDFF">{{tehtava.sarja.nimi}}</td>
   </tr>
   <tr>
     <td valign="middle" class="tauluOtsikko">Yhteyshenkilö:</td>
-    <td colspan="2" valign="middle" bgcolor="#E8EDFF"> </td>
+    <td valign="middle" bgcolor="#E8EDFF">&nbsp;</td>
     <td bgcolor="#E8EDFF">&nbsp;</td>
-
   </tr>
   <tr valign="middle">
     <td valign="middle" class="tauluOtsikko">Tehtävän tila:</td>
-    <td colspan="2" valign="middle" bgcolor="#FFFF66"><label>syötetty osittain</label></td>
+    <td width="150" valign="middle" bgcolor="#FFFF66"><label>syötetty osittain</label></td>
     <td bgcolor="#E8EDFF"><label><input type="checkbox" name="checkbox" id="checkbox" />tarkistettu</label></td>
   </tr>
 </table>

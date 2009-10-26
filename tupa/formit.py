@@ -18,12 +18,12 @@ class VartioForm(ModelForm):
 
 VartioFormSet = inlineformset_factory(Sarja,
                                 Vartio,
-                                extra=10,
-                                fields=('nro','nimi',"ulkopuolella", "keskeyttanyt",),
+                                extra=30,
+                                fields=('nro','nimi','lippukunta','piiri',"ulkopuolella", "keskeyttanyt",),
                                 form=VartioForm )
 
 MaariteFormSet = inlineformset_factory(OsaTehtava,SyoteMaarite,extra=3 )
-SarjaFormSet = inlineformset_factory(Kisa,Sarja,extra=4 )
+SarjaFormSet = inlineformset_factory(Kisa,Sarja,extra=8 )
 TehtavaValintaFormSet = inlineformset_factory(Sarja,Tehtava,fields='jarjestysnro')
 
 tuhoaTehtaviaFormset = modelformset_factory(Tehtava,can_delete=True,extra=0,fields=('delete'))

@@ -158,11 +158,11 @@ tr .odd:hover{
 	padding:3px;
 }
 
-.inputHighlighted{  /* Highlighting style */
+.inputHighlighted{  /* Highlight style */
 	border:2px solid #F00;
 }
 
-.kivaHeaderiTaulukkoon ei kaytossa {
+.tblHeader {	/* ei käytössä */
 	border: 1px solid rgb(0, 0, 0); 
 	padding: 5px; 
 	font-size: 12px; 
