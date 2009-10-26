@@ -1,4 +1,4 @@
-# coding: latin-1
+# -*- coding: utf-8 -*-
 from models import *
 from django.shortcuts import render_to_response
 from django.shortcuts import get_object_or_404
@@ -48,6 +48,7 @@ def maaritaKisa(request, kisa_nimi=None):
                 posti=request.POST
         # Kisa formi
         kisaForm = KisaForm(posti,instance=kisa)
+	kisaForm.label="Kisan perustiedot"
         if kisaForm.is_valid():
                 kisa=kisaForm.save()
         
@@ -61,8 +62,8 @@ def maaritaKisa(request, kisa_nimi=None):
                 return HttpResponseRedirect("/tupa/"+kisa.nimi+"/maarita/")
         else :
                 return render_to_response('tupa/maarita.html', 
-                                      { 'heading' : "Määrita Kisa" ,
-                                      'taakse' : "../" ,
+                                      { 'heading' : "Määritä kisa" ,
+                                      'taakse' : "../../" ,
                                       'forms' : (kisaForm,) ,
                                       'formsets' : ( sarjaFormit,) })
 
@@ -162,7 +163,7 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None):
                 return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/tehtava/"+str(tehtava.id)+'/' )
         else:
                 return render_to_response('tupa/maarita.html', 
-                                      { 'heading' : "Maarita Tehtava" ,
+                                      { 'heading' : "Maarita tehtävä" ,
                                       'taakse' : "/tupa/"+kisa_nimi+"/maarita/tehtava" ,
                                       'forms' : taulukko,
                                       'tabs' : tabit,

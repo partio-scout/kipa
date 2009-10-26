@@ -1,10 +1,10 @@
 {% extends "tupa/base.html" %}
-{% block title %}{{kisa.nimi}} - {{ heading }}{% endblock %}
+{% block title %}{{ heading }}{% endblock %}
 {% block content %} 
 
-<h1> {{ heading }}</h1>
+<h1>{{ heading }}</h1>
 
-<A href='{{taakse}}'>taakse</A><br>
+<p><a href='{{taakse}}'>Etusivu</a> -&gt; {{ heading }}<br></p>
 
 {% block alku %}
 

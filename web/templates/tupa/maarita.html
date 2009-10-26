@@ -1,12 +1,12 @@
 {% extends "tupa/base.html" %}
+{% block title %}{{ heading }}{% endblock %}
 {% block content %} 
 
-<h1> {{ heading }}</h1><br>
+<h1>{{ heading }}</h1>
 
-<A href='{{taakse}}'>taakse</A><br>
+<p><a href='{{taakse}}'>Etusivu</a> -&gt; {{ heading }}<br></p>
 
 <form method="POST" action="">
-
 {% if forms %}
     {% for form in forms%}
         <fieldset>
