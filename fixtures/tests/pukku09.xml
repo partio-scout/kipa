@@ -305,7 +305,7 @@
         <field type="CharField" name="tehtavaluokka"></field>
         <field type="TextField" name="rastikasky"></field>
         <field type="IntegerField" name="jarjestysnro">1</field>
-        <field type="CharField" name="kaava">min(0,a-b*0.5)</field>
+        <field type="CharField" name="kaava">max(0,a-b*0.5)</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">5</field>
     </object>
     <object pk="24" model="tupa.testaustulos">
@@ -531,12 +531,12 @@
     </object>
     <object pk="43" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">6</field>
+        <field type="CharField" name="arvo">6.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">9</field>
     </object>
     <object pk="44" model="tupa.parametri">
         <field type="CharField" name="nimi">aMax</field>
-        <field type="CharField" name="arvo">6</field>
+        <field type="CharField" name="arvo">6.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">9</field>
     </object>
     <object pk="45" model="tupa.parametri">
@@ -551,12 +551,12 @@
     </object>
     <object pk="125" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">9</field>
     </object>
     <object pk="126" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">9</field>
     </object>
     <object pk="9" model="tupa.osatehtava">
@@ -1025,7 +1025,7 @@
     </object>
     <object pk="141" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">7</field>
+        <field type="CharField" name="arvo">7.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">32</field>
     </object>
     <object pk="142" model="tupa.parametri">
@@ -1045,12 +1045,12 @@
     </object>
     <object pk="145" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">b-a</field>
+        <field type="CharField" name="arvo">.b*muk-.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">32</field>
     </object>
     <object pk="146" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">b-a</field>
+        <field type="CharField" name="arvo">.b*muk-.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">32</field>
     </object>
     <object pk="32" model="tupa.osatehtava">
@@ -1291,12 +1291,12 @@
     </object>
     <object pk="51" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">2</field>
+        <field type="CharField" name="arvo">2.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">11</field>
     </object>
     <object pk="52" model="tupa.parametri">
         <field type="CharField" name="nimi">aMax</field>
-        <field type="CharField" name="arvo">2</field>
+        <field type="CharField" name="arvo">2.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">11</field>
     </object>
     <object pk="53" model="tupa.parametri">
@@ -1311,12 +1311,12 @@
     </object>
     <object pk="167" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">11</field>
     </object>
     <object pk="168" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">11</field>
     </object>
     <object pk="11" model="tupa.osatehtava">
@@ -1428,7 +1428,7 @@
     </object>
     <object pk="163" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">3</field>
+        <field type="CharField" name="arvo">3.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">36</field>
     </object>
     <object pk="164" model="tupa.parametri">
@@ -1448,12 +1448,12 @@
     </object>
     <object pk="169" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">36</field>
     </object>
     <object pk="170" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">36</field>
     </object>
     <object pk="36" model="tupa.osatehtava">
@@ -1694,7 +1694,7 @@
     </object>
     <object pk="55" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">4</field>
+        <field type="CharField" name="arvo">4.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">12</field>
     </object>
     <object pk="56" model="tupa.parametri">
@@ -1714,12 +1714,12 @@
     </object>
     <object pk="199" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">12</field>
     </object>
     <object pk="200" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">12</field>
     </object>
     <object pk="12" model="tupa.osatehtava">
@@ -2216,12 +2216,12 @@
     </object>
     <object pk="63" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">5</field>
+        <field type="CharField" name="arvo">5.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">14</field>
     </object>
     <object pk="64" model="tupa.parametri">
         <field type="CharField" name="nimi">aMax</field>
-        <field type="CharField" name="arvo">20</field>
+        <field type="CharField" name="arvo">20.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">14</field>
     </object>
     <object pk="65" model="tupa.parametri">
@@ -2236,12 +2236,12 @@
     </object>
     <object pk="213" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">14</field>
     </object>
     <object pk="214" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">14</field>
     </object>
     <object pk="14" model="tupa.osatehtava">
@@ -2482,12 +2482,12 @@
     </object>
     <object pk="67" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">3</field>
+        <field type="CharField" name="arvo">3.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">15</field>
     </object>
     <object pk="68" model="tupa.parametri">
         <field type="CharField" name="nimi">aMax</field>
-        <field type="CharField" name="arvo">15</field>
+        <field type="CharField" name="arvo">15.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">15</field>
     </object>
     <object pk="69" model="tupa.parametri">
@@ -2502,12 +2502,12 @@
     </object>
     <object pk="215" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">15</field>
     </object>
     <object pk="216" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">15</field>
     </object>
     <object pk="15" model="tupa.osatehtava">
@@ -2748,12 +2748,12 @@
     </object>
     <object pk="71" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">6</field>
+        <field type="CharField" name="arvo">6.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">16</field>
     </object>
     <object pk="72" model="tupa.parametri">
         <field type="CharField" name="nimi">aMax</field>
-        <field type="CharField" name="arvo">12</field>
+        <field type="CharField" name="arvo">12.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">16</field>
     </object>
     <object pk="73" model="tupa.parametri">
@@ -2768,12 +2768,12 @@
     </object>
     <object pk="233" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">16</field>
     </object>
     <object pk="234" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">16</field>
     </object>
     <object pk="16" model="tupa.osatehtava">
@@ -3014,12 +3014,12 @@
     </object>
     <object pk="75" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">6</field>
+        <field type="CharField" name="arvo">6.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">17</field>
     </object>
     <object pk="76" model="tupa.parametri">
         <field type="CharField" name="nimi">aMax</field>
-        <field type="CharField" name="arvo">12</field>
+        <field type="CharField" name="arvo">12.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">17</field>
     </object>
     <object pk="77" model="tupa.parametri">
@@ -3034,12 +3034,12 @@
     </object>
     <object pk="241" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">17</field>
     </object>
     <object pk="242" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">17</field>
     </object>
     <object pk="17" model="tupa.osatehtava">
@@ -3151,7 +3151,7 @@
     </object>
     <object pk="243" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">4</field>
+        <field type="CharField" name="arvo">4.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">48</field>
     </object>
     <object pk="244" model="tupa.parametri">
@@ -3171,12 +3171,12 @@
     </object>
     <object pk="247" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">48</field>
     </object>
     <object pk="248" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">48</field>
     </object>
     <object pk="48" model="tupa.osatehtava">
@@ -3673,12 +3673,12 @@
     </object>
     <object pk="83" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">3</field>
+        <field type="CharField" name="arvo">3.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">19</field>
     </object>
     <object pk="84" model="tupa.parametri">
         <field type="CharField" name="nimi">aMax</field>
-        <field type="CharField" name="arvo">60</field>
+        <field type="CharField" name="arvo">60.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">19</field>
     </object>
     <object pk="85" model="tupa.parametri">
@@ -3693,12 +3693,12 @@
     </object>
     <object pk="251" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">19</field>
     </object>
     <object pk="252" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">19</field>
     </object>
     <object pk="19" model="tupa.osatehtava">
@@ -3939,7 +3939,7 @@
     </object>
     <object pk="95" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">2</field>
+        <field type="CharField" name="arvo">2.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">22</field>
     </object>
     <object pk="96" model="tupa.parametri">
@@ -3959,12 +3959,12 @@
     </object>
     <object pk="327" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">22</field>
     </object>
     <object pk="328" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">22</field>
     </object>
     <object pk="22" model="tupa.osatehtava">
@@ -4332,12 +4332,12 @@
     </object>
     <object pk="91" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">3</field>
+        <field type="CharField" name="arvo">3.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">21</field>
     </object>
     <object pk="92" model="tupa.parametri">
         <field type="CharField" name="nimi">aMax</field>
-        <field type="CharField" name="arvo">20</field>
+        <field type="CharField" name="arvo">20.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">21</field>
     </object>
     <object pk="93" model="tupa.parametri">
@@ -4352,12 +4352,12 @@
     </object>
     <object pk="277" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">21</field>
     </object>
     <object pk="278" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">21</field>
     </object>
     <object pk="21" model="tupa.osatehtava">
@@ -4598,12 +4598,12 @@
     </object>
     <object pk="99" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">4</field>
+        <field type="CharField" name="arvo">4.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">23</field>
     </object>
     <object pk="100" model="tupa.parametri">
         <field type="CharField" name="nimi">aMax</field>
-        <field type="CharField" name="arvo">32</field>
+        <field type="CharField" name="arvo">32.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">23</field>
     </object>
     <object pk="101" model="tupa.parametri">
@@ -4618,12 +4618,12 @@
     </object>
     <object pk="275" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">23</field>
     </object>
     <object pk="276" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">23</field>
     </object>
     <object pk="23" model="tupa.osatehtava">
@@ -4864,7 +4864,7 @@
     </object>
     <object pk="87" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">2</field>
+        <field type="CharField" name="arvo">2.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">20</field>
     </object>
     <object pk="88" model="tupa.parametri">
@@ -4884,12 +4884,12 @@
     </object>
     <object pk="279" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">20</field>
     </object>
     <object pk="280" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">20</field>
     </object>
     <object pk="20" model="tupa.osatehtava">
@@ -5257,7 +5257,7 @@
     </object>
     <object pk="103" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">4</field>
+        <field type="CharField" name="arvo">4.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">24</field>
     </object>
     <object pk="104" model="tupa.parametri">
@@ -5277,12 +5277,12 @@
     </object>
     <object pk="285" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">24</field>
     </object>
     <object pk="286" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">24</field>
     </object>
     <object pk="24" model="tupa.osatehtava">
@@ -5971,7 +5971,7 @@
         <field type="CharField" name="tehtavaluokka"></field>
         <field type="TextField" name="rastikasky"></field>
         <field type="IntegerField" name="jarjestysnro">1</field>
-        <field type="CharField" name="kaava">min(0,a-b*0.5)</field>
+        <field type="CharField" name="kaava">max(0,a-b*0.5)</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">6</field>
     </object>
     <object pk="456" model="tupa.testaustulos">
@@ -6107,12 +6107,12 @@
     </object>
     <object pk="147" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">6</field>
+        <field type="CharField" name="arvo">6.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">33</field>
     </object>
     <object pk="148" model="tupa.parametri">
         <field type="CharField" name="nimi">aMax</field>
-        <field type="CharField" name="arvo">6</field>
+        <field type="CharField" name="arvo">6.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">33</field>
     </object>
     <object pk="149" model="tupa.parametri">
@@ -6127,12 +6127,12 @@
     </object>
     <object pk="151" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">33</field>
     </object>
     <object pk="152" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">33</field>
     </object>
     <object pk="33" model="tupa.osatehtava">
@@ -6441,7 +6441,7 @@
     </object>
     <object pk="157" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">7</field>
+        <field type="CharField" name="arvo">7.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">35</field>
     </object>
     <object pk="158" model="tupa.parametri">
@@ -6461,12 +6461,12 @@
     </object>
     <object pk="161" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">b-a</field>
+        <field type="CharField" name="arvo">.b*muk-.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">35</field>
     </object>
     <object pk="162" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">b-a</field>
+        <field type="CharField" name="arvo">.b*muk-.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">35</field>
     </object>
     <object pk="35" model="tupa.osatehtava">
@@ -6617,12 +6617,12 @@
     </object>
     <object pk="171" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">2</field>
+        <field type="CharField" name="arvo">2.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">37</field>
     </object>
     <object pk="172" model="tupa.parametri">
         <field type="CharField" name="nimi">aMax</field>
-        <field type="CharField" name="arvo">2</field>
+        <field type="CharField" name="arvo">2.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">37</field>
     </object>
     <object pk="173" model="tupa.parametri">
@@ -6637,12 +6637,12 @@
     </object>
     <object pk="175" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">37</field>
     </object>
     <object pk="176" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">37</field>
     </object>
     <object pk="37" model="tupa.osatehtava">
@@ -6719,7 +6719,7 @@
     </object>
     <object pk="177" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">3</field>
+        <field type="CharField" name="arvo">3.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">38</field>
     </object>
     <object pk="178" model="tupa.parametri">
@@ -6739,12 +6739,12 @@
     </object>
     <object pk="181" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">38</field>
     </object>
     <object pk="182" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">38</field>
     </object>
     <object pk="38" model="tupa.osatehtava">
@@ -6895,7 +6895,7 @@
     </object>
     <object pk="183" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">4</field>
+        <field type="CharField" name="arvo">4.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">39</field>
     </object>
     <object pk="184" model="tupa.parametri">
@@ -6915,12 +6915,12 @@
     </object>
     <object pk="187" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">39</field>
     </object>
     <object pk="188" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">39</field>
     </object>
     <object pk="39" model="tupa.osatehtava">
@@ -7163,7 +7163,7 @@
     </object>
     <object pk="193" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">4</field>
+        <field type="CharField" name="arvo">4.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">41</field>
     </object>
     <object pk="194" model="tupa.parametri">
@@ -7183,12 +7183,12 @@
     </object>
     <object pk="197" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">41</field>
     </object>
     <object pk="198" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">41</field>
     </object>
     <object pk="41" model="tupa.osatehtava">
@@ -7339,7 +7339,7 @@
     </object>
     <object pk="201" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">5</field>
+        <field type="CharField" name="arvo">5.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">42</field>
     </object>
     <object pk="202" model="tupa.parametri">
@@ -7359,12 +7359,12 @@
     </object>
     <object pk="205" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">42</field>
     </object>
     <object pk="206" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">42</field>
     </object>
     <object pk="42" model="tupa.osatehtava">
@@ -7681,12 +7681,12 @@
     </object>
     <object pk="207" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">3</field>
+        <field type="CharField" name="arvo">3.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">43</field>
     </object>
     <object pk="208" model="tupa.parametri">
         <field type="CharField" name="nimi">aMax</field>
-        <field type="CharField" name="arvo">15</field>
+        <field type="CharField" name="arvo">15.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">43</field>
     </object>
     <object pk="209" model="tupa.parametri">
@@ -7701,12 +7701,12 @@
     </object>
     <object pk="211" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">43</field>
     </object>
     <object pk="212" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">43</field>
     </object>
     <object pk="43" model="tupa.osatehtava">
@@ -7857,12 +7857,12 @@
     </object>
     <object pk="217" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">3</field>
+        <field type="CharField" name="arvo">3.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">44</field>
     </object>
     <object pk="218" model="tupa.parametri">
         <field type="CharField" name="nimi">aMax</field>
-        <field type="CharField" name="arvo">15</field>
+        <field type="CharField" name="arvo">15.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">44</field>
     </object>
     <object pk="219" model="tupa.parametri">
@@ -7877,12 +7877,12 @@
     </object>
     <object pk="221" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">44</field>
     </object>
     <object pk="222" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">44</field>
     </object>
     <object pk="44" model="tupa.osatehtava">
@@ -8033,12 +8033,12 @@
     </object>
     <object pk="227" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">6</field>
+        <field type="CharField" name="arvo">6.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">46</field>
     </object>
     <object pk="228" model="tupa.parametri">
         <field type="CharField" name="nimi">aMax</field>
-        <field type="CharField" name="arvo">12</field>
+        <field type="CharField" name="arvo">12.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">46</field>
     </object>
     <object pk="229" model="tupa.parametri">
@@ -8053,12 +8053,12 @@
     </object>
     <object pk="231" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">46</field>
     </object>
     <object pk="232" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">46</field>
     </object>
     <object pk="46" model="tupa.osatehtava">
@@ -8209,12 +8209,12 @@
     </object>
     <object pk="235" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">10</field>
+        <field type="CharField" name="arvo">10.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">47</field>
     </object>
     <object pk="236" model="tupa.parametri">
         <field type="CharField" name="nimi">aMax</field>
-        <field type="CharField" name="arvo">10</field>
+        <field type="CharField" name="arvo">10.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">47</field>
     </object>
     <object pk="237" model="tupa.parametri">
@@ -8229,12 +8229,12 @@
     </object>
     <object pk="239" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">47</field>
     </object>
     <object pk="240" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">47</field>
     </object>
     <object pk="47" model="tupa.osatehtava">
@@ -8551,12 +8551,12 @@
     </object>
     <object pk="263" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">3</field>
+        <field type="CharField" name="arvo">3.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">51</field>
     </object>
     <object pk="264" model="tupa.parametri">
         <field type="CharField" name="nimi">aMax</field>
-        <field type="CharField" name="arvo">60</field>
+        <field type="CharField" name="arvo">60.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">51</field>
     </object>
     <object pk="265" model="tupa.parametri">
@@ -8571,12 +8571,12 @@
     </object>
     <object pk="267" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">51</field>
     </object>
     <object pk="268" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">51</field>
     </object>
     <object pk="51" model="tupa.osatehtava">
@@ -8727,7 +8727,7 @@
     </object>
     <object pk="287" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">2</field>
+        <field type="CharField" name="arvo">2.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">54</field>
     </object>
     <object pk="288" model="tupa.parametri">
@@ -8747,12 +8747,12 @@
     </object>
     <object pk="333" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">54</field>
     </object>
     <object pk="334" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">54</field>
     </object>
     <object pk="54" model="tupa.osatehtava">
@@ -8990,7 +8990,7 @@
     </object>
     <object pk="257" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">4</field>
+        <field type="CharField" name="arvo">4.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">50</field>
     </object>
     <object pk="258" model="tupa.parametri">
@@ -9010,12 +9010,12 @@
     </object>
     <object pk="261" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">50</field>
     </object>
     <object pk="262" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">50</field>
     </object>
     <object pk="50" model="tupa.osatehtava">
@@ -9166,7 +9166,7 @@
     </object>
     <object pk="291" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">2</field>
+        <field type="CharField" name="arvo">2.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">55</field>
     </object>
     <object pk="292" model="tupa.parametri">
@@ -9186,12 +9186,12 @@
     </object>
     <object pk="295" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">55</field>
     </object>
     <object pk="296" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">55</field>
     </object>
     <object pk="55" model="tupa.osatehtava">
@@ -9434,12 +9434,12 @@
     </object>
     <object pk="337" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">4</field>
+        <field type="CharField" name="arvo">4.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">64</field>
     </object>
     <object pk="338" model="tupa.parametri">
         <field type="CharField" name="nimi">aMax</field>
-        <field type="CharField" name="arvo">32</field>
+        <field type="CharField" name="arvo">32.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">64</field>
     </object>
     <object pk="339" model="tupa.parametri">
@@ -9454,12 +9454,12 @@
     </object>
     <object pk="341" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">64</field>
     </object>
     <object pk="342" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">64</field>
     </object>
     <object pk="64" model="tupa.osatehtava">
@@ -9610,12 +9610,12 @@
     </object>
     <object pk="269" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">6</field>
+        <field type="CharField" name="arvo">6.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">52</field>
     </object>
     <object pk="270" model="tupa.parametri">
         <field type="CharField" name="nimi">aMax</field>
-        <field type="CharField" name="arvo">13</field>
+        <field type="CharField" name="arvo">13.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">52</field>
     </object>
     <object pk="271" model="tupa.parametri">
@@ -9630,12 +9630,12 @@
     </object>
     <object pk="273" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">52</field>
     </object>
     <object pk="274" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">52</field>
     </object>
     <object pk="52" model="tupa.osatehtava">
@@ -9786,12 +9786,12 @@
     </object>
     <object pk="319" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">5</field>
+        <field type="CharField" name="arvo">5.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">61</field>
     </object>
     <object pk="320" model="tupa.parametri">
         <field type="CharField" name="nimi">aMax</field>
-        <field type="CharField" name="arvo">40</field>
+        <field type="CharField" name="arvo">40.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">61</field>
     </object>
     <object pk="321" model="tupa.parametri">
@@ -9806,12 +9806,12 @@
     </object>
     <object pk="335" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">61</field>
     </object>
     <object pk="336" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">61</field>
     </object>
     <object pk="61" model="tupa.osatehtava">
@@ -9962,7 +9962,7 @@
     </object>
     <object pk="301" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">4</field>
+        <field type="CharField" name="arvo">4.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">57</field>
     </object>
     <object pk="302" model="tupa.parametri">
@@ -9982,12 +9982,12 @@
     </object>
     <object pk="305" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">57</field>
     </object>
     <object pk="306" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">57</field>
     </object>
     <object pk="57" model="tupa.osatehtava">
