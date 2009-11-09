@@ -534,7 +534,7 @@
     </object>
     <object pk="23" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">5</field>
+        <field type="CharField" name="arvo">5.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">5</field>
     </object>
     <object pk="24" model="tupa.parametri">
@@ -554,12 +554,12 @@
     </object>
     <object pk="27" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">5</field>
     </object>
     <object pk="28" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">5</field>
     </object>
     <object pk="5" model="tupa.osatehtava">
@@ -1097,7 +1097,7 @@
     </object>
     <object pk="29" model="tupa.parametri">
         <field type="CharField" name="nimi">maxP</field>
-        <field type="CharField" name="arvo">5</field>
+        <field type="CharField" name="arvo">5.0</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">6</field>
     </object>
     <object pk="30" model="tupa.parametri">
@@ -1117,12 +1117,12 @@
     </object>
     <object pk="33" model="tupa.parametri">
         <field type="CharField" name="nimi">maksimi_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">6</field>
     </object>
     <object pk="34" model="tupa.parametri">
         <field type="CharField" name="nimi">nolla_kaava</field>
-        <field type="CharField" name="arvo">a</field>
+        <field type="CharField" name="arvo">.a*muk</field>
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">6</field>
     </object>
     <object pk="6" model="tupa.osatehtava">

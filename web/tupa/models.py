@@ -41,7 +41,7 @@ class Sarja(models.Model) :
         class Meta:
                 verbose_name_plural = "Sarjat"
         def laskeTulokset(self) :
-                return TulosLaskin().laskeSarja(self)
+                return laskeSarja(self)
 
 class Vartio(models.Model) :
         #gen_dia_class Vartio

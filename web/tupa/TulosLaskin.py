@@ -1,537 +1,229 @@
 #coding: latin-1
 from decimal import *
 import re
-import AritmeettinenLaskin
+from taulukkolaskin import *
 from logger import lokkeri
 import math
 import operator
 from django.core.exceptions import ObjectDoesNotExist
-                 
-def is_number(s):
-        if not s : return False
-        try: float(s)
-        except ValueError: return False
-        return True
+from funktiot import *
 
-"""
-Sanakirja erikoisfunktioista joita voi kutsua kaavoissa,
-Ensimmäisenä nimi jolla viitataan kaavassa , jälkimmäisenä todellisen funktion nimi
-"""
-erikoisFunktiot = { 
-        "interpoloi" : "self.interpoloi" ,
-        "minmax" : "self.minmax" ,
-        "max" : "self.max", 
-        "min" : "self.min" , 
-        "med" : "self.mediaani",
-        "kesk" : "self.keskiarvo" , 
-        "pienin" : "self.pienin" , 
-        "suurin" : "self.suurin" ,
-        "itseisarvo" : "self.itseisarvo" ,
-        "aikavali" : "self.aikavali",
-        "med_aikavali" : "self.med_aikavali",
-        "min_aikavali" : "self.min_aikavali",
-        }
-def parsiSulku(lause) :
+def korvaa(lause,pino,loppu=None) :
         """
-        Parsii lauseesta ensimmäiset sulut joiden sisällä ei ole sulkuja.
-        Palauttaa (lauseen alku,sulkujen sisäpuoli,lauseen loppu)
-        esim. parsiSulku( "5/(2*(3+2))" )
-        palauttaa ( "5/(2*" , "3+2" , ")" )
-        Mikäli sulkua ei löydy palauttaa None.
+        Korvaa lauseen muuttujat pinon mukaisella etuliitteella a.b.c jne.
+        "." lausessa muuttujan edessa liikuttaa muuttujaa pinossa ylospain 
+        optionaalinen loppu parametri lisaa muuttujan peraan arvon. 
+        loppu parametri poistuu ensimmaisella .a operaatiola
+        esim: 
+        >>> korvaa("c",["a","b"])
+        'a.b.c'
+        >>> korvaa(".c",["a","b"])
+        'a.c'
+        >>> korvaa("5+..c",["a","b"])
+        '5+c'
+        >>> korvaa("c",["a","b"],"56")
+        'a.b.c.56'
+        >>> korvaa(".c",["a","b"],"56")
+        'a.b.c'
+        >>> korvaa("..c",["a","b"],"56")
+        'a.c'
+        >>> korvaa("5+...c",["a","b"],"56")
+        '5+c'
+        >>> korvaa("5+...c*c",["a","b"],"56")
+        '5+c*a.b.c.56'
+        >>> korvaa("c(c)",["a","b"])
+        'c(a.b.c)'
+        >>> korvaa("funktio(c)",["a","b"])
+        'funktio(a.b.c)'
         """
-        haku = re.search("(.*?)(?:[(])([^()]*)(?:[)])(.*)"  ,lause)
-        if haku :
-             return (haku.group(1),haku.group(2),haku.group(3))
-        else : return None
-
-       
-def stringDecimaaliksi(merkkijono) :
-        """
-        Muuntaa merkkijonon Decimal objektiksi.
-        Palauttaa None mikäli merkkijono ei ole muunnettavissa.
-        """
-        
-        if merkkijono and re.search(r'^\d*\Z|^\d*\.\d*\Z', merkkijono ) :
-                return Decimal(merkkijono)
-        else : 
-                return None
-
-def sijoitaMuuttujat(kaava,muuttujaKirja):
-        """
-        Korvaa kaavasta löytyvät muuttujaKirjan mukaiset muuttujat.
-        Muuttujan molemmilla puolilla kaavassa tulee olla joko operaattori,",", sulku tai merkkijonon alku tahi loppu.
-        Palauttaa sijoitetun kaavan.
-        """
-        muokattu=kaava
-        muuttui=True
-        while muuttui==True :
-                alussa=muokattu
-                for i, j in muuttujaKirja.iteritems():  
-                        if i and j :
-                                muokattu = re.sub("(?<=[-+/*(),])"+i+"(?=[-+/*(),])",j.strip(),muokattu)  
-                                muokattu = re.sub("(?<=^)"+i+"(?=[-+/*(),])",j.strip(),muokattu)  
-                                muokattu = re.sub("(?<=^)"+i+"(?=$)",j.strip(),muokattu)  
-                                muokattu = re.sub("(?<=[-+/*(),])"+i+"(?=$)",j.strip(),muokattu)
-                if alussa==muokattu : muuttui=False
+        haku= re.finditer("(\.{0,3})([a-zA-Z]+)(?:\.(\w+))?(?:\.(\w+))?(?:\.(\w+))?(?!\w*[(])",lause )
+        muutokset=[]
+        for h in haku :
+                ryhmat= h.groups()
+                vanha=ryhmat[0]
+                uusi=""
+                paluu=len(ryhmat[0])
+                if loppu:
+                        if paluu>0 : paluu=paluu-1
+                kohtaan = len(pino)-paluu
+                for i in range(kohtaan) :
+                        uusi=uusi+"." +pino[i]
+                for g in ryhmat[1:] :
+                        if g: 
+                                uusi=uusi+"."+g
+                                vanha=vanha+"."+g
+                vanha=vanha[1:]
+                if loppu and len(ryhmat[0])==0: 
+                        uusi=uusi+"."+loppu
+                uusi=uusi[1:]
+                muutokset.append((h.start(),h.end(),uusi))
+        muokattu=lause[:muutokset[0][0]]
+        for i in range(len(muutokset)-1):
+                muokattu=muokattu+muutokset[i][2]
+                muokattu=muokattu+lause[muutokset[i][1]:muutokset[i+1][0]]
+        muokattu=muokattu+muutokset[-1][2]
+        muokattu=muokattu+lause[muutokset[-1][1]:]
         return muokattu
 
-def pilkoParametreiksi(merkkijono):
+def luoMuuttujat(sarja) :
+        """ 
+        Luo sarjan syotteiden muuttujasanakirjan:
+        rakenne on muotoa: muuttujat[tehtavan_nimi][osatatehtavan_nimi][syotteen_nimi][vartion_nro]=arvo
+        mukana olevien vartioista loytyy tieto: muuttujat[tehtavan_nimi]["mukana"][vartion_nro]=1
         """
-        Pilkkoo merkkijonon listaksi pilkkujen kohdalta.
-        Jos merkkijonossa on sulkuja ei pilkkomista tehdä sulkeiden sisältä.
+        dict_teht=[]
+        vartiot=sarja.vartio_set.all()
+        tehtavat=sarja.tehtava_set.all()
+        for t in tehtavat:
+                dict_ot=[]
+                mukana_olevat=t.mukanaOlevatVartiot()
+                dict_m=[]
+                for m in mukana_olevat :
+                        dict_m.append( (str(m.nro),1)  )
+                dict_ot.append(("mukana" , dict(dict_m) ) )
+                osatehtavat=t.osatehtava_set.all()
+                for ot in osatehtavat:
+                        dict_maaritteet=[]
+                        maaritteet = ot.syotemaarite_set.all()
+                        for m in maaritteet:
+                                syotteet=m.syote_set.all()
+                                dict_syotteet=[]
+                                for v in vartiot :
+                                        s=syotteet.filter(vartio=v)
+                                        if len(s)==1 : 
+                                                try :
+                                                        dict_syotteet.append((str(v.nro),Decimal(s[0].arvo)))
+                                                except InvalidOperation: 
+                                                        dict_syotteet.append((str(v.nro),s[0].arvo))
+
+                                dict_maaritteet.append( (m.nimi,dict(dict_syotteet)) )
+                        dict_ot.append( (ot.nimi,dict(dict_maaritteet)) )
+                t_nimi= t.nimi.replace(" ","")
+                t_nimi= t_nimi.replace("!","")
+                dict_teht.append( (t_nimi,dict(dict_ot)) )
+        muuttujat= dict(dict_teht)
+        return muuttujat
+
+def luoLaskut(sarja) :
         """
-        sulkuja=0
-        katkaistavatKohdat=[]
-        for i in range(len(merkkijono)):
-                if merkkijono[i]=='(':
-                        sulkuja=sulkuja+1
-                elif merkkijono[i]==')':
-                        sulkuja=sulkuja-1
-                elif merkkijono[i]==',' and sulkuja == 0 :
-                        katkaistavatKohdat.append(i)
-     
-        if len(katkaistavatKohdat):
-                parametrit=[]
-                edellinenKohta=0
-                for k in katkaistavatKohdat:
-                        parametrit.append( merkkijono[edellinenKohta : k ] )
-                        edellinenKohta=k+1
-                parametrit.append(merkkijono[edellinenKohta :])
-                return parametrit
-        else: 
-                return [merkkijono]
-
-class TulosLaskin :
+        luo kaksiulotteisen taulukon jossa on laskutoimitukset vartion pisteiden laskemiseen.
         """
-        Luokka jonka objektit laskevat tuloksia.
-        """
-        funktioKirja = erikoisFunktiot
-
-        def max(self,param) :
-                """
-                Kasksi parametriä, maksimiarvo ja arvo. Molemmat voivat olla lausekkeita. 
-                Palauttaa arvon mikäli se on maksimiarvoa pienempi. Muussa tapauksessa maksimiarvon, 
-                tai None jos lausekkeet eivät ole laskettavissa. 
-                """
-                arvo=self.laske(param[1])
-                suurin=param[0]
-                if arvo and suurin and Decimal(arvo) > Decimal(suurin) :
-                        return suurin
-                elif arvo and suurin:
-                        return arvo
-                else :
-                        return None
-    
-        def min(self,param) :
-                """
-                Kaksi parametriä, minimiarvo ja arvo. Molemmat voivat olla lausekkeita.
-                Palauttaa arvon mikäli se on minimiarvoa suurempi. Muussa tapauksessa minimiarvon,
-                tai None jos lausekkeet eivät ole laskettavissa.
-                """
-                arvo=self.laske(param[1])
-                pienin=param[0]
-                if not arvo:
-                        return None
-                elif Decimal(arvo) < Decimal(pienin) :
-                        return pienin
-                else :
-                        return arvo
-        
-        def minmax(self,param):
-                """
-                Kolme parametriä: minimiarvo, maksimiarvo, ja arvo. Ne voivat olla lausekkeita.
-                Palauttaa arvon rajattuna minimiarvon ja maksimiarvon väliin. 
-                Jos lauseet eivät ole laskettavissa palauttaa None.
-                """
-                a = param[0]
-                b = param[1]
-                c = param[2]
-                lokkeri.setMessage( c ).logMessage()
-                return "min("+a+",max("+b+","+c+"))"
-
-        def interpoloi(self,param):
-                """
-                Neljä parametriä: 
-                          1.a=Interpoloitava arvo,
-                          2.aMax = arvo jolla saa maksimipisteet
-                          3.maxP = Jaettavat maksimipisteet
-                          4.aNolla = arvo jolla saa nollat
-                """
-                a = param[0]
-                aMax = param[1]
-                maxP = param[2]
-                aNolla= param[3]
-                #(maxP/(aMax-aNolla))*(a-aNolla)
-                kaava="minmax(0,"+maxP+",("+maxP+"/("+aMax+"-"+aNolla+"))*("+a+"-"+aNolla+"))"
-                lokkeri.setMessage( kaava ).logMessage()
-                return kaava
-
-        def mediaani(self,param):
-                """
-                Yksi parametri: syote josta lasketaan mediaani.
-                Palauttaa mediaanin. Mikäli syötteitä ei löydy lainkaan palauttaa None
-                Mediaaniin ei oteta mukaan ulkopuolella olevien vartioiden syötteitä. 
-                """
-                if 'med_'+param[0] in self.optimoinnit:
-                        # Optimointi: mediaani lasketaan vain kerran saman tehtävän sisällä
-                        return self.optimoinnit['med_'+param[0]]
-                kaava=param[0]
-                tulokset = self.laske_mukana_oleville(kaava)                
-                def getMedian(numericValues):
-                        if not len(numericValues):
-                                return None
-                        theValues = sorted(numericValues)
-                        if len(theValues) % 2 == 1:
-                                return theValues[(len(theValues)+1)/2-1]
-                        else:
-                                lower = theValues[len(theValues)/2-1]
-                                upper = theValues[len(theValues)/2]
-                        return (Decimal(lower + upper)) / 2  
-                mediaani= str(getMedian(tulokset))
-                self.optimoinnit['med_'+param[0]]=mediaani
-                return mediaani
-
-        def keskiarvo(self,param):
-                """
-                Yksi parametri: Kaava joista lasketaan keskiarvo.
-                Palauttaa Keskiarvon. Mikäli syötteitä ei löydy lainkaan palauttaa None
-                Keskiarvoon ei oteta tehtävässä ulkopuolella olevien vartoiden syötteitä.
-                """
-                assert 0
-
-        def suurin(self,param):
-                """
-                Yksi parametri: Kaava jonka tuloksista haetaan suurin arvo.
-                Palauttaa mukana olevista vartioista suurimman. Mikäli syötteitä ei löydy ollenkaan, palauttaa None.
-                Suurinta arvoa ei lasketa tehtävässä ulkopuolella olevien vartioiden syötteistä.
-                """
-                if 'suurin_'+param[0] in self.optimoinnit:
-                        # Optimointi: suurin haetaan vain kerran samassa tehtavassa
-                        return self.optimoinnit['suurin_'+param[0]]
-
-                kaava=param[0]
-                tulokset= self.laske_mukana_oleville(kaava)
-                sarvo = str(max(tulokset))
-                self.optimoinnit['suurin_'+param[0]]=sarvo
-                return sarvo
-
-        
-        def laske_mukana_oleville(self,kaava):
-                """
-                laskee kaavan tulokset kaikille osatehtavassa mukana oleville vartiolle 
-                kayttaa self.osa_tehtava : osatehtavan laskemisessa
-                palauttaa listan tuloksista
-                """
-                vartiot = self.teht.mukanaOlevatVartiot()
-                tulokset=[]
-                vMuuttujat=self.muuttujaKirja.copy()
-                for v in vartiot:
-                        self.muuttujaKirja=vMuuttujat.copy()
-                        maaritteet = self.osa_teht.syotemaarite_set.all()
-                        if maaritteet:
-                                for m in maaritteet :
-                                        try:
-                                                vArvo=vSyote=m.syote_set.get(vartio=v).arvo
-                                                self.muuttujaKirja[m.nimi]=vArvo
-                                        except ObjectDoesNotExist:
-                                                self.muuttujaKirja[m.nimi]=None
-                                tulos = self.laske(kaava)
-                                if is_number(tulos):
-                                        tulokset.append( Decimal( tulos ))
-                self.muuttujaKirja=vMuuttujat.copy()
-                return tulokset
-
-        def pienin(self,param):
-                """
-                Yksi parametri: Tehtävän syötteiden nimi joista haetaan pienin arvo.
-                Palauttaa mukana olevista vartioista pienimmän. mikäli syötteitä ei löydy ollenkaan, palauttaa None
-                Pienintä arvoa ei lasketa tehtävässä ulkopuolella olevien vartioiden syötteistä.
-                """
-                
-                if 'pienin_'+param[0] in self.optimoinnit:
-                        # Optimointi: pienin haetaan vain kerran samassa tehtavassa
-                        return self.optimoinnit['pienin_'+param[0]]
-                #kaava=sijoitaMuuttujat(param[0],self.muuttujaKirja)
-                kaava=param[0]
-                tulokset = self.laske_mukana_oleville(kaava)                
-                if len(tulokset)==0:
-                        return None
-                parvo = str(min(tulokset))
-                self.optimoinnit['pienin_'+param[0]]=parvo
-                return parvo
-
-
-        def itseisarvo(self,param) :
-                """
-                Muuttaa negatiiviset arvot positiiviseksi.
-                -Yksi parametri
-                """
-                parametri = self.laske(param[0])
-                return unicode( abs( Decimal( parametri ) ) )
-        def aikavali(self,param) :
-                arvoa=self.laske(param[0])
-                arvob=self.laske(param[1])
-                if is_number(arvoa) and is_number(arvob):
-                        lukua = Decimal(arvoa)
-                        lukub = Decimal(arvob)
-                else :
-                        return None
-                if lukua > lukub :
-                        lukub = lukub + 24*60*60
-                return str(lukub)+"-"+str(lukua)
-
-        def suoritaFunktio(self,funktionNimi,parametrit) :
-                """
-                Suorittaa nimetyn erikoisfunktion
-                Antaa funktiolle parametit merkkijonosta, jossa parametrit on eroteltu pilkulla.
-                """
-                log_r_alku = funktionNimi +"("+ parametrit +") = "
-                listaParametreista= pilkoParametreiksi( parametrit )
-                for p in listaParametreista :
-                        if len(p.strip()) == 0 :
-                                return None
-                        p = self.laske(p)
-                tulos = unicode(eval( erikoisFunktiot[funktionNimi] + "(listaParametreista)" ) )
-                lokkeri.setMessage( log_r_alku + tulos ).logMessage()
-                return tulos
-        def haeFunktio(self , lause):
-                """
-                Hakee seuraavan funktiokirjasta löytyvän funktion lauseesta.
-                palauttaa (funktiota edeltävä osa,funktion nimi)
-                esim haeFunktio(5+5+5*Funktio(A)+4)
-                palauttaa ("5+5+5*","Funktio")
-                jos funktiota ei löydy palauttaa None
-                """
-                funktioHaku= "(^|.*[-+*/(),])("
-                if self.funktioKirja:
-                        for i, j in self.funktioKirja.iteritems():  
-                                funktioHaku=funktioHaku+i+"$"+"|"
-                else :
-                        funktioHaku=FunktioHaku+")"
-                funktioHaku=funktioHaku[:-1]+")"
-                funktio = re.search(funktioHaku, lause )
-                if funktio :
-                        return (funktio.group(1), funktio.group(2))
-                else :
-                        return None
-
-        def ratkaiseSulku(self,lause) :
-                """
-                Ratkaisee ensimmäisen sulkuparin joka ei sisällä muita sulkuja.
-                Jos sulut kuuluvat funktiolle, suoritetaan kyseinen funktio
-                Muuten lasketaan sulkujen välinen lause Aritmeettisella laskimella.
-                Palauttaa muokatun lauseen. 
-                """
-                muokattu = lause
-                parsittu = parsiSulku(muokattu)
-                if parsittu:
-                        tulos=None
-                        funktio=self.haeFunktio( parsittu[0] )
-                        if funktio:
-                                tulos = self.suoritaFunktio( funktio[1] , parsittu[1])
-                                muokattu= unicode(funktio[0]) + unicode(tulos) + unicode(parsittu[2])
-                        else:
-                                laskettava=parsittu[1]
-                                if self.muuttujaKirja:
-                                        laskettava=sijoitaMuuttujat(laskettava,self.muuttujaKirja)
-                                tulos = AritmeettinenLaskin.laske( laskettava )
-                                muokattu=unicode(parsittu[0]) + unicode(tulos) + unicode(parsittu[2])
-                return muokattu
-
-        def laske(self,kaava):
-                """
-                Laskee lausekkeen jossa on funktioita, muuttujia, sulkuja, */ sekä +- laskuja.
-                -Suorittaa funktioKirjasta löytyvät erikoisfunktiot.
-                -Sijoittaa muuttujat, joille löytyy arvo muuttujaKirjasta.
-                -Laskee sulkujen mukaan */ ensin sitten +-.
-                -Mikäli lauseke oli laskettavissa palauttaa tuloksen. Muussa tapauksessa None.
-                """
-                muokattu=kaava
-                # Suoritetaan sulkeet:
-                sulkuja = muokattu.count("(") 
-                while sulkuja:
-                        muokattu = self.ratkaiseSulku(muokattu)
-                        if muokattu :
-                            sulkuja = muokattu.count("(") 
-                        else :
-                            sulkuja = 0
-                # Lasketaan loppu :
-                muokattu = sijoitaMuuttujat(muokattu,self.muuttujaKirja)
-                muokattu = AritmeettinenLaskin.laske( muokattu)
-                #lokkeri.setMessage( kaava ).logMessage()
-                return muokattu
-
-        def laskePisteet(self):
-                """
-                Laskee tuloksen valitulle tehtävälle ja syötteille.
-                Palauttaa tuloksen jos tulos oli laskettavissa.
-                Muuten None.
-                """
-                # Ratkaistaan OsaTehtävät sekä suoran summan kaava:
-                osatehtavat = self.teht.osatehtava_set.all()
-                ssKaava = ""
-                muuttujat= []
-                tehtava_hylatty=True
-                syottamatta=True
-                for osa in osatehtavat :
-                        self.osa_teht=osa
-                        osa_muuttujat=[]
-                        
-                        #osa_parametrit=[]
-                        
-                        hylatty=False
-                        # Lisätään tehtävän parametri muuttujat.
-                        for parametri in osa.parametri_set.all():
-                                osa_muuttujat.append( (parametri.nimi,parametri.arvo) )
-                                lokkeri.setMessage( "p: "+parametri.nimi +" = " + parametri.arvo ).logMessage()
-                        osa_kaava = sijoitaMuuttujat(osa.kaava.replace(" ",""),dict(osa_muuttujat))
-                        
-                        # Lisätään vartion syötteet.
-                        for maarite in osa.syotemaarite_set.all():
-                                for syote in maarite.syote_set.filter(vartio=self.vartio) :
-                                        # hylatty
-                                        syottamatta = False
-                                        if syote.arvo == "h": 
-                                                hylatty = True
-                                        else: tehtava_hylatty=False
-
-                                        lokkeri.setMessage( "s: "+maarite.nimi +" = " + syote.arvo ).logMessage()
-                                        osa_muuttujat.append( (maarite.nimi,syote.arvo) )
-                        self.muuttujaKirja = dict(osa_muuttujat)
-                        
-                        if osa.kaava=="ss":
-                                otk=""
-                                for sm in osa.syotemaarite_set.all():
-                                        otk=otk+sm.nimi+"+"
-                                otk=otk[:-1]
-                                osaPiste= self.laske(otk)
-                                lokkeri.setMessage( "ot "+osa.nimi +" = " + otk ).logMessage()
-                        else :
-                                lokkeri.setMessage( "ot "+osa.nimi +" = " + osa_kaava ).logMessage()
-                                osaPiste= self.laske(osa_kaava)
-                                
-
-                        if hylatty :
-                                muuttujat.append( (osa.nimi,"0") )
-                        elif osaPiste :
-                                muuttujat.append( (osa.nimi,osaPiste) )
-                                muuttujat.append( (osa.nimi.upper(),osaPiste) )
-
-                        ssKaava=ssKaava + osa.nimi + "+"
-                self.muuttujaKirja = dict(muuttujat)
-                ssKaava=ssKaava[:-1]
-                # Lasketaan tulos
-                tulos = None
-                
-                if syottamatta:
-                        return "S"
-                if tehtava_hylatty:
-                        lokkeri.setMessage( "Pisteet: H").logMessage()
-                        return "H"
-                if self.teht.kaava == "ss":
-                        lokkeri.setMessage( "teht kaava: " + ssKaava ).logMessage()
-                        tulos = self.laske(ssKaava) 
-                else :
-                        lokkeri.setMessage( "teht kaava: " + self.teht.kaava ).logMessage()
-                        tulos = self.laske(self.teht.kaava) 
-
-                lokkeri.setMessage( "Pisteet: " + unicode(tulos) ).logMessage()
-                return tulos
-
-        def laskeVartio(self,vartio) :
-                                v=vartio
-                                t=self.teht
-                                self.vartio=v
-                                pisteet =None
-                                # Haetaan vartion syötteet tehtävälle
-                                
-                                syotteet = []
-                                
-                                lokkeri.setMessage(u"\nTehtava: " + t.nimi).logMessage()
-                                lokkeri.setMessage(u"Vartio: " + v.nimi ).logMessage()
-                                
-                                # Keskeyttänyt
-                                if v.keskeyttanyt and v.keskeyttanyt<= t.jarjestysnro:
-                                        pisteet = u"K"
-
-                                # Lasketaan tulos
-                                if not pisteet :
-                                        pisteet= self.laskePisteet()
-                                
-                                # Pyöristys
-                                if pisteet and not pisteet == "S" and not pisteet == "K" and not pisteet=="H" :
-                                        pisteet= unicode(Decimal(pisteet).quantize(Decimal('0.1'),
-                                                                rounding=ROUND_HALF_UP ))
-                                #Tuomarineuvos ylimääritys
-                                try:
-                                        tuomarineuvostonTulos=v.tuomarineuvostulos_set.get(tehtava=t)
-                                        pisteet =  tuomarineuvostonTulos.pisteet
-                                except ObjectDoesNotExist:
-                                        pass                               
-
-                                return pisteet
-
-                                
-        def laskeSarja(self,sarja):
-                """
-                Laskee tulokset halutulle sarjalle. 
-                Palauttaa kaksiuloitteisen taulukon[vartio][tehtävä] = pisteet.
-                Taulukon ensimmäisissä sarakkeissa on vartio tai tehtävä objekteja muissa pisteitä.
-                Taulukon vasemmassa ylänurkassa on sarjan objekti
-                """
-                tehtavat = sarja.tehtava_set.all()
-                vartiot = sarja.vartio_set.all()
-                mukana = []
-                ulkona = []
-
-                # Luodaan tyhjä tulostaulukko
-                for v in vartiot :
-                        rivi=[v,Decimal("0")]
-                        for t in tehtavat:
-                                rivi.append( None)
-                        if v.keskeyttanyt==None and v.ulkopuolella==None:
-                                mukana.append(rivi)
-                        else :
-                                ulkona.append(rivi)
-                
-                for tindex in range(len(tehtavat)):
-                        t= tehtavat[tindex]
-                        self.teht=t
-                        self.optimoinnit= {}
-                        for vindex in range(len(mukana)):
-                                pisteet = self.laskeVartio( mukana[vindex][0] )
-                                #Tuloksen lisäys taulukkoon
-                                if pisteet:
-                                                try:
-                                                        lisattava= Decimal(pisteet)
-                                                        mukana[vindex][1] += lisattava
-                                                except InvalidOperation:
-                                                        pass
-                                                mukana[vindex][tindex+2]=pisteet
-                                
-                        for vindex in range(len(ulkona)):
-                                pisteet = self.laskeVartio( ulkona[vindex][0] )
-                                #Tuloksen lisäys taulukkoon
-                                if pisteet:
-                                                try:
-                                                        lisattava= Decimal(pisteet)
-                                                        ulkona[vindex][1] += lisattava
-                                                except InvalidOperation:
-                                                        pass
-                                                ulkona[vindex][tindex+2]=pisteet
-                     
-                mukana.sort( key=operator.itemgetter(1),reverse=True )
-                ulkona.sort( key=operator.itemgetter(1),reverse=True )
-                # Vasempaan ylänurkkaan sarjan objekti  
-                tulosTaulu=[[sarja,"Yht."]]
-
-                #Luodaan ensimmäinen rivi, jossa on tehtävä objektit
+        vartiot=sarja.vartio_set.all()
+        tehtavat=sarja.tehtava_set.all()
+        taulukko=[]
+        pino=[]
+        for v in vartiot:
+                vartioRivi=[]
                 for t in tehtavat:
-                        tulosTaulu[0].append(t)
-                for t in mukana:
-                        tulosTaulu.append(t)
-                tulosTaulu.append( ["Kisasta ulkopuolella:",] )
-                for t in ulkona:
-                        tulosTaulu.append(t)
-                return tulosTaulu
- 
+                        t_nimi= t.nimi.replace(" ","")
+                        t_nimi= t_nimi.replace("!","")
+                        pino.append(t_nimi)
+                        osatehtavat=t.osatehtava_set.all()
+                        ot_lauseet=[]
+                        for ot in osatehtavat:
+                                pino.append(ot.nimi)
+                                ot_lause=ot.kaava 
+                                parametrit=ot.parametri_set.all()
+                                maaritteet=ot.syotemaarite_set.all()
+                                korvautuu=True
+                                # Suora summa syotteiden valilla
+                                if ot_lause =="ss" and maaritteet :
+                                        ot_lause=""
+                                        for m in maaritteet:
+                                                ot_lause=ot_lause+m.nimi+"+"
+                                        ot_lause=ot_lause[:-1]
+                                else :
+                                    while korvautuu:
+                                        korvautuu=False
+                                        vanha=ot_lause
+                                        # Korvataan parametrit
+                                        for p in parametrit:
+                                                ot_lause=re.sub(p.nimi+r"(?!\w+)",p.arvo,ot_lause)
+                                        if not ot_lause==vanha : korvautuu=True
+                                        # pikatie "muk" -> "..mukana" 
+                                        ot_lause=re.sub("muk"+r"(?!\w+)","..mukana",ot_lause)
+
+                                # Muutetaan muuttujien nimet koko polun mittaiseksi:tehtava.osatehtava.syote.vartio
+                                ot_lause=korvaa(ot_lause,pino,str(v.nro))
+                                ot_lauseet.append((ot.nimi,ot_lause))
+                                pino.pop()
+                        tehtava_lause=""
+                        #Suora summa osatehtavien valilla
+                        if t.kaava=="ss" and len(ot_lauseet) :
+                                for l in ot_lauseet :
+                                        tehtava_lause=tehtava_lause + "max([0,"+l[1]+"])+"
+                                tehtava_lause=tehtava_lause[:-1]
+                        else:
+                                tehtava_lause=t.kaava
+                                for l in ot_lauseet:
+                                        lause=l[1]
+                                        tehtava_lause=re.sub(l[0]+r"(?!\w+)","max([0,"+lause+"])",tehtava_lause)
+                                
+                        vartioRivi.append(tehtava_lause)
+                        pino.pop()
+                taulukko.append(vartioRivi)
+        return taulukko
+
+def laskeSarja(sarja):
+        """
+        Laskee tulokset halutulle sarjalle. 
+        Palauttaa kaksiuloitteisen taulukon[vartio][tehtävä] = pisteet.
+        Taulukon ensimmäisissä sarakkeissa on vartio tai tehtävä objekteja muissa pisteitä.
+        Taulukon vasemmassa ylänurkassa on sarjan objekti
+        """
+        #Lasketaan tulokset:
+        muuttujat = luoMuuttujat(sarja)
+        laskut= luoLaskut(sarja)
+        tulokset = laskeTaulukko(laskut,muuttujat)
+        #Muokataan oikean muotoinen tulostaulukko:
+        vartiot=sarja.vartio_set.all()
+        tehtavat=sarja.tehtava_set.all()
+        siirrettavat=[]
+        for i in range(len(vartiot)):
+                # Merkataan tuloksiin H hylattyihin tehtaviin:
+                for t in range(len(tulokset[i])) :
+                        hylatty=True
+                        syotteet= vartiot[i].syote_set.filter(maarite__osa_tehtava__tehtava=tehtavat[t])
+                        for s in syotteet:
+                                if not s.arvo=="h":  hylatty=False
+                        if hylatty and len(syotteet): tulokset[i][t]= "H"
+
+                #merkataan sirrettaviksi ulkopuolella olevat:
+                if vartiot[i].keskeyttanyt or vartiot[i].ulkopuolella : 
+                        # merkataan keskeyttaneille tuloksiin "K" keskeyttamisesta eteenpain
+                        if vartiot[i].keskeyttanyt:
+                                kesk=vartiot[i].keskeyttanyt-1
+                                for t in range(kesk,len(tulokset[i])) :tulokset[i][t]= "K"
+                        siirrettavat.append(i)
+                
+                #kokonaispisteet:
+                tulokset[i].insert(0,summa(tulokset[i]))
+                #vartio objekti jokaisen rivin alkuun:
+                tulokset[i].insert(0,vartiot[i])
+                        
+        # Siirretaan ulkopuoliset ja mukana olevat omiin taulukkoihinsa
+        mukana=[]
+        ulkona=[]
+        for i, item in enumerate(tulokset):
+                u=False
+                for s in siirrettavat:
+                        if s==i : u=True
+                if u : ulkona.append(item)
+                else : mukana.append(item)
+        tulokset=mukana
+        #lisataan tehtava rivi ylos
+        t_list=[sarja,"Yht." ,]
+        for t in tehtavat:
+                t_list.append(t)
+
+        #jarjestetaan taulukot
+        tulokset.sort( key=operator.itemgetter(1),reverse=True )
+        ulkona.sort( key=operator.itemgetter(1),reverse=True )
+        
+        #lisataan ulkonaolevat peraan ja tehtavarivi ylos
+        tulokset.insert(0,t_list)
+        tulokset.append(["Kisasta ulkopuolella:"])
+        tulokset.extend(ulkona)
+        
+        return tulokset
+
