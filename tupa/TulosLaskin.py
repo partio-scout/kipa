@@ -80,7 +80,7 @@ def luoMuuttujat(sarja) :
                 dict_m=[]
                 for m in mukana_olevat :
                         dict_m.append( (str(m.nro),1)  )
-                dict_ot.append(("mukana" , dict(dict_m) ) )
+                dict_ot.append(("mukana" , MathDict(dict_m) ) )
                 osatehtavat=t.osatehtava_set.all()
                 for ot in osatehtavat:
                         dict_maaritteet=[]
@@ -96,12 +96,12 @@ def luoMuuttujat(sarja) :
                                                 except InvalidOperation: 
                                                         dict_syotteet.append((str(v.nro),s[0].arvo))
 
-                                dict_maaritteet.append( (m.nimi,dict(dict_syotteet)) )
-                        dict_ot.append( (ot.nimi,dict(dict_maaritteet)) )
+                                dict_maaritteet.append( (m.nimi,MathDict(dict_syotteet)) )
+                        dict_ot.append( (ot.nimi,MathDict(dict_maaritteet)) )
                 t_nimi= t.nimi.replace(" ","")
                 t_nimi= t_nimi.replace("!","")
-                dict_teht.append( (t_nimi,dict(dict_ot)) )
-        muuttujat= dict(dict_teht)
+                dict_teht.append( (t_nimi,MathDict(dict_ot)) )
+        muuttujat= MathDict(dict_teht)
         return muuttujat
 
 def luoLaskut(sarja) :

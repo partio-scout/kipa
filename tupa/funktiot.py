@@ -18,6 +18,7 @@ def listaksi(sanakirja):
                                 lista.append(sanakirja[k])
                 return lista
 def mediaani(arvot):
+        
         if type(arvot)==list : lista = arvot
         else :lista = listaksi(arvot)
         values = sorted(lista)
@@ -77,7 +78,26 @@ def interpoloi(a,aMax,maxP,aNolla):
                 except InvalidOperation : return None
                 return tulos
 
+def aikavali(a,b):
+        tulos=None
+        # kaksi desimalilukua:
+        if type(a)==Decimal and type(b)==Decimal :
+                tulos= b-a
+                if tulos < Decimal("0"): tulos=tulos+Decimal("86400") # lisataan 24h sekuntteina
+        # kaksi merkkijonoa:
+        elif type(a)==str or type(b)==str or type(a)==unicode or type(b)==unicode:
+                tulos= Decimal(b)-Decimal(a)
+                if tulos < Decimal("0"): tulos=tulos+Decimal("86400") # lisataan 24h sekuntteina
+        #kaksi sanakirjaa:
+        else: 
+                tulos=b-a
+                for i in tulos.keys() :
+                        if tulos[i]<Decimal("0"): tulos[i]=tulos[i]+Decimal("86400")
+        return tulos
+
+
 funktiot= { "interpoloi" : interpoloi ,
+                "aikavali" : aikavali ,
                 "pienin" : minimi,
                 "min" : minimi,
                 "suurin" : maksimi, 

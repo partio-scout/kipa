@@ -465,9 +465,9 @@ class OsaTehtavaForm(ModelForm) :
                         if osatehtava.tyyppi=="ala":
 
                                 # Alku ja loppu aika (loppuaika-alkuaika)
-                                maksimiKaava.arvo=".b*muk-.a*muk"
-                                nollaKaava.arvo=".b*muk-.a*muk"
-                                osatehtava.kaava="interpoloi(b-a,aMax,maxP,nolla_kerroin*nolla)"
+                                maksimiKaava.arvo="aikavali(.a,.b)*muk"
+                                nollaKaava.arvo="aikavali(.a,.b)*muk"
+                                osatehtava.kaava="interpoloi(aikavali(a,b),aMax,maxP,nolla_kerroin*nolla)"
                 
                         maksimiKaava.save()
                         nollaKaava.save()
