@@ -9,14 +9,17 @@ class MathDict(dict):
         """
         def __add__(self,other): 
                 sum = MathDict({})
-                for k in self.keys() : sum[k]=self[k]+other[k]
+                for k in self.keys() : 
+                        if type(other) == Decimal : sum[k]=self[k]+other
+                        else: sum[k]=self[k]+other[k]
                 return sum
         def __sub__(self,other):
                 sub = MathDict({})
-                for k in self.keys() : sub[k]=self[k]-other[k]
+                for k in self.keys() : 
+                        if type(other) == Decimal : sub[k]=self[k]-other
+                        else: sub[k]=self[k]-other[k]
                 return sub
         def __mul__(self,other):
-                
                 mult = MathDict({})
                 for k in self.keys() : 
                         try:
