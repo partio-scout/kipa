@@ -340,8 +340,47 @@ class Arviointi(forms.Form):
         kaytossa=forms.BooleanField(required=False)
         oikea=forms.CharField(label="Oikea vastaus",help_text=help_text,required=False)
         label="Arviointi"
-        def __unicode__(self):
+        
+        def __init__(self,posti,osaTehtava,*argv,**argkw ):
+                self.arv=None
+                self.oikea=None
+                self.osaTehtava=osaTehtava
+                try: self.arv = Parametri.objects.get(nimi="arv",osa_tehtava=osaTehtava )
+                except Parametri.DoesNotExist:  pass
+                try: self.oikea = Parametri.objects.get(nimi="oikea",osa_tehtava=osaTehtava )
+                except Parametri.DoesNotExist:  pass
                 
+                aOikea=None
+                aKaytossa=None
+                if self.arv : aKaytossa=self.arv.arvo
+                if self.oikea : aOikea=self.oikea.arvo
+
+                aInitial= { }
+                if re.match(".*?"+osaTehtava.tyyppi+".*?",argkw['prefix']) :
+                        aInitial= { 'kaytossa' : aKaytossa , 'oikea' : aOikea }
+                if posti:
+                        super(Arviointi,self).__init__(posti,*argv,**argkw)
+                else:
+                        super(Arviointi,self).__init__(posti,initial=aInitial,*argv,**argkw)
+
+        def save(self) :
+                if not self.arv: self.arv=Parametri()
+                if not self.oikea: self.oikea=Parametri()
+                self.arv.osa_tehtava=self.osaTehtava
+                self.oikea.osa_tehtava=self.osaTehtava
+                self.arv.nimi="arv"
+                self.oikea.nimi="oikea"
+                if self.cleaned_data['kaytossa']==True :
+                        self.arv.arvo= "abs"
+                        if self.cleaned_data['oikea']: self.oikea.arvo=self.cleaned_data['oikea']
+                        else: self.oikea.arvo=""
+                else :
+                        self.arv.arvo= ""
+                        self.oikea.arvo=""
+                self.arv.save()
+                self.oikea.save()
+
+        def __unicode__(self):
                 return self.as_p()
 
 class test(list) :
@@ -384,8 +423,8 @@ class OsaTehtavaForm(ModelForm) :
                                                 prefix="maksimi_suoritus_"+prefixID ) )
                                 parametrit[-1].append( NollaSuoritus( posti,self.instance,
                                                 prefix="nolla_suoritus_"+prefixID ) )
-                                #parametrit[-1].append( Arviointi( posti,self.instance,
-                                #                prefix="arviointi_"+prefixID ) )
+                                parametrit[-1].append( Arviointi( posti,self.instance,
+                                                prefix="arviointi_"+prefixID ) )
                         # KisaPiste
                         prefixID="kp_"+self.prefix
                         self.parametrit=test()
@@ -406,8 +445,8 @@ class OsaTehtavaForm(ModelForm) :
                                                 prefix="maksimi_suoritus_"+prefixID ) )
                         self.parametrit[-1].append( NollaAika( posti,self.instance,
                                                 prefix="nolla_suoritus_"+prefixID ) )
-                        #self.parametrit[-1].append( Arviointi( posti,self.instance,
-                        #                        prefix="arviointi_"+prefixID ) )
+                        self.parametrit[-1].append( Arviointi( posti,self.instance,
+                                                prefix="arviointi_"+prefixID ) )
 
                         self.parametrit[-1].id=prefixID
                         self.parametrit[-1].otsikko="Kokonaisaika"
@@ -456,17 +495,17 @@ class OsaTehtavaForm(ModelForm) :
                         # Yleiskaava suurimmalle osalle osa tehtavista :
                         maksimiKaava = Parametri.objects.get_or_create(nimi="maksimi_kaava",
                                                 osa_tehtava=osatehtava)[0]
-                        maksimiKaava.arvo=".a*muk"
+                        maksimiKaava.arvo="arv(.a*muk-oikea)"
                         nollaKaava = Parametri.objects.get_or_create(nimi="nolla_kaava",
                                                 osa_tehtava=osatehtava)[0]
-                        nollaKaava.arvo=".a*muk"
-                        osatehtava.kaava="interpoloi(a,aMax,maxP,nolla_kerroin*nolla)"
+                        nollaKaava.arvo="arv(.a*muk-oikea)"
+                        osatehtava.kaava="interpoloi(arv(a-oikea),aMax,maxP,nolla_kerroin*nolla)"
 
                         if osatehtava.tyyppi=="ala":
 
                                 # Alku ja loppu aika (loppuaika-alkuaika)
-                                maksimiKaava.arvo="aikavali(.a,.b)*muk"
-                                nollaKaava.arvo="aikavali(.a,.b)*muk"
+                                maksimiKaava.arvo="arv(aikavali(.a,.b)*muk-oikea)"
+                                nollaKaava.arvo="arv(aikavali(.a,.b)*muk-oikea)"
                                 osatehtava.kaava="interpoloi(aikavali(a,b),aMax,maxP,nolla_kerroin*nolla)"
                 
                         maksimiKaava.save()

@@ -17,10 +17,13 @@ def listaksi(sanakirja):
                         if type(sanakirja[k])==Decimal :
                                 lista.append(sanakirja[k])
                 return lista
-def mediaani(arvot):
-        
-        if type(arvot)==list : lista = arvot
-        else :lista = listaksi(arvot)
+def mediaani(joukko):
+        """
+        Palauttaa mediaanin arvon joukon lukuarvoista:
+        joukko voi olla sanakirja tai lista
+        Mikali lukujoukon pituus on parillinen palauttaa kahden keskimmaisen luvun keskiarvon.
+        """
+        lista = listaksi(joukko)
         values = sorted(lista)
         if len(values) % 2 == 1:
                 return Decimal(values[(len(values)+1)/2-1])
@@ -33,19 +36,31 @@ def mediaani(arvot):
                         
                 return (Decimal(lower + upper)) / 2  
 
-def minimi(arvot,b=None):  
+def minimi(joukko,b=None):  
+        """
+        Palauttaa joukon pienimman lukuarvon.
+        Joukko voi olla sanakirja tai lista.
+        """
         tulos=None
-        if b and not type(arvot)==list : 
-                tulos=min([arvot,b])
-        else :tulos= min(listaksi(arvot))
+        if b and not type(joukko)==list : 
+                tulos=min([joukko,b])
+        else :tulos= min(listaksi(joukko))
         return tulos
-def maksimi(arvot,b=None) :
-        if b and not type(arvot)==list : 
-                return max([arvot,b])
-        return max(listaksi(arvot))
+def maksimi(joukko,b=None) :
+        """
+        Palauttaa joukon suurimman lukuarvon.
+        Joukko voi olla sanakirja tai lista.
+        """
+        if b and not type(joukko)==list : 
+                return max([joukko,b])
+        return max(listaksi(joukko))
 
-def keskiarvo(arvot) :
-        lista = listaksi(arvot)
+def keskiarvo(joukko) :
+        """
+        Palauttaa joukon lukuarvojen keskiarvon.
+        Joukko voi olla sanakirja tai lista.
+        """
+        lista = listaksi(joukko)
         if not len(lista): return None
         total=Decimal(0) 
         for x in lista :
@@ -53,32 +68,56 @@ def keskiarvo(arvot) :
         avg = total/len(lista)
         return avg
 
-def summa(arvot) :
+def summa(joukko) :
+        """
+        Palauttaa joukon lukuarvojen summan.
+        Joukko voi olla sanakirja tai lista.
+        """
         lista=None
-        if type(arvot)==list : lista = arvot
-        else :lista = listaksi(arvot)
-        s=0 
+        if type(joukko)==list : lista = joukko
+        else :lista = listaksi(joukko)
+        s=Decimal(0) 
         for v in lista : 
                 if v and not type(v)==unicode and not type(v)==str: s=s+v
         return s
 
-def interpoloi(a,aMax,maxP,aNolla):
-                """
-                Nelja parametria: 
-                          1.a=Interpoloitava arvo,
-                          2.aMax = arvo jolla saa maksimipisteet
-                          3.maxP = Jaettavat maksimipisteet
-                          4.aNolla = arvo jolla saa nollat
-                """
-                #print "a="+str(a)+",aMax="+str(aMax)+",maxP="+str(maxP)+",aNolla="+str(aNolla)
-                #(maxP/(aMax-aNolla))*(a-aNolla)
-                try :
-                        laskenta=(Decimal(maxP)/(Decimal(aMax)-Decimal(aNolla)))*(Decimal(a)-Decimal(aNolla))
-                        tulos=mediaani([Decimal(0),Decimal(maxP),laskenta])
-                except InvalidOperation : return None
-                return tulos
+def interpoloi(x,x1,y1,x2,y2=0):
+        """
+        Palauttaa pisteen (x,y) y koordinaatin pisteiden (x1,y1) (x2,y2) maarittamalta suoralta.
+        """
+        #print "x="+str(x)+",x1="+str(x1)+",y1="+str(y1)+",x2="+str(x2)
+        # y = (y1-y2)/(x1-x2)*(x-x2)
+        try :
+                X=Decimal(x)
+                X1=Decimal(x1)
+                Y1=Decimal(y1)
+                X2=Decimal(x2)
+                Y2=Decimal(y2)
+                tulos=(Y1-Y2) / (X1-X2) * (X-X2)
+                tulos=mediaani([Decimal(0),Decimal(y1),tulos])
+        except InvalidOperation : return None
+        return tulos
+
+def itseisarvo(a) :
+        """
+        Palauttaa a itseisarvon kun a on luku.
+        Palauttaa a:n lukujen itseisarvot kun a on sanakirja.
+        """
+        tulos=None
+        if type(a)==Decimal : tulos= abs(a)
+        elif type(a)==str or type(a)==unicode :  tulos= abs(Decimal(a))
+        else: 
+                tulos={}
+                for k in a.keys() : tulos[k] = abs(a[k])
+        return tulos
 
 def aikavali(a,b):
+        """
+        Palauttaa b-a kun a<b
+        Palauttaa b-a+vrk mikali a>b
+        Ajan yksikko on [s]
+        a & b voivat olla lukuja tai sanakirjoja.
+        """
         tulos=None
         # kaksi desimalilukua:
         if type(a)==Decimal and type(b)==Decimal :
@@ -95,9 +134,9 @@ def aikavali(a,b):
                         if tulos[i]<Decimal("0"): tulos[i]=tulos[i]+Decimal("86400")
         return tulos
 
-
 funktiot= { "interpoloi" : interpoloi ,
                 "aikavali" : aikavali ,
+                "abs" : itseisarvo,
                 "pienin" : minimi,
                 "min" : minimi,
                 "suurin" : maksimi, 
