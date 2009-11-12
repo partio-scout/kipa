@@ -63,7 +63,8 @@ def laske(lauseke,m={'num':Decimal}):
         
         tulos=None
         # lasketaan tulos:
-        try: tulos = eval(lause)
+        try: 
+                tulos = eval(lause)
         # Poikkeukset laskuille joita ei pysty laskemaan
         except DivisionByZero : return None
         except KeyError : return "S"
