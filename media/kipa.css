@@ -83,6 +83,17 @@ h2 {
 	margin:1.3em 0 0 0;
 }
 
+.etusivunLinkitTulossa, .etusivunLinkitTulossa a, .etusivunLinkitTulossa:visited {
+	font-style:italic;
+	text-decoration:none;
+	padding-left:30px; /*oli 50 px*/
+	letter-spacing:0;
+	border:0;
+	color:#ccc;
+	margin:1.3em 0 0 0;
+	cursor:default;
+}
+
 .etusivunLinkit a:hover, .etusivunLinkit:visited:hover {
 	text-decoration:underline;
 }
