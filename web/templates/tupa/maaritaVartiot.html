@@ -24,7 +24,8 @@
 			<ul id="tehtavatabs" class="">
                                 {{sarja.1.management_form}}
 				{% for vartio in sarja.1.forms %}
-				   {{vartio}} <br>
+				   {{vartio}}<br>
+				   <label>{{vartio.label}}</label><em>{{vartio.help_text}}</em><br>
                                 {% endfor %}
 			</ul>
 		</div>

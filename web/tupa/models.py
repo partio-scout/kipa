@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 from django.db import models
 
 from random import uniform
@@ -54,7 +57,7 @@ class Vartio(models.Model) :
         puhelinnro = models.CharField(max_length=255, blank=True )
         sahkoposti = models.CharField(max_length=255, blank=True )
         osoite = models.CharField(max_length=255, blank=True )
-        keskeyttanyt = models.IntegerField(blank=True, null=True )
+        keskeyttanyt = models.IntegerField(blank=True, null=True, verbose_name="Keskeyttänyt alkaen tehtävästä nro", help_text="Syötä se tehtävä..." )
         ulkopuolella = models.IntegerField(blank=True , null=True )
 
         #end_dia_class
