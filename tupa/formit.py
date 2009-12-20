@@ -1,4 +1,6 @@
-# coding: latin-1
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 from django.forms.models import modelformset_factory
 from django import forms
 from models import *
@@ -93,7 +95,7 @@ class AikaField(forms.CharField):
                 elif value=="H":
                         return "h"
                 else :
-                        raise forms.ValidationError('Syota aikaa muodossa: (hh:mm:ss)')
+                        raise forms.ValidationError('Syötä aikaa muodossa: (hh:mm:ss)')
 
 class PisteSyoteForm(ModelForm):
         arvo = PisteField(required=False,widget=forms.TextInput(attrs={'size':'8'} ) )

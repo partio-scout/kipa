@@ -31,7 +31,7 @@ def tulosta(request,kisa_nimi):
         Valintalista kisan sarjojen tuloksista.
         """
         sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
-        return render_to_response('tupa/tulosta.html', {'sarja_list': sarjat })
+        return render_to_response('tupa/tulosta.html', {'sarja_list': sarjat, 'kisa_nimi': kisa_nimi })
 
 def maaritaKisa(request, kisa_nimi=None):
         """
@@ -63,9 +63,10 @@ def maaritaKisa(request, kisa_nimi=None):
         else :
                 return render_to_response('tupa/maarita.html', 
                                       { 'heading' : "Määritä kisa" ,
-                                      'taakse' : "../../" ,
+                                      'taakse' : "../" ,
                                       'forms' : (kisaForm,) ,
-                                      'formsets' : ( sarjaFormit,) })
+                                      'formsets' : ( sarjaFormit,),
+                                      'kisa_nimi' : kisa_nimi })
 
 def maaritaValitseTehtava(request,kisa_nimi):
         """
@@ -100,7 +101,7 @@ def maaritaValitseTehtava(request,kisa_nimi):
 
 def maaritaVartiot(request,kisa_nimi):
         """
-        Määritää kisan vartiot sarjoittain.
+        Määrittää kisan vartiot sarjoittain.
         """
         sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
         sarjaVartiot=[]
@@ -163,10 +164,11 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None):
                 return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/tehtava/"+str(tehtava.id)+'/' )
         else:
                 return render_to_response('tupa/maarita.html', 
-                                      { 'heading' : "Maarita tehtävä" ,
+                                      { 'heading' : "Määritä tehtävä" ,
                                       'taakse' : "/tupa/"+kisa_nimi+"/maarita/tehtava" ,
                                       'forms' : taulukko,
                                       'tabs' : tabit,
+                                      'kisa_nimi' : kisa_nimi,
                                       })
 
 def syotaKisa(request, kisa_nimi):
@@ -261,7 +263,7 @@ def testiTulos(request, kisa_nimi):
                 return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/testitulos/")
         return render_to_response('tupa/testitulos.html',
                         { 'taulukko' : taulukko ,
-                        'heading' : "Testi tuloksien määritys" ,
+                        'heading' : "Testittuloksien määritys" ,
                         'taakse' : "../../" })
 
 def tuomarineuvos(request, kisa_nimi):
@@ -302,7 +304,7 @@ def tuomarineuvos(request, kisa_nimi):
                 return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/tuomarineuvos/")
         return render_to_response('tupa/testitulos.html',
                         { 'taulukko' : taulukko ,
-                        'heading' : "Tuomarineuvos tuloksien määritys" ,
+                        'heading' : "Tuomarineuvoksen antamien tulosten määritys" ,
                         'taakse' : "../../" })
 
 def tulostaSarja(request, kisa_nimi, sarja_id) :
