@@ -135,41 +135,55 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None):
                 -kun tehtava_id on määritelty, muokataan sen mukaista tehtävää
                 -muuten luodaan uutta tehtävää halutulle sarjalle
         """
+        posti=None
+        if request.method == 'POST':
+                posti=request.POST
+
         tehtava = None
         sarja = None
         if tehtava_id:
                 tehtava=get_object_or_404(Tehtava, id=tehtava_id)
                 sarja= tehtava.sarja
-        else :
-                sarja=get_object_or_404(Sarja, id=sarja_id)
-         
-        # Post Data
-        posti=None
-        if request.method == 'POST':
-                posti=request.POST
-        tehtavaForm = TehtavaForm( posti,instance=tehtava,sarja=sarja )
-        if tehtavaForm.is_valid() :
-                tehtava=tehtavaForm.save()
-        taulukko=[]
-        taulukko.append( tehtavaForm )
-        tabit=[]
-        for ot in tehtavaForm.osaTehtavaFormit:
-                ot.otsikko=ot.instance.nimi
-                ot.id=ot.instance.id
-                ot.label="Osatehtava " + ot.instance.nimi.upper()
-                tabit.append ("ot_tab_id_" + str(ot.instance.id) )
-                taulukko.append(ot)
+        
+        else:
+                sarja = tehtava=get_object_or_404(Sarja, id=sarja_id)
+                tehtava=Tehtava(sarja)
 
-        if posti and tehtavaForm.is_valid() :
-                return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/tehtava/"+str(tehtava.id)+'/' )
+        # Tabs:
+        tabs= []
+        daatta={}
+        ot_index=0
+        if tehtava_id:
+                osatehtavat= tehtava.osatehtava_set.all() 
+                for ot in osatehtavat :
+                        tabs.append(ot.nimi) 
+                        ot_index+=1 
+                daatta =luoTehtavaData([tehtava]) 
+        # Muutama ylimaarainen tabi:
+        for i in range(5) :
+                tabs.append( string.letters[ot_index] )
+                ot_index+=1
+        
+        # Haetaan suurin kaytosssa oleva jarjestysnro tassa sarjassa:
+        sarjan_tehtavat=Tehtava.objects.filter(sarja=sarja)
+        nro =0 
+        for t in sarjan_tehtavat :
+                if nro < t.jarjestysnro : nro = t.jarjestysnro
+        
+        # Luodaan tehtavan maaritys form
+        maaritaTehtava = tehtavanMaaritysForm(posti,daatta,sarja_id=sarja_id,suurin_jarjestysnro=nro)
+        
+        # Tallennetaan formin muokkaama data
+        tehtava_id=tallennaTehtavaData( daatta ) 
+        
+        if posti and not 'lisaa_maaritteita' in posti.keys() and daatta['valid'] :
+                return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/tehtava/"+str(tehtava_id)+'/' )
         else:
                 return render_to_response('tupa/maarita.html', 
-                                      { 'heading' : "Määritä tehtävä" ,
-                                      'taakse' : "/tupa/"+kisa_nimi+"/maarita/tehtava" ,
-                                      'forms' : taulukko,
-                                      'tabs' : tabit,
-                                      'kisa_nimi' : kisa_nimi,
-                                      })
+                                { 'forms': [maaritaTehtava],
+                                'tabs' : tabs ,
+                                'heading' : "Valitse tehtävä",
+                                'taakse' : "../" })
 
 def syotaKisa(request, kisa_nimi):
         """
