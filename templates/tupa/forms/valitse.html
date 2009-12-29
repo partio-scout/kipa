@@ -1,6 +1,10 @@
 
 <h1> {{ heading }}</h1>
 
+{% block header%}
+
+
+{% endblock %}
 
 {% if taulukko %}
 	<ul id="{{tab_id}}" class="shadetabs">
@@ -24,4 +28,9 @@
 		{% endfor %}
 	</div>
 {%endif%}
+
+{% block footer%}
+
+
+{% endblock %}
 

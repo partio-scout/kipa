@@ -1,0 +1,14 @@
+<legend> <b>Arviointi</b> </legend>
+<p>Käytossa:<input type="checkbox" name="{{arvio.name}}" id="{{arvio.id}}" value="abs"
+{% ifequal arvio.value "abs" %}checked="checked" {% endifequal %}/></p>
+<p><font color=red><b>
+                        {{oikea.errors}}
+</b></font>
+Oikea vastaus:<input type="text" name="{{oikea.name}}" id="{{oikea.id}}" value="{{oikea.value}}" /> <br>
+
+Jos kyseessa on tavallinen tehtava, tata ei valita. 
+Mikäli kyseessä on arivointitehtävä, tulee tässä ilmoittaa tehtävän oikea vastaus. 
+Tällöin vartioiden suoritukset täman arvon molemmin puolin ovat samanarvoisia.</p>
+</fieldset>
+
+

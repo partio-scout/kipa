@@ -1,12 +1,25 @@
 
 <font color=red><b> 
-{{ form.errors}}
+
 </b></font>
 
 <fieldset>
-<legend>{{ form.instance.nimi }}</legend>
-{% for field in form %}
-        {{field.label}} : {{ field }}
+<legend>{{ nimi.value }}</legend>
+
+{{nimi.errors}}
+Nimi : <input type="text" id="{{nimi.id}}"  name="{{nimi.name}}" value="{{nimi.value}}" maxlength="255" />
+{{jarjestysnro.errors}}
+Jarjestysnro : <input type="text" id="{{jarjestysnro.id}}" name="{{jarjestysnro.name}}"  value="{{jarjestysnro.value}}"  />
+{{kaava.errors}}
+Kaava : <input type="text" id="{{kaava.id}}" name="{{kaava.name}}" value="{{kaava.value}}" size="40" />
+{{osatehtavia.errors}}
+Osatehtavia : <input type="text" id="{{osatehtavia.id}}" name="{{osatehtavia.name}}" value="{{osatehtavia.value}}" />
+
+{% for form in osa_tehtavat %}
+        {{ form }}
 {% endfor %}
+
+{{osatehtavat}}
+
 </fieldset>
 
