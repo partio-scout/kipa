@@ -1,37 +1,30 @@
 {% extends "tupa/forms/valitse.html" %}
 
-{% block sarake %} 
-
-<table border="0">
-<tr >
-<td>
-       <font color=red><b> {{ form.tyyppi.errors }}</b></font>
-</td>
-<td>
-{% ifequal "Kisapisteita" sarake.0.label %}
-        {{ form.tyyppi }}
-{% endifequal %}
-{% ifequal "Raakapisteita" sarake.0.label %}
-        {{ form.tyyppi_rp }}
-{% endifequal %}
-{% ifequal "Kokonaisaika" sarake.0.label %}
-        {{ form.tyyppi_ka }}
-{% endifequal %}
-{% ifequal "Alkuaika ja loppuaika" sarake.0.label %}
-        {{ form.tyyppi_ala }}
-{% endifequal %}
-{% ifequal "Vapaa kaava" sarake.0.label %}
-        {{ form.tyyppi_vk}}
-{% endifequal %}
-</td>
-<td>
-
-    {% for taulu in sarake %}
-                <fieldset>
-                        <legend> <b>{{taulu.label}}</b> </legend>
-                        {{taulu}}
-                </fieldset>
-    {% endfor %}
-</table>
+{% block header%} 
+        <fieldset>
+        <legend>Osatehtava {{ nimi }}</legend>
 {% endblock%}
 
+{% block sarake %}
+        <table border="0">
+        
+        <td><font color=red><b> 
+        {{osatehtava.errors}}
+        </b></font>
+
+        {% ifequal osatehtava.value sarake.tyyppi %}
+                <input  type="radio" id="aa" name="{{osatehtava.id}}" value="{{sarake.tyyppi}}" checked="checked"/>
+        {% else %}
+                <input type="radio" id="aa" name="{{osatehtava.id}}" value="{{sarake.tyyppi}}" />
+        {% endifequal %}
+        </td>
+        <td>
+       {{sarake.form}}
+        </td>
+        </table>
+
+{% endblock%}
+
+{% block footer %}
+        </fieldset>
+{% endblock%}
