@@ -65,6 +65,28 @@ def korvaa(lause,pino,loppu=None) :
         muokattu=muokattu+lause[muutokset[-1][1]:]
         return muokattu
 
+def suoritusJoukko(s) :
+        """  Korvaa laittaa kaikkien muuttujien eteen . operaattorin 
+        Jolloin esim. vartion suorituksesta a tulee .a Joka on kaikkien saman sarjan vartioiden vastaava suoritus.
+        >>> suoritusJoukko('a')
+        '.a'
+        >>> suoritusJoukko('a*b+c')
+        '.a*.b+.c'
+        """
+        haku= re.finditer("(\.{0,3})([a-zA-Z]+)(?!\w*[(])",s)
+        muutokset=[]
+        for h in haku :
+                uusi= "." + s[h.start():h.end()]
+                muutokset.append( (h.start(),h.end(),uusi) )
+        
+        muokattu=s[:muutokset[0][0]]
+        for i in range(len(muutokset)-1):
+                muokattu=muokattu+muutokset[i][2]
+                muokattu=muokattu+s[muutokset[i][1]:muutokset[i+1][0]]
+        muokattu=muokattu+muutokset[-1][2]
+        muokattu=muokattu+s[muutokset[-1][1]:]
+        return muokattu
+
 def luoMuuttujat(sarja) :
         """ 
         Luo sarjan syotteiden muuttujasanakirjan:
@@ -142,7 +164,13 @@ def luoLaskut(sarja) :
                                         if not ot_lause==vanha : korvautuu=True
                                         # pikatie "muk" -> "..mukana" 
                                         ot_lause=re.sub("muk"+r"(?!\w+)","..mukana",ot_lause)
-
+                                        # munnos "suor" -> kaikkien vartioiden lasketut suoritukset
+                                        try:
+                                                vartion_kaava=parametrit.filter(nimi="vartion_kaava")[0].arvo
+                                                ot_lause=re.sub("suor"+r"(?!\w+)",
+                                                                suoritusJoukko(vartion_kaava),
+                                                                ot_lause)
+                                        except IndexError: pass
                                 # Muutetaan muuttujien nimet koko polun mittaiseksi:tehtava.osatehtava.syote.vartio
                                 ot_lause=korvaa(ot_lause,pino,str(v.nro))
                                 ot_lauseet.append((ot.nimi,ot_lause))

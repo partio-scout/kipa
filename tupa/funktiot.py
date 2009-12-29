@@ -9,14 +9,15 @@ def listaksi(sanakirja):
         elif type(sanakirja)==Decimal:
                 return [sanakirja]
         elif type(sanakirja)==unicode or type(sanakirja)==str:
-                return None
+                return 
         else:
-                if not len(sanakirja.keys()): return None
-                lista=[]
-                for k in sanakirja.keys() :
-                        if type(sanakirja[k])==Decimal :
-                                lista.append(sanakirja[k])
-                return lista
+                try:
+                        lista=[]
+                        for k in sanakirja.keys() :
+                                if type(sanakirja[k])==Decimal :
+                                        lista.append(sanakirja[k])
+                        return lista
+                except : return None 
 def mediaani(joukko):
         """
         Palauttaa mediaanin arvon joukon lukuarvoista:
