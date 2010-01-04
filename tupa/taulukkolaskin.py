@@ -10,14 +10,20 @@ class MathDict(dict):
         def __add__(self,other): 
                 sum = MathDict({})
                 for k in self.keys() : 
-                        if type(other) == Decimal : sum[k]=self[k]+other
-                        else: sum[k]=self[k]+other[k]
+                        try:
+                                if type(other) == Decimal : sum[k]=self[k]+other
+                                else: sum[k]=self[k]+other[k]
+                        except TypeError : pass
+                        except KeyError: pass
                 return sum
         def __sub__(self,other):
                 sub = MathDict({})
                 for k in self.keys() : 
-                        if type(other) == Decimal : sub[k]=self[k]-other
-                        else: sub[k]=self[k]-other[k]
+                        try:
+                                if type(other) == Decimal : sub[k]=self[k]-other
+                                else: sub[k]=self[k]-other[k]
+                        except TypeError : pass
+                        except KeyError: pass
                 return sub
         def __mul__(self,other):
                 mult = MathDict({})
@@ -26,6 +32,7 @@ class MathDict(dict):
                                 if type(other) == Decimal : mult[k]=self[k]*other
                                 else: mult[k]=self[k]*other[k]
                         except KeyError: pass
+                        except TypeError : pass
                 return mult
         def __div__(self,other):
                 div = MathDict({})
@@ -33,6 +40,7 @@ class MathDict(dict):
                         try:
                                 div[k]=self[k]/other[k]
                         except KeyError: pass
+                        except TypeError : pass
                 return div
 
 def dictToMathDict(dictionary) :
@@ -52,14 +60,16 @@ def laske(lauseke,m={'num':Decimal}):
         """
         # Poistetaan valilyonnit:
         lause = re.sub(" ","",lauseke)
+        # Poistetaan "-0" termit
+        #lause=re.sub(r"([-][0](?![0-9.]))",r"",lause) 
         # Korvataan numerot merkkijonosta laskettavilla objekteilla
         lause=re.sub(r"(\d+\.\d+|(?<=[^0-9.])\d+)",r"num('\g<1>')",lause)
         # Korvataan muuttujien nimet oikeilla muuttujilla:
-        lause=re.sub(r"\.([a-zA-Z]+)(?=\.)",r"['\g<1>']",lause) # .x. -> [x].
-        lause=re.sub(r"(?<!\d)\.([a-zA-Z0-9]+)",r"['\g<1>']",lause)       # .x  -> [x]
-        lause=re.sub(r"([a-zA-Z]+(?=[[]))",r"m['\g<1>']",lause) # x[  -> m[x][
+        lause=re.sub(r"\.([a-zA-Z_]+)(?=\.)",r"['\g<1>']",lause) # .x. -> [x].
+        lause=re.sub(r"(?<!\d)\.([a-zA-Z0-9_]+)",r"['\g<1>']",lause)       # .x  -> [x]
+        lause=re.sub(r"([a-zA-Z_]+(?=[[]))",r"m['\g<1>']",lause) # x[  -> m[x][
         # Korvataan yksinaiset muuttujat (lahinna funktioita):
-        lause=re.sub(r"([a-zA-Z]+(?![a-zA-Z]*?[[']))",r"m['\g<1>']",lause) # x -> m[x]
+        lause=re.sub(r"([a-zA-Z_]+(?![a-zA-Z_]*?[[']))",r"m['\g<1>']",lause) # x -> m[x]
         
         tulos=None
         # lasketaan tulos:
@@ -69,7 +79,7 @@ def laske(lauseke,m={'num':Decimal}):
         # Pyrkii myos estamaan koko paska kaadu virheissa.
         except DivisionByZero : return None 
         except KeyError : return "S" # syottamattomia muuttujia
-        except TypeError : return None 
+        #except TypeError : return None 
         except SyntaxError: return None
         except NameError : return None
         return tulos

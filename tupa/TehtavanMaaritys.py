@@ -34,9 +34,7 @@ def is_kaava(s) :
                 for h in haku :
                         muuttujat[h.group(1)]=Decimal(numero)
                         numero+=1
-                print muuttujat
                 tulos = laskeTaulukko([[s]],muuttujat)
-                print tulos
                 if tulos[0][0]==None or tulos[0][0]=='S' : return False
                 else : return True
 
@@ -214,13 +212,7 @@ def poistaYlimaaraisetMaaritteet(posti,data,prefix,tyyppi,tarvittava_maara):
                                         del data['maaritteet'][k]
                         index+=1
 
-def kisaPisteForm(posti,data,prefix) :
-        data['kaava']="ss"
-        formi=syotteen_kuvaus_field(posti,data,prefix,0,"kp")
-        poistaYlimaaraisetMaaritteet(posti,data,prefix,"kp",1)
-        if posti and prefix in posti.keys() and posti[prefix]=="kp":
-                for k,v in data['maaritteet'].items(): v['tyyppi']='piste'
-        return render_to_string("tupa/forms/kisa_piste.html", formi )
+
 
 def lataa_parametrit(state,data,prefix,ot_tyyppi,muunnos=None):
         if "tyyppi" in data.keys() and data['tyyppi']==ot_tyyppi[1:]:
@@ -277,7 +269,7 @@ def maksimisuoritus(state,data,prefix,ot_tyyppi,formi,validiointi=[[is_number],"
         
         try: 
                 if not state[prefix+ot_tyyppi+"_parhaan_haku"]=="":
-                        save_data(data,['parametrit'],'parhaan_kaava','arvo',"suor")
+                        save_data(data,['parametrit'],'parhaan_kaava','arvo',"suor*muk")
         except : pass
         formi.update( field(state,"kiintea",prefix+ot_tyyppi,errors) )
         # Jaettavat pisteet:
@@ -303,11 +295,12 @@ def nollasuoritus(state,data,prefix,ot_tyyppi,formi,validiointi=[[is_number],"sy
         # Kerroin valinnat:
         if state and prefix in state.keys() and state[prefix]==ot_tyyppi[1:] :
                 kerroin=state[prefix+ot_tyyppi+"_nollan_kerroin"]
+                save_data(data,['parametrit'],'tapa','arvo',"")
                 if kerroin=="1.5" or kerroin=="0.5"or kerroin == "1": 
                         saveField(state,data,"nollan_kerroin",['parametrit'],'nollan_kerroin','arvo',prefix+ot_tyyppi)
                 if kerroin=="1.5" or kerroin=="0.5" or kerroin=="m":
                         save_data(data,['parametrit'],'tapa','arvo',"med")
-                        save_data(data,['parametrit'],'nollan_kaava','arvo',"suor")
+                        save_data(data,['parametrit'],'nollan_kaava','arvo',"suor*muk")
 
         formi.update( field(state,"nollan_kerroin",prefix+ot_tyyppi) )
         # Muu kerroin 
@@ -338,12 +331,21 @@ def arviointi(state,data,prefix,ot_tyyppi,formi,validiointi=[[is_number],"syota 
 def peruskaava(data):
         data['kaava']="interpoloi(arvio(vartion_kaava-oikea),parhaan_haku(arvio(parhaan_kaava-oikea)),jaettavat,nollan_kerroin*tapa(arvio(nollan_kaava-oikea)))"""
 
+def kisaPisteForm(posti,data,prefix) :
+        formi=syotteen_kuvaus_field(posti,data,prefix,0,"kp")
+        poistaYlimaaraisetMaaritteet(posti,data,prefix,"kp",1)
+        if posti and prefix in posti.keys() and posti[prefix]=="kp":
+                for k,v in data['maaritteet'].items(): v['tyyppi']='piste'
+                data['kaava']="a"
+        return render_to_string("tupa/forms/kisa_piste.html", formi )
+
 def raakaPisteForm(posti,data,prefix) :
         formi=syotteen_kuvaus_field(posti,data,prefix,0,"rp")
         poistaYlimaaraisetMaaritteet(posti,data,prefix,"rp",1)
         if posti and prefix in posti.keys() and posti[prefix]=="rp":
                 for k,v in data['maaritteet'].items(): v['tyyppi']='piste'
                 save_data(data,['parametrit'],'vartion_kaava','arvo',"a")
+                peruskaava(data) 
         
         state=None
         # Aloitusarvot kannasta
@@ -356,7 +358,6 @@ def raakaPisteForm(posti,data,prefix) :
         maksimisuoritus(state,data,prefix,"_rp",formi)
         nollasuoritus(state,data,prefix,"_rp",formi)
         arviointi(state,data,prefix,"_rp",formi)
-        peruskaava(data) 
         
         return render_to_string("tupa/forms/raaka_piste.html",  formi)
 
@@ -366,6 +367,7 @@ def kokonaisAikaForm(posti,data,prefix) :
         if posti and prefix in posti.keys() and posti[prefix]=="ka":
                 for k,v in data['maaritteet'].items(): v['tyyppi']='aika'
                 save_data(data,['parametrit'],'vartion_kaava','arvo',"a")
+                peruskaava(data) 
         # Aloitusarvot kannasta
         if not posti : 
                 state={}
@@ -383,7 +385,6 @@ def kokonaisAikaForm(posti,data,prefix) :
         arviointi(state,data,prefix,"_ka",
                         formi,validiointi=[[is_time],"syota hh:mm:ss!"],
                         muunnos=aika_numeroksi )
-        peruskaava(data) 
         return render_to_string("tupa/forms/kokonais_aika.html",  formi)
 
 def aikaValiForm(posti,data,prefix) :
@@ -395,6 +396,7 @@ def aikaValiForm(posti,data,prefix) :
                 save_data(data,['parametrit'],'oikea','arvo',"0")
                 for k,v in data['maaritteet'].items(): v['tyyppi']='aika'
                 save_data(data,['parametrit'],'vartion_kaava','arvo',"aikavali(a,b)")
+                peruskaava(data) 
         # Aloitusarvot kannasta
         state=None
         if not posti : 
@@ -407,7 +409,6 @@ def aikaValiForm(posti,data,prefix) :
         nollasuoritus(state,data,prefix,"_ala",formi,
                         validiointi=[[is_time],"syota hh:mm:ss!"],
                         muunnos=aika_numeroksi)
-        peruskaava(data) 
         return render_to_string("tupa/forms/aika_vali.html",  formi)
 
 def vapaaKaavaForm(posti,data,prefix) :
@@ -439,6 +440,7 @@ def vapaaKaavaForm(posti,data,prefix) :
                                 else :
                                         data['maaritteet'][-maaritteet[i][0]] = maaritteet[i][1]
                                         del data['maaritteet'][maaritteet[i][0]]
+             peruskaava(data) 
              
         poistaYlimaaraisetMaaritteet(posti,data,prefix,"vk",maara)
         
@@ -453,17 +455,16 @@ def vapaaKaavaForm(posti,data,prefix) :
         formi.update( field(state,"parhaan_haku",prefix+"_vk")  )
         
         errors=""
-        saveField(state,data,"kaava",['parametrit'],'vartion_kaava','arvo',prefix+"_vk")
         if state and prefix in state.keys() and state[prefix]=="vk":
                 if not validate(state,"kaava",[is_kaava],prefix+"_vk" ) : 
                         errors= "Kaava ei toimi!"
                         data['valid']=False
+                saveField(state,data,"kaava",['parametrit'],'vartion_kaava','arvo',prefix+"_vk")
         formi.update( field(state,"kaava",prefix+"_vk",errors=errors)  )
 
         maksimisuoritus(state,data,prefix,"_vk",formi, validiointi=[[is_kaava],"Kaava ei toimi!"])
         nollasuoritus(state,data,prefix,"_vk",formi, validiointi=[[is_kaava],"Kaava ei toimi!"])
         arviointi(state,data,prefix,"_vk",formi,validiointi=[[is_kaava],"Kaava ei toimi!"])
-        peruskaava(data) 
 
         return render_to_string("tupa/forms/vapaa_kaava.html",  formi )
 
@@ -580,11 +581,16 @@ def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehta
                                                 errors="Anna numero! "
                                                 data['valid']=False
                                 # Merkkijonojen validiointi:
-                                if fk=='nimi' or fk=='kaava' :
+                                if fk=='nimi'  :
                                         if not is_string(value):
                                                 errors="Anna merkkijono [a-zA-Za0-9_]"
                                                 data['valid']=False
-                        
+                                # Kaavan validiointi:
+                                if  fk=='kaava' :
+                                        if not is_kaava(value):
+                                                errors="Kaava ei toimi!"
+                                                data['valid']=False
+
                         if not fk== 'osa_tehtavat' :  formidata.append( (fk,{'id' : id,
                                                         'name' : id , 
                                                         'value' : value,

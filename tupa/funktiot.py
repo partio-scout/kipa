@@ -18,6 +18,7 @@ def listaksi(sanakirja):
                                         lista.append(sanakirja[k])
                         return lista
                 except : return None 
+
 def mediaani(joukko):
         """
         Palauttaa mediaanin arvon joukon lukuarvoista:
@@ -43,7 +44,7 @@ def minimi(joukko,b=None):
         Joukko voi olla sanakirja tai lista.
         """
         tulos=None
-        if b and not type(joukko)==list : 
+        if b and not type(joukko)==list and not type(b)==unicode: 
                 tulos=min([joukko,b])
         else :tulos= min(listaksi(joukko))
         return tulos
@@ -52,7 +53,7 @@ def maksimi(joukko,b=None) :
         Palauttaa joukon suurimman lukuarvon.
         Joukko voi olla sanakirja tai lista.
         """
-        if b and not type(joukko)==list : 
+        if b and not type(joukko)==list and not type(b)==unicode : 
                 return max([joukko,b])
         return max(listaksi(joukko))
 

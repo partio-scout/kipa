@@ -533,7 +533,6 @@ def luoTestiTulokset(request,kisa_nimi,sarja_id):
                         tulos = haeTulos( tulokset, v , t)
                         tt , p = TestausTulos.objects.get_or_create(vartio=v,tehtava=t )
                         tt.pisteet=str(tulos)
-                        print tulos
                         tt.save()
         return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/testitulos/" )
         
