@@ -57,6 +57,7 @@ def korvaa(lause,pino,loppu=None) :
                         uusi=uusi+"."+loppu
                 uusi=uusi[1:]
                 muutokset.append((h.start(),h.end(),uusi))
+        if not len(muutokset) : return lause
         muokattu=lause[:muutokset[0][0]]
         for i in range(len(muutokset)-1):
                 muokattu=muokattu+muutokset[i][2]
