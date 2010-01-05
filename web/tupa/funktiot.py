@@ -8,7 +8,6 @@ def listaksi(sanakirja):
                 lista=[]
                 for i in sanakirja :
                         if type(i)==Decimal : lista.append(i)
-                print lista
                 return lista
         elif type(sanakirja)==Decimal:
                 return [sanakirja]

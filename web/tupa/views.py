@@ -72,7 +72,7 @@ def maaritaKisa(request, kisa_nimi=None,talletettu=None):
                                       'forms' : (kisaForm,) ,
                                       'formsets' : ( sarjaFormit,),
                                       'kisa_nimi' : kisa_nimi,
-                                'talletettu': tal })
+                                      'talletettu': tal })
 
 def maaritaValitseTehtava(request,kisa_nimi):
         """
