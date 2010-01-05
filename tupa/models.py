@@ -56,10 +56,7 @@ class Vartio(models.Model) :
         puhelinnro = models.CharField(max_length=255, blank=True )
         sahkoposti = models.CharField(max_length=255, blank=True )
         osoite = models.CharField(max_length=255, blank=True )
-        keskeyttanyt = models.IntegerField(blank=True, 
-                                null=True, 
-                                verbose_name="Keskeyttänyt alkaen tehtävästä nro", 
-                                help_text="Syötä se tehtävä..." )
+        keskeyttanyt = models.IntegerField(blank=True, null=True )
         ulkopuolella = models.IntegerField(blank=True , null=True )
 
         #end_dia_class

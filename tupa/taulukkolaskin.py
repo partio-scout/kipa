@@ -53,7 +53,6 @@ def dictToMathDict(dictionary) :
                 else : new[k]=dictionary[k]
         return new
 
-
 def laske(lauseke,m={'num':Decimal}):
         """
         Laskee lauseen mikali se on laskettavissa. Kayttaa muuttujista loytyvia arvoja, seka funktioita.
@@ -61,7 +60,7 @@ def laske(lauseke,m={'num':Decimal}):
         # Poistetaan valilyonnit:
         lause = re.sub(" ","",lauseke)
         # Poistetaan "-0" termit
-        #lause=re.sub(r"([-][0](?![0-9.]))",r"",lause) 
+        lause=re.sub(r"([-][0](?![0-9.]))",r"",lause) 
         # Korvataan numerot merkkijonosta laskettavilla objekteilla
         lause=re.sub(r"(\d+\.\d+|(?<=[^0-9.])\d+)",r"num('\g<1>')",lause)
         # Korvataan muuttujien nimet oikeilla muuttujilla:
@@ -79,7 +78,7 @@ def laske(lauseke,m={'num':Decimal}):
         # Pyrkii myos estamaan koko paska kaadu virheissa.
         except DivisionByZero : return None 
         except KeyError : return "S" # syottamattomia muuttujia
-        except TypeError : return None 
+        except TypeError :  return None 
         except SyntaxError: return None
         except NameError : return None
         return tulos

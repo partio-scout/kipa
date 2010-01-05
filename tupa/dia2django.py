@@ -85,7 +85,7 @@ def korvaaLuokanRunko(koodi,luokka):
                 sisennys=len(sisennys_haku.group(0)) * " "
         runko=haeLuokanRunko(luokka,sisennys)
         return re.sub(r'(?s)(?<=#gen_dia_class '+ luokka.nimi +'\n).*?#end_dia_class',
-                                runko+"\n"+sisennys +"#end_dia_class",koodi)
+                                runko+"\n"+sisennys +r"#end_dia_class",koodi)
 
 def luoMallienRungot(kaavion_nimi,koodin_nimi):
         source=open( koodin_nimi , "r" )
