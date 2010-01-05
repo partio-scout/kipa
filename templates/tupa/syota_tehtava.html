@@ -17,6 +17,7 @@
 
 <p><a href='../../../'>Etusivu</a> -&gt; <a href='../../'>Valitse tehtävä</a> -&gt; {{ tehtava.nimi }}<br></p>
 
+<form action="." name="form1" method="post">     
 <table width="600" border="0" cellpadding="2" cellspacing="0">
   <tr>
     <td width="100" class="tauluOtsikko">Tehtävä:</td>
@@ -33,13 +34,25 @@
   </tr>
   <tr valign="middle">
     <td valign="middle" class="tauluOtsikko">Tehtävän tila:</td>
+    {%ifequal tilanne "a"%}
+    <td width="150" valign="middle" bgcolor="#FF4F00"><label>aloittamatta</label></td>
+    {% endifequal %}
+    {%ifequal tilanne "o"%}
     <td width="150" valign="middle" bgcolor="#FFFF66"><label>syötetty osittain</label></td>
-    <td bgcolor="#E8EDFF"><label><input type="checkbox" name="checkbox" id="checkbox" />tarkistettu</label></td>
+    {% endifequal %}
+    {%ifequal tilanne "s"%}
+    <td width="150" valign="middle" bgcolor="#b9f73e"><label>syötetty</label></td>
+    {% endifequal %}
+    {%ifequal tilanne "t"%}
+    <td width="150" valign="middle" bgcolor="#679b00"><label>tarkistettu</label></td>
+    {% endifequal %}
+
+    
+    <td bgcolor="#E8EDFF"><label><input type="checkbox" {%if tarkistettu %}checked="checked" {% endif %} name="tarkistettu" id="tarkistettu" />tarkistettu</label></td>
   </tr>
 </table>
 <br />
 
-<form action="." name="form1" method="post">     
    
     <table id="taulukko" border="0" cellpadding="2" cellspacing="0">
         <tr>

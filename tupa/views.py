@@ -20,6 +20,16 @@ from TehtavanMaaritys import *
 
 from reportlab.pdfgen import canvas
 
+def tehtavanTilanne(tehtava):
+        vartioita=len( tehtava.sarja.vartio_set.all() )
+        syotteita=len( Syote.objects.filter(maarite__osa_tehtava__tehtava=tehtava) )
+        maaritteita=len( SyoteMaarite.objects.filter(osa_tehtava__tehtava=tehtava) )
+        tila="a"
+        if syotteita: tila="o"
+        if syotteita==vartioita*maaritteita : tila="s"
+        if tehtava.tarkistettu : tila="t"
+        return tila
+
 def kisa(request,kisa_nimi) :
         """
         Kisakohtainen päävalikko.
@@ -49,7 +59,7 @@ def maaritaKisa(request, kisa_nimi=None,talletettu=None):
                 posti=request.POST
         # Kisa formi
         kisaForm = KisaForm(posti,instance=kisa)
-	kisaForm.label="Kisan perustiedot"
+        kisaForm.label="Kisan perustiedot"
         if kisaForm.is_valid():
                 kisa=kisaForm.save()
         
@@ -229,6 +239,9 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None) :
         posti=None
         if request.method == 'POST':
                 posti=request.POST
+                if 'tarkistettu' in posti.keys():  tehtava.tarkistettu=True
+                else : tehtava.tarkistettu=False
+        tarkistettu=tehtava.tarkistettu
         validi=True
         for v in vartiot :
                 rivi=[]
@@ -245,17 +258,21 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None) :
                                 validi=False
                         rivi.append( formi )
                 syoteFormit.append( (v,rivi))
+        
         if posti and validi  :
+                tehtava.save()
                 return HttpResponseRedirect("/tupa/"+kisa_nimi+"/syota/tehtava/"+str(tehtava.id)+'/talletettu/' )
         else:
                 tal=""
                 if talletettu=="talletettu" and not posti : tal="Talletettu!"
-
+                tilanne=tehtavanTilanne(tehtava)
                 return render_to_response('tupa/syota_tehtava.html', 
                         { 'tehtava' : tehtava ,
                         'maaritteet' : maaritteet ,
                         'syotteet' : syoteFormit,
-                        'talletettu': tal } )
+                        'talletettu': tal ,
+                        'tilanne' : tilanne,
+                        'tarkistettu' : tarkistettu} )
 
 def testiTulos(request, kisa_nimi,talletettu=None):
         """
@@ -563,6 +580,7 @@ def luoTestiTulokset(request,kisa_nimi,sarja_id):
                         tt.save()
         return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/testitulos/" )
 
+
 def laskennanTilanne(request,kisa_nimi) :
         kisa= get_object_or_404(Kisa , nimi=kisa_nimi )
         taulukko=[[]]
@@ -592,12 +610,7 @@ def laskennanTilanne(request,kisa_nimi) :
         for s in kisa.sarja_set.all() :
                 vartioita=len(s.vartio_set.all())
                 for t in s.tehtava_set.all() :
-                        syotteita=len( Syote.objects.filter(maarite__osa_tehtava__tehtava=t) )
-                        maaritteita=len( SyoteMaarite.objects.filter(osa_tehtava__tehtava=t) )
-                        tila="a"
-                        if syotteita: tila="o"
-                        if syotteita==vartioita*maaritteita : tila="s"
-                        taulukko[t.jarjestysnro][sarake]= tila
+                        taulukko[t.jarjestysnro][sarake]= tehtavanTilanne(t)
                 syotteita=len( Syote.objects.filter(maarite__osa_tehtava__tehtava__sarja=s) )
                 maaritteita=len( SyoteMaarite.objects.filter(osa_tehtava__tehtava__sarja=s) )
                 if syotteita>0 : 

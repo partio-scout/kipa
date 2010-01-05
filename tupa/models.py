@@ -105,6 +105,7 @@ class Tehtava(models.Model) :
         jarjestysnro = models.IntegerField()
         kaava = models.CharField(max_length=255)
         sarja = models.ForeignKey(Sarja)
+        tarkistettu = models.BooleanField(blank=True, null=True )
 
         #end_dia_class
         def mukanaOlevatVartiot(self):
@@ -189,6 +190,7 @@ class Syote(models.Model) :
         arvo = models.CharField(max_length=255)
         vartio = models.ForeignKey(Vartio, blank=True, null=True )
         maarite = models.ForeignKey(SyoteMaarite)
+        tarkistus = models.CharField(max_length=255, blank=True,null=True )
 
         #end_dia_class
 

@@ -22,9 +22,7 @@
         <legend>{{formset.label}}</legend>
         {{ formset.management_form }}
         {% for form in formset.forms %}
-                <fieldset>
                         {{ form }} <br>
-                </fieldset>
         {% endfor %}
         </fieldset>
     {% endfor%}
