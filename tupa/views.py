@@ -59,7 +59,6 @@ def maaritaKisa(request, kisa_nimi=None,talletettu=None):
                 sarjaFormit.save()
         sarjaFormit.label="Sarjat" 
         # Annetaan tiedot templatelle:
-        assert 0 
         if posti and sarjaFormit.is_valid() and kisaForm.is_valid() :
                 return HttpResponseRedirect("/tupa/"+kisa.nimi+"/maarita/talletettu/")
         else :
