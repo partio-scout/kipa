@@ -33,7 +33,7 @@ def tulosta(request,kisa_nimi):
         sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
         return render_to_response('tupa/tulosta.html', {'sarja_list': sarjat, 'kisa_nimi': kisa_nimi })
 
-def maaritaKisa(request, kisa_nimi=None):
+def maaritaKisa(request, kisa_nimi=None,talletettu=None):
         """
         Kisan ja sarjojen määritys.
         """
@@ -59,14 +59,18 @@ def maaritaKisa(request, kisa_nimi=None):
         sarjaFormit.label="Sarjat" 
         # Annetaan tiedot templatelle:
         if posti and sarjaFormit.is_valid() and kisaForm.is_valid() :
-                return HttpResponseRedirect("/tupa/"+kisa.nimi+"/maarita/")
+                return HttpResponseRedirect("/tupa/"+kisa.nimi+"/maarita/talletettu/")
         else :
+                tal=""
+                if talletettu=="talletettu" and not posti : tal="Talletettu!"
+
                 return render_to_response('tupa/maarita.html', 
                                       { 'heading' : "Määritä kisa" ,
                                       'taakse' : "../" ,
                                       'forms' : (kisaForm,) ,
                                       'formsets' : ( sarjaFormit,),
-                                      'kisa_nimi' : kisa_nimi })
+                                      'kisa_nimi' : kisa_nimi,
+                                'talletettu': tal })
 
 def maaritaValitseTehtava(request,kisa_nimi):
         """
@@ -99,7 +103,7 @@ def maaritaValitseTehtava(request,kisa_nimi):
                                         'heading' : "Valitse tehtävä",
                                         'taakse' : "/tupa/"+kisa_nimi+"/" })
 
-def maaritaVartiot(request,kisa_nimi):
+def maaritaVartiot(request,kisa_nimi,talletettu=None):
         """
         Määrittää kisan vartiot sarjoittain.
         """
@@ -120,14 +124,18 @@ def maaritaVartiot(request,kisa_nimi):
                 vartioFormit.id=s.id
                 taulukko.append( vartioFormit )
         if posti and post_ok:
-                return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/vartiot/")
+                return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/vartiot/talletettu/")
         else:
+                tal=""
+                if talletettu=="talletettu" and not posti : tal="Talletettu!"
+
                 return render_to_response('tupa/valitse_formset.html',
                                         { 'taulukko' : taulukko ,
                                         'heading' : "Määritä vartiot",
-                                        'taakse' : "../../" })
+                                        'taakse' : "../../",
+                                        'talletettu': tal })
 
-def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None):
+def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu=""):
         """
         Määritää tehtävän.
         Parametrit:
@@ -177,13 +185,17 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None):
         tehtava_id=tallennaTehtavaData( daatta ) 
         
         if posti and not 'lisaa_maaritteita' in posti.keys() and daatta['valid'] :
-                return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/tehtava/"+str(tehtava_id)+'/' )
+                return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/tehtava/"+str(tehtava_id)+'/talletettu/' )
         else:
+                tal=""
+                if talletettu=="talletettu" and not posti : tal="Talletettu!"
+                
                 return render_to_response('tupa/maarita.html', 
                                 { 'forms': [maaritaTehtava],
                                 'tabs' : tabs ,
                                 'heading' : "Valitse tehtävä",
-                                'taakse' : "../" })
+                                'taakse' : "../" ,
+                                'talletettu': tal})
 
 def syotaKisa(request, kisa_nimi):
         """
@@ -204,7 +216,7 @@ def syotaKisa(request, kisa_nimi):
                                 'heading' : "Valitse tehtävä",
                                 'taakse' : "../" })
 
-def syotaTehtava(request, kisa_nimi , tehtava_id) :
+def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None) :
         """
         Määrittää tehtävän syötteet.
         """
@@ -232,14 +244,18 @@ def syotaTehtava(request, kisa_nimi , tehtava_id) :
                         rivi.append( formi )
                 syoteFormit.append( (v,rivi))
         if posti and validi  :
-                return HttpResponseRedirect("/tupa/"+kisa_nimi+"/syota/tehtava/"+str(tehtava.id)+'/' )
+                return HttpResponseRedirect("/tupa/"+kisa_nimi+"/syota/tehtava/"+str(tehtava.id)+'/talletettu/' )
         else:
+                tal=""
+                if talletettu=="talletettu" and not posti : tal="Talletettu!"
+
                 return render_to_response('tupa/syota_tehtava.html', 
                         { 'tehtava' : tehtava ,
                         'maaritteet' : maaritteet ,
-                        'syotteet' : syoteFormit } )
+                        'syotteet' : syoteFormit,
+                        'talletettu': tal } )
 
-def testiTulos(request, kisa_nimi):
+def testiTulos(request, kisa_nimi,talletettu=None):
         """
         Määrittää kisalle testitulokset. Eli ns "oikeat" tulokset, 
         joita voidaan testeissä verrata laskennan tuottamiin tuloksiin.
@@ -274,13 +290,14 @@ def testiTulos(request, kisa_nimi):
                 taulut.id=s.id
                 taulukko.append(taulut)
         if posti and validi:
-                return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/testitulos/")
+                return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/testitulos/talletettu/")
         return render_to_response('tupa/testitulos.html',
                         { 'taulukko' : taulukko ,
                         'heading' : "Testittuloksien määritys" ,
-                        'taakse' : "../../" })
+                        'taakse' : "../../",
+                        'talletettu': tal })
 
-def tuomarineuvos(request, kisa_nimi):
+def tuomarineuvos(request, kisa_nimi,talletettu=None):
         """
         Määrittää kisalle testitulokset. Eli ns "oikeat" tulokset, 
         joita voidaan testeissä verrata laskennan tuottamiin tuloksiin.
@@ -315,11 +332,15 @@ def tuomarineuvos(request, kisa_nimi):
                 taulut.id=s.id
                 taulukko.append(taulut)
         if posti and validi:
-                return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/tuomarineuvos/")
+                return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/tuomarineuvos/talletettu/")
+        tal=""
+        if talletettu=="talletettu" and not posti : tal="Talletettu!"
+
         return render_to_response('tupa/testitulos.html',
                         { 'taulukko' : taulukko ,
                         'heading' : "Tuomarineuvoksen antamien tulosten määritys" ,
-                        'taakse' : "../../" })
+                        'taakse' : "../../",
+                        'talletettu': tal })
 
 def tulostaSarja(request, kisa_nimi, sarja_id) :
         """
