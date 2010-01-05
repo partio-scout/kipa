@@ -54,9 +54,12 @@ class AikaWidget(forms.TextInput):
                         try:
                                 float(newValue)
                                 arvo = Decimal(newValue)
-                                h = divmod(arvo , 60*60)[0]
-                                min = divmod(arvo , 60)[0]- h*60
-                                sec = arvo - (h*60*60) - (min*60)
+                                h = int(divmod(arvo , 60*60)[0])
+                                min = int(divmod(arvo , 60)[0]- h*60)
+                                sec = int(arvo - (h*60*60) - (min*60))
+                                if h < 10 : h="0"+str(h)
+                                if min < 10 : min="0"+str(min)
+                                if sec < 10 : sec="0"+str(sec)
                                 newValue = str(h) +":"+str(min) +":"+str(sec)
                         except ValueError:
                                 pass
