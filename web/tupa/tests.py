@@ -30,7 +30,7 @@ class aritmeettinen_laskin_test(unittest.TestCase):
         assert    Decimal(laske('0.5*2+10.5000')) == Decimal('11.5000')
     
     def testMuuttujavirhe(self):
-        assert    laske('tyhja_muuttuja*5') == None
+        assert    laske('tyhja_muuttuja*5') == 'S'
 
     def testSulkulauseke(self):
         assert    laske('2*(1+9)') == Decimal('20')
@@ -169,13 +169,17 @@ def TulosTestFactory(fixture_name):
                                         if not tulos == vaadittava:
                                                 ilmoitus= virheilmoitus
                                                 ilmoitus=ilmoitus + "\nTehtava: " + t.tehtava.nimi
-                                                ilmoitus=ilmoitus + "\nSyotteet: "
-                                                for s in Syote.objects.filter(maarite__osa_tehtava__tehtava=t.tehtava).filter(vartio=t.vartio):
-                                                        ilmoitus=ilmoitus + s.maarite.nimi+"="+ s.arvo + " "
                                                 ilmoitus=ilmoitus + "\nKaava: " + t.tehtava.kaava
                                                 ilmoitus=ilmoitus + "\nOstatehtavien kaavat: " 
                                                 for k in OsaTehtava.objects.filter(tehtava=t.tehtava):
-                                                        ilmoitus=ilmoitus + "\n    "+k.nimi +"="+ k.kaava + " "
+                                                        ilmoitus=ilmoitus + "\n"+k.nimi +"="+ k.kaava + " "
+                                                        ilmoitus=ilmoitus + "\n  Parametrit: " 
+                                                        for p in Parametri.objects.filter(osa_tehtava=k):
+                                                                ilmoitus=ilmoitus + "\n    "+p.nimi+"="+p.arvo+" "
+                                                        ilmoitus=ilmoitus + "\nSyotteet: "
+                                                        for s in Syote.objects.filter(maarite__osa_tehtava=k).filter(vartio=t.vartio):
+
+                                                                ilmoitus=ilmoitus + s.maarite.nimi+"="+ s.arvo + " "
                                                 ilmoitus=ilmoitus + "\nVartio: "  + t.vartio.nimi  
                                                 ilmoitus=ilmoitus + "\nTulos: "   + str(tulos)+' != '+str(vaadittava)
                                                 virheet.append(ilmoitus) 
