@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from models import *
 from django.shortcuts import render_to_response
 from django.shortcuts import get_object_or_404
 from django.http import Http404, HttpResponse, HttpResponseRedirect
@@ -13,6 +12,7 @@ from django.utils.safestring import SafeUnicode
 from duplicate import kopioiTehtava
 from duplicate import kisa_xml
 
+from models import *
 import re
 from formit import *
 from TehtavanMaaritys import *
@@ -397,7 +397,8 @@ def kopioiTehtavia(request,kisa_nimi,sarja_id ):
                 return render_to_response('tupa/valitse_form.html', 
                                       { 'heading' : u"Kopioi Tehtavia sarjaan: "+sarjaan.nimi ,
                                       'taulukko' : formit ,
-                                      'taakse' : "../../../../tehtava/" })
+                                      'taakse' : "../../../../tehtava/",
+                                      'napin_tyyppi' : 'kopioi' })
 
 
 def tallennaKisa(request, kisa_nimi):
