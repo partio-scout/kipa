@@ -66,7 +66,7 @@ def maaritaKisa(request, kisa_nimi=None,talletettu=None):
 
                 return render_to_response('tupa/maarita.html', 
                                       { 'heading' : "Määritä kisa" ,
-                                      'taakse' : "../" ,
+                                      'taakse' : "/tupa/"+kisa.nimi+"/" ,
                                       'forms' : (kisaForm,) ,
                                       'formsets' : ( sarjaFormit,),
                                       'kisa_nimi' : kisa_nimi,
@@ -132,7 +132,7 @@ def maaritaVartiot(request,kisa_nimi,talletettu=None):
                 return render_to_response('tupa/valitse_formset.html',
                                         { 'taulukko' : taulukko ,
                                         'heading' : "Määritä vartiot",
-                                        'taakse' : "../../",
+                                        'taakse' : "/tupa/"+kisa_nimi+"/",
                                         'talletettu': tal })
 
 def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu=""):
@@ -194,7 +194,7 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
                                 { 'forms': [maaritaTehtava],
                                 'tabs' : tabs ,
                                 'heading' : "Valitse tehtävä",
-                                'taakse' : "../" ,
+                                'taakse' : "/tupa/"+kisa_nimi+"/maarita/tehtava/" ,
                                 'talletettu': tal})
 
 def syotaKisa(request, kisa_nimi):
@@ -214,7 +214,7 @@ def syotaKisa(request, kisa_nimi):
         return render_to_response('tupa/valitse_linkki.html', 
                                 { 'taulukko' : taulukko,
                                 'heading' : "Valitse tehtävä",
-                                'taakse' : "../" })
+                                'taakse' : "/tupa/"+kisa_nimi+"/" })
 
 def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None) :
         """
@@ -291,10 +291,13 @@ def testiTulos(request, kisa_nimi,talletettu=None):
                 taulukko.append(taulut)
         if posti and validi:
                 return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/testitulos/talletettu/")
+        tal=""
+        if talletettu=="talletettu" and not posti : tal="Talletettu!"
+
         return render_to_response('tupa/testitulos.html',
                         { 'taulukko' : taulukko ,
                         'heading' : "Testittuloksien määritys" ,
-                        'taakse' : "../../",
+                        'taakse' : "/tupa/"+kisa_nimi+"/",
                         'talletettu': tal })
 
 def tuomarineuvos(request, kisa_nimi,talletettu=None):
@@ -339,7 +342,7 @@ def tuomarineuvos(request, kisa_nimi,talletettu=None):
         return render_to_response('tupa/testitulos.html',
                         { 'taulukko' : taulukko ,
                         'heading' : "Tuomarineuvoksen antamien tulosten määritys" ,
-                        'taakse' : "../../",
+                        'taakse' : "/tupa/"+kisa_nimi+"/",
                         'talletettu': tal })
 
 def tulostaSarja(request, kisa_nimi, sarja_id) :
@@ -397,7 +400,7 @@ def kopioiTehtavia(request,kisa_nimi,sarja_id ):
                 return render_to_response('tupa/valitse_form.html', 
                                       { 'heading' : u"Kopioi Tehtavia sarjaan: "+sarjaan.nimi ,
                                       'taulukko' : formit ,
-                                      'taakse' : "../../../../tehtava/",
+                                      'taakse' : "/tupa/"+kisa.nimi+"/maarita/tehtava/",
                                       'napin_tyyppi' : 'kopioi' })
 
 
