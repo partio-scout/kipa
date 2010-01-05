@@ -118,9 +118,7 @@ class PisteSyoteForm(ModelForm):
                 syote = super(ModelForm,self).save(commit=False)
                 syote.maarite=self.maarite
                 syote.vartio=self.vartio
-                if self.cleaned_data['arvo'] == "kesk":
-                        pass
-                elif not self.cleaned_data['arvo']== None :
+                if not self.cleaned_data['arvo']== None :
                         syote.arvo = self.cleaned_data['arvo']
                         syote.save()
                 elif syote.id :
