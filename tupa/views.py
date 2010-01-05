@@ -11,6 +11,7 @@ from django.utils.safestring import SafeUnicode
 
 from duplicate import kopioiTehtava
 from duplicate import kisa_xml
+import random
 
 from models import *
 import re
@@ -58,15 +59,17 @@ def maaritaKisa(request, kisa_nimi=None,talletettu=None):
                 sarjaFormit.save()
         sarjaFormit.label="Sarjat" 
         # Annetaan tiedot templatelle:
+        assert 0 
         if posti and sarjaFormit.is_valid() and kisaForm.is_valid() :
                 return HttpResponseRedirect("/tupa/"+kisa.nimi+"/maarita/talletettu/")
         else :
                 tal=""
                 if talletettu=="talletettu" and not posti : tal="Talletettu!"
-
+                taakse= "/tupa/"
+                if kisa_nimi : taakse = "/tupa/"+kisa_nimi+"/"
                 return render_to_response('tupa/maarita.html', 
                                       { 'heading' : "Määritä kisa" ,
-                                      'taakse' : "/tupa/"+kisa.nimi+"/" ,
+                                      'taakse' : taakse ,
                                       'forms' : (kisaForm,) ,
                                       'formsets' : ( sarjaFormit,),
                                       'kisa_nimi' : kisa_nimi,
@@ -400,7 +403,7 @@ def kopioiTehtavia(request,kisa_nimi,sarja_id ):
                 return render_to_response('tupa/valitse_form.html', 
                                       { 'heading' : u"Kopioi Tehtavia sarjaan: "+sarjaan.nimi ,
                                       'taulukko' : formit ,
-                                      'taakse' : "/tupa/"+kisa.nimi+"/maarita/tehtava/",
+                                      'taakse' : "/tupa/"+kisa_nimi+"/maarita/tehtava/",
                                       'napin_tyyppi' : 'kopioi' })
 
 
@@ -465,7 +468,7 @@ def raportti_500(request) :
         linkki=SafeUnicode('<a href=/tupa/post_txt/'+'osoite='+request.path )
         if len(request.raw_post_data):
                 linkki+='&'+request.raw_post_data
-        linkki+='/> Post data testaukseen </a>'      
+        linkki+='/> #00000000'+ str(random.uniform(1, 10)) +'</a>'      
         return render_to_response('500.html', {'error': SafeUnicode(linkki) })
 
 def tulostaSarjaPDF(request,kisa_nimi,sarja_id):

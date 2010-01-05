@@ -5,11 +5,15 @@ def listaksi(sanakirja):
         Muuttaa sanakirjan tai desimaalin listaksi jos syote on sanakirja, muuten palauttaa muuttujan itsessaan.
         """
         if type(sanakirja)==list:
-                return sanakirja
+                lista=[]
+                for i in sanakirja :
+                        if type(i)==Decimal : lista.append(i)
+                print lista
+                return lista
         elif type(sanakirja)==Decimal:
                 return [sanakirja]
         elif type(sanakirja)==unicode or type(sanakirja)==str:
-                return 
+                return sanakirja
         else:
                 try:
                         lista=[]
@@ -55,7 +59,7 @@ def maksimi(joukko,b=None) :
         """
         if b and not type(joukko)==list and not type(b)==unicode : 
                 return max([joukko,b])
-        return max(listaksi(joukko))
+        else : return max(listaksi(joukko))
 
 def keskiarvo(joukko) :
         """

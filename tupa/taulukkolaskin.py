@@ -79,7 +79,7 @@ def laske(lauseke,m={'num':Decimal}):
         # Pyrkii myos estamaan koko paska kaadu virheissa.
         except DivisionByZero : return None 
         except KeyError : return "S" # syottamattomia muuttujia
-        #except TypeError : return None 
+        except TypeError : return None 
         except SyntaxError: return None
         except NameError : return None
         return tulos
