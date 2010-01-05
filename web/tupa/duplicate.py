@@ -1,3 +1,4 @@
+import models 
 
 def kisa_xml(kisa):
         """
@@ -34,7 +35,7 @@ def kopioiTehtava(tehtava,sarjaan,uusiNimi=None) :
         tNimi=tehtava.nimi
         if uusiNimi:
                 tNimi=uusiNimi
-        uusiTehtava=Tehtava( sarja = sarjaan,
+        uusiTehtava=models.Tehtava( sarja = sarjaan,
                              nimi = tNimi,
                              kaava = tehtava.kaava,
                              jarjestysnro = tehtava.jarjestysnro )
@@ -43,7 +44,7 @@ def kopioiTehtava(tehtava,sarjaan,uusiNimi=None) :
         # Kopioi osatehtavat:
         osatehtavat = tehtava.osatehtava_set.all()
         for ot in osatehtavat:
-                uusiot=OsaTehtava(nimi=ot.nimi,
+                uusiot=models.OsaTehtava(nimi=ot.nimi,
                                 kaava=ot.kaava,
                                 tyyppi=ot.tyyppi,
                                 tehtava=uusiTehtava)
@@ -51,7 +52,7 @@ def kopioiTehtava(tehtava,sarjaan,uusiNimi=None) :
                 # Kopioi parametrit
                 parametrit = ot.parametri_set.all()
                 for p in parametrit :
-                        uusip=Parametri(nimi=p.nimi,
+                        uusip=models.Parametri(nimi=p.nimi,
                                         arvo=p.arvo ,
                                         osa_tehtava=uusiot)
                         uusip.save()
@@ -59,15 +60,13 @@ def kopioiTehtava(tehtava,sarjaan,uusiNimi=None) :
                 # Kopioi maaritteet:
                 maaritteet = ot.syotemaarite_set.all()
                 for m in maaritteet:
-                        uusim=SyoteMaarite( nimi=m.nimi,
+                        uusim=models.SyoteMaarite( nimi=m.nimi,
                                     osa_tehtava=uusiot,
                                     tyyppi=m.tyyppi,
                                     kali_vihje=m.kali_vihje )
                         uusim.save()
         
-        nimi = models.CharField(max_length=255)
-        kali_vihje = models.CharField(max_length=255, blank=True , null=True )
-        osa_tehtava = models.ForeignKey(OsaTehtava)
+
 
 
 
