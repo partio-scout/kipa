@@ -117,7 +117,8 @@ def luoMuuttujat(sarja) :
                                                 try :
                                                         dict_syotteet.append((str(v.nro),Decimal(s[0].arvo)))
                                                 except InvalidOperation: 
-                                                        dict_syotteet.append((str(v.nro),s[0].arvo))
+                                                        if not s[0].arvo=="kesk":
+                                                                dict_syotteet.append((str(v.nro),s[0].arvo))
 
                                 dict_maaritteet.append( (m.nimi,MathDict(dict_syotteet)) )
                         dict_ot.append( (ot.nimi,MathDict(dict_maaritteet)) )

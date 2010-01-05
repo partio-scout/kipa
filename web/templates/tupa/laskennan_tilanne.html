@@ -1,0 +1,86 @@
+
+{% extends "tupa/base.html" %}
+{% block title %}Tupa - laskennan tilanne{% endblock %}
+
+{% block header %}
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Tupa - laskennan tilanne</title>
+<link href="kipa.css" rel="stylesheet" type="text/css" />
+<script src="enter-as-tab2.js" type="text/javascript"></script>
+<script src="keyhandler.js" type="text/javascript"></script>
+<script src="jquery-1.3.2.min.js" type="text/javascript"></script>
+<script src="jquery.maskedinput-1.2.2.min.js" type="text/javascript"></script>
+
+{% endblock header %}
+
+{% block content %} 
+<body>
+
+
+<h1>Laskennan tilanne</h1>
+<p><a href="{{taakse}}">taakse</a> -&gt; <a href="">Laskennan tilanne</a>
+<br />
+</p>
+  <table width="500" border="0" id="taulukko">
+    {% for rivi in taulukko %}
+        <tr valign="top">
+        {%for sarake in rivi %}
+                {% if forloop.parent.first %}
+                        <th bgcolor="#FFFFF">{{ sarake }}</th>
+                {%else%}
+                {% if forloop.first %}
+                        <th>{{ sarake }}</th>
+                {%else%}
+
+                {% ifequal sarake "a" %}
+                        <td width="62" bgcolor="#FF4F00">&nbsp;</td>
+                {%else%}{% ifequal sarake "o" %}
+                        <td width="62" bgcolor="#FFFF66">&nbsp;</td>
+                {%else%}{% ifequal sarake "s" %}
+                        <td width="62" bgcolor="#b9f73e">&nbsp;</td>
+                {%else%}{% ifequal sarake "t" %}
+                        <td width="62" bgcolor="#679b00">&nbsp;</td>
+                {%else%}
+                        <td width="62" bgcolor="#FFFFF">{{ sarake }}</td>
+                {% endifequal %}
+                {% endifequal %}
+                {% endifequal %}
+                {% endifequal %}
+                {% endif %}
+                {% endif %}
+        {%endfor%}
+        </tr>
+      {%endfor%}
+   </table>
+    
+<br />
+  <table width="168" border="0">
+    <tr>
+      <td width="96"><label>aloittamatta</label></td>
+
+      <td width="62" bgcolor="#FF4F00">&nbsp;</td>
+    </tr>
+    <tr>
+      <td>syötetty osittain</td>
+      <td bgcolor="#FFFF66">&nbsp;</td>
+    </tr>
+    <tr>
+      <td><label> syötetty</label></td>
+
+      <td bgcolor="#b9f73e">&nbsp;</td>
+    </tr>
+    <tr>
+      <td>tarkistettu</td>
+      <td bgcolor="#679b00">&nbsp;</td>
+    </tr>
+  </table>
+  <p><br />
+
+  </p>
+
+</script>
+</body>
+
+{% endblock %}
+

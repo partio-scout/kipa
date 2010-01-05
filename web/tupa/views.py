@@ -562,5 +562,55 @@ def luoTestiTulokset(request,kisa_nimi,sarja_id):
                         tt.pisteet=str(tulos)
                         tt.save()
         return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/testitulos/" )
+
+def laskennanTilanne(request,kisa_nimi) :
+        kisa= get_object_or_404(Kisa , nimi=kisa_nimi )
+        taulukko=[[]]
+        taulukko[0].append("Tehtava")
         
+        suurin = 0
+        # Otsikkorivi
+        for s in kisa.sarja_set.all() :
+                taulukko[0].append(s.nimi)
+                for t in s.tehtava_set.all() : 
+                        if t.jarjestysnro > suurin: suurin =t.jarjestysnro
+        
+        # Luodaan taulukko
+        for i in range(suurin) :
+                rivi= [i+1]
+                for s in kisa.sarja_set.all() :
+                        rivi.append("")
+                taulukko.append(rivi)
+        rivi=['valmiina']
+        for s in kisa.sarja_set.all() :
+                rivi.append("")
+
+        taulukko.append(rivi)
+        
+        # 
+        sarake=1
+        for s in kisa.sarja_set.all() :
+                vartioita=len(s.vartio_set.all())
+                for t in s.tehtava_set.all() :
+                        syotteita=len( Syote.objects.filter(maarite__osa_tehtava__tehtava=t) )
+                        maaritteita=len( SyoteMaarite.objects.filter(osa_tehtava__tehtava=t) )
+                        tila="a"
+                        if syotteita: tila="o"
+                        if syotteita==vartioita*maaritteita : tila="s"
+                        taulukko[t.jarjestysnro][sarake]= tila
+                syotteita=len( Syote.objects.filter(maarite__osa_tehtava__tehtava__sarja=s) )
+                maaritteita=len( SyoteMaarite.objects.filter(osa_tehtava__tehtava__sarja=s) )
+                if syotteita>0 : 
+                        prosentit=Decimal(syotteita*100)/(maaritteita*vartioita)
+                        prosentit=prosentit.quantize(Decimal('1.'), rounding=ROUND_UP)
+                        taulukko[suurin+1][sarake]= str(prosentit)+"%"
+                else: taulukko[suurin+1][sarake]= "0%"
+                sarake+=1
+        #taulukko[suurin][0]= "valmiina"
+
+        
+
+                        
+        return render_to_response('tupa/laskennan_tilanne.html', {'taulukko' : taulukko,
+                                                        "taakse" :"/tupa/"+kisa_nimi+"/" }  )
 
