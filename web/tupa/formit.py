@@ -15,6 +15,7 @@ class VartioForm(ModelForm):
                         widget=forms.TextInput(attrs={'size':'2'} ) ,
                         required=False)
         keskeyttanyt = forms.IntegerField(widget=forms.TextInput(attrs={'size':'2'} ) ,required=False)
+        nro = forms.IntegerField(widget=forms.TextInput(attrs={'size':'3'} ) )
         class Meta:
                 model = Vartio
 
