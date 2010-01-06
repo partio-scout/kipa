@@ -225,7 +225,13 @@ def laskeSarja(sarja):
                                 kesk=vartiot[i].keskeyttanyt-1
                                 for t in range(kesk,len(tulokset[i])) :tulokset[i][t]= "K"
                         siirrettavat.append(i)
-                
+                # tuomarineuvos
+                vartion_tuomarit=vartiot[i].tuomarineuvostulos_set.all()
+                if len( vartion_tuomarit ):
+                        for t in range(len(tulokset[i])) :
+                                tuom=vartion_tuomarit.filter(tehtava=tehtavat[t])
+                                if len(tuom) :  tulokset[i][t]= tuom[0].pisteet
+
                 #kokonaispisteet:
                 tulokset[i].insert(0,summa(tulokset[i]))
                 #vartio objekti jokaisen rivin alkuun:

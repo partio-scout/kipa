@@ -209,9 +209,10 @@ class TuomarineuvosForm(ModelForm):
                 tulos = super(ModelForm,self).save(commit=False)
                 tulos.vartio=self.vartio
                 tulos.tehtava=self.tehtava
+
                 if tulos.pisteet == None or len(tulos.pisteet)==0  and tulos.id  : 
                         tulos.delete()
-                else : tulos.save()
+                if tulos.pisteet and len(tulos.pisteet)  : tulos.save()
                 return tulos
         class Meta:
                 fields=("pisteet")
