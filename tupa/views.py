@@ -458,6 +458,105 @@ def tietokantaan(request):
         response['Content-Disposition'] = 'attachment; filename=tietokanta.xml'
         return response
 
+
+class UploadFileForm(forms.Form):
+    file  = forms.FileField()
+
+
+def saveNewId(object,changeDict,keyName):
+        id=object.id
+        object.id=None
+        object.save()
+        changeDict[keyName][id]=object.id
+        return object
+
+def korvaaKisa(request,kisa_nimi):
+        kisa=get_object_or_404(Kisa, nimi=kisa_nimi)
+
+        if request.method == 'POST':
+                form = UploadFileForm(request.POST, request.FILES)
+                if form.is_valid():
+                        xml=r""
+                        for chunk in request.FILES['file'].chunks():
+                                xml+=chunk
+
+                        kisat=[]
+                        sarjat=[]
+                        vartiot=[]
+                        tehtavat=[]
+                        testaustulokset=[]
+                        tuomarit=[]
+                        osatehtavat=[]
+                        maaritteet=[]
+                        syotteet=[]
+                        parametrit=[]
+
+                        for obj in serializers.deserialize("xml", xml):
+                                if type(obj.object)==Kisa : kisat.append(obj.object)
+                                elif type(obj.object)==Sarja: sarjat.append(obj.object)
+                                elif type(obj.object)==Vartio : vartiot.append(obj.object)
+                                elif type(obj.object)==Tehtava : tehtavat.append(obj.object)
+                                elif type(obj.object)==TestausTulos : testaustulokset.append(obj.object)
+                                elif type(obj.object)==TuomarineuvosTulos : tuomarit.append(obj.object)
+                                elif type(obj.object)==OsaTehtava : osatehtavat.append(obj.object)
+                                elif type(obj.object)==SyoteMaarite : maaritteet.append(obj.object)
+                                elif type(obj.object)==Syote : syotteet.append(obj.object)
+                                elif type(obj.object)==Parametri : parametrit.append(obj.object)
+                        
+                        translations={'kisat':{},
+                                        'sarjat':{},
+                                        'vartiot':{},
+                                        'tehtavat':{},
+                                        'testaustulokset':{},
+                                        'tuomarit':{},
+                                        'osatehtavat':{},
+                                        'maaritteet': {} ,
+                                        'syotteet': {},
+                                        'parametrit' : {} }
+                        
+                        if not len(kisat)==1 : return HttpResponseRedirect('/tupa/'+kisa.nimi+'/korvaa/')
+                        else : kisa.delete()
+
+                        for k in kisat:
+                                kisa= saveNewId(k,translations,"kisat")
+                        for s in sarjat:
+                                s.kisa_id = translations["kisat"][s.kisa_id]
+                                saveNewId(s,translations,"sarjat")
+                        for v in vartiot:
+                                v.sarja_id = translations["sarjat"][v.sarja_id]
+                                saveNewId(v,translations,"vartiot")
+                        for t in tehtavat:
+                                t.sarja_id = translations["sarjat"][t.sarja_id]
+                                saveNewId(t,translations,"tehtavat")
+                        for t in testaustulokset:
+                                t.tehtava_id = translations["tehtavat"][t.tehtava_id]
+                                t.vartio_id = translations["vartiot"][t.vartio_id]
+                                saveNewId(t,translations,"testaustulokset")
+                        for t in tuomarit:
+                                t.tehtava_id = translations["tehtavat"][t.tehtava_id]
+                                t.vartio_id = translations["vartiot"][t.vartio_id]
+                                saveNewId(t,translations,"tuomarit")
+                        for o in osatehtavat:
+                                o.tehtava_id = translations["tehtavat"][o.tehtava_id]
+                                saveNewId(o,translations,"osatehtavat")
+                        for m in maaritteet:
+                                m.osa_tehtava_id = translations["osatehtavat"][m.osa_tehtava_id]
+                                saveNewId(m,translations,"maaritteet")
+                        for s in syotteet:
+                                s.maarite_id = translations["maaritteet"][s.maarite_id]
+                                s.vartio_id = translations["vartiot"][s.vartio_id]
+                                saveNewId(s,translations,"syotteet")
+                        for p in parametrit:
+                                p.osa_tehtava_id = translations["osatehtavat"][p.osa_tehtava_id]
+                                saveNewId(p,translations,"parametrit")
+
+                        return HttpResponseRedirect('/tupa/'+kisa.nimi+'/')
+        else:
+                form = UploadFileForm()
+        return render_to_response('tupa/upload.html', { 'heading' : u"korvaa kisa tiedostosta ", 
+                                                        'form' : form , })
+
+
 def post_txt(request,parametrit):
         """
         Apunäkymä virhetilanteisiin. (error 500,server internal error)

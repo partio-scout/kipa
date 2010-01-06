@@ -54,6 +54,9 @@ STATIC_DOC_ROOT = hakemisto + "/media/"
 # Example: "http://media.lawrence.com"
 MEDIA_URL = ''
 
+FILE_UPLOAD_HANDLERS= ("django.core.files.uploadhandler.MemoryFileUploadHandler",
+ "django.core.files.uploadhandler.TemporaryFileUploadHandler",)
+
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
