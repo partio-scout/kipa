@@ -209,7 +209,7 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
                                 'taakse' : "/tupa/"+kisa_nimi+"/maarita/tehtava/" ,
                                 'talletettu': tal})
 
-def syotaKisa(request, kisa_nimi):
+def syotaKisa(request, kisa_nimi,tarkistus=None):
         """
         Valitsee kisan tehtävän jonka tuloksia ruvetaan syöttämään.
         """
@@ -228,7 +228,7 @@ def syotaKisa(request, kisa_nimi):
                                 'heading' : "Valitse tehtävä",
                                 'taakse' : "/tupa/"+kisa_nimi+"/" })
 
-def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None) :
+def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None) :
         """
         Määrittää tehtävän syötteet.
         """
@@ -251,7 +251,14 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None) :
                         formi=None
                         if syotteet:
                                 syote=syotteet[0]
-                        formi = SyoteForm(m,v,posti,instance=syote,prefix=v.nimi+str(m.pk),)
+                        if tarkistus : formi =  TarkistusSyoteForm(m,v,posti,instance=syote,prefix=v.nimi+str(m.pk),)
+                        else : formi = SyoteForm(m,v,posti,instance=syote,prefix=v.nimi+str(m.pk),)
+                        if syote and syote.arvo and syote.tarkistus :
+                                if not syote.arvo==syote.tarkistus :
+                                        try: 
+                                                if not Decimal(syote.arvo)==Decimal(syote.tarkistus):
+                                                        formi.syottovirhe="virhe"
+                                        except : formi.syottovirhe="virhe"
                         if formi.is_valid() :
                                 formi.save()
                         else :
@@ -261,7 +268,10 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None) :
         
         if posti and validi  :
                 tehtava.save()
-                return HttpResponseRedirect("/tupa/"+kisa_nimi+"/syota/tehtava/"+str(tehtava.id)+'/talletettu/' )
+                if tarkistus : 
+                        osoite="/tupa/"+kisa_nimi+"/syota/tarkistus/tehtava/"+str(tehtava.id)+'/talletettu/'
+                        return HttpResponseRedirect( osoite )
+                else : return HttpResponseRedirect("/tupa/"+kisa_nimi+"/syota/tehtava/"+str(tehtava.id)+'/talletettu/' )
         else:
                 tal=""
                 if talletettu=="talletettu" and not posti : tal="Talletettu!"
@@ -272,7 +282,8 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None) :
                         'syotteet' : syoteFormit,
                         'talletettu': tal ,
                         'tilanne' : tilanne,
-                        'tarkistettu' : tarkistettu} )
+                        'tarkistettu' : tarkistettu,
+                        'tarkistus' : tarkistus} )
 
 def testiTulos(request, kisa_nimi,talletettu=None):
         """
@@ -580,7 +591,6 @@ def luoTestiTulokset(request,kisa_nimi,sarja_id):
                         tt.save()
         return HttpResponseRedirect("/tupa/"+kisa_nimi+"/maarita/testitulos/" )
 
-
 def laskennanTilanne(request,kisa_nimi) :
         kisa= get_object_or_404(Kisa , nimi=kisa_nimi )
         taulukko=[[]]
@@ -604,8 +614,6 @@ def laskennanTilanne(request,kisa_nimi) :
                 rivi.append("")
 
         taulukko.append(rivi)
-        
-        # 
         sarake=1
         for s in kisa.sarja_set.all() :
                 vartioita=len(s.vartio_set.all())
@@ -619,10 +627,6 @@ def laskennanTilanne(request,kisa_nimi) :
                         taulukko[suurin+1][sarake]= str(prosentit)+"%"
                 else: taulukko[suurin+1][sarake]= "0%"
                 sarake+=1
-        #taulukko[suurin][0]= "valmiina"
-
-        
-
                         
         return render_to_response('tupa/laskennan_tilanne.html', {'taulukko' : taulukko,
                                                         "taakse" :"/tupa/"+kisa_nimi+"/" }  )
