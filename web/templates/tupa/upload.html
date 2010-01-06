@@ -1,0 +1,18 @@
+{% extends "tupa/base.html" %}
+{% block title %}{{ heading }}{% endblock %}
+{% block content %} 
+<h1> {{heading}} <h1>
+
+<form method="POST" action="" enctype="multipart/form-data">
+
+<p>
+<br>
+<br>
+<br>
+
+{{form}}
+
+{% include "tupa/tallenna.html" %}
+
+{% endblock %}
+
