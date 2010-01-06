@@ -17,7 +17,6 @@
 {% block content %} 
 <body>
 
-
 <h1>Laskennan tilanne</h1>
 <p><a href="{{taakse}}">taakse</a> -&gt; <a href="">Laskennan tilanne</a>
 <br />
@@ -30,7 +29,7 @@
                         <th width="62" bgcolor="#FFFFF">{{ sarake }}</th>
                 {%else%}
                 {% if forloop.first %}
-                        <th width="62" >{{ sarake }}</th>
+                        <th width="62" bgcolor="#000000" >{{ sarake }}</th>
                 {%else%}
 
                 {% ifequal sarake "a" %}

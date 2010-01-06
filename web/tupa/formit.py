@@ -101,41 +101,71 @@ class AikaField(forms.CharField):
                 else :
                         raise forms.ValidationError('Syötä aikaa muodossa: (hh:mm:ss)')
 
+
+def initPisteSyote(self,fieldName):
+        kesk= self.vartio.keskeyttanyt
+        nro = self.maarite.osa_tehtava.tehtava.jarjestysnro
+        if kesk and nro :
+                if kesk <= nro :
+                        self.fields[fieldName].widget.attrs['readonly'] = True
+                        self.initial[fieldName]= "kesk"
+
+def savePisteSyote(self,syote,field,fieldName):
+        syote.maarite=self.maarite
+        syote.vartio=self.vartio
+        if not self.cleaned_data[fieldName]== None :
+                field = self.cleaned_data[fieldName]
+                syote.save()
+        elif syote.id :
+                syote.delete()
+
+
 class PisteSyoteForm(ModelForm):
         arvo = PisteField(required=False,widget=forms.TextInput(attrs={'size':'8'} ) )
-        
+        tarkistus = PisteField(required=False,widget=forms.HiddenInput ) 
         def __init__(self,maarite,vartio,*argv,**argkw) :
                 super(ModelForm,self).__init__(*argv,**argkw)
                 self.maarite=maarite
                 self.vartio=vartio
-                kesk= self.vartio.keskeyttanyt
-                nro = self.maarite.osa_tehtava.tehtava.jarjestysnro
-                if kesk and nro :
-                        if kesk <= nro :
-                                self.fields['arvo'].widget.attrs['readonly'] = True
-                                self.initial['arvo']= "kesk"
-
+                initPisteSyote(self,"arvo")
         def save(self):
                 syote = super(ModelForm,self).save(commit=False)
-                syote.maarite=self.maarite
-                syote.vartio=self.vartio
-                if not self.cleaned_data['arvo']== None :
-                        syote.arvo = self.cleaned_data['arvo']
-                        syote.save()
-                elif syote.id :
-                        syote.delete()
+                savePisteSyote(self,syote,syote.arvo,"arvo")
+        class Meta:
+                exclude = ('maarite','vartio')
+                model = Syote
+
+class PisteTarkistusForm(ModelForm):
+        tarkistus = PisteField(required=False,widget=forms.TextInput(attrs={'size':'8'} ) )
+        arvo = PisteField(required=False,widget=forms.HiddenInput  )
+        def __init__(self,maarite,vartio,*argv,**argkw) :
+                super(ModelForm,self).__init__(*argv,**argkw)
+                self.maarite=maarite
+                self.vartio=vartio
+                initPisteSyote(self,"tarkistus")
+        def save(self):
+                syote = super(ModelForm,self).save(commit=False)
+                savePisteSyote(self,syote,syote.tarkistus,"tarkistus")
         class Meta:
                 exclude = ('maarite','vartio')
                 model = Syote
 
 class AikaSyoteForm(PisteSyoteForm) :
         arvo=AikaField(required=False,widget=AikaWidget( attrs={'class': 'TCMask[##:##:##]','value': ''} ))
-           
+class AikaTarkistusForm(PisteTarkistusForm) :
+        tarkistus=AikaField(required=False,widget=AikaWidget( attrs={'class': 'TCMask[##:##:##]','value': ''} ))
+             
 def SyoteForm(*argv,**argkw) :
         if argv[0].tyyppi=="aika":
                 return AikaSyoteForm(*argv,**argkw)
         else :
                 return PisteSyoteForm(*argv,**argkw)
+
+def TarkistusSyoteForm(*argv,**argkw) :
+        if argv[0].tyyppi=="aika":
+                return AikaTarkistusForm(*argv,**argkw)
+        else :
+                return PisteTarkistusForm(*argv,**argkw)
 
 class TestiTulosForm(ModelForm):
         pisteet = forms.CharField(required=False,widget=forms.TextInput(attrs={'size':'4'} ))
