@@ -6,8 +6,19 @@
 
 int getconf(char *filename,char **keys,char **values,int max_str_len) ; // function for getting values from config files
 
+void getString(char *string) { // Function for getting raw line input from user
+	char ch;
+	while ((ch = getchar()) != '\n') {
+		if(ch=='\b' && strlen(string) ) string[strlen(string)-1]=0 ;
+		else {
+			string[strlen(string)]=ch  ;
+			string[strlen(string)+1]=0 ;
+		}
+	}
+}
+
 int main(int argc, char** argv) {
-	char apachedir[256];
+	char apachedir[256]="";
 	// Luetaan Konffitiedosto
 	char kipadir[256] ;
 	char apache_installer[256] ;
@@ -34,8 +45,8 @@ int main(int argc, char** argv) {
 			KEY_QUERY_VALUE, 
 			&hkey) == ERROR_SUCCESS)
 	{
-		printf("Kerro Apachen siainti koneellasi a:");
-		scanf("%s", apachedir);
+		printf("Kerro Apachen siainti koneellasi:");
+		getString(apachedir) ;
 	}
 	datalen = 256;
 	if (RegQueryValueExA(hkey,
@@ -45,31 +56,18 @@ int main(int argc, char** argv) {
 		apachedir,
 		&datalen) != ERROR_SUCCESS && !apachedir[0])	
 	{
-		printf("Kerro Apachen siainti koneellasi b:\n");
-		scanf("%s", apachedir);
+		printf("Kerro Apachen siainti koneellasi:\n");
+		getString(apachedir) ;
 	}
 	RegCloseKey(hkey);
 	
 	// Toistetaan itsest‰‰nselvyys:
-	printf("Apache on hakemistossa:\t%s\n",apachedir);
+	printf("Apache on hakemistossa:%s\n",apachedir);
 	
 	// Kysell‰‰n tyhmi‰:
 	printf("\nMihin hakemistoon kipa asennetaan ? ( vakio=%s ) ", kipadir) ;
-	char hakemisto[255];
-	hakemisto[0]=0;
-	char ch;
-	while ((ch = getchar()) != '\n') {
-		if(ch=='\b' && strlen(hakemisto) ) hakemisto[strlen(hakemisto)-1]=0 ;
-		else {
-			hakemisto[strlen(hakemisto)]=ch  ;
-			hakemisto[strlen(hakemisto)+1]=0 ;
-		}
-	}
+	getString(kipadir) ;
 
-	if ( hakemisto[0]!=0 ) {
-		kipadir[0]=0;
-		strcpy(kipadir,hakemisto) ;	
-	}
 	int i;
 	for( i =0 ; i< strlen(kipadir) ; i++ ) { // korvataan kaikki /
 		if (kipadir[i]=='/') kipadir[i]=='\\' ;
