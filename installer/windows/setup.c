@@ -23,13 +23,15 @@ int main(int argc, char** argv) {
 	char kipadir[256] ;
 	char apache_installer[256] ;
 	char apache_dir_key[256] ;
+	char apache_dir_64key[256] ;
 	char apache_dir_value[256] ;
-	char *keys[] = {"default_dir","apache_installer","apache_dir_key","apache_dir_value",NULL} ;
-	char *values[5] ;
+	char *keys[] = {"default_dir","apache_installer","apache_dir_key","apache_dir_64key","apache_dir_value",NULL} ;
+	char *values[6] ;
 	values[0]=kipadir ;
 	values[1]=apache_installer ;
 	values[2]=apache_dir_key ;
-	values[3]=apache_dir_value ;
+	values[3]=apache_dir_64key ;
+	values[4]=apache_dir_value ;
 	getconf("install.cfg",keys,values,256) ;
 	
 	// Ajetaan apache asentaja
@@ -43,10 +45,17 @@ int main(int argc, char** argv) {
 			apache_dir_key,
 			NULL,
 			KEY_QUERY_VALUE, 
-			&hkey) == ERROR_SUCCESS)
+			&hkey) == ERROR_SUCCESS) // Normal windows
 	{
-		printf("Kerro Apachen siainti koneellasi:");
-		getString(apachedir) ;
+		if  (!RegOpenKeyExA(HKEY_LOCAL_MACHINE,
+			apache_dir_64key,
+			NULL,
+			KEY_QUERY_VALUE, 
+			&hkey) == ERROR_SUCCESS) // 64 bit windows 7
+		{
+			printf("Kerro Apachen siainti koneellasi \n (Hakemisto jonka alla on suoraan \"modules\" ja \"bin\" hakemisto):\n");
+			getString(apachedir) ;
+		}
 	}
 	datalen = 256;
 	if (RegQueryValueExA(hkey,
@@ -56,7 +65,7 @@ int main(int argc, char** argv) {
 		apachedir,
 		&datalen) != ERROR_SUCCESS && !apachedir[0])	
 	{
-		printf("Kerro Apachen siainti koneellasi:\n");
+		printf("Kerro Apachen siainti koneellasi. \n (Hakemisto on se jonka alla on suoraan \"modules\" ja \"bin\" hakemistot):\n");
 		getString(apachedir) ;
 	}
 	RegCloseKey(hkey);
@@ -66,7 +75,12 @@ int main(int argc, char** argv) {
 	
 	// Kysell‰‰n tyhmi‰:
 	printf("\nMihin hakemistoon kipa asennetaan ? ( vakio=%s ) ", kipadir) ;
-	getString(kipadir) ;
+	char hakemisto[256]="";
+	getString(hakemisto) ;
+	if (hakemisto[0]) {
+		kipadir[0]=0 ;
+		strcpy(kipadir , hakemisto) ;
+	}	
 
 	int i;
 	for( i =0 ; i< strlen(kipadir) ; i++ ) { // korvataan kaikki /
@@ -94,7 +108,7 @@ int main(int argc, char** argv) {
 
 	// Paivitetaan httpd.conf
 	char httpd_conf[512] ;
-	sprintf(httpd_conf,"Alias /kipamedia %s\\web\\media \n <Directory %s\\web\\media> \n Order allow,deny \n  Allow from all \n </Directory> \n LoadModule python_module modules/mod_python.so \n <Location \"/tupa/\"> \n SetHandler python-program \n PythonHandler django.core.handlers.modpython \n SetEnv DJANGO_SETTINGS_MODULE web.settings \n PythonDebug On \n PythonPath \"['c:\\kipa'] + sys.path\" \n </Location> \n", kipadir, kipadir) ; 
+	sprintf(httpd_conf,"Alias /kipamedia %s\\web\\media \n <Directory %s\\web\\media> \n Order allow,deny \n  Allow from all \n </Directory> \n LoadModule python_module modules/mod_python.so \n <Location \"/tupa/\"> \n SetHandler python-program \n PythonHandler django.core.handlers.modpython \n SetEnv DJANGO_SETTINGS_MODULE web.settings \n PythonDebug On \n PythonPath \"['%s'] + sys.path\" \n </Location> \n", kipadir, kipadir,kipadir) ; 
 	
 	char httpd_filename[256] ;
 	sprintf(httpd_filename,"%s\\conf\\httpd.conf",apachedir) ;
@@ -136,7 +150,7 @@ int main(int argc, char** argv) {
 	system( httpd_stop ); 
 	system( httpd_start ); 
 	
-	printf("Valmis! paina jotain nappia.");
+	printf("\nValmis! paina jotain nappia.");
 	while( !kbhit());
 	// K‰ynistet‰‰n selain
 	system( "start.html" ); 
