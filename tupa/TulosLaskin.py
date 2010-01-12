@@ -119,6 +119,7 @@ def luoMuuttujat(sarja) :
                                                 except InvalidOperation: 
                                                         if not s[0].arvo=="kesk":
                                                                 dict_syotteet.append((str(v.nro),s[0].arvo))
+                                                except TypeError : pass
 
                                 dict_maaritteet.append( (m.nimi,MathDict(dict_syotteet)) )
                         dict_ot.append( (ot.nimi,MathDict(dict_maaritteet)) )

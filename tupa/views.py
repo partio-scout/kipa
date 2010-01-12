@@ -6,7 +6,6 @@ import operator
 from decimal import *
 from django import forms
 import django.template
-from logger import lokkeri
 from django.utils.safestring import SafeUnicode
 
 from duplicate import kopioiTehtava
@@ -380,7 +379,6 @@ def tulostaSarja(request, kisa_nimi, sarja_id) :
         Sarjan tulokset.
         """
         sarja = Sarja.objects.get(id=sarja_id)
-        lokkeri.clearLog()
         tulokset= sarja.laskeTulokset()
         return render_to_response('tupa/tulokset.html', {'tulos_taulukko' : tulokset }  )
 
@@ -602,7 +600,6 @@ def tulostaSarjaPDF(request,kisa_nimi,sarja_id):
 	Sarjan tulokset PDF:ksi. Tämän laskennan voisi varmaan toteuttaa jossain muualla, mut kokeilin nyt vain /Joonas
 	"""
 	sarja = Sarja.objects.get(id=sarja_id)
-	lokkeri.clearLog()
 	tulokset= sarja.laskeTulokset()
 	# return render_to_response('tupa/tulokset.html', {'tulos_taulukko' : tulokset }  )
 
@@ -662,7 +659,6 @@ def tulostaSarjaHTML(request, kisa_nimi, sarja_id) :
         Sarjan tulokset, sivu muotoiltuna tulostusta varten, ilman turhia grafiikoita.
         """
         sarja = Sarja.objects.get(id=sarja_id)
-        lokkeri.clearLog()
         tulokset= sarja.laskeTulokset()
         return render_to_response('tupa/tuloksetHTML.html', {'tulos_taulukko' : tulokset }  )
 
