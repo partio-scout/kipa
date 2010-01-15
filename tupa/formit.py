@@ -121,7 +121,7 @@ def savePisteSyote(self,syote,field,fieldName):
 
 
 class PisteSyoteForm(ModelForm):
-        arvo = PisteField(required=False,widget=forms.TextInput(attrs={'size':'8'} ) )
+        arvo = PisteField(required=False,widget=forms.TextInput(attrs={'size':'8', 'class':'numeric'} ) )
         tarkistus = PisteField(required=False,widget=forms.HiddenInput ) 
         def __init__(self,maarite,vartio,*argv,**argkw) :
                 super(ModelForm,self).__init__(*argv,**argkw)

@@ -1,5 +1,15 @@
 {% extends "tupa/base.html" %}
 {% block title %}{{ heading }}{% endblock %}
+{% block header %}
+<script type='text/javascript' src='/kipamedia/jquery.autocomplete.js'></script>
+<script type='text/javascript' src='/kipamedia/localdata.js'></script>
+<script>
+	$(document).ready(function(){
+		$("id_Valkoinen-0-lippukunta").autocomplete(lpkt);
+	});
+</script>
+{% endblock %}
+
 {% block content %} 
 
 <p><a href='../../'>Etusivu</a> -&gt; vartioiden määritys<br></p>

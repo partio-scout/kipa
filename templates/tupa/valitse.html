@@ -1,5 +1,21 @@
 {% extends "tupa/base.html" %}
 {% block title %}{{ heading }}{% endblock %}
+{% block header %}
+<script type="text/javascript" src="/kipamedia/jquery-1.3.2.min.js"></script>
+<script type='text/javascript' src='/kipamedia/jquery.autocomplete.js'></script>
+<script type='text/javascript' src='/kipamedia/lpkt_ja_piirit.js'></script>
+<script>
+	$(document).ready(function(){
+		$("#id_Valkoinen-0-piiri").autocomplete(piirit, {
+		minChars: 0,
+		width: 310});
+		$("#id_Valkoinen-0-lippukunta").autocomplete(lpkt, {
+		minChars: 0,
+		width: 310});
+	});
+</script>
+{% endblock %}
+
 {% block content %} 
 
 <h1>{{ heading }}</h1>
