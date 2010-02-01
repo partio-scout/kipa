@@ -29,7 +29,20 @@ MaariteFormSet = inlineformset_factory(OsaTehtava,SyoteMaarite,extra=3 )
 SarjaFormSet = inlineformset_factory(Kisa,Sarja,extra=8 )
 TehtavaValintaFormSet = inlineformset_factory(Sarja,Tehtava,fields='jarjestysnro')
 
-tuhoaTehtaviaFormset = modelformset_factory(Tehtava,can_delete=True,extra=0,fields=('delete'))
+class TuhoaTehtavaForm(ModelForm):
+        nimi = forms.CharField(widget=forms.HiddenInput,required=False )
+        tehtavaryhma = forms.CharField(widget=forms.HiddenInput,required=False)
+        tehtavaluokka = forms.CharField(widget=forms.HiddenInput,required=False)
+        rastikasky = forms.CharField(widget=forms.HiddenInput,required=False)
+        jarjestysnro = forms.CharField(widget=forms.HiddenInput,required=False)
+        kaava = forms.CharField(widget=forms.HiddenInput,required=False)
+        sarja = forms.CharField(widget=forms.HiddenInput,required=False)
+        tarkistettu = forms.BooleanField(widget=forms.HiddenInput,required=False)
+        class Meta :
+                model=Tehtava
+
+
+tuhoaTehtaviaFormset = modelformset_factory(Tehtava,can_delete=True,extra=0,form=TuhoaTehtavaForm)
 class TehtavaLinkkilistaFormset(tuhoaTehtaviaFormset):
         def __unicode__(self) :
                 piirto=unicode(self.management_form)

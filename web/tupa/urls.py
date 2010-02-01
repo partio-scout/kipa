@@ -12,7 +12,7 @@ genericViews = patterns('django.views.generic.list_detail',
 
 tal=r"(?P<talletettu>(talletettu)?)/?$"
 
-urlpatterns = genericViews +  patterns('web.tupa.views.',
+urlpatterns = genericViews +  patterns('web.tupa.views',
         (r'^admin/(.*)', admin.site.root ),
         (r'^post_txt/(?P<parametrit>.+)/$', 'post_txt'), 
         (r'^(?P<kisa_nimi>\w+)/tallenna/$', 'tallennaKisa'), 
@@ -35,9 +35,9 @@ urlpatterns = genericViews +  patterns('web.tupa.views.',
         (r'^(?P<kisa_nimi>\w+)/tulosta/tilanne/$', 'laskennanTilanne'),
         (r'^(?P<kisa_nimi>\w+)/tulosta/sarja/(?P<sarja_id>\d+)/$', 'tulostaSarja'),
         (r'^(?P<kisa_nimi>\w+)/tulosta/sarja/tuloste/(?P<sarja_id>\d+)/$', 'tulostaSarjaHTML'),
-        (r'^(?P<kisa_nimi>\w+)/tulosta/sarja/pdf/(?P<sarja_id>\d+)/$', 'tulostaSarjaPDF'),
         (r'^(?P<kisa_nimi>\w+)/tulosta/piirit/$', 'piirit'), )
 
+#(r'^(?P<kisa_nimi>\w+)/tulosta/sarja/pdf/(?P<sarja_id>\d+)/$', 'tulostaSarjaPDF'),
 
 if settings.DEBUG :
         urlpatterns += patterns('',
