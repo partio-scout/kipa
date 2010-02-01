@@ -1,24 +1,24 @@
 from decimal import *
 
-def listaksi(sanakirja):
+def listaksi(joukkio):
         """
-        Muuttaa sanakirjan tai desimaalin listaksi jos syote on sanakirja, muuten palauttaa muuttujan itsessaan.
+        Muuttaa sanakirjan tai desimaalin listaksi jos syote on joukkio, muuten palauttaa muuttujan itsessaan.
         """
-        if type(sanakirja)==list:
+        if type(joukkio)==list:
                 lista=[]
-                for i in sanakirja :
+                for i in joukkio :
                         if type(i)==Decimal : lista.append(i)
                 return lista
-        elif type(sanakirja)==Decimal:
-                return [sanakirja]
-        elif type(sanakirja)==unicode or type(sanakirja)==str:
-                return sanakirja
+        elif type( joukkio )==Decimal:
+                return [joukkio]
+        elif type( joukkio )==unicode or type( joukkio )==str:
+                return joukkio
         else:
                 try:
                         lista=[]
-                        for k in sanakirja.keys() :
-                                if type(sanakirja[k])==Decimal :
-                                        lista.append(sanakirja[k])
+                        for k in joukkio.keys() :
+                                if type(joukkio[k])==Decimal :
+                                        lista.append(joukkio[k])
                         return lista
                 except : return None 
 
@@ -80,7 +80,7 @@ def summa(joukko) :
         """
         lista=None
         if type(joukko)==list : lista = joukko
-        else :lista = listaksi(joukko)
+        else : lista = listaksi(joukko)
         s=Decimal(0) 
         for v in lista : 
                 if v and not type(v)==unicode and not type(v)==str: s=s+v
@@ -90,7 +90,6 @@ def interpoloi(x,x1,y1,x2,y2=0):
         """
         Palauttaa pisteen (x,y) y koordinaatin pisteiden (x1,y1) (x2,y2) maarittamalta suoralta.
         """
-        #print "x="+str(x)+",x1="+str(x1)+",y1="+str(y1)+",x2="+str(x2)
         # y = (y1-y2)/(x1-x2)*(x-x2)
         try :
                 X=Decimal(x)
@@ -132,7 +131,7 @@ def aikavali(a,b):
         elif type(a)==str or type(b)==str or type(a)==unicode or type(b)==unicode:
                 tulos= Decimal(b)-Decimal(a)
                 if tulos < Decimal("0"): tulos=tulos+Decimal("86400") # lisataan 24h sekuntteina
-        #kaksi sanakirjaa:
+        # kaksi sanakirjaa:
         else: 
                 tulos=b-a
                 for i in tulos.keys() :

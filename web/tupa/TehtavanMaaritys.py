@@ -10,6 +10,9 @@ from taulukkolaskin import laskeTaulukko
 from models import *
 from django.core import serializers
 
+""" This file is made with no explainable logic. It has only been made to work. Most propably the best way to improveis simply rewriting. Anyway the task is not simple. Strongly recommend of using the already defined database syntax. See developement documentation for the actual syntax definition.
+"""
+
 # Validiointi funktiot:
 def is_number(s):
         if not s : return False
@@ -86,8 +89,8 @@ def syotteen_tyyppi_field(posti,data,prefix,syote_id,tyyppi):
                         maarite_index+=1
         # tilan tallennus
         formi= { field_name :{   'id' : id,
-                                        'name' : id, 
-                                        'value' : value } } 
+                               'name' : id, 
+                              'value' : value } } 
         return formi
 
 def field(posti,field_name,prefix,errors=""):

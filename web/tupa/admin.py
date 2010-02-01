@@ -4,30 +4,33 @@ from formit import *
 
 class SarjaInline(admin.TabularInline):
     model = Sarja
-    extra = 4
+    extra = 1
+
+class ParametriInline(admin.TabularInline):
+    model = Parametri
+    extra = 1
+
+class SyoteMaariteInline(admin.TabularInline):
+    model = SyoteMaarite
+    extra = 1
+
+class OsaTehtavaInline(admin.TabularInline):
+    model = OsaTehtava
+    extra = 1
 
 class KisaAdmin(admin.ModelAdmin):
     form = KisaForm
-    fieldsets = [
-        (None,               {'fields': ['nimi']}),
-        ('Optionaalinen informaatio', {'fields': ['aika','paikka'], 'classes': ['collapse']}),
-    ]
     inlines = [SarjaInline]
 
 class KaavaInline(admin.TabularInline):
     model = OsaTehtava
     extra = 1
 
-class SyoteMaariteInline(admin.TabularInline):
-    model = SyoteMaarite
-    extra = 2
-
 class TehtavaAdmin(admin.ModelAdmin) :
-    fieldsets = [
-        (None,               {'fields': ['nimi','kaava','jarjestysnro']}),
-        ('Optionaalinen informaatio', {'fields': ['tehtavaryhma','tehtavaluokka','rastikasky'], 'classes': ['collapse']}),
-    ]
+    inlines = [OsaTehtavaInline]
 
+class OsaTehtavaAdmin(admin.ModelAdmin) :
+    inlines = [ParametriInline,SyoteMaariteInline]
 
 admin.site.register(Kisa, KisaAdmin)
 admin.site.register(Sarja)
@@ -38,6 +41,6 @@ admin.site.register(SyoteMaarite)
 admin.site.register(Allergia)
 admin.site.register(TuomarineuvosTulos)
 admin.site.register(TestausTulos)
-admin.site.register(OsaTehtava)
+admin.site.register(OsaTehtava,OsaTehtavaAdmin)
 admin.site.register(Parametri)
 

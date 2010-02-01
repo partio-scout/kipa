@@ -5,7 +5,7 @@ from funktiot import funktiot
 class MathDict(dict):
         """
         Sanakirja jonka alkioille voi tehda massoittain 
-        laskutoimituksia toisten sanakirjan kanssa.
+        laskutoimituksia toisten sanakirjan vastaavien alkioiden kesken.
         """
         def __add__(self,other): 
                 sum = MathDict({})
@@ -45,7 +45,7 @@ class MathDict(dict):
 
 def dictToMathDict(dictionary) :
         """
-        Muuttaa sanakirjan rekursiivisesti laskennalliseksi sanakirjaksi
+        Muuttaa taballisen sanakirjan rekursiivisesti laskennalliseksi sanakirjaksi.
         """
         new=MathDict({})
         for k in dictionary.keys():

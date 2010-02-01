@@ -17,8 +17,6 @@ import re
 from formit import *
 from TehtavanMaaritys import *
 
-from reportlab.pdfgen import canvas
-
 def tehtavanTilanne(tehtava):
         vartioita=len( tehtava.sarja.vartio_set.all() )
         syotteita=len( Syote.objects.filter(maarite__osa_tehtava__tehtava=tehtava) )
@@ -595,11 +593,11 @@ def raportti_500(request) :
         linkki+='/> #00000000'+ str(random.uniform(1, 10)) +'</a>'      
         return render_to_response('500.html', {'error': SafeUnicode(linkki) })
 
-def tulostaSarjaPDF(request,kisa_nimi,sarja_id):
+#def tulostaSarjaPDF(request,kisa_nimi,sarja_id):
 	"""
 	Sarjan tulokset PDF:ksi. Tämän laskennan voisi varmaan toteuttaa jossain muualla, mut kokeilin nyt vain /Joonas
 	"""
-	sarja = Sarja.objects.get(id=sarja_id)
+	"""sarja = Sarja.objects.get(id=sarja_id)
 	tulokset= sarja.laskeTulokset()
 	# return render_to_response('tupa/tulokset.html', {'tulos_taulukko' : tulokset }  )
 
@@ -617,7 +615,7 @@ def tulostaSarjaPDF(request,kisa_nimi,sarja_id):
 	# Draw things on the PDF. Here's where the PDF generation happens.
 	# See the ReportLab documentation for the full list of functionality.
 	c.drawString(100, 100, "Hello world.")
-
+"""
 	'''from reportlab.lib.units import inch
 	# move the origin up and to the left
 	c.translate(inch,inch)
@@ -637,7 +635,7 @@ def tulostaSarjaPDF(request,kisa_nimi,sarja_id):
 	c.setFillColorRGB(0,0,0.77)
 	# say hello (note after rotate the y coord needs to be negative!)
 	c.drawString(0.3*inch, -inch, "Hello World")'''
-
+"""
 	from reportlab.lib.units import inch
 	from reportlab.lib.colors import magenta, red
 	c.setFont("Times-Roman", 20)
@@ -653,7 +651,7 @@ def tulostaSarjaPDF(request,kisa_nimi,sarja_id):
 	c.showPage()
 	c.save()
 	return response
-
+"""
 def tulostaSarjaHTML(request, kisa_nimi, sarja_id) :
         """
         Sarjan tulokset, sivu muotoiltuna tulostusta varten, ilman turhia grafiikoita.
