@@ -7,9 +7,7 @@ from django.shortcuts import get_object_or_404
 from duplicate import kisa_xml
 #coding: latin-1
 
-
 #recorder middleware:
-
 class PostDataRecorder:
         """
         Nauhoittaa post requestit record.xml tietokanta tiedoston loppuun mikali se on olemassa ja settings.RECORDING==True
@@ -44,68 +42,4 @@ class PostDataRecorder:
                                 FILE = open("record.xml","w")
                                 FILE.write(data.toxml(encoding="utf-8") )
                 return None
-
-if settings.LOGGING==True :  
-  class Logger:
-    """
-    Logger Class 
-    """
-    def __init__(self) :
-        self.stack=[""]
-        self.file="log.log"
-    def setFileName(self,fileName) :
-        self.file=fileName
-        return self
-    def setMessage(self,message) :
-        if message :
-                self.stack[-1]=message
-        else:
-                self.stack[-1]="None"
-        return self
-    def push(self) :
-        self.stack.append("")
-        return self
-    def pop(self) :
-        if len(self.stack) > 1 :
-           self.stack.pop()
-        return self
-    def clearStack(self) :
-        self.stack=[""]
-        return self
-    def clearLog(self) :
-        
-        log = open(self.file, "w")
-        log.write("")
-        log.close()
-        return self
-        
-    def logMessage(self) :
-        log = open(self.file, "a")
-        for r in self.stack:
-           log.write(unicode(r).encode('ascii', 'ignore'))
-        log.write("\n")
-        log.close()
-        return self
-  lokkeri=Logger()
-else :
-  
-  class Logger:
-    def setFileName(self,fileName) :
-        return self
-    def setMessage(self,message) :
-        return self
-    def push(self) :
-        return self
-    def pop(self) :
-        return self
-    def clearStack(self) :
-        return self
-    def clearLog(self) :
-        return self
-    def logMessage(self) :
-        return self
-  lokkeri=Logger()
-
-lokkeri.setFileName("laskenta.log")
-
 

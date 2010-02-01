@@ -67,9 +67,3 @@ def kopioiTehtava(tehtava,sarjaan,uusiNimi=None) :
                         uusim.save()
         
 
-
-
-
-
-
-
