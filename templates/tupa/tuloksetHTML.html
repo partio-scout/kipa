@@ -58,13 +58,13 @@ TD {
                                         {{ sarake.nimi }} <td><b>vartio:</b></td>
                                 {% else %}
                                         {% comment %} ylarivi {% endcomment %}
-                                        <td><b>{{ sarake }}</b></td>
+                                        <td><b>{{ sarake.nimi }}</b></td>
                                 {% endif %}
                      {% else %}
                      {% if forloop.first  %}
                      {% comment %} ekasarake {% endcomment %}
                         <td><b>
-                                {{ sarake }}
+                                {{ sarake.nimi }}
                         </b></td>
                      {% else %}
                      {% comment %} muut sarakkeet {% endcomment %}
