@@ -103,7 +103,7 @@ class Tehtava(models.Model) :
         jarjestysnro = models.IntegerField()
         kaava = models.CharField(max_length=255)
         sarja = models.ForeignKey(Sarja)
-        tarkistettu = models.BooleanField(blank=True, null=True )
+        tarkistettu = models.BooleanField()
 
         #end_dia_class
         def mukanaOlevatVartiot(self):
