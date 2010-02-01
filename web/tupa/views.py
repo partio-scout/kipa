@@ -441,6 +441,19 @@ def tallennaKisa(request, kisa_nimi):
         response['Content-Disposition'] = 'attachment; filename=tietokanta.xml'
         return response
 
+def poistaKisa(request, kisa_nimi) :
+        kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
+        posti=None
+        if request.method=='POST' :
+                posti=request.POST
+                kisa.delete()
+                return HttpResponseRedirect("/tupa/")
+        otsikko = 'poista kisa' 
+        return render_to_response('tupa/poista_kisa.html', { 'heading' : otsikko , 
+                                                        'kisa_nimi' : kisa_nimi})
+
+
+
 class UploadFileForm(forms.Form):
         file  = forms.FileField()
 
