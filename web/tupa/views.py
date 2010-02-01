@@ -441,23 +441,12 @@ def tallennaKisa(request, kisa_nimi):
         response['Content-Disposition'] = 'attachment; filename=tietokanta.xml'
         return response
 
-def tietokantaan(request):
-        """
-        Palauttaa tupa tietokannan kokonaisuudessaan xml formaatissa käyttäjälle talletettavaksi.
-        """
-        from django.db.models import get_app, get_apps, get_models
-        from django.core import serializers
-        objects=[]
-        for model in get_models(get_app("tupa")):
-                objects.extend(model._default_manager.all())
-        response = HttpResponse(serializers.serialize("xml", objects , indent=4), mimetype='application/xml')
-        response['Content-Disposition'] = 'attachment; filename=tietokanta.xml'
-        return response
-
-
 class UploadFileForm(forms.Form):
-    file  = forms.FileField()
+        file  = forms.FileField()
 
+class UploadFileNameForm(forms.Form):
+        file  = forms.FileField()
+        name = forms.CharField(label = "Tallennetaan nimelle")
 
 def saveNewId(object,changeDict,keyName):
         id=object.id
@@ -466,12 +455,28 @@ def saveNewId(object,changeDict,keyName):
         changeDict[keyName][id]=object.id
         return object
 
-def korvaaKisa(request,kisa_nimi):
-        kisa=get_object_or_404(Kisa, nimi=kisa_nimi)
+def korvaaKisa(request,kisa_nimi=None):
+        try :
+                kisa=Kisa.objects.get(nimi=kisa_nimi)
+        except : 
+                kisa=None
+        
+        otsikko=u"korvaa kisa tiedostosta"
+        if not kisa_nimi : otsikko =u"lisää kisa tiedostosta "
 
+        form = None
         if request.method == 'POST':
-                form = UploadFileForm(request.POST, request.FILES)
+                if not kisa_nimi : form = UploadFileNameForm(request.POST, request.FILES)
+                else : form = UploadFileForm(request.POST, request.FILES)
+                
                 if form.is_valid():
+                        if not kisa_nimi : 
+                                kisa_nimi = form.cleaned_data['name']
+                                try :
+                                        kisa=Kisa.objects.get(nimi=kisa_nimi)
+                                except : 
+                                        kisa=None
+                        
                         xml=r""
                         for chunk in request.FILES['file'].chunks():
                                 xml+=chunk
@@ -510,11 +515,10 @@ def korvaaKisa(request,kisa_nimi):
                                         'syotteet': {},
                                         'parametrit' : {} }
                         
-                        if not len(kisat)==1 : return HttpResponseRedirect('/tupa/'+kisa.nimi+'/korvaa/')
-                        else : kisa.delete()
-
-                        for k in kisat:
-                                kisa= saveNewId(k,translations,"kisat")
+                        if not len(kisat)==1 : return HttpResponseRedirect('/tupa/'+kisa_nimi+'/korvaa/')
+                        elif kisa : kisa.delete()
+                        kisat[0].nimi=kisa_nimi
+                        saveNewId(kisat[0],translations,"kisat")
                         for s in sarjat:
                                 s.kisa_id = translations["kisat"][s.kisa_id]
                                 saveNewId(s,translations,"sarjat")
@@ -546,10 +550,14 @@ def korvaaKisa(request,kisa_nimi):
                                 p.osa_tehtava_id = translations["osatehtavat"][p.osa_tehtava_id]
                                 saveNewId(p,translations,"parametrit")
 
-                        return HttpResponseRedirect('/tupa/'+kisa.nimi+'/')
+                        return HttpResponseRedirect('/tupa/'+kisa_nimi+'/')
         else:
-                form = UploadFileForm()
-        return render_to_response('tupa/upload.html', { 'heading' : u"korvaa kisa tiedostosta ", 
+                if not kisa_nimi : 
+                        form = UploadFileNameForm()
+                else :form = UploadFileForm()
+
+
+        return render_to_response('tupa/upload.html', { 'heading' : otsikko , 
                                                         'form' : form , })
 
 
