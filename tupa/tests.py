@@ -103,7 +103,6 @@ def ViewSanityCheck(fixture_name):
                         tehtavat=Tehtava.objects.all()
                         virheet=[]
                         request =HttpRequest()
-                        tietokantaan(request)
                         maaritaKisa(request)
                         for k in kisat :
                                 kisa_nimi=k.nimi
