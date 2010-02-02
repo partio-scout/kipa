@@ -502,6 +502,7 @@ def osaTehtavaForm(posti,data,prefix="") :
         return render_to_string("tupa/forms/osa_tehtava.html",  {'tab_id': data['nimi'] , 
                                                                 'nimi' : data['nimi'] ,
                                                                 'taulukko' : taulukko ,
+                                                                'tyyppi' : data['tyyppi'] ,
                                                                 'osatehtava' : otForm } )
 
 def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehtava_") :

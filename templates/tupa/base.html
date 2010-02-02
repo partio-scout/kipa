@@ -26,10 +26,10 @@
 {% if tabs %}
         {% for tab in tabs %}
                 <script type="text/javascript">
-	                    var sarjat=new ddtabcontent("{{tab}}")
-	                    sarjat.setpersist(true)
-	                    sarjat.setselectedClassTarget("link") //"link" or "linkparent"
-	                    sarjat.init()
+	                    var tab_{{tab}}=new ddtabcontent("{{tab}}")
+	                    tab_{{tab}}.setpersist(false)
+	                    tab_{{tab}}.setselectedClassTarget("link") //"link" or "linkparent"
+	                    tab_{{tab}}.init()
                 </script>
 
         {% endfor %}
