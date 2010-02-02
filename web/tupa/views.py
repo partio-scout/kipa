@@ -57,13 +57,16 @@ def maaritaKisa(request, kisa_nimi=None,talletettu=None):
         # Kisa formi
         kisaForm = KisaForm(posti,instance=kisa)
         kisaForm.label="Kisan perustiedot"
-        if kisaForm.is_valid():
-                kisa=kisaForm.save()
-        
+                
         # Sarja formset
         sarjaFormit=SarjaFormSet(posti,instance=kisa)
-        if sarjaFormit.is_valid():
-                sarjaFormit.save()
+
+
+        if kisaForm.is_valid():
+                kisa=kisaForm.save()
+                if sarjaFormit.is_valid():
+                        sarjaFormit.save()
+
         sarjaFormit.label="Sarjat" 
         # Annetaan tiedot templatelle:
         if posti and sarjaFormit.is_valid() and kisaForm.is_valid() :
