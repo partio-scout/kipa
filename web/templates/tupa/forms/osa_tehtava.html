@@ -8,11 +8,10 @@ div {
 display: none;
 }
 
-
 </style> 
 {% if taulukko %}
 
-<b> Osatehtävän tyyppi: </b>
+Osatehtävän tyyppi: 
 {% for sarake in taulukko%}
         <input type="radio" id="aa" name="{{osatehtava.id}}" value="{{sarake.tyyppi}}" 
         onclick="
