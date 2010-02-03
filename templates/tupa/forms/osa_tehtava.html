@@ -1,30 +1,56 @@
-{% extends "tupa/forms/valitse.html" %}
+<h1> {{ heading }}</h1>
 
-{% block header%} 
-        <fieldset>
-        <legend>Osatehtava {{ nimi }}</legend>
-{% endblock%}
+<fieldset>
+<legend>Osatehtava {{ nimi }}</legend>
 
-{% block sarake %}
+<style type="text/css"> 
+div {
+display: none;
+}
+
+
+</style> 
+{% if taulukko %}
+
+<b> Osatehtävän tyyppi: </b>
+{% for sarake in taulukko%}
+        <input type="radio" id="aa" name="{{osatehtava.id}}" value="{{sarake.tyyppi}}" 
+        onclick="
+        {% for sa in taulukko%}
+                {%ifequal sa.tyyppi sarake.tyyppi %}
+                        setVisibility('{{sa.id}}','inline')
+                {% else %}
+                        setVisibility('{{sa.id}}','none')
+                {% endifequal %}
+        {% endfor %} "
+        
+        {%ifequal sarake.tyyppi tyyppi %} checked='checked' {% endifequal %} />
+        {{sarake.otsikko}} &nbsp &nbsp
+{% endfor %}
+{% for sarake in taulukko%}
+        
+        <div id="{{sarake.id}}" >    
+        
+        
         <table border="0">
         
         <td><font color=red><b> 
         {{osatehtava.errors}}
         </b></font>
 
-        {% ifequal osatehtava.value sarake.tyyppi %}
-                <input  type="radio" id="aa" name="{{osatehtava.id}}" value="{{sarake.tyyppi}}" checked="checked"/>
-        {% else %}
-                <input type="radio" id="aa" name="{{osatehtava.id}}" value="{{sarake.tyyppi}}" />
-        {% endifequal %}
+        
         </td>
         <td>
        {{sarake.form}}
         </td>
         </table>
+        </div>
+{% endfor %}
+<script type="text/javascript">
+setVisibility('{{nimi}}_{{tyyppi}}','inline')
+</script>
 
-{% endblock%}
+{%endif%}
 
-{% block footer %}
-        </fieldset>
-{% endblock%}
+
+</fieldset>

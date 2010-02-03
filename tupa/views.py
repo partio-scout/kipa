@@ -170,19 +170,11 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
                 tehtava=Tehtava(sarja)
 
         # Tabs:
-        tabs= []
         daatta={}
-        ot_index=0
         if tehtava_id:
                 osatehtavat= tehtava.osatehtava_set.all() 
-                for ot in osatehtavat :
-                        tabs.append(ot.nimi) 
-                        ot_index+=1 
                 daatta =luoTehtavaData([tehtava]) 
-        # Muutama ylimaarainen tabi:
-        for i in range(5) :
-                tabs.append( string.letters[ot_index] )
-                ot_index+=1
+        
         
         # Haetaan suurin kaytosssa oleva jarjestysnro tassa sarjassa:
         sarjan_tehtavat=Tehtava.objects.filter(sarja=sarja)
@@ -204,7 +196,6 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
                 
                 return render_to_response('tupa/maarita.html', 
                                 { 'forms': [maaritaTehtava],
-                                'tabs' : tabs ,
                                 'heading' : "Valitse tehtävä",
                                 'taakse' : "/tupa/"+kisa_nimi+"/maarita/tehtava/" ,
                                 'talletettu': tal})
