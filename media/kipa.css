@@ -58,7 +58,7 @@ h1 {
 	/* tämä on sivuotsikko	*/
 	margin-bottom: 20px;
 	text-transform: uppercase;
-	color:#FFF;
+	color:#333;
 }
 
 h2 {
@@ -407,3 +407,166 @@ tr .odd:hover{
 }
 
 /* /jQuery Autocomplete*/
+
+
+/* ---- SIIVOTTU TÄSTÄ ALASPÄIN ---------*/
+body {
+	min-width: 630px;         /* 2 x (LC fullwidth + CC padding) + RC fullwidth */
+}
+
+html, body, #wrap {
+	height: 100%; 
+    margin:0; 
+    padding:0;
+   	font-size: 11px;
+	line-height: 120%;
+	font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+	background-color: white;
+}
+
+body > #wrap {
+	height: auto; 
+	min-height: 100%;
+	background: url(/kipamedia/matte-blue.png) repeat-y;
+}
+
+#main {
+	padding-bottom: 20px;  /* must be same height as the footer */
+}
+
+#footer {
+	position: relative;
+	margin-top: -21px; /* negative value of footer height */
+	height: 12px;
+	clear:both;
+	text-align:right;
+	font-family: Tahoma,Arial,sans-serif;
+	color: #4f5959;
+	text-transform: uppercase;
+	letter-spacing: 0.2em;
+	word-spacing: 0.25em;
+	font: 8px Verdana, "Lucida Grande", Lucida, sans-serif;
+	font-weight: bold;
+	text-shadow: #d1d8d8 0 1px 0;
+	background: #9fafb1 url(/kipamedia/white-overlays.png) repeat-x;
+	margin: 2em 0 0 0 0;
+	padding: 4px 0;
+	border-top: 1px solid #abbdbe;
+} 
+
+/* --- CLEARFIXES --- */
+.clearfix:after {content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+.clearfix {display: inline-block;}
+/* Hides from IE-mac \*/
+* html .clearfix { height: 1%;}
+.clearfix {display: block;}
+/* End hide from IE-mac */
+
+
+/* --- Grid --- */
+#container {
+	padding-left: 70px;      /* LC fullwidth */
+	padding-right: 10px;     /* RC fullwidth + CC padding */
+}
+
+#container .column {
+	position: relative;
+	float: left;
+}
+
+#right {
+	padding: 10px 0;       /* CC padding */
+	width: 100%;
+}
+
+#left {
+	width: 40px;             /* LC width */
+	padding: 5px;          /* LC padding */
+	right: 5px;             /* LC fullwidth + CC padding */
+	margin-left: -65px;
+}
+				
+/*** IE Fix ***/
+* html #left {
+	left: 150px;              /* RC fullwidth */
+}
+
+
+#header {
+	height: 20px;
+	background:#ff0;
+	padding:8px;
+	background: url(/kipamedia/header.png) repeat-x;
+}
+
+#pageTitle {
+	text-transform: uppercase;
+	color: #9fa8a9;
+	float: left;
+	padding-top: 0.33em 8px; 
+	text-shadow: #333333;
+	font-family: Verdana,"Lucida Grande",Lucida,sans-serif;
+	font-size: 1.33em;
+	line-height: normal;
+}
+
+#breadcrumbs {
+	background: url(/kipamedia/green-bar.png);
+	height:15px;
+	margin-bottom: -1px;
+	padding: 3px 0 3px 8px;
+	position: relative;
+	z-index: 2;
+	color:#5D5D5D;
+	font-size: 11px;
+	font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+	overflow:hidden;
+}
+
+#breadcrumbs a {
+	text-decoration:none;
+	color:#5D5D5D;
+}
+
+#breadcrumbs a:hover {
+	text-decoration:none;
+	color:#fff;
+}
+
+
+a.sitetoolbarnav img { 
+	border: none;
+}
+
+
+div.sitetoolbarrow {padding:2px; font-weight:bold}
+a.sitetoolbarnav { 
+	color: #0d3b65; 
+	padding: 3px; 
+	margin: 2px;
+	font-family: Arial, Helvetica,Geneva,Swiss,SunSans-Regular, Verdana; 
+	width: 35px; 
+	float: left;
+	font-weight: bold; 
+	font-size: 10px; 
+	text-decoration: none;
+	border: 1px solid #EDEDED;
+}
+
+a.sitetoolbarnav:hover { 
+	color: #0d3b65; 
+	border: 1px solid #486B8A;
+	padding: 3px; 
+	width: 35px; 
+	float: left; 
+	background: #D8E0E7;
+}
+
+a.sitetoolbarnavactive {color:#0d3b65;  border: 1px solid #486B8A;  padding: 3px; width: 35px;  float: left; font-size: 10px; background: #fff; font-weight: bold; text-decoration: none;}
+a.sitetoolbarnavactive:hover { color: #0d3b65; border: 1px solid #486B8A; padding: 3px; width: 35px; float: left;  background: #D8E0E7; }
+
