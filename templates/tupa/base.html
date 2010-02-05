@@ -25,20 +25,20 @@ document.getElementById(id).style.display = visibility;
 <body>
 
 <div id="wrap">
-    <div id="header"><div id="pageTitle">Punkku '09 <font color=00FF00 size=3><b>{{talletettu}}</b></font></div></div>
-    <div id="breadcrumbs"><a href="/tupa/Punkku09/">Punkku 09</a> &raquo; <a href="">Muokkaa kisaa</a> &raquo; <a href="">Muokkaa tehtävää</a></div>
+    <div id="header"><div id="pageTitle">{{kisa_nimi}} <font color=00FF00 size=3><b>{{talletettu}}</b></font></div></div>
+    <div id="breadcrumbs"><a href="/kipa/{{kisa_nimi}}/">{{kisa_nimi}}</a> &raquo; <a href="">{{taakse}}</a> &raquo; <a href="">{{heading}}</a></div>
     
     <div id="main" class="clearfix">
     
         <div id="container">
             <div id="left" class="column">
                 <div id="sitetoolbarrow"> 
-                	<a href="/tupa/Punkku09/" class="sitetoolbarnav" title="Etusivulle"><img src="/kipamedia/home.png" width="32" height="32" alt="Etusivulle" /></a>
-                    <a href="/tupa/Punkku09/syota/" class="sitetoolbarnav" title="Syötä suorituksia"><img src="/kipamedia/add.png" width="32" height="32" alt="Syötä suorituksia" /></a>
-                    <a href="/tupa/Punkku09/tulosta/" class="sitetoolbarnav" title="Laskennan tilanne"><img src="/kipamedia/chart_up.png" width="32" height="32" alt="Laskennan tilanne" /></a>
-                    <a href="/tupa/Punkku09/maarita/vartiot/" class="sitetoolbarnav" title="Määrittele vartiot"><img src="/kipamedia/edit_profile.png" width="32" height="32" alt="Määrittele vartiot" /></a>
-                    <a href="/tupa/Punkku09/maarita/tehtava/" class="sitetoolbarnav" title="Määrittele tehtävät"><img src="/kipamedia/edit_page.png" width="32" height="32" alt="Määrittele tehtävät" /></a>
-                    <a href="/tupa/Punkku09/apua/" class="sitetoolbarnav" title="Apua"><img src="/kipamedia/help.png" width="32" height="32" alt="Apua" /></a>
+					<a href="/kipa/{{kisa_nimi}}/" class="sitetoolbarnav" title="Etusivulle"><img src="/kipamedia/home.png" width="32" height="32" alt="Etusivulle" /></a>
+					<a href="/kipa/{{kisa_nimi}}/syota/" class="sitetoolbarnav" title="Syötä suorituksia"><img src="/kipamedia/add.png" width="32" height="32" alt="Syötä suorituksia" /></a>
+					<a href="/kipa/{{kisa_nimi}}/tulosta/" class="sitetoolbarnav" title="Laskennan tilanne"><img src="/kipamedia/chart_up.png" width="32" height="32" alt="Laskennan tilanne" /></a>
+					<a href="/kipa/{{kisa_nimi}}/maarita/vartiot/" class="sitetoolbarnav" title="Määrittele vartiot"><img src="/kipamedia/edit_profile.png" width="32" height="32" alt="Määrittele vartiot" /></a>
+					<a href="/kipa/{{kisa_nimi}}/maarita/tehtava/" class="sitetoolbarnav" title="Määrittele tehtävät"><img src="/kipamedia/edit_page.png" width="32" height="32" alt="Määrittele tehtävät" /></a>
+					<a href="/kipa/{{kisa_nimi}}/apua/" class="sitetoolbarnav" title="Apua"><img src="/kipamedia/help.png" width="32" height="32" alt="Apua" /></a>
                 </div>
             </div><!-- /left -->
             <div id="right" class="column">
