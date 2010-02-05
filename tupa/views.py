@@ -183,7 +183,7 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
                 if nro < t.jarjestysnro : nro = t.jarjestysnro
         
         # Luodaan tehtavan maaritys form
-        maaritaTehtava = tehtavanMaaritysForm(posti,daatta,sarja_id=sarja_id,suurin_jarjestysnro=nro)
+        tehtavaForm = tehtavanMaaritysForm(posti,daatta,sarja_id=sarja_id,suurin_jarjestysnro=nro)
         
         # Tallennetaan formin muokkaama data
         tehtava_id=tallennaTehtavaData( daatta ) 
@@ -193,9 +193,8 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
         else:
                 tal=""
                 if talletettu=="talletettu" and not posti : tal="Talletettu!"
-                
                 return render_to_response('tupa/maarita.html', 
-                                { 'forms': [maaritaTehtava],
+                                { 'forms': [tehtavaForm],
                                 'heading' : "Valitse tehtävä",
                                 'taakse' : "/tupa/"+kisa_nimi+"/maarita/tehtava/" ,
                                 'talletettu': tal})
@@ -318,6 +317,7 @@ def testiTulos(request, kisa_nimi,talletettu=None):
         return render_to_response('tupa/testitulos.html',
                         { 'taulukko' : taulukko ,
                         'heading' : "Testittuloksien määritys" ,
+                        'kisa_nimi' : kisa_nimi,
                         'taakse' : "/tupa/"+kisa_nimi+"/",
                         'talletettu': tal })
 
@@ -417,9 +417,10 @@ def kopioiTehtavia(request,kisa_nimi,sarja_id ):
         if redirect:
                 return HttpResponseRedirect("/tupa/"+kisa.nimi+"/maarita/tehtava/")
         else:
-                return render_to_response('tupa/valitse_form.html', 
+                return render_to_response('tupa/valitse_form.html',
                                       { 'heading' : u"Kopioi Tehtavia sarjaan: "+sarjaan.nimi ,
                                       'taulukko' : formit ,
+                                      'kisa_nimi' : kisa_nimi,
                                       'taakse' : "/tupa/"+kisa_nimi+"/maarita/tehtava/",
                                       'napin_tyyppi' : 'kopioi' })
 

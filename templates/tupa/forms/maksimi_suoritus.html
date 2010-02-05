@@ -2,14 +2,12 @@
 
 <legend> <b>Maksimisuoritus</b> </legend>
 
-<p>
-                Tässä kerrotaan suoritus, jolla saa maksimipisteet. Tämä voi olla vartioiden suorituksista pienin, suurin tai jokin kiinteä luku.
-
-</p>
-
+<table>
+<tr>
+<td width=400>
 <font color=red><b> 
 </b></font>
-Parhaat piseet saa:
+Parhaat pisteet saa:<br>
 <input type="radio" id="{{parhaan_haku.id}}" value="min" name="{{parhaan_haku.name}}" 
 {% ifequal parhaan_haku.value "min" %}checked="checked" {% endifequal %}
 /> pienin:</label>
@@ -30,6 +28,12 @@ Montako kisapistetta jaetaan:
         {{jaettavat.errors}}
 </b></font>
 <input type="text" name="{{jaettavat.name}}" id="{{jaettavat.id}}" value="{{jaettavat.value}}" />               
+</td>
+<td>
+Tässä kerrotaan suoritus, jolla saa maksimipisteet. Tämä voi olla vartioiden suorituksista pienin, suurin tai jokin kiinteä luku.
+</td>
+
+</table>
 
 </fieldset>
 
