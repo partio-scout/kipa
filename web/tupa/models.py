@@ -24,7 +24,7 @@ class Kisa(models.Model) :
         #gen_dia_class Kisa
 
         nimi = models.CharField(max_length=255)
-        aika = models.DateField(blank=True, null=True )
+        aika = models.CharField(max_length=255, blank=True, null=True )
         paikka = models.CharField(max_length=255, blank=True )
 
         #end_dia_class

@@ -513,7 +513,7 @@ def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehta
                                                 'kaava': 'ss' ,
                                                 'nimi': '' ,
                                                 'jarjestysnro':suurin_jarjestysnro+1, 
-                                                'osa_tehtavat' : {  } }
+                                                'osa_tehtavat' : { '#1': { "nimi": "","tyyppi": "" }  } }
         data['valid']=True
         if not posti: data['valid']=False
 
@@ -537,6 +537,7 @@ def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehta
                                                         'value' : osatehtavia,
                                                         'errors' : errors })) 
                 # Osatehtavien formien lisays, vanhojen poisto:
+                
                 osatehtava_id=0
                 osatehtavat=[]
                 for tk,tv in v['osa_tehtavat'].items() : osatehtavat.append( (tv['nimi'],tk ) )
@@ -661,7 +662,7 @@ def tallennaTehtavaData(data) :
                                 osateht= ot_v.copy()
                                 if 'parametrit' in osateht.keys() : del osateht['parametrit'] 
                                 if 'maaritteet' in osateht.keys() : del osateht['maaritteet']
-                                del osateht['tehtava']
+                                if 'tehtava' in osateht.keys() : del osateht['tehtava']
                                 osa_tehtava=OsaTehtava(**osateht)
                                 if not type(ot_k) == str : osa_tehtava.id=ot_k
                                 osa_tehtava.tehtava=tehtava
