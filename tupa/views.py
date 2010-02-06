@@ -41,6 +41,18 @@ def tulosta(request,kisa_nimi):
         sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
         return render_to_response('tupa/tulosta.html', {'sarja_list': sarjat, 'kisa_nimi': kisa_nimi, 'heading' : 'Tulokset sarjoittain' })
 
+
+
+
+
+
+
+
+
+
+
+
+
 def maaritaKisa(request, kisa_nimi=None,talletettu=None):
         """
         Kisan ja sarjojen määritys.
@@ -113,8 +125,7 @@ def maaritaValitseTehtava(request,kisa_nimi):
         else:
                 return render_to_response('tupa/maaritaValitseTehtava.html', 
                                         { 'taulukko' : taulukko,
-                                        'heading' : 'Valitse tehtävä', 'kisa_nimi': kisa_nimi,
-                                        'taakse' : "<a href='/kipa/"+kisa_nimi+"/'>Valitse tehtävä</a>" })
+                                        'heading' : 'Muokkaa tehtävää', 'kisa_nimi': kisa_nimi })
 
 def maaritaVartiot(request,kisa_nimi,talletettu=None):
         """
@@ -146,7 +157,6 @@ def maaritaVartiot(request,kisa_nimi,talletettu=None):
                                         { 'taulukko' : taulukko ,
                                         'heading' : "Määritä vartiot",
 					'kisa_nimi': kisa_nimi,
-                                        'taakse' : "/kipa/"+kisa_nimi+"/",
                                         'talletettu': tal })
 
 def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu=""):
@@ -189,6 +199,10 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
         
         # Tallennetaan formin muokkaama data
         tehtava_id=tallennaTehtavaData( daatta ) 
+
+	otsikko = 'Uusi tehtävä'
+
+	if tehtava and not tehtava.nimi == '' : otsikko = tehtava.nimi
         
         if posti and not 'lisaa_maaritteita' in posti.keys() and daatta['valid'] :
                 return HttpResponseRedirect("/kipa/"+kisa_nimi+"/maarita/tehtava/"+str(tehtava_id)+'/talletettu/' )
@@ -197,9 +211,9 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
                 if talletettu=="talletettu" and not posti : tal="Talletettu!"
                 return render_to_response('tupa/maarita.html', 
                                 { 'forms': [tehtavaForm],
-                                'heading' : "Valitse tehtävä",
+                                'heading' : otsikko,
 				'kisa_nimi': kisa_nimi,
-                                'taakse' : "/kipa/"+kisa_nimi+"/maarita/tehtava/" ,
+				'taakse' : {'url' : '/kipa/' + kisa_nimi + '/maarita/tehtava/', 'title' : u'Muokkaa tehtävää' },
                                 'talletettu': tal})
 
 def syotaKisa(request, kisa_nimi,tarkistus=None):
@@ -218,7 +232,7 @@ def syotaKisa(request, kisa_nimi,tarkistus=None):
                 taulukko.append( tehtavat )
         return render_to_response('tupa/valitse_linkki.html', 
                                 { 'taulukko' : taulukko,
-                                'heading' : "Valitse tehtävä",
+                                'heading' : "Muokkaa tehtävää",
 				'kisa_nimi': kisa_nimi,
                                 'taakse' : "/kipa/"+kisa_nimi+"/" })
 
@@ -280,7 +294,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
 			'kisa_nimi': kisa_nimi,
                         'tarkistus' : tarkistus,
 			'heading' : tehtava.nimi,
-			'taakse' : {'url' : '/kipa/' + kisa_nimi + '/syota/', 'title' : u'Valitse tehtävä' } } )
+			'taaksee' : {'url' : '/kipa/' + kisa_nimi + '/syota/', 'title' : u'Muokkaa tehtävää' } } )
 
 def testiTulos(request, kisa_nimi,talletettu=None):
         """
@@ -682,9 +696,16 @@ def laskennanTilanne(request,kisa_nimi) :
                 if syotteita>0 : 
                         prosentit=Decimal(syotteita*100)/(maaritteita*vartioita)
                         prosentit=prosentit.quantize(Decimal('1.'), rounding=ROUND_UP)
-                        taulukko[suurin+1][sarake]= str(prosentit)+"%"
-                else: taulukko[suurin+1][sarake]= "0%"
+                        taulukko[suurin+1][sarake]= str(prosentit)+" %"
+                else: taulukko[suurin+1][sarake]= "0 %"
                 sarake+=1
                         
-        return render_to_response('tupa/laskennan_tilanne.html', {'taulukko' : taulukko, 'kisa_nimi' : kisa_nimi }  )
+        return render_to_response('tupa/laskennan_tilanne.html', {'taulukko' : taulukko, 'kisa_nimi' : kisa_nimi, 'heading' : 'Laskennan tilanne' }  )
+
+def apua(request) :
+        """
+        Apua onnettomalle ja surulliselle käyttäjälle
+        """
+        return HttpResponseRedirect("kipa/apua.html")
+
 
