@@ -8,6 +8,7 @@ from django import forms
 import django.template
 from django.utils.safestring import SafeUnicode
 
+from django.contrib.auth import authenticate,login
 from duplicate import kopioiTehtava
 from duplicate import kisa_xml
 import random
@@ -16,6 +17,21 @@ from models import *
 import re
 from formit import *
 from TehtavanMaaritys import *
+
+def login(request, kisa_nimi):
+        kisa = get_object_or_404(Kisa, nimi=kisa_nimi) 
+
+        posti=None
+        if request.method == 'POST':
+                posti=request.POST
+
+                user = authenticate(username=posti['uname'], password=posti['pword'])
+                if user is not None:
+                    if user.is_active:
+                        login(request, user)
+                        return render_to_response('tupa/kisa.html', {'kisa' : kisa, 'kisa_nimi': kisa_nimi, 'heading' : user.get_full_name()})
+        return render_to_response('tupa/kisa.html', {'kisa' : kisa, 'kisa_nimi': kisa_nimi, 'heading' : u'Kirjautuminen epäonnistui' })
+
 
 def tehtavanTilanne(tehtava):
         vartioita=len( tehtava.sarja.vartio_set.all() )
