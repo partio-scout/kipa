@@ -1,13 +1,13 @@
 <h1> {{ heading }}</h1>
 
 <fieldset>
-<legend>Osatehtava {{ nimi }}</legend>
+<legend><b>Osatehtävä {{ nimi }}</b></legend>
 
 <style type="text/css"> 
 
 .hidden
 {
-display: none;
+	display: none;
 }
 
 </style> 
@@ -26,7 +26,7 @@ Osatehtävän tyyppi:
         {% endfor %} "
         
         {%ifequal sarake.tyyppi tyyppi %} checked='checked' {% endifequal %} />
-        {{sarake.otsikko}} &nbsp &nbsp
+        {{sarake.otsikko}} &nbsp; &nbsp;
 {% endfor %}
 {% for sarake in taulukko%}
         

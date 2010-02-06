@@ -309,7 +309,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
 			'kisa_nimi': kisa_nimi,
                         'tarkistus' : tarkistus,
 			'heading' : tehtava.nimi,
-			'taaksee' : {'url' : '/kipa/' + kisa_nimi + '/syota/', 'title' : u'Muokkaa tehtävää' } } )
+			'taakse' : {'url' : '/kipa/' + kisa_nimi + '/syota/', 'title' : u'Muokkaa tehtävää' } } )
 
 def testiTulos(request, kisa_nimi,talletettu=None):
         """

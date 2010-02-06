@@ -4,8 +4,6 @@
 
 <h1>NÄYTÄ TULOKSET</h1>
 
-<p><a href='/tupa/{{ tulos_taulukko.0.0.kisa.nimi}}'>{{ tulos_taulukko.0.0.kisa.nimi}}</a> &raquo; tulokset sarjoittain </a><br></p>
-
 <br>
 <p>
 {% if tulos_taulukko %}
@@ -87,5 +85,4 @@
 </form>
 <p><a href="../tuloste/{{tulos_taulukko.0.0.id}}/">Tulokset tulostusmuodossa</a></p>
 
-<!-- <p><a href="../pdf/1/">Tulokset PDF-muodossa</a></p> <!-- MITEN SAAN TOHON YKKÖSEN TILALLE SARJA_ID:N? /JOONAS-->
 {% endblock %}

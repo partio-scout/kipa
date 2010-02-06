@@ -40,14 +40,6 @@
   </tr>
 </table>
 
-{% if not request.user.is_authenticated %}
-<form action="/kipa/{{kisa.nimi}}/login/" name="form1" id="form1" method="post">
-	<input type="text" id="uname" name="uname">
-	<input type="password" id="pword" name="pword">
-	<button type="submit" class="small blue awesome" >Kirjaudu »</button>
-</form>
-{% endif %}
-
 <script type="text/javascript" language="javascript" src="/kipamedia/tooltip.js"></script>
 
 {% endblock %}

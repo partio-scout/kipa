@@ -1,24 +1,30 @@
 
-<b>Syotteet:</b><br>
+<b>Syötteet:</b><br>
+<table>
 {% for maarite in maaritteet %}
-        Syoteen {{maarite.nimi}} kuvaus:
-        <input type="text" 
-                        name="{{maarite.kali_vihje.name}}" 
-                        id="{{maarite.kali_vihje.id}}" 
-                        value="{{maarite.kali_vihje.value}}" />
-                         Tyyppi: 
+	<tr>
+		<td>Syötteen {{maarite.nimi}} kuvaus:</td>
+		<td>
+			<input type="text" 
+			        name="{{maarite.kali_vihje.name}}" 
+			        id="{{maarite.kali_vihje.id}}" 
+			        value="{{maarite.kali_vihje.value}}" />
+			         Tyyppi: 
 
-                        <select name="{{maarite.tyyppi.name}}">
-                                <option value="piste" 
-                                {% ifequal maarite.tyyppi.value "piste" %}selected="selected"{% endifequal %}
-                                 >piste</option>
-                                <option value="aika"
-                                {% ifequal maarite.tyyppi.value "aika" %}selected="selected"{% endifequal %}
-                                >aika</option>
-                        </select>
-        <br> <br>
+		        <select name="{{maarite.tyyppi.name}}">
+		                <option value="piste" 
+		                {% ifequal maarite.tyyppi.value "piste" %}selected="selected"{% endifequal %}
+		                 >piste</option>
+		                <option value="aika"
+		                {% ifequal maarite.tyyppi.value "aika" %}selected="selected"{% endifequal %}
+		                >aika</option>
+		        </select>
+		</td>
+	</tr>
 {% endfor %}
-<button name="lisaa_maaritteita" type="submit" class="small blue awesome" value='{{maaritteita.name}}' title="Lisaa 5 syoteen kenttaa">Lisaa 5</button><br><br>
+</table>
+
+<button name="lisaa_maaritteita" type="submit" class="small blue awesome" value='{{maaritteita.name}}' title="Lisää 5 tyhjää kenttää">Lisää 5 kenttää</button><br><br>
 <font color=red><b>{{kaava.errors}}</b></font> Vartion suorituksen kaava:<input type="text" 
                         name="{{kaava.name}}" 
                         id="{{kaava.id}}" 
