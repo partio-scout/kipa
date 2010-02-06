@@ -24,13 +24,15 @@ def loginSivu(request, kisa_nimi):
 
         posti=None
         if request.method == 'POST':
-                posti=request.POST
-                user = authenticate(username=posti['uname'], password=posti['pword'])
-                if user is not None:
-                    if user.is_active:
-                	login(request, user)
-	return render_to_response('tupa/kisa.html', {'kisa' : kisa, 'kisa_nimi': kisa_nimi, 'heading' : 'Etusivu' },
-			context_instance=RequestContext(request))
+            posti=request.POST
+            user = authenticate(username=posti['uname'], password=posti['pword'])
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+            else:
+                return render_to_response('tupa/kisa.html', {'kisa' : kisa, 'kisa_nimi': kisa_nimi, 'heading' : 'Etusivu', 'login_fail' : 'fail'}, context_instance=RequestContext(request))
+
+        return render_to_response('tupa/kisa.html', {'kisa' : kisa, 'kisa_nimi': kisa_nimi, 'heading' : 'Etusivu' }, context_instance=RequestContext(request))
 
 def logoutSivu(request, kisa_nimi):
 	logout(request)
