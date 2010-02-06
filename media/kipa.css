@@ -67,7 +67,7 @@ h2 {
 }
 
 .etusivunOtsikko {
-	font: 2em / 1.4em Georgia,Helvetica,"Lucida Sans Unicode",Tahoma,Verdana,Arial,Helvetica,sans-serif;
+	font: 20px Georgia,Helvetica,"Lucida Sans Unicode",Tahoma,Verdana,Arial,Helvetica,sans-serif;
 	letter-spacing:0;
 	border:0;
 	color:#006ea6;
@@ -570,3 +570,22 @@ a.sitetoolbarnav:hover {
 a.sitetoolbarnavactive {color:#0d3b65;  border: 1px solid #486B8A;  padding: 3px; width: 35px;  float: left; font-size: 10px; background: #fff; font-weight: bold; text-decoration: none;}
 a.sitetoolbarnavactive:hover { color: #0d3b65; border: 1px solid #486B8A; padding: 3px; width: 35px; float: left;  background: #D8E0E7; }
 
+.aloittamatta {
+	background: #ffff88;
+}
+
+.osittain {
+	background: #ffee40;
+}
+
+.syotetty {
+	background: #b9f73e;
+}
+
+.tarkistettu {
+	background: #679b00;
+}
+
+.virhe {
+	background: #ff4f00;
+}
