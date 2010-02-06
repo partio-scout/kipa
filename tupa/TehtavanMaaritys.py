@@ -593,6 +593,11 @@ def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehta
                                         if not is_string(value):
                                                 errors="Anna merkkijono [a-zA-Za0-9_]"
                                                 data['valid']=False
+                                        else:
+                                                for nimi_k,nimi_v in v.items() : 
+                                                        pass
+                                                        # Nimen olemassaolon tarkistus
+                                                
                                 # Kaavan validiointi:
                                 if  fk=='kaava' :
                                         if not is_kaava(value):

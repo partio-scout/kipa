@@ -26,7 +26,9 @@ VartioFormSet = inlineformset_factory(Sarja,
                                 form=VartioForm )
 
 MaariteFormSet = inlineformset_factory(OsaTehtava,SyoteMaarite,extra=3 )
-SarjaFormSet = inlineformset_factory(Kisa,Sarja,extra=8 )
+
+SarjaFormSet = inlineformset_factory(Kisa,Sarja,extra=8)
+
 TehtavaValintaFormSet = inlineformset_factory(Sarja,Tehtava,fields='jarjestysnro')
 
 class TuhoaTehtavaForm(ModelForm):
@@ -123,10 +125,10 @@ def initPisteSyote(self,fieldName):
                         self.fields[fieldName].widget.attrs['readonly'] = True
                         self.initial[fieldName]= "kesk"
 
-def savePisteSyote(self,syote,field,fieldName):
+def savePisteSyote(self,syote,field,fieldName,alternateName):
         syote.maarite=self.maarite
         syote.vartio=self.vartio
-        if not self.cleaned_data[fieldName]== None :
+        if not self.cleaned_data[fieldName]== None or not self.cleaned_data[alternateName]== None:
                 field = self.cleaned_data[fieldName]
                 syote.save()
         elif syote.id :
@@ -143,7 +145,7 @@ class PisteSyoteForm(ModelForm):
                 initPisteSyote(self,"arvo")
         def save(self):
                 syote = super(ModelForm,self).save(commit=False)
-                savePisteSyote(self,syote,syote.arvo,"arvo")
+                savePisteSyote(self,syote,syote.arvo,"arvo","tarkistus")
         class Meta:
                 exclude = ('maarite','vartio')
                 model = Syote
@@ -158,7 +160,7 @@ class PisteTarkistusForm(ModelForm):
                 initPisteSyote(self,"tarkistus")
         def save(self):
                 syote = super(ModelForm,self).save(commit=False)
-                savePisteSyote(self,syote,syote.tarkistus,"tarkistus")
+                savePisteSyote(self,syote,syote.tarkistus,"tarkistus","arvo")
         class Meta:
                 exclude = ('maarite','vartio')
                 model = Syote
@@ -223,7 +225,7 @@ class TuomarineuvosForm(ModelForm):
                 tulos.vartio=self.vartio
                 tulos.tehtava=self.tehtava
 
-                if tulos.pisteet == None or len(tulos.pisteet)==0  and tulos.id  : 
+                if tulos.pisteet == None or len(tulos.pisteet)==0  and tulos.id   : 
                         tulos.delete()
                 if tulos.pisteet and len(tulos.pisteet)  : tulos.save()
                 return tulos

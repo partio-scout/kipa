@@ -26,22 +26,25 @@
         <tr valign="top">
         {%for sarake in rivi %}
                 {% if forloop.parent.first %}
-                        <th width="62" bgcolor="#FFFFF">{{ sarake }}</th>
+                        <th width="62" bgcolor="#FFFFFF">{{ sarake }}</th>
                 {%else%}
                 {% if forloop.first %}
                         <th width="62" bgcolor="#000000" >{{ sarake }}</th>
                 {%else%}
 
                 {% ifequal sarake "a" %}
-                        <td width="62" bgcolor="#FF4F00">&nbsp;</td>
+                        <td width="62" class='aloittamatta'>&nbsp;</td>
                 {%else%}{% ifequal sarake "o" %}
-                        <td width="62" bgcolor="#FFFF66">&nbsp;</td>
+                        <td width="62" class='osittain'>&nbsp;</td>
                 {%else%}{% ifequal sarake "s" %}
-                        <td width="62" bgcolor="#b9f73e">&nbsp;</td>
+                        <td width="62" class='syotetty'>&nbsp;</td>
                 {%else%}{% ifequal sarake "t" %}
-                        <td width="62" bgcolor="#679b00">&nbsp;</td>
+                        <td width="62" class='tarkistettu'> &nbsp;</td>
+                {%else%}{% ifequal sarake "v" %}
+                        <td width="62" class='virhe'> &nbsp;</td>
                 {%else%}
-                        <td width="62" bgcolor="#FFFFF">{{ sarake }}</td>
+                        <td width="62" >{{ sarake }}</td>
+                {% endifequal %}
                 {% endifequal %}
                 {% endifequal %}
                 {% endifequal %}
@@ -58,20 +61,26 @@
     <tr>
       <td width="96"><label>aloittamatta</label></td>
 
-      <td width="62" bgcolor="#FF4F00">&nbsp;</td>
+      <td width="62" class='aloittamatta'>&nbsp;</td>
     </tr>
+
     <tr>
       <td>syötetty osittain</td>
-      <td bgcolor="#FFFF66">&nbsp;</td>
+      <td class='osittain'>&nbsp;</td>
     </tr>
     <tr>
       <td><label> syötetty</label></td>
 
-      <td bgcolor="#b9f73e">&nbsp;</td>
+      <td class='syotetty' >&nbsp;</td>
     </tr>
     <tr>
       <td>tarkistettu</td>
-      <td bgcolor="#679b00">&nbsp;</td>
+      <td class='tarkistettu'>&nbsp;</td>
+    </tr>
+     <tr>
+     <td width="96"><label>syöttövirhe</label></td>
+
+     <td width="62" class='virhe'>&nbsp;</td>
     </tr>
   </table>
   <p><br />
