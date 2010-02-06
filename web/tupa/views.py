@@ -1,8 +1,7 @@
+# -*- coding: utf-8 -*-
 # KiPa(KisaPalvelu), tuloslaskentajärjestelmä partiotaitokilpailuihin
 #    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
 
-
-# -*- coding: utf-8 -*-
 from django.shortcuts import render_to_response
 from django.shortcuts import get_object_or_404
 from django.http import Http404, HttpResponse, HttpResponseRedirect

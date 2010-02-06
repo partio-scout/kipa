@@ -17,11 +17,11 @@
 {% if formsets %}
     {% for formset in formsets %}
         <fieldset>
-	<legend>{{formset.label}}</legend>
-        {{ formset.management_form }}
-        {% for form in formset.forms %}
-                        {{ form }} <br>
-        {% endfor %}
+		<legend>{{formset.label}}</legend>
+		{{ formset.management_form }}
+		{% for form in formset.forms %}
+		                {{ form }} <br>
+		{% endfor %}
 	</fieldset>
     {% endfor%}
 {% endif %}

@@ -70,6 +70,12 @@ h2 {
 	margin-top:20px;
 }
 
+h3 {
+	background: url(/kipamedia/arrow_blue.gif) no-repeat 0 1px;
+	padding-left: 15px;
+	font-size: 11px;
+}
+
 #infofield {
 	color: #00FF00; 
 	font-size:18px;

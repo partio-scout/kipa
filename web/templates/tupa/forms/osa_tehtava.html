@@ -1,4 +1,4 @@
-<h1> {{ heading }}</h1>
+<h1>{{ heading }}</h1>
 
 <fieldset>
 <legend><b>Osatehtävä {{ nimi }}</b></legend>
@@ -32,18 +32,9 @@ Osatehtävän tyyppi:
         
         <div id="{{sarake.id}}" class='hidden' >    
         
-        
         <table border="0">
-        
-        <td><font color=red><b> 
-        {{osatehtava.errors}}
-        </b></font>
-
-        
-        </td>
-        <td>
-       {{sarake.form}}
-        </td>
+		<td><font color=red><b>{{osatehtava.errors}}</b></font></td>
+		<td>{{sarake.form}}</td>
         </table>
         </div>
 {% endfor %}
