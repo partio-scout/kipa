@@ -18,7 +18,7 @@ import re
 from formit import *
 from TehtavanMaaritys import *
 
-def login(request, kisa_nimi):
+def loginSivu(request, kisa_nimi):
         kisa = get_object_or_404(Kisa, nimi=kisa_nimi) 
 
         posti=None
