@@ -26,7 +26,7 @@ document.getElementById(id).style.display = visibility;
 
 <div id="wrap">
     <div id="header"><div id="pageTitle">{{kisa_nimi}} <font color=00FF00 size=3><b>{{talletettu}}</b></font></div>
-		<div style="float:right; margin-top:-4px; margin-bottom:0; padding-bottom:0;">		
+		<div style="float:right; margin-top:-4px; margin-bottom:0; padding-bottom:0; height:18px;">		
 			{% if not request.user.is_authenticated %}
 			<form action="/kipa/{{kisa.nimi}}/login/" name="form1" id="form1" method="post">
 				<input type="text" id="uname" name="uname">
