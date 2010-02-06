@@ -6,9 +6,10 @@ import operator
 from decimal import *
 from django import forms
 import django.template
+from django.template import RequestContext
 from django.utils.safestring import SafeUnicode
 
-from django.contrib.auth import authenticate,login
+from django.contrib.auth import authenticate,login, logout
 from duplicate import kopioiTehtava
 from duplicate import kisa_xml
 import random
@@ -24,13 +25,16 @@ def loginSivu(request, kisa_nimi):
         posti=None
         if request.method == 'POST':
                 posti=request.POST
-                user = authenticate(posti['uname'], password=posti['pword'])
+                user = authenticate(username=posti['uname'], password=posti['pword'])
                 if user is not None:
                     if user.is_active:
-                        login(request, user)
-                        return render_to_response('tupa/kisa.html', {'kisa' : kisa, 'kisa_nimi': kisa_nimi, 'heading' : user.get_full_name()})
-        return render_to_response('tupa/kisa.html', {'kisa' : kisa, 'kisa_nimi': kisa_nimi, 'heading' : u'Kirjautuminen epäonnistui' })
+                	login(request, user)
+	return render_to_response('tupa/kisa.html', {'kisa' : kisa, 'kisa_nimi': kisa_nimi, 'heading' : 'Etusivu' },
+			context_instance=RequestContext(request))
 
+def logoutSivu(request, kisa_nimi):
+	logout(request)
+        return HttpResponseRedirect("/kipa/"+kisa_nimi+"/")	
 
 def tehtavanTilanne(tehtava):
         vartioita=len( tehtava.sarja.vartio_set.all() )
@@ -47,7 +51,8 @@ def kisa(request,kisa_nimi) :
         Kisakohtainen päävalikko.
         """
         kisa = get_object_or_404(Kisa, nimi=kisa_nimi) 
-        return render_to_response('tupa/kisa.html', {'kisa' : kisa, 'kisa_nimi': kisa_nimi, 'heading' : 'Etusivu' })
+        return render_to_response('tupa/kisa.html', {'kisa' : kisa, 'kisa_nimi': kisa_nimi, 'heading' : 'Etusivu' },
+				context_instance=RequestContext(request))
 
 def tulosta(request,kisa_nimi):
         """
@@ -55,17 +60,6 @@ def tulosta(request,kisa_nimi):
         """
         sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
         return render_to_response('tupa/tulosta.html', {'sarja_list': sarjat, 'kisa_nimi': kisa_nimi, 'heading' : 'Tulokset sarjoittain' })
-
-
-
-
-
-
-
-
-
-
-
 
 
 def maaritaKisa(request, kisa_nimi=None,talletettu=None):
