@@ -5,7 +5,7 @@ import re
 lokkeri=None
 from django.shortcuts import get_object_or_404
 from duplicate import kisa_xml
-#coding: latin-1
+#coding: utf-8
 
 #recorder middleware:
 class PostDataRecorder:
