@@ -6,7 +6,7 @@ BODY {
 	LINE-HEIGHT: 120%; 
 	FONT-FAMILY: Tahoma, Verdana, Arial, Helvetica, sans-serif; 
 	BACKGROUND-COLOR: white;
-	background-image: url("bg-body.gif");
+/*	background-image: url("bg-body.gif");*/
 	background-repeat: repeat-x;
 	background-attachment: scroll;
 	background-position: 100% 0pt;
