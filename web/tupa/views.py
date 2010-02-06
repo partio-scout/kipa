@@ -686,6 +686,5 @@ def laskennanTilanne(request,kisa_nimi) :
                 else: taulukko[suurin+1][sarake]= "0%"
                 sarake+=1
                         
-        return render_to_response('tupa/laskennan_tilanne.html', {'taulukko' : taulukko, 'kisa_nimi' : kisa_nimi,
-                                                        "taakse" :"/kipa/"+kisa_nimi+"/" }  )
+        return render_to_response('tupa/laskennan_tilanne.html', {'taulukko' : taulukko, 'kisa_nimi' : kisa_nimi }  )
 
