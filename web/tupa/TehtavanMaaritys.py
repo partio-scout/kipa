@@ -422,9 +422,7 @@ def vapaaKaavaForm(posti,data,prefix) :
                 if posti and prefix+'_maaritteita' in posti.keys() : maara= int(posti[prefix+'_maaritteita'])
                 if maara > int(maara/5)*5 : maara= int(maara/5)*5+5
                 else : maara= int(maara/5)*5
-        print posti
         if posti and 'lisaa_maaritteita' in posti.keys()  :
-                print posti['lisaa_maaritteita']
                 maara=int(posti[prefix+'_maaritteita'])+5
         formit=[]
         for i in range(maara):
