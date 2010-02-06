@@ -1,3 +1,7 @@
+# KiPa(KisaPalvelu), tuloslaskentajärjestelmä partiotaitokilpailuihin
+#    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
+
+
 from django.conf import settings
 from xml.dom.minidom import parse, parseString
 import os.path

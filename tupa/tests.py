@@ -1,4 +1,8 @@
-#coding=latin_1
+
+# KiPa(KisaPalvelu), tuloslaskentajärjestelmä partiotaitokilpailuihin
+#    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
+
+#coding=utf-8
 import unittest
 
 from models import *
