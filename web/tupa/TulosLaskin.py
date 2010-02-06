@@ -1,4 +1,4 @@
-#coding: latin-1
+#coding: utf-8
 from decimal import *
 import re
 from taulukkolaskin import *
