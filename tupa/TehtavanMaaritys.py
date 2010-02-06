@@ -1,6 +1,6 @@
+# -*- coding: utf-8 -*-
 # KiPa(KisaPalvelu), tuloslaskentajärjestelmä partiotaitokilpailuihin
 #    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
-
 
 from django.utils.safestring import SafeUnicode
 from django.template.loader import render_to_string
@@ -262,7 +262,7 @@ def lataa_parametrit(state,data,prefix,ot_tyyppi,muunnos=None):
 
                 except : pass
 
-def maksimisuoritus(state,data,prefix,ot_tyyppi,formi,validiointi=[[is_number],"syota numeroita"],muunnos=None) :
+def maksimisuoritus(state,data,prefix,ot_tyyppi,formi,validiointi=[[is_number],u"Syötä numeroita!"],muunnos=None) :
         # Valinnat:
         if prefix in state.keys() and state[prefix]==ot_tyyppi[1:]:
                 saveField(state,data,"parhaan_haku",['parametrit'],'parhaan_haku','arvo',prefix+ot_tyyppi)
@@ -284,12 +284,12 @@ def maksimisuoritus(state,data,prefix,ot_tyyppi,formi,validiointi=[[is_number],"
         errors=""
         if state and prefix in state.keys() and state[prefix]==ot_tyyppi[1:] :
                 if not validate(state,"jaettavat",[is_number],prefix+ot_tyyppi ) : 
-                        errors= "Syota numeroita!"
+                        errors= "Syötä numeroita!"
                         data['valid']=False
                 else: saveField(state,data,"jaettavat",['parametrit'],'jaettavat','arvo',prefix+ot_tyyppi)
         formi.update( field(state,"jaettavat",prefix+ot_tyyppi,errors) )
 
-def nollasuoritus(state,data,prefix,ot_tyyppi,formi,validiointi=[[is_number],"syota numeroita"],muunnos=None) :
+def nollasuoritus(state,data,prefix,ot_tyyppi,formi,validiointi=[[is_number],"Syötä numeroita!"],muunnos=None) :
         # Kiintea nolla
         errors=""
         if state and prefix in state.keys() and state[prefix]==ot_tyyppi[1:] and state[prefix+ot_tyyppi+"_nollan_kerroin"]=="1":
@@ -316,11 +316,11 @@ def nollasuoritus(state,data,prefix,ot_tyyppi,formi,validiointi=[[is_number],"sy
         if state and prefix in state.keys() and state[prefix]==ot_tyyppi[1:] and state[prefix+ot_tyyppi+"_nollan_kerroin"]=="m":
                 if not validate(state,"muu_kerroin",[is_number],prefix+ot_tyyppi):
                         data['valid']=False
-                        errors= "Syota numeroita!"
+                        errors= "Syötä numeroita!"
                 else: saveField(state,data,"muu_kerroin",['parametrit'],'nollan_kerroin','arvo',prefix+ot_tyyppi)
         formi.update( field(state,"muu_kerroin",prefix+ot_tyyppi,errors) )
         
-def arviointi(state,data,prefix,ot_tyyppi,formi,validiointi=[[is_number],"syota numeroita"],muunnos=None):
+def arviointi(state,data,prefix,ot_tyyppi,formi,validiointi=[[is_number],"Syötä numeroita!"],muunnos=None):
         # Arviointi
         errors=""
         if state and prefix in state.keys() and state[prefix]==ot_tyyppi[1:] : 
@@ -385,13 +385,13 @@ def kokonaisAikaForm(posti,data,prefix) :
         
         maksimisuoritus(state,data,prefix,"_ka",
                                 formi,
-                                validiointi=[[is_time],"syota hh:mm:ss!"],
+                                validiointi=[[is_time],"Syötä hh:mm:ss!"],
                                 muunnos=aika_numeroksi)
         nollasuoritus(state,data,prefix,"_ka",
-                        formi,validiointi=[[is_time],"syota hh:mm:ss!"],
+                        formi,validiointi=[[is_time],"Syötä hh:mm:ss!"],
                         muunnos=aika_numeroksi)
         arviointi(state,data,prefix,"_ka",
-                        formi,validiointi=[[is_time],"syota hh:mm:ss!"],
+                        formi,validiointi=[[is_time],"Syötä hh:mm:ss!"],
                         muunnos=aika_numeroksi )
         return render_to_string("tupa/forms/kokonais_aika.html",  formi)
 
@@ -412,10 +412,10 @@ def aikaValiForm(posti,data,prefix) :
                 lataa_parametrit(state,data,prefix,"_ala",muunnos=numero_ajaksi)
         else : state=posti.copy()
         maksimisuoritus(state,data,prefix,"_ala",formi,
-                        validiointi=[[is_time],"syota hh:mm:ss!"],
+                        validiointi=[[is_time],"Syötä hh:mm:ss!"],
                         muunnos=aika_numeroksi)
         nollasuoritus(state,data,prefix,"_ala",formi,
-                        validiointi=[[is_time],"syota hh:mm:ss!"],
+                        validiointi=[[is_time],"Syötä hh:mm:ss!"],
                         muunnos=aika_numeroksi)
         return render_to_string("tupa/forms/aika_vali.html",  formi)
 
