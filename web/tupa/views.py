@@ -32,14 +32,14 @@ def kisa(request,kisa_nimi) :
         Kisakohtainen päävalikko.
         """
         kisa = get_object_or_404(Kisa, nimi=kisa_nimi) 
-        return render_to_response('kipa/kisa.html', {'kisa' : kisa, 'kisa_nimi': kisa_nimi })
+        return render_to_response('tupa/kisa.html', {'kisa' : kisa, 'kisa_nimi': kisa_nimi, 'heading' : 'Etusivu' })
 
 def tulosta(request,kisa_nimi):
         """
         Valintalista kisan sarjojen tuloksista.
         """
         sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
-        return render_to_response('kipa/tulosta.html', {'sarja_list': sarjat, 'kisa_nimi': kisa_nimi })
+        return render_to_response('tupa/tulosta.html', {'sarja_list': sarjat, 'kisa_nimi': kisa_nimi, 'heading' : 'Tulokset sarjoittain' })
 
 def maaritaKisa(request, kisa_nimi=None,talletettu=None):
         """
@@ -70,15 +70,16 @@ def maaritaKisa(request, kisa_nimi=None,talletettu=None):
         sarjaFormit.label="Sarjat" 
         # Annetaan tiedot templatelle:
         if posti and sarjaFormit.is_valid() and kisaForm.is_valid() :
-                return HttpResponseRedirect("/kipa/"+kisa.nimi+"/maarita/talletettu/")
+                return HttpResponseRedirect("/tupa/"+kisa.nimi+"/maarita/talletettu/")
         else :
                 tal=""
                 if talletettu=="talletettu" and not posti : tal="Talletettu!"
                 taakse= "/kipa/"
                 if kisa_nimi : taakse = "/kipa/"+kisa_nimi+"/"
-                return render_to_response('kipa/maarita.html', 
+                return render_to_response('tupa/maarita.html', 
                                       { 'heading' : "Määritä kisa" ,
                                       'taakse' : taakse ,
+				      'taakse_heading' : 'taakse',
                                       'forms' : (kisaForm,) ,
                                       'formsets' : ( sarjaFormit,),
                                       'kisa_nimi' : kisa_nimi,
@@ -110,10 +111,10 @@ def maaritaValitseTehtava(request,kisa_nimi):
         if posti :
                 return HttpResponseRedirect("/kipa/"+kisa_nimi+"/maarita/tehtava/")
         else:
-                return render_to_response('kipa/maaritaValitseTehtava.html', 
+                return render_to_response('tupa/maaritaValitseTehtava.html', 
                                         { 'taulukko' : taulukko,
-                                        'heading' : "Valitse tehtävä", 'kisa_nimi': kisa_nimi,
-                                        'taakse' : "/kipa/"+kisa_nimi+"/" })
+                                        'heading' : 'Valitse tehtävä', 'kisa_nimi': kisa_nimi,
+                                        'taakse' : "<a href='/kipa/"+kisa_nimi+"/'>Valitse tehtävä</a>" })
 
 def maaritaVartiot(request,kisa_nimi,talletettu=None):
         """
@@ -141,7 +142,7 @@ def maaritaVartiot(request,kisa_nimi,talletettu=None):
                 tal=""
                 if talletettu=="talletettu" and not posti : tal="Talletettu!"
 
-                return render_to_response('kipa/valitse_formset.html',
+                return render_to_response('tupa/valitse_formset.html',
                                         { 'taulukko' : taulukko ,
                                         'heading' : "Määritä vartiot",
 					'kisa_nimi': kisa_nimi,
@@ -194,7 +195,7 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
         else:
                 tal=""
                 if talletettu=="talletettu" and not posti : tal="Talletettu!"
-                return render_to_response('kipa/maarita.html', 
+                return render_to_response('tupa/maarita.html', 
                                 { 'forms': [tehtavaForm],
                                 'heading' : "Valitse tehtävä",
 				'kisa_nimi': kisa_nimi,
@@ -215,7 +216,7 @@ def syotaKisa(request, kisa_nimi,tarkistus=None):
                 tehtavat.id=s.id
                 tehtavat.otsikko=s.nimi
                 taulukko.append( tehtavat )
-        return render_to_response('kipa/valitse_linkki.html', 
+        return render_to_response('tupa/valitse_linkki.html', 
                                 { 'taulukko' : taulukko,
                                 'heading' : "Valitse tehtävä",
 				'kisa_nimi': kisa_nimi,
@@ -269,7 +270,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                 tal=""
                 if talletettu=="talletettu" and not posti : tal="Talletettu!"
                 tilanne=tehtavanTilanne(tehtava)
-                return render_to_response('kipa/syota_tehtava.html', 
+                return render_to_response('tupa/syota_tehtava.html', 
                         { 'tehtava' : tehtava ,
                         'maaritteet' : maaritteet ,
                         'syotteet' : syoteFormit,
@@ -277,7 +278,9 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                         'tilanne' : tilanne,
                         'tarkistettu' : tarkistettu,
 			'kisa_nimi': kisa_nimi,
-                        'tarkistus' : tarkistus} )
+                        'tarkistus' : tarkistus,
+			'heading' : tehtava.nimi,
+			'taakse' : {'url' : '/kipa/' + kisa_nimi + '/syota/', 'title' : u'Valitse tehtävä' } } )
 
 def testiTulos(request, kisa_nimi,talletettu=None):
         """
@@ -318,7 +321,7 @@ def testiTulos(request, kisa_nimi,talletettu=None):
         tal=""
         if talletettu=="talletettu" and not posti : tal="Talletettu!"
 
-        return render_to_response('kipa/testitulos.html',
+        return render_to_response('tupa/testitulos.html',
                         { 'taulukko' : taulukko ,
                         'heading' : "Testituloksien määritys" ,
                         'kisa_nimi' : kisa_nimi,
@@ -364,7 +367,7 @@ def tuomarineuvos(request, kisa_nimi,talletettu=None):
         tal=""
         if talletettu=="talletettu" and not posti : tal="Talletettu!"
 
-        return render_to_response('kipa/testitulos.html',
+        return render_to_response('tupa/testitulos.html',
                         { 'taulukko' : taulukko ,
                         'heading' : "Tuomarineuvoksen antamien tulosten määritys" ,
                         'taakse' : "/kipa/"+kisa_nimi+"/",
@@ -377,7 +380,7 @@ def tulostaSarja(request, kisa_nimi, sarja_id) :
         """
         sarja = Sarja.objects.get(id=sarja_id)
         tulokset= sarja.laskeTulokset()
-        return render_to_response('kipa/tulokset.html', {'tulos_taulukko' : tulokset, 'kisa_nimi' : kisa_nimi }  )
+        return render_to_response('tupa/tulokset.html', {'tulos_taulukko' : tulokset, 'kisa_nimi' : kisa_nimi, 'heading' : 'Tulokset sarjoittain' }  )
 
 def piirit(request,kisa_nimi) :
         """
@@ -422,7 +425,7 @@ def kopioiTehtavia(request,kisa_nimi,sarja_id ):
         if redirect:
                 return HttpResponseRedirect("/kipa/"+kisa.nimi+"/maarita/tehtava/")
         else:
-                return render_to_response('kipa/valitse_form.html',
+                return render_to_response('tupa/valitse_form.html',
                                       { 'heading' : u"Kopioi Tehtavia sarjaan: "+sarjaan.nimi ,
                                       'taulukko' : formit ,
                                       'kisa_nimi' : kisa_nimi,
@@ -449,7 +452,7 @@ def poistaKisa(request, kisa_nimi) :
                 kisa.delete()
                 return HttpResponseRedirect("/kipa/")
         otsikko = 'poista kisa' 
-        return render_to_response('kipa/poista_kisa.html', { 'heading' : otsikko , 
+        return render_to_response('tupa/poista_kisa.html', { 'heading' : otsikko , 
                                                         'kisa_nimi' : kisa_nimi})
 
 
@@ -570,8 +573,8 @@ def korvaaKisa(request,kisa_nimi=None):
                 else :form = UploadFileForm()
 
 
-        return render_to_response('kipa/upload.html', { 'heading' : otsikko , 
-                                                        'form' : form , })
+        return render_to_response('tupa/upload.html', { 'heading' : otsikko , 
+                                                        'form' : form , 'kisa_nimi' : kisa_nimi})
 
 
 def post_txt(request,parametrit):
@@ -620,7 +623,7 @@ def tulostaSarjaHTML(request, kisa_nimi, sarja_id) :
         """
         sarja = Sarja.objects.get(id=sarja_id)
         tulokset= sarja.laskeTulokset()
-        return render_to_response('kipa/tuloksetHTML.html', {'tulos_taulukko' : tulokset, 'kisa_nimi' : kisa_nimi }  )
+        return render_to_response('tupa/tuloksetHTML.html', {'tulos_taulukko' : tulokset, 'kisa_nimi' : kisa_nimi }  )
 
 def luoTestiTulokset(request,kisa_nimi,sarja_id):
         """
@@ -683,6 +686,6 @@ def laskennanTilanne(request,kisa_nimi) :
                 else: taulukko[suurin+1][sarake]= "0%"
                 sarake+=1
                         
-        return render_to_response('kipa/laskennan_tilanne.html', {'taulukko' : taulukko, 'kisa_nimi' : kisa_nimi,
+        return render_to_response('tupa/laskennan_tilanne.html', {'taulukko' : taulukko, 'kisa_nimi' : kisa_nimi,
                                                         "taakse" :"/kipa/"+kisa_nimi+"/" }  )
 
