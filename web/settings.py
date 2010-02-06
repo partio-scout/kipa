@@ -99,3 +99,4 @@ INSTALLED_APPS = (
     'django.template',
     'django.contrib.databrowse'
 )
+
