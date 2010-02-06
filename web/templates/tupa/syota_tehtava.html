@@ -33,12 +33,6 @@
 <body onLoad="document.forms.form1.textfield.focus()">
 
 <h1>Tehtävä: {{tehtava.nimi}} </h1>
-{% if tarkistus %}
-<p><a href='../../../../'>Etusivu</a> -&gt; <a href='../../'>Valitse tehtävä</a> -&gt; {{ tehtava.nimi }}<br></p>
-{% else %}
-<p><a href='../../../'>Etusivu</a> -&gt; <a href='../../'>Valitse tehtävä</a> -&gt; {{ tehtava.nimi }}<br></p>
-{% endif %}
-
 
 <form action="." name="form1" id="form1" method="post">     
 <table width="600" border="0" cellpadding="2" cellspacing="0">

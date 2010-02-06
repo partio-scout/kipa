@@ -4,12 +4,11 @@
 
 <h1>Tulokset sarjoittain</h1>
 
-<p><a href='/tupa/{{kisa_nimi}}'>{{kisa_nimi}}</a> &raquo; tulokset sarjoittain<br></p>
-
+<blockquote>
 {%for sarja in sarja_list %}
       <A href='./sarja/{{sarja.id}}/' > {{sarja.nimi}} </A> <br>
-
 {% endfor %}
+</blockquote>
 
 {% endblock %}
 

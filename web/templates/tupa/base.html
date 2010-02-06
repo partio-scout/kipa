@@ -25,7 +25,17 @@ document.getElementById(id).style.display = visibility;
 <body>
 
 <div id="wrap">
-    <div id="header"><div id="pageTitle">{{kisa_nimi}} <font color=00FF00 size=3><b>{{talletettu}}</b></font></div></div>
+    <div id="header"><div id="pageTitle">{{kisa_nimi}} <font color=00FF00 size=3><b>{{talletettu}}</b></font></div>
+		<div style="float:right; margin-top:-4px; margin-bottom:0; padding-bottom:0;">		
+			{% if not request.user.is_authenticated %}
+			<form action="/kipa/{{kisa.nimi}}/login/" name="form1" id="form1" method="post">
+				<input type="text" id="uname" name="uname">
+				<input type="password" id="pword" name="pword">
+				<button type="submit" class="small blue awesome" style="height:20px;">Kirjaudu »</button>
+			</form>
+			{% endif %}
+		</div>
+	</div><!-- /header -->
     <div id="breadcrumbs"><a href="/kipa/{{kisa_nimi}}/">{{kisa_nimi}}</a> {%if taakse%}&raquo; <a href="{{taakse.url}}">{{taakse.title}}</a> {% endif %}&raquo; {{heading}}</div>
     
     <div id="main" class="clearfix">
