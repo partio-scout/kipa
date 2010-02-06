@@ -38,14 +38,25 @@ def logoutSivu(request, kisa_nimi):
 	logout(request)
         return HttpResponseRedirect("/kipa/"+kisa_nimi+"/")	
 
+def tarkistaVirhe(syote):
+        syottovirhe=None
+        if syote and syote.arvo and syote.tarkistus or syote and syote.tarkistus :
+                if not syote.arvo==syote.tarkistus :
+                        try: 
+                                if not Decimal(syote.arvo)==Decimal(syote.tarkistus):
+                                        syottovirhe="virhe"
+                        except :  syottovirhe="virhe"
+        return syottovirhe
+
 def tehtavanTilanne(tehtava):
         vartioita=len( tehtava.sarja.vartio_set.all() )
         syotteita=len( Syote.objects.filter(maarite__osa_tehtava__tehtava=tehtava) )
         maaritteita=len( SyoteMaarite.objects.filter(osa_tehtava__tehtava=tehtava) )
-        tila="a"
-        if syotteita: tila="o"
-        if syotteita==vartioita*maaritteita : tila="s"
-        if tehtava.tarkistettu : tila="t"
+        tila=("a",tehtava.nimi)
+        if syotteita: tila=("o",tehtava.nimi)
+        if syotteita==vartioita*maaritteita : tila=("s",tehtava.nimi)
+        if tehtava.tarkistettu : tila=("t",tehtava.nimi)
+        
         return tila
 
 def kisa(request,kisa_nimi) :
@@ -53,7 +64,9 @@ def kisa(request,kisa_nimi) :
         Kisakohtainen päävalikko.
         """
         kisa = get_object_or_404(Kisa, nimi=kisa_nimi) 
-        return render_to_response('tupa/kisa.html', {'kisa' : kisa, 'kisa_nimi': kisa_nimi, 'heading' : 'Etusivu' },
+        return render_to_response('tupa/kisa.html', {'kisa' : kisa, 
+                                        'kisa_nimi': kisa_nimi, 
+                                        'heading' : 'Etusivu' },
 				context_instance=RequestContext(request))
 
 def tulosta(request,kisa_nimi):
@@ -61,8 +74,9 @@ def tulosta(request,kisa_nimi):
         Valintalista kisan sarjojen tuloksista.
         """
         sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
-        return render_to_response('tupa/tulosta.html', {'sarja_list': sarjat, 'kisa_nimi': kisa_nimi, 'heading' : 'Tulokset sarjoittain' })
-
+        return render_to_response('tupa/tulosta.html', {'sarja_list': sarjat,
+                                                      'kisa_nimi': kisa_nimi, 
+                                                      'heading' : 'Tulokset sarjoittain' })
 
 def maaritaKisa(request, kisa_nimi=None,talletettu=None):
         """
@@ -247,6 +261,8 @@ def syotaKisa(request, kisa_nimi,tarkistus=None):
 				'kisa_nimi': kisa_nimi,
                                 'taakse' : "/kipa/"+kisa_nimi+"/" })
 
+
+
 def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None) :
         """
         Määrittää tehtävän syötteet.
@@ -256,6 +272,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
         vartiot = Vartio.objects.filter(sarja = tehtava.sarja )
         syoteFormit = []
         posti=None
+        syottovirhe=None
         if request.method == 'POST':
                 posti=request.POST
                 if 'tarkistettu' in posti.keys():  tehtava.tarkistettu=True
@@ -273,12 +290,11 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                                 syote=syotteet[0]
                         if tarkistus : formi =  TarkistusSyoteForm(m,v,posti,instance=syote,prefix=v.nimi+str(m.pk),)
                         else : formi = SyoteForm(m,v,posti,instance=syote,prefix=v.nimi+str(m.pk),)
-                        if syote and syote.arvo and syote.tarkistus or syote and syote.tarkistus :
-                                if not syote.arvo==syote.tarkistus :
-                                        try: 
-                                                if not Decimal(syote.arvo)==Decimal(syote.tarkistus):
-                                                        formi.syottovirhe="virhe"
-                                        except : formi.syottovirhe="virhe"
+                        
+                        tarkistaVirhe(syote)
+                        if tarkistaVirhe(syote): 
+                                formi.syottovirhe="virhe"
+                                syottovirhe="virhe"
                         if formi.is_valid() :
                                 formi.save()
                         else :
@@ -296,18 +312,19 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                 tal=""
                 if talletettu=="talletettu" and not posti : tal="Talletettu!"
                 tilanne=tehtavanTilanne(tehtava)
+                if syottovirhe : tilanne="v" 
                 return render_to_response('tupa/syota_tehtava.html', 
                         { 'tehtava' : tehtava ,
-			'sarja' : tehtava.sarja.id,
+			            'sarja' : tehtava.sarja.id,
                         'maaritteet' : maaritteet ,
                         'syotteet' : syoteFormit,
                         'talletettu': tal ,
                         'tilanne' : tilanne,
                         'tarkistettu' : tarkistettu,
-			'kisa_nimi': kisa_nimi,
+			            'kisa_nimi': kisa_nimi,
                         'tarkistus' : tarkistus,
-			'heading' : tehtava.nimi,
-			'taakse' : {'url' : '/kipa/' + kisa_nimi + '/syota/', 'title' : u'Syötä tuloksia' } } )
+			            'heading' : tehtava.nimi,
+			            'taakse' : {'url' : '/kipa/' + kisa_nimi + '/syota/', 'title' : u'Syötä tuloksia' } } )
 
 def testiTulos(request, kisa_nimi,talletettu=None):
         """
@@ -679,22 +696,22 @@ def luoTestiTulokset(request,kisa_nimi,sarja_id):
 def laskennanTilanne(request,kisa_nimi) :
         kisa= get_object_or_404(Kisa , nimi=kisa_nimi )
         taulukko=[[]]
-        taulukko[0].append("Tehtava")
+        taulukko[0].append((0,"Tehtava"))
         
         suurin = 0
         # Otsikkorivi
         for s in kisa.sarja_set.all() :
-                taulukko[0].append(s.nimi)
+                taulukko[0].append((None,s.nimi))
                 for t in s.tehtava_set.all() : 
                         if t.jarjestysnro > suurin: suurin =t.jarjestysnro
         
         # Luodaan taulukko
         for i in range(suurin) :
-                rivi= [i+1]
+                rivi= [(0,i+1)]
                 for s in kisa.sarja_set.all() :
                         rivi.append("")
                 taulukko.append(rivi)
-        rivi=['valmiina']
+        rivi=[(0,'valmiina')]
         for s in kisa.sarja_set.all() :
                 rivi.append("")
 
@@ -702,15 +719,21 @@ def laskennanTilanne(request,kisa_nimi) :
         sarake=1
         for s in kisa.sarja_set.all() :
                 vartioita=len(s.vartio_set.all())
+                syotteita=0
                 for t in s.tehtava_set.all() :
                         taulukko[t.jarjestysnro][sarake]= tehtavanTilanne(t)
-                syotteita=len( Syote.objects.filter(maarite__osa_tehtava__tehtava__sarja=s) )
+                        syotteet= Syote.objects.filter(maarite__osa_tehtava__tehtava=t) 
+                        for syo in syotteet:
+                                syotteita=syotteita+1
+                                if tarkistaVirhe(syo): taulukko[t.jarjestysnro][sarake]=('v',t.nimi)
+
                 maaritteita=len( SyoteMaarite.objects.filter(osa_tehtava__tehtava__sarja=s) )
-                if syotteita>0 : 
+                if syotteita>0  and maaritteita>0: 
                         prosentit=Decimal(syotteita*100)/(maaritteita*vartioita)
                         prosentit=prosentit.quantize(Decimal('1.'), rounding=ROUND_UP)
-                        taulukko[suurin+1][sarake]= str(prosentit)+" %"
-                else: taulukko[suurin+1][sarake]= "0 %"
+                        taulukko[suurin+1][sarake]= (None,str(prosentit)+" %")
+                else: 
+                        taulukko[suurin+1][sarake]= (None,"0 %")
                 sarake+=1
                         
         return render_to_response('tupa/laskennan_tilanne.html', {'taulukko' : taulukko, 'kisa_nimi' : kisa_nimi, 'heading' : 'Laskennan tilanne' }  )

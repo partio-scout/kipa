@@ -52,8 +52,8 @@ class TehtavaLinkkilistaFormset(tuhoaTehtaviaFormset):
                         linkki=""
                         nimi=""
                         if form.instance:
-                                linkki=str(form.instance.id)+"/"
-                                nimi=str(form.instance.jarjestysnro)+". "+str(form.instance.nimi)
+                                linkki=unicode(form.instance.id)+"/"
+                                nimi=unicode(form.instance.jarjestysnro)+". "+unicode(form.instance.nimi)
                         piirto=piirto+"<a href="+linkki+">"+nimi+"</a>  "+form.as_p()+"<br>" 
                         piirto = piirto.replace("<p>","").replace("</p>","")
                 return SafeUnicode(piirto)
@@ -104,7 +104,7 @@ class AikaField(forms.CharField):
                 super(AikaField, self).clean(value)
                 haku = re.match(r"^(\d+):(\d+):(\d+)$",value)    
                 if haku:
-                        return str(int(haku.group(1))*60*60 + int(haku.group(2))*60 + int(haku.group(3)))
+                        return unicode(int(haku.group(1))*60*60 + int(haku.group(2))*60 + int(haku.group(3)))
                 elif not value :
                         return None
                 elif value=="kesk":
