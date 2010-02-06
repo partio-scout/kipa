@@ -1,3 +1,4 @@
+# encoding: utf-8
 # KiPa(KisaPalvelu), tuloslaskentajärjestelmä partiotaitokilpailuihin
 #    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
 
@@ -9,7 +10,7 @@ import re
 lokkeri=None
 from django.shortcuts import get_object_or_404
 from duplicate import kisa_xml
-#coding: utf-8
+
 
 #recorder middleware:
 class PostDataRecorder:
