@@ -32,12 +32,13 @@ def is_kaava(s) :
         if s=="": return False
         else : 
                 muuttujat={}
-                haku= re.finditer("([a-zA-Z.]+)(?!\w*[(])",s)
+                kaava=s.replace("." ,"") 
+                haku= re.finditer("([a-zA-Z]+)(?!\w*[(])",kaava)
                 numero=4
                 for h in haku :
                         muuttujat[h.group(1)]=Decimal(numero)
                         numero+=1
-                tulos = laskeTaulukko([[s]],muuttujat)
+                tulos = laskeTaulukko([[kaava]],muuttujat)
                 if tulos[0][0]==None or tulos[0][0]=='S' : return False
                 else : return True
 
