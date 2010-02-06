@@ -115,8 +115,6 @@ def maaritaKisa(request, kisa_nimi=None,talletettu=None):
                 if kisa_nimi : taakse = "/kipa/"+kisa_nimi+"/"
                 return render_to_response('tupa/maarita.html', 
                                       { 'heading' : "Määritä kisa" ,
-                                      'taakse' : taakse ,
-				      'taakse_heading' : 'taakse',
                                       'forms' : (kisaForm,) ,
                                       'formsets' : ( sarjaFormit,),
                                       'kisa_nimi' : kisa_nimi,
@@ -150,7 +148,7 @@ def maaritaValitseTehtava(request,kisa_nimi):
         else:
                 return render_to_response('tupa/maaritaValitseTehtava.html', 
                                         { 'taulukko' : taulukko,
-                                        'heading' : 'Muokkaa tehtävää', 'kisa_nimi': kisa_nimi })
+                                        'heading' : u'Muokkaa tehtävää', 'kisa_nimi' : kisa_nimi })
 
 def maaritaVartiot(request,kisa_nimi,talletettu=None):
         """
@@ -257,9 +255,8 @@ def syotaKisa(request, kisa_nimi,tarkistus=None):
                 taulukko.append( tehtavat )
         return render_to_response('tupa/valitse_linkki.html', 
                                 { 'taulukko' : taulukko,
-                                'heading' : "Muokkaa tehtävää",
-				'kisa_nimi': kisa_nimi,
-                                'taakse' : "/kipa/"+kisa_nimi+"/" })
+                                'heading' : "Syötä tuloksia",
+				'kisa_nimi': kisa_nimi })
 
 
 

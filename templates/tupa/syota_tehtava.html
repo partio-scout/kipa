@@ -4,35 +4,18 @@
 {{ block.super }}
 <script type="text/javascript" src="/kipamedia/enter-as-tab2.js"></script>
 <script type="text/javascript" src="/kipamedia/jquery-1.3.2.min.js"></script>
-<script type="text/javascript" src="/kipamedia/jquery.validate.js"></script>
-<script type="text/javascript" src="/kipamedia/jquery.maskedinput-1.2.2.min.js"></script>
 <script type="text/javascript" src="/kipamedia/highlight-active-input.js"></script>
-<script type="text/javascript" src="/kipamedia/typecast.js"></script>
-<script type="text/javascript" src="/kipamedia/typecast.config.js"></script>
 <style type="text/css">
 	label { width: 10em; float: left; }
 	label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }
 </style>
-<script> <!-- syöteformin validiointi -->
-  $(document).ready(function(){
-    $("#form1").validate({
-	  rules: {
-		numeric: {
-		  number: true
-    }
-  }
-});
-  });
-
-</script>
-
 
 {% endblock header%}
 
 {% block content %} 
 <body onLoad="document.forms.form1.textfield.focus()">
 
-<h1>Tehtävä: {{tehtava.nimi}} </h1>
+<h1>{{tehtava.nimi}}</h1>
 
 <form action="." name="form1" id="form1" method="post">     
 <table width="600" border="0" cellpadding="2" cellspacing="0">
@@ -44,11 +27,11 @@
     <td class="tauluOtsikko">Sarja:</td>
     <td colspan="2" bgcolor="#E8EDFF">{{tehtava.sarja.nimi}}</td>
   </tr>
-  <tr>
+<!--  <tr>
     <td valign="middle" class="tauluOtsikko">Yhteyshenkilö:</td>
     <td valign="middle" bgcolor="#E8EDFF">&nbsp;</td>
     <td bgcolor="#E8EDFF">&nbsp;</td>
-  </tr>
+  </tr>-->
   <tr valign="middle">
     <td valign="middle" class="tauluOtsikko">Tehtävän tila:</td>
     {%ifequal tilanne "a"%}
@@ -146,24 +129,8 @@ h - vartion suoritus on hylätty<br />
 	enterToTab(document.forms.form1, false);
 	document.forms.form1.elements[0].focus();
 </script>
-
 	
 <script type="text/javascript" language="javascript" src="/kipamedia/tooltip.js"></script>
-
-<!-- Maskaus vaikuttaa niihin tekstikenttiin, joiden ID on listattu alla -->
-<script type="text/javascript">
-jQuery(function($){
-   $("#aika").mask("9:99:99");
-});
-</script>
-
-<script type="text/javascript">
-// Maskaa input-kentät Typecastilla
-	window.onload = go;
-	function go(){
-		Typecast.Init();
-	}
-</script>
 
 <script type="text/javascript">
 // Initialize the input highlight script

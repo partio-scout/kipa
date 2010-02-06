@@ -7,21 +7,24 @@
 <form method="POST" action="">
 {% if forms %}
     {% for form in forms%}
-        <legend>{{form.label}}</legend>
-        {{form}} <br>
+        <fieldset>
+		<legend>{{form.label}} </legend>
+		{{form}} <br>
+	</fieldset>
     {% endfor%}
 {% endif %}
+<br>
 {% if formsets %}
     {% for formset in formsets %}
-        <legend>{{formset.label}}</legend>
+        <fieldset>
+	<legend>{{formset.label}}</legend>
         {{ formset.management_form }}
         {% for form in formset.forms %}
                         {{ form }} <br>
         {% endfor %}
+	</fieldset>
     {% endfor%}
 {% endif %}
-<br>
 {% include "tupa/tallenna.html" %}
 </form>
 {% endblock %}
-
