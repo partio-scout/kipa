@@ -27,7 +27,11 @@ VartioFormSet = inlineformset_factory(Sarja,
 
 MaariteFormSet = inlineformset_factory(OsaTehtava,SyoteMaarite,extra=3 )
 
-SarjaFormSet = inlineformset_factory(Kisa,Sarja,extra=8)
+class SarjaForm(ModelForm):
+        vartion_maksimikoko = forms.IntegerField(widget=forms.HiddenInput )
+        vartion_minimikoko = forms.IntegerField(widget=forms.HiddenInput)
+
+SarjaFormSet = inlineformset_factory(Kisa,Sarja,extra=8 , form=SarjaForm)
 
 TehtavaValintaFormSet = inlineformset_factory(Sarja,Tehtava,fields='jarjestysnro')
 
