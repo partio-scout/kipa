@@ -24,8 +24,7 @@ def loginSivu(request, kisa_nimi):
         posti=None
         if request.method == 'POST':
                 posti=request.POST
-
-                user = authenticate(username=posti['uname'], password=posti['pword'])
+                user = authenticate(posti['uname'], password=posti['pword'])
                 if user is not None:
                     if user.is_active:
                         login(request, user)
@@ -98,7 +97,7 @@ def maaritaKisa(request, kisa_nimi=None,talletettu=None):
         sarjaFormit.label="Sarjat" 
         # Annetaan tiedot templatelle:
         if posti and sarjaFormit.is_valid() and kisaForm.is_valid() :
-                return HttpResponseRedirect("/tupa/"+kisa.nimi+"/maarita/talletettu/")
+                return HttpResponseRedirect("/kipa/"+kisa.nimi+"/maarita/talletettu/")
         else :
                 tal=""
                 if talletettu=="talletettu" and not posti : tal="Talletettu!"
@@ -277,7 +276,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                                 syote=syotteet[0]
                         if tarkistus : formi =  TarkistusSyoteForm(m,v,posti,instance=syote,prefix=v.nimi+str(m.pk),)
                         else : formi = SyoteForm(m,v,posti,instance=syote,prefix=v.nimi+str(m.pk),)
-                        if syote and syote.arvo and syote.tarkistus :
+                        if syote and syote.arvo and syote.tarkistus or syote and syote.tarkistus :
                                 if not syote.arvo==syote.tarkistus :
                                         try: 
                                                 if not Decimal(syote.arvo)==Decimal(syote.tarkistus):
@@ -462,7 +461,6 @@ def kopioiTehtavia(request,kisa_nimi,sarja_id ):
                                       'taakse' : "/kipa/"+kisa_nimi+"/maarita/tehtava/",
                                       'napin_tyyppi' : 'kopioi' })
 
-
 def tallennaKisa(request, kisa_nimi):
         """
         Palauttaa käyttäjälle valitun kisan xml formaatissa.
@@ -484,8 +482,6 @@ def poistaKisa(request, kisa_nimi) :
         otsikko = 'poista kisa' 
         return render_to_response('tupa/poista_kisa.html', { 'heading' : otsikko , 
                                                         'kisa_nimi' : kisa_nimi})
-
-
 
 class UploadFileForm(forms.Form):
         file  = forms.FileField()
