@@ -70,6 +70,7 @@
     
     <td bgcolor="#E8EDFF"><label><input type="checkbox" {%if tarkistettu %}checked="checked" {% endif %} name="tarkistettu" id="tarkistettu" />tarkistettu</label></td>
   </tr>
+{% if tarkistus %}<tr bgcolor="#ff9900"><td colspan=3>Syötät tarkistustuloksia</td></tr>{% endif %}
 </table>
 <br />
 
@@ -111,7 +112,7 @@
                   <td width="15">
                   {{ vartio.0.nro}}
                   </td>
-		<td width="100">
+		<td width="200">
                   {{ vartio.0.nimi }}
 		</td>
                   {% for kentta in vartio.1 %}
@@ -138,7 +139,7 @@ h - vartion suoritus on hylätty<br />
 </p>
 
 <p><a href="../../../maarita/tehtava/{{tehtava.id}}/">Tehtävän määrittely</a></p>
-<p><a href="#">Katso tämän tehtävän tulokset</a></p>
+<p><a href="../../../tulosta/sarja/{{sarja}}/">Tämän sarjan tulokset</a></p>
 
 <!-- tarvitaan, jotta enterillä pääsisi seuraavaan kenttään, pitää olla sivun lopussa, formin pitää olla nimeltään form1 -->
 <script type='text/javascript'>	

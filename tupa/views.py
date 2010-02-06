@@ -262,6 +262,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                 else : tehtava.tarkistettu=False
         tarkistettu=tehtava.tarkistettu
         validi=True
+
         for v in vartiot :
                 rivi=[]
                 for m in maaritteet :
@@ -297,6 +298,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                 tilanne=tehtavanTilanne(tehtava)
                 return render_to_response('tupa/syota_tehtava.html', 
                         { 'tehtava' : tehtava ,
+			'sarja' : tehtava.sarja.id,
                         'maaritteet' : maaritteet ,
                         'syotteet' : syoteFormit,
                         'talletettu': tal ,
@@ -305,7 +307,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
 			'kisa_nimi': kisa_nimi,
                         'tarkistus' : tarkistus,
 			'heading' : tehtava.nimi,
-			'taakse' : {'url' : '/kipa/' + kisa_nimi + '/syota/', 'title' : u'Muokkaa tehtävää' } } )
+			'taakse' : {'url' : '/kipa/' + kisa_nimi + '/syota/', 'title' : u'Syötä tuloksia' } } )
 
 def testiTulos(request, kisa_nimi,talletettu=None):
         """
@@ -394,8 +396,7 @@ def tuomarineuvos(request, kisa_nimi,talletettu=None):
 
         return render_to_response('tupa/testitulos.html',
                         { 'taulukko' : taulukko ,
-                        'heading' : "Tuomarineuvoksen antamien tulosten määritys" ,
-                        'taakse' : "/kipa/"+kisa_nimi+"/",
+                        'heading' : "Tuomarineuvoston antamien tulosten määritys" ,
 			'kisa_nimi': kisa_nimi,
                         'talletettu': tal })
 
@@ -405,7 +406,11 @@ def tulostaSarja(request, kisa_nimi, sarja_id) :
         """
         sarja = Sarja.objects.get(id=sarja_id)
         tulokset= sarja.laskeTulokset()
-        return render_to_response('tupa/tulokset.html', {'tulos_taulukko' : tulokset, 'kisa_nimi' : kisa_nimi, 'heading' : 'Tulokset sarjoittain' }  )
+        return render_to_response('tupa/tulokset.html', 
+			{'tulos_taulukko' : tulokset, 
+			'kisa_nimi' : kisa_nimi, 
+			'heading' : sarja.nimi, 
+			'taakse' : {'url' : '../../', 'title' : 'Tulokset sarjoittain'} }  )
 
 def piirit(request,kisa_nimi) :
         """
@@ -475,7 +480,7 @@ def poistaKisa(request, kisa_nimi) :
                 posti=request.POST
                 kisa.delete()
                 return HttpResponseRedirect("/kipa/")
-        otsikko = 'poista kisa' 
+        otsikko = 'Poista kisa' 
         return render_to_response('tupa/poista_kisa.html', { 'heading' : otsikko , 
                                                         'kisa_nimi' : kisa_nimi})
 
