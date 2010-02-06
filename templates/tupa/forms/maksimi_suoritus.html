@@ -14,7 +14,7 @@ Parhaat pisteet saa:<br>
 <input type="radio" id="{{parhaan_haku.id}}" value="max" name="{{parhaan_haku.name}}"
 {% ifequal parhaan_haku.value "max" %}checked="checked" {% endifequal %}
 /> suurin:</label>
-<input type="radio" id="{{parhaan_haku.id}}" value="" name="{{parhaan_haku.name}}" 
+<br><input type="radio" id="{{parhaan_haku.id}}" value="" name="{{parhaan_haku.name}}" 
 {% ifequal parhaan_haku.value "" %}checked="checked" {% endifequal %}
 /> {%if vapaa %} kaava: {%else%} kiintea: {% endif %}</label>
 <font color=red><b> 
