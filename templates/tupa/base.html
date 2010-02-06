@@ -26,7 +26,7 @@ document.getElementById(id).style.display = visibility;
 
 <div id="wrap">
     <div id="header"><div id="pageTitle">{{kisa_nimi}} <font color=00FF00 size=3><b>{{talletettu}}</b></font></div></div>
-    <div id="breadcrumbs"><a href="/kipa/{{kisa_nimi}}/">{{kisa_nimi}}</a> &raquo; <a href="{{taakse.url}}">{{taakse.title}}</a> &raquo; {{heading}}</div>
+    <div id="breadcrumbs"><a href="/kipa/{{kisa_nimi}}/">{{kisa_nimi}}</a> {%if taakse%}&raquo; <a href="{{taakse.url}}">{{taakse.title}}</a> {% endif %}&raquo; {{heading}}</div>
     
     <div id="main" class="clearfix">
     
