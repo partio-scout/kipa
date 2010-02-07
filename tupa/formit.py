@@ -253,6 +253,7 @@ class TuomarineuvosForm(ModelForm):
 class KisaForm(ModelForm):
         def clean_nimi(self):
                 nimi = self.cleaned_data['nimi']
+                nimi = re.sub(r'\s', '_',nimi)
                 kisat = Kisa.objects.all() 
                 for k in kisat :
                         if k.nimi==nimi and self.instance and not self.instance == k :
@@ -273,6 +274,7 @@ class UploadFileNameForm(forms.Form):
         name = forms.CharField(label = "Tallennetaan nimelle")
         def clean_name(self):
                 nimi = self.cleaned_data['name']
+                nimi = re.sub(r'\s', '_',nimi)
                 kisat = Kisa.objects.all() 
                 for k in kisat :
                         if k.nimi==nimi :
