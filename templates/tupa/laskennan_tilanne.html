@@ -7,10 +7,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Tupa - laskennan tilanne</title>
 <link href="kipa.css" rel="stylesheet" type="text/css" />
-<script src="enter-as-tab2.js" type="text/javascript"></script>
-<script src="keyhandler.js" type="text/javascript"></script>
-<script src="jquery-1.3.2.min.js" type="text/javascript"></script>
-<script src="jquery.maskedinput-1.2.2.min.js" type="text/javascript"></script>
 
 {% endblock header %}
 
@@ -25,17 +21,17 @@
         {%for sarake in rivi %}
                 {% if forloop.first %}
                         <font color="#FFFFFF">
-                        <td width="62" fgcolor="#FFFFFF" bgcolor="#000000" ><font color="#FFFFFF">{{ sarake.1 }}</font></td>
+                        <td width="50" fgcolor="#FFFFFF" bgcolor="#000000" ><font color="#FFFFFF">{{ sarake.1 }}</font></td>
                 {%else%}
 
                 {% ifequal sarake.0 "a" %}
-                        <td width="62" class='aloittamatta'>{{sarake.1}}</td>
+                        <td width="100" class='aloittamatta'>{{sarake.1}}</td>
                 {%else%}{% ifequal sarake.0 "o" %}
-                        <td width="62" class='osittain'>{{sarake.1}}</td>
+                        <td width="100" class='osittain'>{{sarake.1}}</td>
                 {%else%}{% ifequal sarake.0 "s" %}
                         <td width="62" class='syotetty'>{{sarake.1}}</td>
                 {%else%}{% ifequal sarake.0 "t" %}
-                        <td width="62" class='tarkistettu'> {{sarake.1}}</td>
+                        <td width="100" class='tarkistettu'> {{sarake.1}}</td>
                 {%else%}{% ifequal sarake.0 "v" %}
                         <td width="62" class='virhe'> {{sarake.1}}</td>
                 {%else%}
@@ -51,31 +47,27 @@
       {%endfor%}
    </table>
     
-<br />
-  <table width="168" border="0">
+<br /><br />
+  <table width="170" border="0">
     <tr>
-      <td width="96"><label>aloittamatta</label></td>
-
+      <td width="96">aloittamatta</td>
       <td width="62" class='aloittamatta'>&nbsp;</td>
     </tr>
-
     <tr>
       <td>syötetty osittain</td>
       <td class='osittain'>&nbsp;</td>
     </tr>
     <tr>
-      <td><label> syötetty</label></td>
-
-      <td class='syotetty' >&nbsp;</td>
+      <td>syötetty</td>
+      <td class='syotetty'>&nbsp;</td>
     </tr>
     <tr>
       <td>tarkistettu</td>
       <td class='tarkistettu'>&nbsp;</td>
     </tr>
      <tr>
-     <td width="96"><label>syöttövirhe</label></td>
-
-     <td width="62" class='virhe'>&nbsp;</td>
+     <td>syöttövirhe</td>
+     <td class='virhe'>&nbsp;</td>
     </tr>
   </table>
   <p><br />

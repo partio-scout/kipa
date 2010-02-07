@@ -593,22 +593,27 @@ a.sitetoolbarnavactive:hover { color: #0d3b65; border: 1px solid #486B8A; paddin
 
 .aloittamatta {
 	background: #ffff88;
+	width:150px;
 }
 
 .osittain {
 	background: #fc3;
+	width:150px;
 }
 
 .syotetty {
 	background: #b9f73e;
+	width:150px;
 }
 
 .tarkistettu {
 	background: #679b00;
+	width:150px;
 }
 
 .virhe {
 	background: #ff4f00;
+	width:150px;
 }
 
 #tulostaulukko_screen {
