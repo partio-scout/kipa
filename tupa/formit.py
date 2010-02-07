@@ -254,6 +254,15 @@ class KisaForm(ModelForm):
         def clean_nimi(self):
                 nimi = self.cleaned_data['nimi']
                 nimi = re.sub(r'\s', '_',nimi)
+                # Workaround for Django bug #11522:
+                # unicode string crashes HttpResponseRedirect
+                nimi = re.sub(r'ä', 'a',nimi)
+                nimi = re.sub(r'Ä', 'A',nimi)
+                nimi = re.sub(r'ö', 'o',nimi)
+                nimi = re.sub(r'Ö', 'O',nimi)
+                nimi = re.sub(r'å', 'a',nimi)
+                nimi = re.sub(r'Å', 'A',nimi)
+                # End workaround
                 kisat = Kisa.objects.all() 
                 for k in kisat :
                         if k.nimi==nimi and self.instance and not self.instance == k :
@@ -275,6 +284,15 @@ class UploadFileNameForm(forms.Form):
         def clean_name(self):
                 nimi = self.cleaned_data['name']
                 nimi = re.sub(r'\s', '_',nimi)
+                # Workaround for Django bug #11522:
+                # unicode string crashes HttpResponseRedirect
+                nimi = re.sub(r'ä', 'a',nimi)
+                nimi = re.sub(r'Ä', 'A',nimi)
+                nimi = re.sub(r'ö', 'o',nimi)
+                nimi = re.sub(r'Ö', 'O',nimi)
+                nimi = re.sub(r'å', 'a',nimi)
+                nimi = re.sub(r'Å', 'A',nimi)
+                # End workaround
                 kisat = Kisa.objects.all() 
                 for k in kisat :
                         if k.nimi==nimi :
