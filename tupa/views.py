@@ -745,6 +745,6 @@ def apua(request) :
         """
         Apua onnettomalle ja surulliselle käyttäjälle
         """
-        return HttpResponseRedirect("kipa/apua.html")
+        return HttpResponseRedirect('/kipamedia/manual_v02.pdf')
 
 
