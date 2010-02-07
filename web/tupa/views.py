@@ -616,7 +616,11 @@ def korvaaKisa(request,kisa_nimi=None):
                 else :form = UploadFileForm()
 
 
-        return render_to_response('tupa/upload.html', { 'heading' : otsikko , 
+        if kisa_nimi:
+            return render_to_response('tupa/upload.html', { 'heading' : otsikko , 
+                                                        'form' : form , 'kisa_nimi' : kisa_nimi})
+        else:
+            return render_to_response('tupa/upload_riisuttu.html', { 'heading' : otsikko , 
                                                         'form' : form , 'kisa_nimi' : kisa_nimi})
 
 
