@@ -5,7 +5,7 @@ tarkistus= os.getcwd()
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-RECORDING=True
+RECORDING=False
 if not hakemisto == tarkistus :
         #Viittaisi siihen etta kyseessa on apachen alta toimiva joten pakotetaan debugit pois
         DEBUG=False

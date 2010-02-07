@@ -263,8 +263,6 @@ def laskeSarja(sarja):
         
         #lisataan ulkonaolevat peraan ja tehtavarivi ylos
         tulokset.insert(0,t_list)
-        tulokset.append(["Kisasta ulkopuolella:"])
-        tulokset.extend(ulkona)
         
-        return tulokset
+        return (tulokset,ulkona)
 

@@ -23,7 +23,8 @@ class PostDataRecorder:
                                 posti=request.POST
                                 address=request.path
                                 
-                                kisa_haku = re.search("^/tupa/(.*?)/.*$",address)
+                                print posti
+                                kisa_haku = re.search("^/kipa/(.*?)/.*$",address)
                                 if not kisa_haku:
                                         return None
                                 kisa_nimi = kisa_haku.group(1)
