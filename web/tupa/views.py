@@ -1,4 +1,3 @@
-
 # encoding: utf-8
 # KiPa(KisaPalvelu), tuloslaskentajärjestelmä partiotaitokilpailuihin
 #    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
@@ -12,6 +11,7 @@ from django import forms
 import django.template
 from django.template import RequestContext
 from django.utils.safestring import SafeUnicode
+import datetime
 
 from django.contrib.auth import authenticate,login, logout
 from duplicate import kopioiTehtava
