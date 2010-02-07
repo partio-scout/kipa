@@ -11,7 +11,6 @@ from django import forms
 import django.template
 from django.template import RequestContext
 from django.utils.safestring import SafeUnicode
-import datetime
 
 from django.contrib.auth import authenticate,login, logout
 from duplicate import kopioiTehtava
@@ -423,11 +422,15 @@ def tulostaSarja(request, kisa_nimi, sarja_id) :
         Sarjan tulokset.
         """
         sarja = Sarja.objects.get(id=sarja_id)
-        tulokset= sarja.laskeTulokset()
+        tulokset = sarja.laskeTulokset()
+	kisa_aika = sarja.kisa.aika
+	kisa_paikka = sarja.kisa.paikka
         return render_to_response('tupa/tulokset.html', 
 			{'tulos_taulukko' : tulokset[0],
-            'ulkona_taulukko' : tulokset[1],
-			'kisa_nimi' : kisa_nimi, 
+	                'ulkona_taulukko' : tulokset[1],
+			'kisa_nimi' : kisa_nimi,
+			'kisa_aika' : kisa_aika,
+			'kisa_paikka' : kisa_paikka,
 			'heading' : sarja.nimi, 
 			'taakse' : {'url' : '../../', 'title' : 'Tulokset sarjoittain'} }  )
 

@@ -2,15 +2,15 @@
 {% block title %}Sarjakohtaiset tulokset{% endblock title %} 
 {% block content %} 
 
-<table width="100%" border="0">
-<tr height="20">
-	<td width="33%"><h1>{{kisa_nimi}}</h1></td>
+<table width="100%" border="0" id="tulostaulukko_otsikko">
+<tr valign="top">
+	<td width="33%"><h1 style:"margin:0; padding:0;">{{kisa_nimi}}</h1></td>
 	<td width="33%" align="center"><h1>{{heading}}</h1></td>
 	<td width="33%" align="right">&nbsp;</td>
 </tr>
 <tr>
-	<td>aika<br> paikka</td>
-	<td align="center">&nbsp;</td>
+	<td>{{kisa_aika}}<br> {{kisa_paikka}}</td>
+	<td align="center"><br>{% now "j.n.Y H:i"%}</td>
 	<td align="right">&nbsp;</td>
 </tr>
 </table>
