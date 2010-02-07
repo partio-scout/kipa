@@ -42,7 +42,7 @@
                       </tr>
                       <tr>
                       
-                      <td align="right">
+                      <td width="30" align="right">
                       {%if forloop.first %}
                       {% comment %} vasen ylanurkka {% endcomment %}
                                 sij.
@@ -60,7 +60,7 @@
                                         {{ sarake.nimi }} <td><b>nro:</b></td><td><b>vartio:</b></td>
                                 {% else %}
                                         {% comment %} ylarivi {% endcomment %}
-                                        <td><b>{{sarake.nimi|slice:":4"}}</b></td>
+                                        <td align="right"><b>{{sarake.nimi|slice:":4"}}</b></td>
                                 {% endif %}
                      {% else %}
                      {% if forloop.first  %}
@@ -70,7 +70,7 @@
                         </b></td>
                      {% else %}
                      {% comment %} muut sarakkeet {% endcomment %}
-                        <td>
+                        <td align="right">
                                         {{ sarake }}
                         </td>
                      {% endif %}
@@ -94,7 +94,7 @@
                                         </b></td>
                                 {% else %}
                                         {% comment %} muut sarakkeet {% endcomment %}
-                                <td>
+                                <td align="right">
                                         {{ sarake }}
                                 </td>
                                 {% endif %}
@@ -123,6 +123,6 @@
  None = laskentavirhe
 </p>
 </form>
-<p><a href="../tuloste/{{tulos_taulukko.0.0.id}}/">Tulokset tulostusmuodossa</a></p>
+<!--<p><a href="../tuloste/{{tulos_taulukko.0.0.id}}/">Tulokset tulostusmuodossa</a></p>-->
 
 {% endblock %}
