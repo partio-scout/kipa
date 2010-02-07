@@ -85,7 +85,7 @@
                 {% if forloop.last %}
                         {% for rivi in ulkona_taulukko%}
                         <tr>
-                        <td>  {{forloop.counter + forloop.parentloop.counter0}}.</td>
+                        <td>  {{forloop.counter}}.</td>
 			            {% for sarake in rivi %}
                                 {% if forloop.first  %}
                                         {% comment %} ekasarake {% endcomment %}
