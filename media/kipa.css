@@ -614,3 +614,8 @@ a.sitetoolbarnavactive:hover { color: #0d3b65; border: 1px solid #486B8A; paddin
 #tulostaulukko_screen {
 	border-collapse:collapse;
 }
+
+#tulostaulukko_otsikko h1 {
+	margin:0; 
+	padding:0;
+}
