@@ -483,7 +483,6 @@ def osaTehtavaForm(posti,data,prefix="") :
         
         otForm = { 'id' : id, 'nimi' : id , 'value' : data['tyyppi']  }
         if posti and data['tyyppi']=="" : 
-                otForm['errors']="Valitse tehtavan typpi!"
                 data['valid']=False
 
         # tabit :
@@ -654,6 +653,7 @@ def luoTehtavaData(tehtavat ) :
 def tallennaTehtavaData(data) :
         ser=[]
         tehtava_id=None
+        print data
         if 'valid' in  data.keys() and data['valid'] == True :
                 del data['valid'] 
                 for k, v in data.items() :

@@ -75,12 +75,41 @@
                         </td>
                      {% endif %}
                      {% endif %}
-                     
+                
                      
 
 			    {% endfor %}    
-		      </tr>    
-		{% endfor %}
+		      </tr>
+            
+               {% comment %} ULKONA OLEVAT: {% endcomment %}
+                {% if forloop.last %}
+                        {% for rivi in ulkona_taulukko%}
+                        <tr>
+                        <td>  {{forloop.counter + forloop.parentloop.counter0}}.</td>
+			            {% for sarake in rivi %}
+                                {% if forloop.first  %}
+                                        {% comment %} ekasarake {% endcomment %}
+                                        <td><b> 
+                                        {{ sarake.nro }}</b></td> <td>  {{ sarake.nimi }}</td>
+                                        </b></td>
+                                {% else %}
+                                        {% comment %} muut sarakkeet {% endcomment %}
+                                <td>
+                                        {{ sarake }}
+                                </td>
+                                {% endif %}
+                        {% endfor %}
+                        </tr>
+                        {% endfor %}
+                {% endif %}
+        {% endfor %}
+        
+        <tr>
+        <br>
+        <br>
+        </tr>
+		
+
 	</table>
        
 {% else %}

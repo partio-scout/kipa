@@ -33,8 +33,8 @@ VartioFormSet = inlineformset_factory(Sarja,
 MaariteFormSet = inlineformset_factory(OsaTehtava,SyoteMaarite,extra=3 )
 
 class SarjaForm(ModelForm):
-        vartion_maksimikoko = forms.IntegerField(widget=forms.HiddenInput )
-        vartion_minimikoko = forms.IntegerField(widget=forms.HiddenInput)
+        vartion_maksimikoko = forms.IntegerField(widget=forms.HiddenInput,required=False )
+        vartion_minimikoko = forms.IntegerField(widget=forms.HiddenInput,required=False)
 
 SarjaFormSet = inlineformset_factory(Kisa,Sarja,extra=8 , form=SarjaForm)
 
@@ -90,19 +90,27 @@ class AikaWidget(forms.TextInput):
                                 pass
                 return super(AikaWidget,self).render(name,newValue,attrs)
 
-class PisteField(forms.FloatField) :
+class PisteField(forms.CharField) :
         """
-        Floatfield accepting "kesk",h
+        Decimal field accepting "kesk",h and ,/. as decimal delimiter 
         """
         def clean(self, value) :
+                haku = re.match(r"^((\d*)[,.]?\d+)$",value)
+                if haku:
+
+                        merkkijono='0'+haku.group(0)
+                        print merkkijono
+                        return unicode( Decimal(merkkijono.replace(",",".")) )
                 if value=="kesk":
                         return value
                 elif value=="h":
                         return value
                 elif value=="H":
                         return "h"
+                elif value=="" :
+                        return value
                 else:
-                        return super(PisteField, self).clean(value)
+                        raise forms.ValidationError('Anna desimaaliluku!')
 
 class AikaField(forms.CharField):
         """
@@ -243,6 +251,13 @@ class TuomarineuvosForm(ModelForm):
                 model = TuomarineuvosTulos
 
 class KisaForm(ModelForm):
+        def clean_nimi(self):
+                nimi = self.cleaned_data['nimi']
+                kisat = Kisa.objects.all() 
+                for k in kisat :
+                        if k.nimi==nimi and self.instance and not self.instance == k :
+                                raise forms.ValidationError("Nimi on jo käytössä")
+                return nimi
         class Meta:
                 model = Kisa
 
@@ -250,4 +265,17 @@ class PoistaTehtavaForm(ModelForm):
         class Meta:
                 model = Tehtava
 
+class UploadFileForm(forms.Form):
+        file  = forms.FileField()
+
+class UploadFileNameForm(forms.Form):
+        file  = forms.FileField()
+        name = forms.CharField(label = "Tallennetaan nimelle")
+        def clean_name(self):
+                nimi = self.cleaned_data['name']
+                kisat = Kisa.objects.all() 
+                for k in kisat :
+                        if k.nimi==nimi :
+                                raise forms.ValidationError("Nimi on jo käytössä")
+                return nimi
 

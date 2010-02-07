@@ -425,7 +425,8 @@ def tulostaSarja(request, kisa_nimi, sarja_id) :
         sarja = Sarja.objects.get(id=sarja_id)
         tulokset= sarja.laskeTulokset()
         return render_to_response('tupa/tulokset.html', 
-			{'tulos_taulukko' : tulokset, 
+			{'tulos_taulukko' : tulokset[0],
+            'ulkona_taulukko' : tulokset[1],
 			'kisa_nimi' : kisa_nimi, 
 			'heading' : sarja.nimi, 
 			'taakse' : {'url' : '../../', 'title' : 'Tulokset sarjoittain'} }  )
@@ -502,12 +503,6 @@ def poistaKisa(request, kisa_nimi) :
         return render_to_response('tupa/poista_kisa.html', { 'heading' : otsikko , 
                                                         'kisa_nimi' : kisa_nimi})
 
-class UploadFileForm(forms.Form):
-        file  = forms.FileField()
-
-class UploadFileNameForm(forms.Form):
-        file  = forms.FileField()
-        name = forms.CharField(label = "Tallennetaan nimelle")
 
 def saveNewId(object,changeDict,keyName):
         id=object.id
