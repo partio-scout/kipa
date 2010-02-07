@@ -610,3 +610,7 @@ a.sitetoolbarnavactive:hover { color: #0d3b65; border: 1px solid #486B8A; paddin
 .virhe {
 	background: #ff4f00;
 }
+
+#tulostaulukko_screen {
+	border-collapse:collapse;
+}

@@ -2,12 +2,23 @@
 {% block title %}Sarjakohtaiset tulokset{% endblock title %} 
 {% block content %} 
 
-<h1>NÄYTÄ TULOKSET</h1>
+<table width="100%" border="0">
+<tr height="20">
+	<td width="33%"><h1>{{kisa_nimi}}</h1></td>
+	<td width="33%" align="center"><h1>{{heading}}</h1></td>
+	<td width="33%" align="right">&nbsp;</td>
+</tr>
+<tr>
+	<td>aika<br> paikka</td>
+	<td align="center">&nbsp;</td>
+	<td align="right">&nbsp;</td>
+</tr>
+</table>
 
 <br>
 <p>
 {% if tulos_taulukko %}
-	<table width="100%" border="1">
+	<table width="100%" id="tulostaulukko_screen">
 		{% for rivi in tulos_taulukko%}
                       
                       <tr>
@@ -20,7 +31,7 @@
                                 {% else %}
                                         {% comment %} ylarivi {% endcomment %}
 
-                                        <td align="left"><b>
+                                        <td align="right"><b>
                                         {% if sarake.jarjestysnro %}
                                                 {{ sarake.jarjestysnro }}
                                         {% endif %}
@@ -31,7 +42,7 @@
                       </tr>
                       <tr>
                       
-                      <td>
+                      <td align="right">
                       {%if forloop.first %}
                       {% comment %} vasen ylanurkka {% endcomment %}
                                 sij.
