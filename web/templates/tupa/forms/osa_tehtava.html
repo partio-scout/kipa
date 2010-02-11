@@ -11,11 +11,12 @@
 }
 
 </style> 
+<font color=red><b> {{osatehtava.errors}} </b> </font>
 {% if taulukko %}
 
 Osatehtävän tyyppi: 
 {% for sarake in taulukko%}
-        <input type="radio" id="aa" name="{{osatehtava.id}}" value="{{sarake.tyyppi}}" 
+        <input type="radio" name="{{osatehtava.id}}" value="{{sarake.tyyppi}}" 
         onclick="
         {% for sa in taulukko%}
                 {%ifequal sa.tyyppi sarake.tyyppi %}
@@ -33,7 +34,6 @@ Osatehtävän tyyppi:
         <div id="{{sarake.id}}" class='hidden' >    
         
         <table border="0">
-		<td><font color=red><b>{{osatehtava.errors}}</b></font></td>
 		<td>{{sarake.form}}</td>
         </table>
         </div>

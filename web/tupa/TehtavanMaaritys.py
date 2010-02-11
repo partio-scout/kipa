@@ -16,8 +16,10 @@ from django.core import serializers
 
 """ This file is made with no explainable logic. It has only been made to work. Most propably the best way to improveis simply rewriting. Anyway the task is not simple. Strongly recommend of using the already defined database syntax. See developement documentation for the actual syntax definition.
 """
+#########################
+# Validiointi funktiot: #
+#########################
 
-# Validiointi funktiot:
 def is_number(s):
         if not s : return False
         try: float(s)
@@ -46,6 +48,21 @@ def is_kaava(s) :
                 if tulos[0][0]==None or tulos[0][0]=='S' : return False
                 else : return True
 
+def validate(posti,field_name,testFunctions,prefix="" ) :
+        id=prefix+"_"+field_name
+        value=""
+        if posti and id in posti.keys(): value=posti[id]
+        valid= True
+        for f in testFunctions :
+                if f(value)==False :
+                        valid=False
+                        break
+        return valid
+
+####################
+# Muunnosfunktiot: #
+####################
+
 def aika_numeroksi(s) :
         haku = re.match(r"^(\d+):(\d+):(\d+)$",s)    
         if haku:
@@ -70,6 +87,9 @@ def numero_ajaksi(n) :
                         pass
         return newValue
 
+###################
+# Pohjapalikoita: #
+###################
 def syotteen_tyyppi_field(posti,data,prefix,syote_id,tyyppi):
         nimi=string.letters[syote_id]
         id=prefix+"_"+tyyppi+"_"+nimi+"_tyyppi"
@@ -107,16 +127,7 @@ def field(posti,field_name,prefix,errors=""):
                                'value' : value ,
                               'errors' : errors } }
 
-def validate(posti,field_name,testFunctions,prefix="" ) :
-        id=prefix+"_"+field_name
-        value=""
-        if posti and id in posti.keys(): value=posti[id]
-        valid= True
-        for f in testFunctions :
-                if f(value)==False :
-                        valid=False
-                        break
-        return valid
+
 
 def save_data(data,data_path,data_nimi,data_field,value) :
         pos=data
@@ -262,6 +273,12 @@ def lataa_parametrit(state,data,prefix,ot_tyyppi,muunnos=None):
 
                 except : pass
 
+def peruskaava(data):
+        data['kaava']="interpoloi(arvio(vartion_kaava-oikea),parhaan_haku(arvio(parhaan_kaava-oikea)),jaettavat,nollan_kerroin*tapa(arvio(nollan_kaava-oikea)))"""
+
+####################################
+# Yleiset osatehtävien parametrit: #
+####################################
 def maksimisuoritus(state,data,prefix,ot_tyyppi,formi,validiointi=[[is_number],u"Syötä numeroita!"],muunnos=None) :
         # Valinnat:
         if prefix in state.keys() and state[prefix]==ot_tyyppi[1:]:
@@ -336,9 +353,9 @@ def arviointi(state,data,prefix,ot_tyyppi,formi,validiointi=[[is_number],"Syöt�
         formi.update( field(state,"oikea",prefix+ot_tyyppi,errors) )
         formi.update( field(state,"arvio",prefix+ot_tyyppi) )
 
-def peruskaava(data):
-        data['kaava']="interpoloi(arvio(vartion_kaava-oikea),parhaan_haku(arvio(parhaan_kaava-oikea)),jaettavat,nollan_kerroin*tapa(arvio(nollan_kaava-oikea)))"""
-
+###################################
+# Osatehtäväkohtaiset kokoonpanot #
+###################################
 def kisaPisteForm(posti,data,prefix) :
         formi=syotteen_kuvaus_field(posti,data,prefix,0,"kp")
         poistaYlimaaraisetMaaritteet(posti,data,prefix,"kp",1)
@@ -476,14 +493,17 @@ def vapaaKaavaForm(posti,data,prefix) :
 
         return render_to_string("tupa/forms/vapaa_kaava.html",  formi )
 
+##########################
+# Osatehtävän kokoonpano #
+##########################
 def osaTehtavaForm(posti,data,prefix="") :
         # valitse tyyppi formi
         id= prefix +"_tyyppi"
         if posti and id in posti.keys() : data['tyyppi']=posti[id]
-        
         otForm = { 'id' : id, 'nimi' : id , 'value' : data['tyyppi']  }
         if posti and data['tyyppi']=="" : 
                 data['valid']=False
+                otForm['errors']="valitse tyyppi"
 
         # tabit :
         taulukko= [ { 'id' : data['nimi'] +'_kp',
@@ -507,8 +527,10 @@ def osaTehtavaForm(posti,data,prefix="") :
                                                                 'nimi' : data['nimi'] ,
                                                                 'taulukko' : taulukko ,
                                                                 'tyyppi' : data['tyyppi'] ,
-                                                                'osatehtava' : otForm } )
-
+                                                                'osatehtava' : otForm  } )
+#####################
+# Tehtävän määritys #
+#####################
 def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehtava_") :
         formidata=[]
         # luodaan uusi tehtava jos vanhaa ei loydy
@@ -517,7 +539,7 @@ def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehta
                                                 'kaava': 'ss' ,
                                                 'nimi': '' ,
                                                 'jarjestysnro':suurin_jarjestysnro+1, 
-                                                'osa_tehtavat' : { '#1': { "nimi": "","tyyppi": "" }  } }
+                                                'osa_tehtavat' : { '#1': { "nimi": "a","tyyppi": "" }  } }
         data['valid']=True
         if not posti: data['valid']=False
 
@@ -570,7 +592,9 @@ def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehta
                                                         'kaava' : "",
                                                         'tehtava' : tId }
 
-                        ot_formit.append( osaTehtavaForm(posti, v['osa_tehtavat'][uusi_id],prefix+str(k)+"_"+str(uusi_id)) )
+                        ot_formit.append( osaTehtavaForm(posti, 
+                                        v['osa_tehtavat'][uusi_id],
+                                        prefix+str(k)+"_"+str(uusi_id)) )
                         if 'valid' in v['osa_tehtavat'][uusi_id].keys() and not v['osa_tehtavat'][uusi_id]['valid']:
                                 del v['osa_tehtavat'][uusi_id]['valid']
                                 data['valid']=False
@@ -594,10 +618,6 @@ def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehta
                                         if not is_string(value):
                                                 errors="Anna merkkijono [a-zA-Za0-9_]"
                                                 data['valid']=False
-                                        else:
-                                                for nimi_k,nimi_v in v.items() : 
-                                                        pass
-                                                        # Nimen olemassaolon tarkistus
                                                 
                                 # Kaavan validiointi:
                                 if  fk=='kaava' :
@@ -613,6 +633,11 @@ def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehta
                 formidata.append( ('osa_tehtavat',ot_formit) )
         return render_to_string("tupa/forms/tehtava.html",  dict(formidata) )
 
+
+
+########################
+# Tietokannan muokkaus #
+########################
 def luoTehtavaData(tehtavat ) :
         """
         Luo sanakirjan tehtavista, niiden osatehtavista ,parametreista seka syotteiden maaritteista.
