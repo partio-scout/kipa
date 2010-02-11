@@ -422,13 +422,22 @@ def tulostaSarja(request, kisa_nimi, sarja_id) :
         Sarjan tulokset.
         """
         sarja = Sarja.objects.get(id=sarja_id)
-        tulokset = sarja.laskeTulokset()
-	kisa_aika = sarja.kisa.aika
-	kisa_paikka = sarja.kisa.paikka
+        tulokset= sarja.laskeTulokset()
+        mukana=tulokset[0]
+        ulkona=tulokset[1]
+        numero=1 
+        for i in range(len(mukana[1:])) :
+                mukana[i+1].insert(0,numero)
+                numero=numero+1
+        for i in range(len(ulkona)) :
+                ulkona[i].insert(0,numero)
+                numero=numero+1
+        kisa_aika = sarja.kisa.aika
+        kisa_paikka = sarja.kisa.paikka
         return render_to_response('tupa/tulokset.html', 
-			{'tulos_taulukko' : tulokset[0],
-	                'ulkona_taulukko' : tulokset[1],
-			'kisa_nimi' : kisa_nimi,
+			{'tulos_taulukko' : mukana,
+            'ulkona_taulukko' : ulkona,
+			'kisa_nimi' : kisa_nimi, 
 			'kisa_aika' : kisa_aika,
 			'kisa_paikka' : kisa_paikka,
 			'heading' : sarja.nimi, 
