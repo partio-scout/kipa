@@ -97,9 +97,7 @@ class PisteField(forms.CharField) :
         def clean(self, value) :
                 haku = re.match(r"^((\d*)[,.]?\d+)$",value)
                 if haku:
-
                         merkkijono='0'+haku.group(0)
-                        print merkkijono
                         return unicode( Decimal(merkkijono.replace(",",".")) )
                 if value=="kesk":
                         return value
