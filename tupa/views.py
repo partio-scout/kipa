@@ -115,8 +115,16 @@ def maaritaKisa(request, kisa_nimi=None,talletettu=None):
                 tal=""
                 if talletettu=="talletettu" and not posti : tal="Talletettu!"
                 taakse= "/kipa/"
-                if kisa_nimi : taakse = "/kipa/"+kisa_nimi+"/"
-                return render_to_response('tupa/maarita.html', 
+                if kisa_nimi:
+                    taakse = "/kipa/"+kisa_nimi+"/"
+                    return render_to_response('tupa/maarita.html', 
+                                      { 'heading' : "Määritä kisa" ,
+                                      'forms' : (kisaForm,) ,
+                                      'formsets' : ( sarjaFormit,),
+                                      'kisa_nimi' : kisa_nimi,
+                                      'talletettu': tal })
+                else:
+                    return render_to_response('tupa/maarita_riisuttu.html', 
                                       { 'heading' : "Määritä kisa" ,
                                       'forms' : (kisaForm,) ,
                                       'formsets' : ( sarjaFormit,),
@@ -626,11 +634,9 @@ def korvaaKisa(request,kisa_nimi=None):
 
 
         if kisa_nimi:
-            return render_to_response('tupa/upload.html', { 'heading' : otsikko , 
-                                                        'form' : form , 'kisa_nimi' : kisa_nimi})
+            return render_to_response('tupa/upload.html', { 'heading' : otsikko , 'form' : form , 'kisa_nimi' : kisa_nimi})
         else:
-            return render_to_response('tupa/upload_riisuttu.html', { 'heading' : otsikko , 
-                                                        'form' : form , 'kisa_nimi' : kisa_nimi})
+            return render_to_response('tupa/upload_riisuttu.html', { 'heading' : otsikko , 'form' : form , 'kisa_nimi' : kisa_nimi})
 
 
 def post_txt(request,parametrit):
