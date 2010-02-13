@@ -57,16 +57,16 @@ class aritmeettinen_laskin_test(unittest.TestCase):
     def testEiaritmtetiikkaa(self):
         assert    laske('a+ b-c*d') == "S"
     
-    #def testkaksikertomerkkia(self):
+    #def testkaksikertomerkkia(self): (potenssi)
     #    assert    laske('5+2**5') == None
      
-    #def testkaksiplusmerkkia(self):
+    #def testkaksiplusmerkkia(self): (ok)
     #    assert    laske('5+2++5') == None
         
-    #def testkaksimiinusmerkkia(self):
+    #def testkaksimiinusmerkkia(self): (ok)
         #assert    laske('5+2--5') == None
         
-    #def testplusmiinus(self):
+    #def testplusmiinus(self): (ok)
         #assert    laske('5+2+-5') == None 
       
     def testkertojako(self):
@@ -74,20 +74,28 @@ class aritmeettinen_laskin_test(unittest.TestCase):
 
     def testLaskettuNegatiivinenOperandi(self):
         assert    laske('3*(1-5)') == Decimal("-12")
-    def testTuotosPotenssimuoto(self):
+    def testPitkadesimaali(self):
         assert not laske('-0.008333333333333333333333333333*0.0') == None
 
 
-
-def haeTulos(sarjanTulokset, vartio, tehtava) :
-    """
-    Hakee Vartion pisteet teht‰v‰lle m‰‰ritellyst‰ tulostaulukosta
-    """
-    for vart_nro in range(1,len(sarjanTulokset)-1) :
-        for teht_nro in range(2,len(sarjanTulokset[vart_nro])):
-            tulokset =sarjanTulokset[vart_nro][teht_nro]
-            if sarjanTulokset[vart_nro][0] ==vartio and sarjanTulokset[0][teht_nro] ==tehtava:
-                 return tulokset
+def haeTulos(tuloksetSarjalle, vartio, tehtava) :
+                #Mukana olevat
+                sarjanTulokset=tuloksetSarjalle[0]
+                for vart_nro in range(1,len(sarjanTulokset)) :
+                        va=None
+                        for teht_nro in range(2,len(sarjanTulokset[vart_nro])):
+                                tul =sarjanTulokset[vart_nro][teht_nro]
+                                va= sarjanTulokset[vart_nro][0]
+                                if va ==vartio and sarjanTulokset[0][teht_nro] ==tehtava:
+                                        return tul
+                #Ulkopuoliset
+                for vart_nro in range(0,len(tuloksetSarjalle[1])) :
+                        va=None
+                        for teht_nro in range(2,len(tuloksetSarjalle[1][vart_nro])):
+                                tul =tuloksetSarjalle[1][vart_nro][teht_nro]
+                                va= tuloksetSarjalle[1][vart_nro][0]
+                                if va ==vartio and tuloksetSarjalle[0][0][teht_nro] ==tehtava:
+                                        return tul
 
 def ViewSanityCheck(fixture_name):
         """

@@ -686,23 +686,31 @@ def tulostaSarjaHTML(request, kisa_nimi, sarja_id) :
         sarja = Sarja.objects.get(id=sarja_id)
         tulokset= sarja.laskeTulokset()
         return render_to_response('tupa/tuloksetHTML.html', {'tulos_taulukko' : tulokset, 'kisa_nimi' : kisa_nimi }  )
-
+def haeTulos(tuloksetSarjalle, vartio, tehtava) :
+                #Mukana olevat
+                sarjanTulokset=tuloksetSarjalle[0]
+                for vart_nro in range(1,len(sarjanTulokset)) :
+                        va=None
+                        for teht_nro in range(2,len(sarjanTulokset[vart_nro])):
+                                tul =sarjanTulokset[vart_nro][teht_nro]
+                                va= sarjanTulokset[vart_nro][0]
+                                if va ==vartio and sarjanTulokset[0][teht_nro] ==tehtava:
+                                        return tul
+                #Ulkopuoliset
+                for vart_nro in range(0,len(tuloksetSarjalle[1])) :
+                        va=None
+                        for teht_nro in range(2,len(tuloksetSarjalle[1][vart_nro])):
+                                tul =tuloksetSarjalle[1][vart_nro][teht_nro]
+                                va= tuloksetSarjalle[1][vart_nro][0]
+                                if va ==vartio and tuloksetSarjalle[0][0][teht_nro] ==tehtava:
+                                        return tul
 def luoTestiTulokset(request,kisa_nimi,sarja_id):
         """
         Luo testitulokset valitulle sarjalle ja tallentaa ne kantaan
         """
-        def haeTulos(sarjanTulokset, vartio, tehtava) :
-                """
-                Hakee Vartion pisteet tehtävälle määritellystä tulostaulukosta
-                """
-                for vart_nro in range(1,len(sarjanTulokset)-1) :
-                        for teht_nro in range(2,len(sarjanTulokset[vart_nro])):
-                                tulokset =sarjanTulokset[vart_nro][teht_nro]
-                                if sarjanTulokset[vart_nro][0] ==vartio and sarjanTulokset[0][teht_nro] ==tehtava:
-                                        return tulokset
-        
         sarja = get_object_or_404(Sarja , id=sarja_id )
         tulokset= sarja.laskeTulokset()
+        
         for t in sarja.tehtava_set.all() :
                 for v in sarja.vartio_set.all() :
                         tulos = haeTulos( tulokset, v , t)

@@ -678,7 +678,6 @@ def luoTehtavaData(tehtavat ) :
 def tallennaTehtavaData(data) :
         ser=[]
         tehtava_id=None
-        print data
         if 'valid' in  data.keys() and data['valid'] == True :
                 del data['valid'] 
                 for k, v in data.items() :
