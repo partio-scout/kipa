@@ -242,7 +242,7 @@ def laskeSarja(sarja):
                 #vartio objekti jokaisen rivin alkuun:
                 tulokset[i].insert(0,vartiot[i])
                         
-        # Siirretaan ulkopuoliset ja mukana olevat omiin taulukkoihinsa
+        # Siirretään ulkopuoliset ja mukana olevat omiin taulukkoihinsa
         mukana=[]
         ulkona=[]
         for i, item in enumerate(tulokset):
@@ -252,17 +252,17 @@ def laskeSarja(sarja):
                 if u : ulkona.append(item)
                 else : mukana.append(item)
         tulokset=mukana
-        #lisataan tehtava rivi ylos
+        #lisataan tehtävä rivi ylos
         t_list=[sarja,"Yht." ,]
         for t in tehtavat:
                 t_list.append(t)
 
-        #jarjestetaan taulukot
+        #järjestetään taulukot
         tulokset.sort( key=operator.itemgetter(1),reverse=True )
         ulkona.sort( key=operator.itemgetter(1),reverse=True )
         
-        #lisataan ulkonaolevat peraan ja tehtavarivi ylos
-        tulokset.insert(0,t_list)
+        #lisataan tehtävärivi ylos
+        mukana.insert(0,t_list)
         
-        return (tulokset,ulkona)
+        return (mukana,ulkona)
 
