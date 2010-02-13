@@ -108,7 +108,7 @@ int main(int argc, char** argv) {
 
 	// Paivitetaan httpd.conf
 	char httpd_conf[512] ;
-	sprintf(httpd_conf,"Alias /kipamedia %s\\web\\media \n <Directory %s\\web\\media> \n Order allow,deny \n  Allow from all \n </Directory> \n LoadModule python_module modules/mod_python.so \n <Location \"/tupa/\"> \n SetHandler python-program \n PythonHandler django.core.handlers.modpython \n SetEnv DJANGO_SETTINGS_MODULE web.settings \n PythonDebug On \n PythonPath \"['%s'] + sys.path\" \n </Location> \n", kipadir, kipadir,kipadir) ; 
+	sprintf(httpd_conf,"Alias /kipamedia %s\\web\\media \n <Directory %s\\web\\media> \n Order allow,deny \n  Allow from all \n </Directory> \n LoadModule python_module modules/mod_python.so \n <Location \"/kipa/\"> \n SetHandler python-program \n PythonHandler django.core.handlers.modpython \n SetEnv DJANGO_SETTINGS_MODULE web.settings \n PythonDebug On \n PythonPath \"['%s'] + sys.path\" \n </Location> \n", kipadir, kipadir,kipadir) ; 
 	
 	char httpd_filename[256] ;
 	sprintf(httpd_filename,"%s\\conf\\httpd.conf",apachedir) ;
