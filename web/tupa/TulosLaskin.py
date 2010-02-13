@@ -235,8 +235,11 @@ def laskeSarja(sarja):
                 if len( vartion_tuomarit ):
                         for t in range(len(tulokset[i])) :
                                 tuom=vartion_tuomarit.filter(tehtava=tehtavat[t])
-                                if len(tuom) :  tulokset[i][t]= tuom[0].pisteet
-
+                                if len(tuom) :
+                                        try:
+                                                tulokset[i][t]= Decimal(tuom[0].pisteet)
+                                        except:
+                                                tulokset[i][t]= tuom[0].pisteet
                 #kokonaispisteet:
                 tulokset[i].insert(0,summa(tulokset[i]))
                 #vartio objekti jokaisen rivin alkuun:

@@ -8,6 +8,7 @@ from models import *
 from django.contrib import admin
 admin.autodiscover()
 from django.views.generic.simple import direct_to_template
+from django.views.generic.simple import redirect_to
 from django.conf import settings
 
 genericViews = patterns('django.views.generic.list_detail',        
@@ -45,6 +46,7 @@ urlpatterns = genericViews +  patterns('web.tupa.views',
         (r'^(?P<kisa_nimi>\w+)/tulosta/piirit/$', 'piirit'), 
         (r'^(?P<kisa_nimi>\w+)/login/$', 'loginSivu'), 
         (r'^(?P<kisa_nimi>\w+)/logout/$', 'logoutSivu'),
+        (r'^.*$',redirect_to, {'url': '/kipa'})
         )
 
 if settings.DEBUG :
