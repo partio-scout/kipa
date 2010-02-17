@@ -46,7 +46,6 @@ urlpatterns = genericViews +  patterns('web.tupa.views',
         (r'^(?P<kisa_nimi>\w+)/tulosta/piirit/$', 'piirit'), 
         (r'^(?P<kisa_nimi>\w+)/login/$', 'loginSivu'), 
         (r'^(?P<kisa_nimi>\w+)/logout/$', 'logoutSivu'),
-        (r'^.*$',redirect_to, {'url': '/kipa'})
         )
 
 if settings.DEBUG :
