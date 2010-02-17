@@ -190,7 +190,7 @@ def maaritaVartiot(request,kisa_nimi,talletettu=None):
                 return render_to_response('tupa/valitse_formset.html',
                                         { 'taulukko' : taulukko ,
                                         'heading' : "Määritä vartiot",
-					'kisa_nimi': kisa_nimi,
+                                        'kisa_nimi': kisa_nimi,
                                         'talletettu': tal })
 
 def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu=""):
