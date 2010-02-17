@@ -514,7 +514,7 @@ body > #wrap {
 				
 /*** IE Fix ***/
 * html #left {
-	left: 150px;              /* RC fullwidth */
+	left: 100%;              /* RC fullwidth */
 }
 
 
