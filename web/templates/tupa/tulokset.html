@@ -102,7 +102,9 @@
                                 {% ifequal forloop.counter 2 %}
                                         {% comment %} ekasarake {% endcomment %}
                                         <td>{{ sarake.nro }}</td> <td>  {{ sarake.nimi }}<br> 
-                                                {{sarake.lippukunta}}<br> 
+                                                {%if sarake.lippukunta %} <br> {%endif%}
+                                                {{sarake.lippukunta}} 
+                                                {%if sarake.piiri %} <br> {%endif%} 
                                                 {{sarake.piiri}} </td>
                                         
                                         </b></td>
