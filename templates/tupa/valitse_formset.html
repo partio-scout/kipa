@@ -2,6 +2,8 @@
 
 {% block sarake %} 
     {{ sarake.management_form }}
+        <p><img src="/kipamedia/help_small.png" hspace="3" align="baseline" />
+        <strong>Sy&ouml;t&auml; 'Keskeytt&auml;nyt' ja 'Ulkopuolella' kenttiin sen teht&auml;v&auml;n numero, josta l&auml;htien vartio on sarjan ulkopuolella.</strong></p>
     {% for form in sarake.forms %}
         {{ form }} <br>
     {% endfor %}
