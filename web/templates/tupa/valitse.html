@@ -6,12 +6,10 @@
 <script type='text/javascript' src='/kipamedia/lpkt_ja_piirit.js'></script>
 <script>
 	$(document).ready(function(){
-		$("#id_Valkoinen-0-piiri").autocomplete(piirit, {
-		minChars: 0,
-		width: 310});
-		$("#id_Valkoinen-0-lippukunta").autocomplete(lpkt, {
-		minChars: 0,
-		width: 310});
+		$("#id_Valkoinen-0-piiri").autocomplete(piirit, {minChars: 0, width: 310});
+		$("#id_Valkoinen-0-lippukunta").autocomplete(lpkt, {minChars: 0, width: 310});
+			$("#id_{{taulukko.sarake.otsikko}}-0-piiri").autocomplete(piirit, {minChars: 0, width: 310});
+			$("#id_Valkoinen-0-lippukunta").autocomplete(lpkt, {minChars: 0, width: 310});
 	});
 </script>
 {% endblock %}
@@ -41,8 +39,8 @@
 		{% for sarake in taulukko%}
 		<div id="sarake{{ sarake.id }}" class="tabcontent">
 			<ul id="tehtavatabs" class="">
-			     {% block sarake%} {{sarake}} {% endblock %}
-                        </ul>
+			     {% block sarake %} {{sarake}} {% endblock %}
+            </ul>
 		</div>
 		{% endfor %}
 	</div>
