@@ -22,6 +22,8 @@ import re
 from formit import *
 from TehtavanMaaritys import *
 
+def kipaResponseRedirect(url) : return HttpResponse('<html><head><meta http-equiv="REFRESH" content="0;url='+url+'"></HEAD><BODY></BODY></HTML>')
+
 def loginSivu(request, kisa_nimi):
         kisa = get_object_or_404(Kisa, nimi=kisa_nimi) 
 
@@ -39,7 +41,7 @@ def loginSivu(request, kisa_nimi):
 
 def logoutSivu(request, kisa_nimi):
 	logout(request)
-        return HttpResponseRedirect("/kipa/"+kisa_nimi+"/")	
+        return kipaResponseRedirect("/kipa/"+kisa_nimi+"/")	
 
 def tarkistaVirhe(syote):
         syottovirhe=None
@@ -81,6 +83,7 @@ def tulosta(request,kisa_nimi):
                                                       'kisa_nimi': kisa_nimi, 
                                                       'heading' : 'Tulokset sarjoittain' })
 
+
 def maaritaKisa(request, kisa_nimi=None,talletettu=None):
         """
         Kisan ja sarjojen määritys.
@@ -110,7 +113,7 @@ def maaritaKisa(request, kisa_nimi=None,talletettu=None):
         sarjaFormit.label="Sarjat" 
         # Annetaan tiedot templatelle:
         if posti and sarjaFormit.is_valid() and kisaForm.is_valid() :
-                return HttpResponseRedirect("/kipa/"+kisa.nimi+"/maarita/talletettu/")
+                return kipaResponseRedirect("/kipa/"+kisa.nimi+"/maarita/talletettu/")
         else :
                 tal=""
                 if talletettu=="talletettu" and not posti : tal="Talletettu!"
@@ -155,7 +158,7 @@ def maaritaValitseTehtava(request,kisa_nimi):
                         taulukko.append(formsetti)
         
         if posti :
-                return HttpResponseRedirect("/kipa/"+kisa_nimi+"/maarita/tehtava/")
+                return kipaResponseRedirect("/kipa/"+kisa_nimi+"/maarita/tehtava/")
         else:
                 return render_to_response('tupa/maaritaValitseTehtava.html', 
                                         { 'taulukko' : taulukko,
@@ -182,7 +185,7 @@ def maaritaVartiot(request,kisa_nimi,talletettu=None):
                 vartioFormit.id=s.id
                 taulukko.append( vartioFormit )
         if posti and post_ok:
-                return HttpResponseRedirect("/kipa/"+kisa_nimi+"/maarita/vartiot/talletettu/")
+                return kipaResponseRedirect("/kipa/"+kisa_nimi+"/maarita/vartiot/talletettu/")
         else:
                 tal=""
                 if talletettu=="talletettu" and not posti : tal="Talletettu!"
@@ -239,7 +242,7 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
 	if tehtava and not tehtava.nimi == '' : otsikko = tehtava.nimi
         
         if posti and not 'lisaa_maaritteita' in posti.keys() and daatta['valid'] :
-                return HttpResponseRedirect("/kipa/"+kisa_nimi+"/maarita/tehtava/"+str(tehtava_id)+'/talletettu/' )
+                return kipaResponseRedirect("/kipa/"+kisa_nimi+"/maarita/tehtava/"+str(tehtava_id)+'/talletettu/' )
         else:
                 tal=""
                 if talletettu=="talletettu" and not posti : tal="Talletettu!"
@@ -314,8 +317,8 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                 tehtava.save()
                 if tarkistus : 
                         osoite="/kipa/"+kisa_nimi+"/syota/tarkistus/tehtava/"+str(tehtava.id)+'/talletettu/'
-                        return HttpResponseRedirect( osoite )
-                else : return HttpResponseRedirect("/kipa/"+kisa_nimi+"/syota/tehtava/"+str(tehtava.id)+'/talletettu/' )
+                        return kipaResponseRedirect( osoite )
+                else : return kipaResponseRedirect("/kipa/"+kisa_nimi+"/syota/tehtava/"+str(tehtava.id)+'/talletettu/' )
         else:
                 tal=""
                 if talletettu=="talletettu" and not posti : tal="Talletettu!"
@@ -369,7 +372,7 @@ def testiTulos(request, kisa_nimi,talletettu=None):
                 taulut.id=s.id
                 taulukko.append(taulut)
         if posti and validi:
-                return HttpResponseRedirect("/kipa/"+kisa_nimi+"/maarita/testitulos/talletettu/")
+                return kipaResponseRedirect("/kipa/"+kisa_nimi+"/maarita/testitulos/talletettu/")
         tal=""
         if talletettu=="talletettu" and not posti : tal="Talletettu!"
 
@@ -415,7 +418,7 @@ def tuomarineuvos(request, kisa_nimi,talletettu=None):
                 taulut.id=s.id
                 taulukko.append(taulut)
         if posti and validi:
-                return HttpResponseRedirect("/kipa/"+kisa_nimi+"/maarita/tuomarineuvos/talletettu/")
+                return kipaResponseRedirect("/kipa/"+kisa_nimi+"/maarita/tuomarineuvos/talletettu/")
         tal=""
         if talletettu=="talletettu" and not posti : tal="Talletettu!"
 
@@ -492,7 +495,7 @@ def kopioiTehtavia(request,kisa_nimi,sarja_id ):
                 else:
                         redirect=False
         if redirect:
-                return HttpResponseRedirect("/kipa/"+kisa.nimi+"/maarita/tehtava/")
+                return kipaResponseRedirect("/kipa/"+kisa.nimi+"/maarita/tehtava/")
         else:
                 return render_to_response('tupa/valitse_form.html',
                                       { 'heading' : u"Kopioi Tehtavia sarjaan: "+sarjaan.nimi ,
@@ -518,7 +521,7 @@ def poistaKisa(request, kisa_nimi) :
         if request.method=='POST' :
                 posti=request.POST
                 kisa.delete()
-                return HttpResponseRedirect("/kipa/")
+                return kipaResponseRedirect("/kipa/")
         otsikko = 'Poista kisa' 
         return render_to_response('tupa/poista_kisa.html', { 'heading' : otsikko , 
                                                         'kisa_nimi' : kisa_nimi})
@@ -591,7 +594,7 @@ def korvaaKisa(request,kisa_nimi=None):
                                         'syotteet': {},
                                         'parametrit' : {} }
                         
-                        if not len(kisat)==1 : return HttpResponseRedirect('/kipa/'+kisa_nimi+'/korvaa/')
+                        if not len(kisat)==1 : return kipaResponseRedirect('/kipa/'+kisa_nimi+'/korvaa/')
                         elif kisa : kisa.delete()
                         kisat[0].nimi=kisa_nimi
                         saveNewId(kisat[0],translations,"kisat")
@@ -626,7 +629,7 @@ def korvaaKisa(request,kisa_nimi=None):
                                 p.osa_tehtava_id = translations["osatehtavat"][p.osa_tehtava_id]
                                 saveNewId(p,translations,"parametrit")
 
-                        return HttpResponseRedirect('/kipa/'+kisa_nimi+'/')
+                        return kipaResponseRedirect('/kipa/'+kisa_nimi+'/')
         else:
                 if not kisa_nimi : 
                         form = UploadFileNameForm()
@@ -717,7 +720,7 @@ def luoTestiTulokset(request,kisa_nimi,sarja_id):
                         tt , p = TestausTulos.objects.get_or_create(vartio=v,tehtava=t )
                         tt.pisteet=str(tulos)
                         tt.save()
-        return HttpResponseRedirect("/kipa/"+kisa_nimi+"/maarita/testitulos/" )
+        return kipaResponseRedirect("/kipa/"+kisa_nimi+"/maarita/testitulos/" )
 
 def laskennanTilanne(request,kisa_nimi) :
         kisa= get_object_or_404(Kisa , nimi=kisa_nimi )
@@ -768,6 +771,6 @@ def apua(request) :
         """
         Apua onnettomalle ja surulliselle käyttäjälle
         """
-        return HttpResponseRedirect('/kipamedia/manual_v02.pdf')
+        return kipaResponseRedirect('/kipamedia/manual_v02.pdf')
 
 
