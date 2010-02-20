@@ -535,11 +535,21 @@ def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehta
         formidata=[]
         # luodaan uusi tehtava jos vanhaa ei loydy
         if len(data.items() ) == 0 : 
-                data['#1']={'sarja' : sarja_id,
+                """
+                if not posti:
+                        data['#1']={'sarja' : sarja_id,
                                                 'kaava': 'ss' ,
                                                 'nimi': '' ,
                                                 'jarjestysnro':suurin_jarjestysnro+1, 
                                                 'osa_tehtavat' : { '#1': { "nimi": "a","tyyppi": "" }  } }
+                else :
+                """
+                data['#1']={'sarja' : sarja_id,
+                                                'kaava': 'ss' ,
+                                                'nimi': '' ,
+                                                'jarjestysnro':suurin_jarjestysnro+1, 
+                                                'osa_tehtavat' : {  } }
+
         data['valid']=True
         if not posti: data['valid']=False
 
@@ -556,21 +566,28 @@ def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehta
                         if not is_number( posti[prefix+str(k)+'_osatehtavia']):
                                 errors="Anna numero! "
                                 data['valid']=False
+                        elif int(posti[prefix+str(k)+'_osatehtavia']) < 1 : 
+                                errors="Tehtävässä täytyy olla vähintään 1 osatehtävä!"
+                                data['valid']=False
+
                         else : osatehtavia = int(posti[prefix+str(k)+'_osatehtavia'])
+                elif osatehtavia == 0 : osatehtavia =1
                 
+
                 formidata.append( ('osatehtavia' , {'id' : prefix+str(k)+'_osatehtavia',
                                                         'name' : prefix+str(k)+'_osatehtavia',
                                                         'value' : osatehtavia,
                                                         'errors' : errors })) 
-                # Osatehtavien formien lisays, vanhojen poisto:
                 
+                # Osatehtavien formien lisays, vanhojen poisto:
                 osatehtava_id=0
                 osatehtavat=[]
                 for tk,tv in v['osa_tehtavat'].items() : osatehtavat.append( (tv['nimi'],tk ) )
+                
                 for ot in sorted(osatehtavat, key=operator.itemgetter(0)) :
                         tk=ot[1]
                         tv=v['osa_tehtavat'][tk]
-                        if osatehtava_id < osatehtavia and tk>0  :
+                        if osatehtava_id < osatehtavia   :
                                 ot_formit.append( osaTehtavaForm(posti,tv,prefix+str(k)+"_"+str(tk)) )
                                 if 'valid' in tv.keys() and tv['valid']==False: 
                                         del tv['valid']
