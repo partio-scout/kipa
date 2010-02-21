@@ -143,7 +143,7 @@ def initPisteSyote(self,fieldName):
 def savePisteSyote(self,syote,field,fieldName,alternateName):
         syote.maarite=self.maarite
         syote.vartio=self.vartio
-        if not self.cleaned_data[fieldName]== None or not self.cleaned_data[alternateName]== None:
+        if self.cleaned_data[fieldName] or self.cleaned_data[alternateName] :
                 field = self.cleaned_data[fieldName]
                 syote.save()
         elif syote.id :
