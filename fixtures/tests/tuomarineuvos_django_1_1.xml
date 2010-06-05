@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?><django-objects version="1.0">
+    <object model="tupa.kisa" pk="2">
+        <field name="nimi" type="CharField">tuomari_kaatuu</field>
+        <field name="aika" type="CharField"/>
+        <field name="paikka" type="CharField"/>
+    </object>
+    <object model="tupa.sarja" pk="2">
+        <field name="nimi" type="CharField">punainen</field>
+        <field name="vartion_maksimikoko" type="IntegerField"><None/></field>
+        <field name="vartion_minimikoko" type="IntegerField"><None/></field>
+        <field name="kisa" rel="ManyToOneRel" to="tupa.kisa">2</field>
+    </object>
+    <object model="tupa.vartio" pk="13">
+        <field name="nro" type="IntegerField">1</field>
+        <field name="nimi" type="CharField">jes</field>
+        <field name="sarja" rel="ManyToOneRel" to="tupa.sarja">2</field>
+        <field name="piiri" type="CharField"/>
+        <field name="lippukunta" type="CharField"/>
+        <field name="puhelinnro" type="CharField"/>
+        <field name="sahkoposti" type="CharField"/>
+        <field name="osoite" type="CharField"/>
+        <field name="keskeyttanyt" type="IntegerField"><None/></field>
+        <field name="ulkopuolella" type="IntegerField"><None/></field>
+    </object>
+    <object model="tupa.tehtava" pk="18">
+        <field name="nimi" type="CharField">aaaa</field>
+        <field name="tehtavaryhma" type="CharField"/>
+        <field name="tehtavaluokka" type="CharField"/>
+        <field name="rastikasky" type="TextField"/>
+        <field name="jarjestysnro" type="IntegerField">1</field>
+        <field name="kaava" type="CharField">ss</field>
+        <field name="sarja" rel="ManyToOneRel" to="tupa.sarja">2</field>
+        <field name="tarkistettu" type="BooleanField">False</field>
+    </object>
+    <object model="tupa.syotemaarite" pk="26">
+        <field name="nimi" type="CharField">a</field>
+        <field name="tyyppi" type="CharField">piste</field>
+        <field name="kali_vihje" type="CharField">aaa</field>
+        <field name="osa_tehtava" rel="ManyToOneRel" to="tupa.osatehtava">26</field>
+    </object>
+    <object model="tupa.osatehtava" pk="26">
+        <field name="nimi" type="CharField">a</field>
+        <field name="tyyppi" type="CharField">kp</field>
+        <field name="kaava" type="CharField">a</field>
+        <field name="tehtava" rel="ManyToOneRel" to="tupa.tehtava">18</field>
+    </object>
+<post_request address="/kipa/tuomari_kaatuu/maarita/testitulos/"><input name="tuomari_kaatuupunainenaaaajes-pisteet" value="4"/></post_request></django-objects>
