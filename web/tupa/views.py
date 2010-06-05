@@ -677,9 +677,7 @@ def raportti_500(request) :
         -Sisältää linkin joka palauttaa tietokannan,
         sekä viimeisimmän post datan xml formaatissa testausta varten.
         """
-        linkki=SafeUnicode('<a href=/kipa/post_txt/'+'osoite='+request.path )
-        if len(request.raw_post_data):
-                linkki+='&'+request.raw_post_data
+        linkki=SafeUnicode('<a href=/kipa' )
         linkki+='/> #00000000'+ str(random.uniform(1, 10)) +'</a>'      
         return render_to_response('500.html', {'error': SafeUnicode(linkki) })
 
