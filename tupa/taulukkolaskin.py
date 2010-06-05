@@ -86,6 +86,7 @@ def laske(lauseke,m={'num':Decimal}):
         except TypeError :  return None 
         except SyntaxError: return None
         except NameError : return None
+        except : return None
         return tulos
 
 def laskeTaulukko(taulukko,muuttujat) :
