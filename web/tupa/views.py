@@ -335,7 +335,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
 			            'kisa_nimi': kisa_nimi,
                         'tarkistus' : tarkistus,
 			            'heading' : tehtava.nimi,
-                        'maaritys_url' : "/kipa/"+kisa_nimi+"/maarita/tehtava/"+tehtava_id+"/",
+                        'maaritys_url' : "/kipa/"+kisa_nimi+"/maarita/tehtava/"+str(tehtava_id)+"/",
                         'tulokset_url' : "/kipa/"+kisa_nimi+"/tulosta/sarja/"+str(tehtava.sarja.id)+"/",
 			            'taakse' : {'url' : '/kipa/' + kisa_nimi + '/syota/', 'title' : u'Syötä tuloksia' } } )
 
@@ -387,8 +387,7 @@ def testiTulos(request, kisa_nimi,talletettu=None):
 
 def tuomarineuvos(request, kisa_nimi,talletettu=None):
         """
-        Määrittää kisalle testitulokset. Eli ns "oikeat" tulokset, 
-        joita voidaan testeissä verrata laskennan tuottamiin tuloksiin.
+        Määrittää kisalle tuomarineuvoston tulokset. Eli tulokset joilla voidaan ylimäärittää laskimen laskemat tulokset.
         """
         taulukko=[]
         sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)

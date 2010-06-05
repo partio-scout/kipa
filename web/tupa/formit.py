@@ -14,6 +14,7 @@ from django.forms.models import inlineformset_factory
 from decimal import *
 import re
 from django.utils.safestring import SafeUnicode
+from django.template.loader import render_to_string
 
 class VartioForm(ModelForm):
         ulkopuolella = forms.IntegerField(
@@ -197,70 +198,55 @@ def TarkistusSyoteForm(*argv,**argkw) :
         else :
                 return PisteTarkistusForm(*argv,**argkw)
 
-class TestiTulosForm(ModelForm):
-        pisteet = forms.CharField(required=False,widget=forms.TextInput(attrs={'size':'4'} ))
+###############################################################
+############## Tuomarineuvos ja TestiTulos ####################
+###############################################################
 
-        def __init__(self,posti,vartio,tehtava,*argv,**argkw) :
-                objekti=None
-                try : objekti=TestausTulos.objects.get(vartio=vartio,tehtava=tehtava)
-                except TestausTulos.DoesNotExist : pass
-                self.vartio=vartio
-                self.tehtava=tehtava
-                if objekti:
-                        super(ModelForm,self).__init__(posti,instance=objekti,*argv,**argkw)
-                else :
-                        super(ModelForm,self).__init__(posti,*argv,**argkw)
-        def save(self):
-                tulos = super(ModelForm,self).save(commit=False)
-                tulos.vartio=self.vartio
-                tulos.tehtava=self.tehtava
-                if tulos.pisteet == None or len(tulos.pisteet)==0  and tulos.id  : 
-                        tulos.delete()
-                else : tulos.save()
-                return tulos
-        class Meta:
-                fields=("pisteet")
-                model = TestausTulos
+def tulostauluFormFactory( tauluTyyppi ) :
+        class tulostauluForm :
+                def __init__(self,posti,vartio,tehtava,*argv,**argkw) :
+                        self.taulu=None
+                        self.posti=posti
+                        self.errors=""
+                        self.id = "tuomarineuvos_"+str(vartio.id)+"_"+str(tehtava.id) 
+                        try : 
+                                self.taulu=tauluTyyppi.objects.get(vartio=vartio,tehtava=tehtava)
+                        except tauluTyyppi.DoesNotExist : pass
+                        self.vartio=vartio
+                        self.tehtava=tehtava
+                def is_valid(self) :
+                        if self.posti and self.id in self.posti.keys():
+                                self.pisteet=self.posti[self.id]
+                                return 1
+                        else: 
+                                return None
+                def save(self): 
+                        tulos=None
+                        if self.pisteet == None or len(self.pisteet)==0  and self.taulu : 
+                                self.taulu.delete()
+                        if self.pisteet and len(self.pisteet)  : 
+                                tulos, created = tauluTyyppi.objects.get_or_create(vartio=self.vartio,
+                                                                              tehtava=self.tehtava)
+                                tulos.pisteet=self.pisteet
+                                tulos.save()
+                                self.taulu=tulos
+                        return tulos
+                def __unicode__(self) :
+                        formidata = { "name" : self.id  , "id" : self.id ,"value": "","errors" : self.errors } 
+                        if self.taulu: 
+                                formidata["value"]=self.taulu.pisteet
+                        return render_to_string("tupa/forms/tulostaulu.html",  dict(formidata) )
+        return tulostauluForm
 
-class TuomarineuvosForm(ModelForm):
-        pisteet = forms.CharField(required=False,widget=forms.TextInput(attrs={'size':'4'} ))
+TuomarineuvosForm = tulostauluFormFactory( TuomarineuvosTulos ) 
+TestiTulosForm = tulostauluFormFactory( TestausTulos )
 
-        def __init__(self,posti,vartio,tehtava,*argv,**argkw) :
-                objekti=None
-                try : objekti=TuomarineuvosTulos.objects.get(vartio=vartio,tehtava=tehtava)
-                except TuomarineuvosTulos.DoesNotExist : pass
-                self.vartio=vartio
-                self.tehtava=tehtava
-                if objekti:
-                        super(ModelForm,self).__init__(posti,instance=objekti,*argv,**argkw)
-                else :
-                        super(ModelForm,self).__init__(posti,*argv,**argkw)
-        def save(self):
-                tulos = super(ModelForm,self).save(commit=False)
-                tulos.vartio=self.vartio
-                tulos.tehtava=self.tehtava
-
-                if tulos.pisteet == None or len(tulos.pisteet)==0  and tulos.id   : 
-                        tulos.delete()
-                if tulos.pisteet and len(tulos.pisteet)  : tulos.save()
-                return tulos
-        class Meta:
-                fields=("pisteet")
-                model = TuomarineuvosTulos
+####################################################################
 
 class KisaForm(ModelForm):
         def clean_nimi(self):
                 nimi = self.cleaned_data['nimi']
                 nimi = re.sub(r'\s', '_',nimi)
-                # Workaround for Django bug #11522:
-                # unicode string crashes HttpResponseRedirect
-                nimi = re.sub(r'ä', 'a',nimi)
-                nimi = re.sub(r'Ä', 'A',nimi)
-                nimi = re.sub(r'ö', 'o',nimi)
-                nimi = re.sub(r'Ö', 'O',nimi)
-                nimi = re.sub(r'å', 'a',nimi)
-                nimi = re.sub(r'Å', 'A',nimi)
-                # End workaround
                 kisat = Kisa.objects.all() 
                 for k in kisat :
                         if k.nimi==nimi and self.instance and not self.instance == k :
@@ -282,15 +268,6 @@ class UploadFileNameForm(forms.Form):
         def clean_name(self):
                 nimi = self.cleaned_data['name']
                 nimi = re.sub(r'\s', '_',nimi)
-                # Workaround for Django bug #11522:
-                # unicode string crashes HttpResponseRedirect
-                nimi = re.sub(r'ä', 'a',nimi)
-                nimi = re.sub(r'Ä', 'A',nimi)
-                nimi = re.sub(r'ö', 'o',nimi)
-                nimi = re.sub(r'Ö', 'O',nimi)
-                nimi = re.sub(r'å', 'a',nimi)
-                nimi = re.sub(r'Å', 'A',nimi)
-                # End workaround
                 kisat = Kisa.objects.all() 
                 for k in kisat :
                         if k.nimi==nimi :

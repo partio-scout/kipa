@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object pk="2" model="tupa.kisa">
+        <field type="CharField" name="nimi">hylatty_aikavali</field>
+        <field type="CharField" name="aika"></field>
+        <field type="CharField" name="paikka"></field>
+    </object>
+    <object pk="3" model="tupa.sarja">
+        <field type="CharField" name="nimi">kataa</field>
+        <field type="IntegerField" name="vartion_maksimikoko"><None></None></field>
+        <field type="IntegerField" name="vartion_minimikoko"><None></None></field>
+        <field to="tupa.kisa" name="kisa" rel="ManyToOneRel">2</field>
+    </object>
+    <object pk="38" model="tupa.vartio">
+        <field type="IntegerField" name="nro">1</field>
+        <field type="CharField" name="nimi">hylsy</field>
+        <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">3</field>
+        <field type="CharField" name="piiri"></field>
+        <field type="CharField" name="lippukunta"></field>
+        <field type="CharField" name="puhelinnro"></field>
+        <field type="CharField" name="sahkoposti"></field>
+        <field type="CharField" name="osoite"></field>
+        <field type="IntegerField" name="keskeyttanyt"><None></None></field>
+        <field type="IntegerField" name="ulkopuolella"><None></None></field>
+    </object>
+    <object pk="41" model="tupa.tehtava">
+        <field type="CharField" name="nimi">rikki</field>
+        <field type="CharField" name="tehtavaryhma"></field>
+        <field type="CharField" name="tehtavaluokka"></field>
+        <field type="TextField" name="rastikasky"></field>
+        <field type="IntegerField" name="jarjestysnro">1</field>
+        <field type="CharField" name="kaava">ss</field>
+        <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">3</field>
+        <field type="BooleanField" name="tarkistettu">False</field>
+    </object>
+    <object pk="54" model="tupa.syotemaarite">
+        <field type="CharField" name="nimi">a</field>
+        <field type="CharField" name="tyyppi">aika</field>
+        <field type="CharField" name="kali_vihje">alku</field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">51</field>
+    </object>
+    <object pk="941" model="tupa.syote">
+        <field type="CharField" name="arvo">h</field>
+        <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">38</field>
+        <field to="tupa.syotemaarite" name="maarite" rel="ManyToOneRel">54</field>
+        <field type="CharField" name="tarkistus"></field>
+    </object>
+    <object pk="53" model="tupa.syotemaarite">
+        <field type="CharField" name="nimi">b</field>
+        <field type="CharField" name="tyyppi">aika</field>
+        <field type="CharField" name="kali_vihje">loppu</field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">51</field>
+    </object>
+    <object pk="942" model="tupa.syote">
+        <field type="CharField" name="arvo">3723</field>
+        <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">38</field>
+        <field to="tupa.syotemaarite" name="maarite" rel="ManyToOneRel">53</field>
+        <field type="CharField" name="tarkistus"></field>
+    </object>
+    <object pk="422" model="tupa.parametri">
+        <field type="CharField" name="nimi">parhaan_kaava</field>
+        <field type="CharField" name="arvo">suor*muk</field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">51</field>
+    </object>
+    <object pk="423" model="tupa.parametri">
+        <field type="CharField" name="nimi">oikea</field>
+        <field type="CharField" name="arvo">0</field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">51</field>
+    </object>
+    <object pk="424" model="tupa.parametri">
+        <field type="CharField" name="nimi">jaettavat</field>
+        <field type="CharField" name="arvo">4</field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">51</field>
+    </object>
+    <object pk="425" model="tupa.parametri">
+        <field type="CharField" name="nimi">nollan_kaava</field>
+        <field type="CharField" name="arvo">suor*muk</field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">51</field>
+    </object>
+    <object pk="426" model="tupa.parametri">
+        <field type="CharField" name="nimi">parhaan_haku</field>
+        <field type="CharField" name="arvo">min</field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">51</field>
+    </object>
+    <object pk="427" model="tupa.parametri">
+        <field type="CharField" name="nimi">vartion_kaava</field>
+        <field type="CharField" name="arvo">aikavali(a,b)</field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">51</field>
+    </object>
+    <object pk="428" model="tupa.parametri">
+        <field type="CharField" name="nimi">tapa</field>
+        <field type="CharField" name="arvo">med</field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">51</field>
+    </object>
+    <object pk="429" model="tupa.parametri">
+        <field type="CharField" name="nimi">arvio</field>
+        <field type="CharField" name="arvo"></field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">51</field>
+    </object>
+    <object pk="430" model="tupa.parametri">
+        <field type="CharField" name="nimi">nollan_kerroin</field>
+        <field type="CharField" name="arvo">1.5</field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">51</field>
+    </object>
+    <object pk="51" model="tupa.osatehtava">
+        <field type="CharField" name="nimi">a</field>
+        <field type="CharField" name="tyyppi">ala</field>
+        <field type="CharField" name="kaava">interpoloi(arvio(vartion_kaava-oikea),parhaan_haku(arvio(parhaan_kaava-oikea)),jaettavat,nollan_kerroin*tapa(arvio(nollan_kaava-oikea)))</field>
+        <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">41</field>
+    </object>
+</django-objects>
