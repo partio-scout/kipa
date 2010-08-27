@@ -43,7 +43,8 @@ class MathDict(dict):
                 div = MathDict({})
                 for k in self.keys() : 
                         try:
-                                div[k]=self[k]/other[k]
+                                if type(other) == Decimal : div[k]=self[k]/other
+                                else: div[k]=self[k]/other[k]
                         except KeyError: pass
                         except TypeError : pass
                 return div
