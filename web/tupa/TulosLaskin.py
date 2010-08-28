@@ -119,7 +119,7 @@ def luoMuuttujat(sarja) :
                                         s=syotteet.filter(vartio=v)
                                         if len(s)==1 : 
                                                 try :
-                                                        dict_syotteet.append((str(v.nro),Decimal(s[0].arvo)))
+                                                        dict_syotteet.append((str(v.nro),DictDecimal(s[0].arvo)))
                                                 except InvalidOperation: 
                                                         if not s[0].arvo=="kesk":
                                                                 dict_syotteet.append((str(v.nro),s[0].arvo))

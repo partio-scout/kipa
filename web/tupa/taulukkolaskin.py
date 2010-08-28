@@ -1,57 +1,17 @@
 # encoding: utf-8
 # KiPa(KisaPalvelu), tuloslaskentajärjestelmä partiotaitokilpailuihin
 #    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
-
-
 import re
 from decimal import *
 from funktiot import funktiot
+from funktiot import MathDict
+from funktiot import DictDecimal
 
-class MathDict(dict):
-        """
-        Sanakirja jonka alkioille voi tehda massoittain 
-        laskutoimituksia toisten sanakirjan vastaavien alkioiden kesken.
-        """
-        def __add__(self,other): 
-                sum = MathDict({})
-                for k in self.keys() : 
-                        try:
-                                if type(other) == Decimal : sum[k]=self[k]+other
-                                else: sum[k]=self[k]+other[k]
-                        except TypeError : pass
-                        except KeyError: pass
-                return sum
-        def __sub__(self,other):
-                sub = MathDict({})
-                for k in self.keys() : 
-                        try:
-                                if type(other) == Decimal : sub[k]=self[k]-other
-                                else: sub[k]=self[k]-other[k]
-                        except TypeError : pass
-                        except KeyError: pass
-                return sub
-        def __mul__(self,other):
-                mult = MathDict({})
-                for k in self.keys() : 
-                        try:
-                                if type(other) == Decimal : mult[k]=self[k]*other
-                                else: mult[k]=self[k]*other[k]
-                        except KeyError: pass
-                        except TypeError : pass
-                return mult
-        def __div__(self,other):
-                div = MathDict({})
-                for k in self.keys() : 
-                        try:
-                                if type(other) == Decimal : div[k]=self[k]/other
-                                else: div[k]=self[k]/other[k]
-                        except KeyError: pass
-                        except TypeError : pass
-                return div
+
 
 def dictToMathDict(dictionary) :
         """
-        Muuttaa taballisen sanakirjan rekursiivisesti laskennalliseksi sanakirjaksi.
+        Muuttaa tavallisen sanakirjan rekursiivisesti laskennalliseksi sanakirjaksi.
         """
         new=MathDict({})
         for k in dictionary.keys():
@@ -59,7 +19,7 @@ def dictToMathDict(dictionary) :
                 else : new[k]=dictionary[k]
         return new
 
-def laske(lauseke,m={'num':Decimal}):
+def laske(lauseke,m={'num':DictDecimal}):
         """
         Laskee lauseen mikali se on laskettavissa. Kayttaa muuttujista loytyvia arvoja, seka funktioita.
         """
@@ -88,6 +48,7 @@ def laske(lauseke,m={'num':Decimal}):
         except SyntaxError: return None
         except NameError : return None
         except : return None
+        if type(tulos)== DictDecimal : return Decimal(tulos)
         return tulos
 
 def laskeTaulukko(taulukko,muuttujat) :
@@ -95,7 +56,7 @@ def laskeTaulukko(taulukko,muuttujat) :
         Laskee taulukon alkiot jotka ovat laskettavissa, muuttujista loytyvilla muuttujilla seka funktioilla.
         """
         # Maaritetaan numeroluokka eli vakiona lasketaan desimaaliluvuilla:
-        m = { "num" : Decimal }
+        m = { "num" : DictDecimal }
         m.update(funktiot)
         # Paivitetaan kayttajan muuttujilla:
         m.update(muuttujat)
@@ -110,6 +71,4 @@ def laskeTaulukko(taulukko,muuttujat) :
                         else: rivi.append(tulos)
                 tulokset.append(rivi)
         return tulokset
-
-
 

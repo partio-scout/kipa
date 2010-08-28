@@ -5,6 +5,100 @@
 
 from decimal import *
 
+class MathDict(dict):
+        """
+        Sanakirja jonka alkioille voi tehda massoittain 
+        laskutoimituksia toisten sanakirjan vastaavien alkioiden kesken.
+        """
+        def __add__(self,other): 
+                sum = MathDict({})
+                for k in self.keys() : 
+                        try:
+                                if type(other) != MathDict : sum[k]=self[k]+other
+                                else: sum[k]=self[k]+other[k]
+                        except TypeError : pass
+                        except KeyError: pass
+                return sum
+        def __sub__(self,other):
+                sub = MathDict({})
+                for k in self.keys() : 
+                        try:
+                                if type(other) != MathDict : sub[k]=self[k]-other
+                                else: sub[k]=self[k]-other[k]
+                        except TypeError : pass
+                        except KeyError: pass
+                return sub
+        def __mul__(self,other):
+                mult = MathDict({})
+                for k in self.keys() : 
+                        try:
+                                if type(other) != MathDict : mult[k]=self[k]*other
+                                else: mult[k]=self[k]*other[k]
+                        except KeyError: pass
+                        except TypeError : pass
+                return mult
+        def __div__(self,other):
+                div = MathDict({})
+                for k in self.keys() : 
+                        try:
+                                if type(other) != MathDict : div[k]=self[k]/other
+                                else: div[k]=self[k]/other[k]
+                        except KeyError: pass
+                        except TypeError : pass
+                return div
+
+class DictDecimal(Decimal) :
+        """
+        Desimaali luokan , johon on toteutettu operoiminen MathDict instansseilla.
+        """
+        def __add__(self,other):
+                add=DictDecimal()
+                if type(other) == MathDict :
+                        add = MathDict(other)
+                        for k in other.keys() : 
+                                try:
+                                        add[k]=self+other[k]
+                                except KeyError: pass
+                                except TypeError : pass
+                else:  add = DictDecimal(Decimal(self) + other)
+                return add
+
+        def __sub__(self,other):
+                sub = Decimal()
+                if type(other) == MathDict :
+                        sub = MathDict(other)
+                        for k in other.keys() : 
+                                try:
+                                        sub[k]=self-other[k]
+                                except KeyError: pass
+                                except TypeError : pass
+                else: sub = DictDecimal(Decimal(self) - other)
+                return sub
+
+        def __mul__(self,other):
+                mul = DictDecimal()
+                if type(other) == MathDict :
+                        mul = MathDict(other)
+                        for k in other.keys() : 
+                                try:
+                                        mul[k]=self*other[k]
+                                except KeyError: pass
+                                except TypeError : pass
+                else: mul= DictDecimal(Decimal(self) * other )
+                return mul
+
+        def __div__(self,other):
+                div = DictDecimal()
+                if type(other) == MathDict :
+                        div = MathDict(other)
+                        for k in other.keys() : 
+                                try:
+                                        div[k]=self/other[k]
+                                except KeyError: pass
+                                except TypeError : pass
+                else: div= DictDecimal(Decimal(self) / other)
+                return div
+
 def listaksi(joukkio):
         """
         Muuttaa sanakirjan tai desimaalin listaksi jos syote on joukkio, muuten palauttaa muuttujan itsessaan.
@@ -12,9 +106,9 @@ def listaksi(joukkio):
         if type(joukkio)==list:
                 lista=[]
                 for i in joukkio :
-                        if type(i)==Decimal : lista.append(i)
+                        if type(i)==DictDecimal : lista.append(i)
                 return lista
-        elif type( joukkio )==Decimal:
+        elif type( joukkio )==DictDecimal:
                 return [joukkio]
         elif type( joukkio )==unicode or type( joukkio )==str:
                 return joukkio
@@ -22,10 +116,41 @@ def listaksi(joukkio):
                 try:
                         lista=[]
                         for k in joukkio.keys() :
-                                if type(joukkio[k])==Decimal :
-                                        lista.append(joukkio[k])
+                                if type(joukkio[k])==DictDecimal or type(joukkio[k])==Decimal :
+                                        lista.append(DictDecimal(joukkio[k]))
                         return lista
                 except : return None 
+
+def suorita(funktio,a,b) :
+        """
+        Suorittaa valittua funktiota tarpeen mukaan a&b tyypistä riippuen.
+        Muodostaa suoritteista laskukirjan tai yksittäisen desimaaliluvun.
+        """
+
+        if not type(a)==MathDict or not type(b)==MathDict: return funktio(a,b)
+        else :
+                rValue=MathDict({})        
+                if type(a)==MathDict :
+                        for ak in a.keys():
+                                if type(b)==MathDict:
+                                        for bk in b.keys() :
+                                                try:
+                                                        rValue[ak]= funktio(a[ak],b[bk])
+                                                except KeyError: pass
+                                                except TypeError : pass
+                                else :
+                                        try:
+                                                rValue[ak]= funktio(a[ak],b)
+                                        except KeyError: pass
+                                        except TypeError : pass
+                else :
+                        for bk in b.keys() :
+                                try:
+                                        rValue[bk]= funktio(a,b[bk])
+                                except KeyError: pass
+                                except TypeError : pass
+                return rValue
+
 
 def mediaani(joukko):
         """
@@ -36,15 +161,15 @@ def mediaani(joukko):
         lista = listaksi(joukko)
         values = sorted(lista)
         if len(values) % 2 == 1:
-                return Decimal(values[(len(values)+1)/2-1])
+                return DictDecimal(values[(len(values)+1)/2-1])
         else:
                 lower = values[len(values)/2-1]
                 upper = values[len(values)/2]
                 if type(upper)==str or type(lower)==str: 
-                        upper=Decimal(upper)
-                        lower=Decimal(lower)
+                        upper=DictDecimal(upper)
+                        lower=DictDecimal(lower)
                         
-                return (Decimal(lower + upper)) / 2  
+                return (DictDecimal(lower + upper)) / 2  
 
 def minimi(joukko,b=None):  
         """
@@ -72,7 +197,7 @@ def keskiarvo(joukko) :
         """
         lista = listaksi(joukko)
         if not len(lista): return None
-        total=Decimal(0) 
+        total=DictDecimal(0) 
         for x in lista :
                 total=total+x
         avg = total/len(lista)
@@ -86,7 +211,7 @@ def summa(joukko) :
         lista=None
         if type(joukko)==list : lista = joukko
         else : lista = listaksi(joukko)
-        s=Decimal(0) 
+        s=DictDecimal(0) 
         for v in lista : 
                 if v and not type(v)==unicode and not type(v)==str: s=s+v
         return s
@@ -97,13 +222,13 @@ def interpoloi(x,x1,y1,x2,y2=0):
         """
         # y = (y1-y2)/(x1-x2)*(x-x2)
         try :
-                X=Decimal(x)
-                X1=Decimal(x1)
-                Y1=Decimal(y1)
-                X2=Decimal(x2)
-                Y2=Decimal(y2)
+                X=DictDecimal(x)
+                X1=DictDecimal(x1)
+                Y1=DictDecimal(y1)
+                X2=DictDecimal(x2)
+                Y2=DictDecimal(y2)
                 tulos=(Y1-Y2) / (X1-X2) * (X-X2)
-                tulos=mediaani([Decimal(0),Decimal(y1),tulos])
+                tulos=mediaani([DictDecimal(0),DictDecimal(y1),tulos])
         except InvalidOperation : return None
         return tulos
 
@@ -113,8 +238,8 @@ def itseisarvo(a) :
         Palauttaa a:n lukujen itseisarvot kun a on sanakirja.
         """
         tulos=None
-        if type(a)==Decimal : tulos= abs(a)
-        elif type(a)==str or type(a)==unicode :  tulos= abs(Decimal(a))
+        if type(a)==DictDecimal : tulos= abs(a)
+        elif type(a)==str or type(a)==unicode :  tulos= abs(DictDecimal(a))
         else: 
                 tulos={}
                 for k in a.keys() : tulos[k] = abs(a[k])
@@ -129,18 +254,18 @@ def aikavali(a,b):
         """
         tulos=None
         # kaksi desimalilukua:
-        if type(a)==Decimal and type(b)==Decimal :
+        if type(a)==DictDecimal and type(b)==DictDecimal :
                 tulos= b-a
-                if tulos < Decimal("0"): tulos=tulos+Decimal("86400") # lisataan 24h sekuntteina
+                if tulos < DictDecimal("0"): tulos=tulos+DictDecimal("86400") # lisataan 24h sekuntteina
         # kaksi merkkijonoa:
         elif type(a)==str or type(b)==str or type(a)==unicode or type(b)==unicode:
-                tulos= Decimal(b)-Decimal(a)
-                if tulos < Decimal("0"): tulos=tulos+Decimal("86400") # lisataan 24h sekuntteina
+                tulos= DictDecimal(b)-DictDecimal(a)
+                if tulos < DictDecimal("0"): tulos=tulos+DictDecimal("86400") # lisataan 24h sekuntteina
         # kaksi sanakirjaa:
         else: 
                 tulos=b-a
                 for i in tulos.keys() :
-                        if tulos[i]<Decimal("0"): tulos[i]=tulos[i]+Decimal("86400")
+                        if tulos[i]<DictDecimal("0"): tulos[i]=tulos[i]+DictDecimal("86400")
         return tulos
 
 funktiot= { "interpoloi" : interpoloi ,
