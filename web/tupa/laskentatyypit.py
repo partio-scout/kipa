@@ -103,12 +103,15 @@ def listaksi(joukkio):
         Muuttaa sanakirjan tai desimaalin listaksi jos syote on joukkio, muuten palauttaa muuttujan itsessaan.
         """
         if type(joukkio)==list:
+
                 lista=[]
                 for i in joukkio :
                         if type(i)==DictDecimal : lista.append(i)
                 return lista
         elif type( joukkio )==DictDecimal:
                 return [joukkio]
+        elif type( joukkio )==Decimal:
+                return [DictDecimal(joukkio)]
         elif type( joukkio )==unicode or type( joukkio )==str:
                 return joukkio
         else:
@@ -120,23 +123,34 @@ def listaksi(joukkio):
                         return lista
                 except : return None 
 
-def suorita(funktio,a,b) :
+
+def suorita1(funktio,a) :
+        if not type(a)==MathDict : return funktio(a)
+        else : 
+                rValue=MathDict({})
+                for k in a.keys() :
+                        try: rValue[k]= funktio(a[k])
+                        except KeyError: pass
+                        except TypeError : pass
+                return rValue
+
+
+def suorita2(funktio,a,b) :
         """
         Suorittaa valittua funktiota tarpeen mukaan a&b tyypistä riippuen.
         Muodostaa suoritteista laskukirjan tai yksittäisen desimaaliluvun.
         """
-
-        if not type(a)==MathDict or not type(b)==MathDict: return funktio(a,b)
+        if not type(a)==MathDict and not type(b)==MathDict: 
+                return funktio(a,b)
         else :
                 rValue=MathDict({})        
                 if type(a)==MathDict :
                         for ak in a.keys():
                                 if type(b)==MathDict:
-                                        for bk in b.keys() :
-                                                try:
-                                                        rValue[ak]= funktio(a[ak],b[bk])
-                                                except KeyError: pass
-                                                except TypeError : pass
+                                        try:
+                                                rValue[ak]= funktio(a[ak],b[ak])
+                                        except KeyError: pass
+                                        except TypeError : pass
                                 else :
                                         try:
                                                 rValue[ak]= funktio(a[ak],b)

@@ -2,30 +2,8 @@
 # KiPa(KisaPalvelu), tuloslaskentajärjestelmä partiotaitokilpailuihin
 #    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
 
-
 from laskentatyypit import *
-
-def listaksi(joukkio):
-        """
-        Muuttaa sanakirjan tai desimaalin listaksi jos syote on joukkio, muuten palauttaa muuttujan itsessaan.
-        """
-        if type(joukkio)==list:
-                lista=[]
-                for i in joukkio :
-                        if type(i)==DictDecimal : lista.append(i)
-                return lista
-        elif type( joukkio )==DictDecimal:
-                return [joukkio]
-        elif type( joukkio )==unicode or type( joukkio )==str:
-                return joukkio
-        else:
-                try:
-                        lista=[]
-                        for k in joukkio.keys() :
-                                if type(joukkio[k])==DictDecimal :
-                                        lista.append(joukkio[k])
-                        return lista
-                except : return None 
+from math import *
 
 def mediaani(joukko):
         """
@@ -54,8 +32,9 @@ def minimi(joukko,b=None):
         tulos=None
         if b and not type(joukko)==list and not type(b)==unicode: 
                 tulos=min([joukko,b])
-        else :tulos= min(listaksi(joukko))
+        else : tulos= min(listaksi(joukko))
         return tulos
+
 def maksimi(joukko,b=None) :
         """
         Palauttaa joukon suurimman lukuarvon.
@@ -107,20 +86,10 @@ def interpoloi(x,x1,y1,x2,y2=0):
         except InvalidOperation : return None
         return tulos
 
-def itseisarvo(a) :
-        """
-        Palauttaa a itseisarvon kun a on luku.
-        Palauttaa a:n lukujen itseisarvot kun a on sanakirja.
-        """
-        tulos=None
-        if type(a)==DictDecimal : tulos= abs(a)
-        elif type(a)==str or type(a)==unicode :  tulos= abs(DictDecimal(a))
-        else: 
-                tulos={}
-                for k in a.keys() : tulos[k] = abs(a[k])
-        return tulos
+def itseisarvo(a) : 
+        return suorita1(abs,a) 
 
-def aikavali(a,b):
+def __aikavali(a,b):
         """
         Palauttaa b-a kun a<b
         Palauttaa b-a+vrk mikali a>b
@@ -129,19 +98,34 @@ def aikavali(a,b):
         """
         tulos=None
         # kaksi desimalilukua:
-        if type(a)==DictDecimal and type(b)==DictDecimal :
-                tulos= b-a
-                if tulos < DictDecimal("0"): tulos=tulos+DictDecimal("86400") # lisataan 24h sekuntteina
-        # kaksi merkkijonoa:
-        elif type(a)==str or type(b)==str or type(a)==unicode or type(b)==unicode:
-                tulos= DictDecimal(b)-DictDecimal(a)
-                if tulos < DictDecimal("0"): tulos=tulos+DictDecimal("86400") # lisataan 24h sekuntteina
-        # kaksi sanakirjaa:
-        else: 
-                tulos=b-a
-                for i in tulos.keys() :
-                        if tulos[i]<DictDecimal("0"): tulos[i]=tulos[i]+DictDecimal("86400")
+        tulos= b-a
+        if tulos < DictDecimal("0"): tulos=tulos+DictDecimal("86400") # lisataan 24h sekuntteina
         return tulos
+def aikavali(a,b) : return suorita2(__aikavali,a,b)
+
+def __logaritmi10(x) : return x.log10()
+def logaritmi10(a) : return suorita1(__logaritmi10,a)
+
+def __luonnollinen_logaritmi(x) : return x.ln()
+def luonnollinen_logaritmi(a) : return suorita1(__luonnollinen_logaritmi,a)
+
+def __lattia(a) : return a.quantize(Decimal('1.'), rounding=ROUND_FLOOR) 
+def lattia(a) : return suorita1(__pohja,a)
+
+def __katto(a) : return a.quantize(Decimal('1.'), rounding=ROUND_CEILING) 
+def katto(a) : return suorita1(__katto,a)
+
+def __neliojuuri(a) : return a.sqrt()
+def nelijojuuri(a) : return suorita1(__neliojuuri,a)
+
+def __exponentti(a) : return a.exp()
+def exponentti(a) : return suorita1(__exponentti,a)
+
+def __modulus(a,b) : return getcontext().remainder(a,b)
+def modulus(a,b) : return suorita2(__modulus,a,b)
+
+def __kokonaisosa(a,b) : return getcontext().divmod(a,b)[0]
+def kokonaisosa(a,b) : return suorita2(__kokonaisosa,a,b)
 
 funktiot= { "interpoloi" : interpoloi ,
                 "aikavali" : aikavali ,
@@ -152,6 +136,14 @@ funktiot= { "interpoloi" : interpoloi ,
                 "max" : maksimi , 
                 "sum" : summa , 
                 "med" : mediaani ,
-                "kesk" : keskiarvo }
+                "kesk" : keskiarvo ,
+                "log" : logaritmi10 ,
+                "ln" : luonnollinen_logaritmi ,
+                "floor" : lattia,
+                "ceil" : katto,
+                "sqrt" : nelijojuuri,
+                "exp"  : exponentti,
+                "mod" : modulus,
+                "divmod" : kokonaisosa}
 
 
