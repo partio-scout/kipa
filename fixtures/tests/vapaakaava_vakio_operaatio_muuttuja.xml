@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <django-objects version="1.0">
     <object pk="1" model="tupa.kisa">
-        <field type="CharField" name="nimi">vakio_vapaa</field>
+        <field type="CharField" name="nimi">vakio</field>
         <field type="CharField" name="aika"></field>
         <field type="CharField" name="paikka"></field>
     </object>
@@ -84,27 +84,27 @@
     <object pk="1" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">1</field>
         <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">1</field>
-        <field type="CharField" name="pisteet">1</field>
+        <field type="CharField" name="pisteet">0.6</field>
     </object>
     <object pk="2" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">2</field>
         <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">1</field>
-        <field type="CharField" name="pisteet">0.5</field>
+        <field type="CharField" name="pisteet">1.3</field>
     </object>
     <object pk="3" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">3</field>
         <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">1</field>
-        <field type="CharField" name="pisteet">0.25</field>
+        <field type="CharField" name="pisteet">2.5</field>
     </object>
     <object pk="4" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">4</field>
         <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">1</field>
-        <field type="CharField" name="pisteet">0.125</field>
+        <field type="CharField" name="pisteet">5</field>
     </object>
     <object pk="5" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">5</field>
         <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">1</field>
-        <field type="CharField" name="pisteet">0.625</field>
+        <field type="CharField" name="pisteet">10</field>
     </object>
     <object pk="1" model="tupa.syotemaarite">
         <field type="CharField" name="nimi">a</field>
@@ -113,13 +113,13 @@
         <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">1</field>
     </object>
     <object pk="1" model="tupa.syote">
-        <field type="CharField" name="arvo">1</field>
+        <field type="CharField" name="arvo">16</field>
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">1</field>
         <field to="tupa.syotemaarite" name="maarite" rel="ManyToOneRel">1</field>
         <field type="CharField" name="tarkistus"></field>
     </object>
     <object pk="2" model="tupa.syote">
-        <field type="CharField" name="arvo">2</field>
+        <field type="CharField" name="arvo">8</field>
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">2</field>
         <field to="tupa.syotemaarite" name="maarite" rel="ManyToOneRel">1</field>
         <field type="CharField" name="tarkistus"></field>
@@ -131,13 +131,13 @@
         <field type="CharField" name="tarkistus"></field>
     </object>
     <object pk="4" model="tupa.syote">
-        <field type="CharField" name="arvo">8</field>
+        <field type="CharField" name="arvo">2</field>
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">4</field>
         <field to="tupa.syotemaarite" name="maarite" rel="ManyToOneRel">1</field>
         <field type="CharField" name="tarkistus"></field>
     </object>
     <object pk="5" model="tupa.syote">
-        <field type="CharField" name="arvo">16</field>
+        <field type="CharField" name="arvo">1</field>
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">5</field>
         <field to="tupa.syotemaarite" name="maarite" rel="ManyToOneRel">1</field>
         <field type="CharField" name="tarkistus"></field>
@@ -206,27 +206,27 @@
     <object pk="6" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">1</field>
         <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">2</field>
-        <field type="CharField" name="pisteet">5</field>
+        <field type="CharField" name="pisteet">2</field>
     </object>
-    <object pk="9" model="tupa.testaustulos">
+    <object pk="7" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">2</field>
         <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">2</field>
-        <field type="CharField" name="pisteet">10</field>
+        <field type="CharField" name="pisteet">4</field>
     </object>
-    <object pk="12" model="tupa.testaustulos">
+    <object pk="8" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">3</field>
         <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">2</field>
-        <field type="CharField" name="pisteet">15</field>
+        <field type="CharField" name="pisteet">6</field>
     </object>
-    <object pk="15" model="tupa.testaustulos">
+    <object pk="9" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">4</field>
         <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">2</field>
-        <field type="CharField" name="pisteet">20</field>
+        <field type="CharField" name="pisteet">8</field>
     </object>
-    <object pk="18" model="tupa.testaustulos">
+    <object pk="10" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">5</field>
         <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">2</field>
-        <field type="CharField" name="pisteet">25</field>
+        <field type="CharField" name="pisteet">10</field>
     </object>
     <object pk="2" model="tupa.syotemaarite">
         <field type="CharField" name="nimi">a</field>
@@ -325,12 +325,12 @@
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">1</field>
         <field type="BooleanField" name="tarkistettu">False</field>
     </object>
-    <object pk="7" model="tupa.testaustulos">
+    <object pk="11" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">1</field>
         <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">3</field>
         <field type="CharField" name="pisteet">6</field>
     </object>
-    <object pk="10" model="tupa.testaustulos">
+    <object pk="12" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">2</field>
         <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">3</field>
         <field type="CharField" name="pisteet">7</field>
@@ -340,12 +340,12 @@
         <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">3</field>
         <field type="CharField" name="pisteet">8</field>
     </object>
-    <object pk="16" model="tupa.testaustulos">
+    <object pk="14" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">4</field>
         <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">3</field>
         <field type="CharField" name="pisteet">9</field>
     </object>
-    <object pk="19" model="tupa.testaustulos">
+    <object pk="15" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">5</field>
         <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">3</field>
         <field type="CharField" name="pisteet">10</field>
@@ -447,30 +447,30 @@
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">1</field>
         <field type="BooleanField" name="tarkistettu">False</field>
     </object>
-    <object pk="8" model="tupa.testaustulos">
+    <object pk="16" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">1</field>
         <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">4</field>
-        <field type="CharField" name="pisteet">9</field>
-    </object>
-    <object pk="11" model="tupa.testaustulos">
-        <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">2</field>
-        <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">4</field>
-        <field type="CharField" name="pisteet">8</field>
-    </object>
-    <object pk="14" model="tupa.testaustulos">
-        <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">3</field>
-        <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">4</field>
-        <field type="CharField" name="pisteet">7</field>
+        <field type="CharField" name="pisteet">2</field>
     </object>
     <object pk="17" model="tupa.testaustulos">
-        <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">4</field>
+        <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">2</field>
+        <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">4</field>
+        <field type="CharField" name="pisteet">4</field>
+    </object>
+    <object pk="18" model="tupa.testaustulos">
+        <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">3</field>
         <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">4</field>
         <field type="CharField" name="pisteet">6</field>
+    </object>
+    <object pk="19" model="tupa.testaustulos">
+        <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">4</field>
+        <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">4</field>
+        <field type="CharField" name="pisteet">8</field>
     </object>
     <object pk="20" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">5</field>
         <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">4</field>
-        <field type="CharField" name="pisteet">5</field>
+        <field type="CharField" name="pisteet">10</field>
     </object>
     <object pk="4" model="tupa.syotemaarite">
         <field type="CharField" name="nimi">a</field>
