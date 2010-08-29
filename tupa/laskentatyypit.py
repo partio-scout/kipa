@@ -103,11 +103,7 @@ def listaksi(joukkio):
         Muuttaa sanakirjan tai desimaalin listaksi jos syote on joukkio, muuten palauttaa muuttujan itsessaan.
         """
         if type(joukkio)==list:
-
-                lista=[]
-                for i in joukkio :
-                        if type(i)==DictDecimal : lista.append(i)
-                return lista
+                return joukkio
         elif type( joukkio )==DictDecimal:
                 return [joukkio]
         elif type( joukkio )==Decimal:

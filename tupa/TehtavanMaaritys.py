@@ -493,6 +493,65 @@ def vapaaKaavaForm(posti,data,prefix) :
 
         return render_to_string("tupa/forms/vapaa_kaava.html",  formi )
 
+################
+# Puhdas kaava #
+################
+
+def puhdasKaavaForm(posti,data,prefix) :
+        maara=5
+        if 'maaritteet' in data.keys() : 
+                maara=int(len(data['maaritteet']))
+                if posti and prefix+'_maaritteita' in posti.keys() : maara= int(posti[prefix+'_maaritteita'])
+                if maara > int(maara/5)*5 : maara= int(maara/5)*5+5
+                else : maara= int(maara/5)*5
+        if posti and 'lisaa_maaritteita' in posti.keys()  :
+                maara=int(posti[prefix+'_maaritteita'])+5
+        formit=[]
+        for i in range(maara):
+                validi=True 
+                if 'valid' in data.keys() and data['valid'] == False: validi=False
+                formia=syotteen_kuvaus_field(posti,data,prefix,i,"pk").items()[0]
+                formib=syotteen_tyyppi_field(posti,data,prefix,i,"pk").items()[0]
+                if validi and 'valid' in data.keys() and data['valid'] == False: del data['valid']
+                formit.append({'kali_vihje': formia[1], 'nimi': string.letters[i] ,
+                                'tyyppi': formib[1]  })
+               
+        if posti and prefix in posti.keys() and posti[prefix]=="pk":
+             if 'maaritteet' in data.keys(): 
+                maaritteet = data['maaritteet'].copy().items()
+                for i in range(maara):
+                        if maaritteet[i][1]['kali_vihje']=="":
+                                if type(maaritteet[i][0]) == str and maaritteet[i][0][:1]=="#" :
+                                        del data['maaritteet'][maaritteet[i][0]]
+                                else :
+                                        data['maaritteet'][-maaritteet[i][0]] = maaritteet[i][1]
+                                        del data['maaritteet'][maaritteet[i][0]]
+             data['kaava']="vartion_kaava"
+             
+        poistaYlimaaraisetMaaritteet(posti,data,prefix,"pk",maara)
+        
+        formi={"vapaa": True,
+                'maaritteet' : formit,
+                'maaritteita' : { 'value' : maara, 'name' : prefix+'_maaritteita'}}
+        
+        # Aloitusarvot kannasta
+        if not posti : 
+                state={}
+                lataa_parametrit(state,data,prefix,"_pk")
+        else : state=posti.copy()
+        formi.update( field(state,"parhaan_haku",prefix+"_pk")  )
+        
+        errors=""
+        if state and prefix in state.keys() and state[prefix]=="pk":
+                if not validate(state,"kaava",[is_kaava],prefix+"_pk" ) : 
+                        errors= "Kaava ei toimi!"
+                        data['valid']=False
+                saveField(state,data,"kaava",['parametrit'],'vartion_kaava','arvo',prefix+"_pk")
+        formi.update( field(state,"kaava",prefix+"_pk",errors=errors)  )
+
+        return render_to_string("tupa/forms/puhdas_kaava.html",  formi )
+
+
 ##########################
 # Osatehtävän kokoonpano #
 ##########################
@@ -521,7 +580,10 @@ def osaTehtavaForm(posti,data,prefix="") :
                         'form' : aikaValiForm(posti,data,id)},
                 { 'id' : data['nimi'] +'_vk', 'otsikko' :'Vapaa kaava',
                         'tyyppi' : 'vk',
-                        'form' : vapaaKaavaForm(posti,data,id)} ]
+                        'form' : vapaaKaavaForm(posti,data,id)},
+                { 'id' : data['nimi'] +'_pk', 'otsikko' :'Puhdas kaava',
+                        'tyyppi' : 'pk',
+                        'form' : puhdasKaavaForm(posti,data,id)}]
         
         return render_to_string("tupa/forms/osa_tehtava.html",  {'tab_id': data['nimi'] , 
                                                                 'nimi' : data['nimi'] ,

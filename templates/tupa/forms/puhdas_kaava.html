@@ -1,0 +1,33 @@
+
+<b>Syötteet:</b><br>
+<table>
+{% for maarite in maaritteet %}
+	<tr>
+		<td>Syötteen {{maarite.nimi}} kuvaus:</td>
+		<td>
+			<input type="text" 
+			        name="{{maarite.kali_vihje.name}}" 
+			        id="{{maarite.kali_vihje.id}}" 
+			        value="{{maarite.kali_vihje.value}}" />
+			         Tyyppi: 
+
+		        <select name="{{maarite.tyyppi.name}}">
+		                <option value="piste" 
+		                {% ifequal maarite.tyyppi.value "piste" %}selected="selected"{% endifequal %}
+		                 >piste</option>
+		                <option value="aika"
+		                {% ifequal maarite.tyyppi.value "aika" %}selected="selected"{% endifequal %}
+		                >aika</option>
+		        </select>
+		</td>
+	</tr>
+{% endfor %}
+</table>
+
+<button name="lisaa_maaritteita" type="submit" class="small blue awesome" value='{{maaritteita.name}}' title="Lisää 5 tyhjää kenttää">Lisää 5 kenttää</button><br><br>
+<font color=red><b>{{kaava.errors}}</b></font> Vartion suorituksen kaava:
+                        <textarea name="{{kaava.name}}" id="{{kaava.id}}" cols="80" rows="7">{{kaava.value}}</textarea><br><br>
+
+<INPUT TYPE=HIDDEN NAME="{{maaritteita.name}}" value="{{maaritteita.value}}">
+
+
