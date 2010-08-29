@@ -88,7 +88,6 @@ def interpoloi(x,x1,y1,x2,y2=0):
 
 def itseisarvo(a) : 
         return suorita1(abs,a) 
-
 def __aikavali(a,b):
         """
         Palauttaa b-a kun a<b
@@ -115,6 +114,7 @@ def nelijojuuri(a) : return suorita1(getcontext().sqrt,a)
 def exponentti(a) : return suorita1(getcontext().exp,a)
 def modulus(a,b) : return suorita2(getcontext().remainder,a,b)
 def potenssi(a,b) : return suorita2(getcontext().power,a,b)
+
 
 # kavoissa käytettävät funktiot, ja niiden käyttönimet:
 #           käyttönimi : funktio 
