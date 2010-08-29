@@ -2,6 +2,10 @@
 # KiPa(KisaPalvelu), tuloslaskentajärjestelmä partiotaitokilpailuihin
 #    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
 
+"""
+Tässä tiedostossa on määritelty kaikki funktiot joita voi käyttää laskennan kaavoissa.
+"""
+
 from laskentatyypit import *
 from math import *
 
@@ -34,7 +38,7 @@ def minimi(joukko,b=None):
 def maksimi(joukko,b=None) :
         """
         Palauttaa joukon suurimman lukuarvon.
-        Joukko voi olla sanakirja tai lista.
+        Joukko voi o    lla sanakirja tai lista.
         """
         if b and not type(joukko)==list and not type(b)==unicode : 
                 return max([joukko,b])
@@ -104,13 +108,16 @@ def lattia(a) : return suorita1(__lattia,a)
 def __katto(a) : return a.quantize(Decimal('1.'), rounding=ROUND_CEILING) 
 def katto(a) : return suorita1(__katto,a)
 
-def logaritmi10(a) : return suorita1(getcontext().log10,a)
+def logaritmi10(a) : 
+        return suorita1(getcontext().log10,a)
 def luonnollinen_logaritmi(a) : return suorita1(getcontext().ln,a)
 def nelijojuuri(a) : return suorita1(getcontext().sqrt,a)
 def exponentti(a) : return suorita1(getcontext().exp,a)
 def modulus(a,b) : return suorita2(getcontext().remainder,a,b)
 def potenssi(a,b) : return suorita2(getcontext().power,a,b)
 
+# kavoissa käytettävät funktiot, ja niiden käyttönimet:
+#           käyttönimi : funktio 
 funktiot= { "interpoloi" : interpoloi ,
                 "aikavali" : aikavali ,
                 "abs" : itseisarvo,
