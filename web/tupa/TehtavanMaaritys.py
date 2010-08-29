@@ -31,7 +31,7 @@ def is_string(s) :
         else : return False
 
 def is_non_number_string(s) :
-        if re.match("^[a-zA-Z]+$",s) : return True
+        if re.match("^[a-zA-Z_]+$",s) : return True
         else : return False
 
 
@@ -638,7 +638,7 @@ def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehta
                                 # Merkkijonojen validiointi:
                                 if fk=='nimi'  :
                                         if not is_non_number_string(value):
-                                                errors="Anna merkkijono [a-zA-Z]"
+                                                errors="Anna merkkijono [a-zA-Z_]"
                                                 data['valid']=False
                                                 
                                 # Kaavan validiointi:
