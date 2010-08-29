@@ -163,18 +163,21 @@ def luoLaskut(sarja) :
                                                 ot_lause=ot_lause+m.nimi+"+"
                                         ot_lause=ot_lause[:-1]
                                 else :
+                                    # Korvataan parametrit
                                     while korvautuu:
                                         korvautuu=False
                                         vanha=ot_lause
-                                        # Korvataan parametrit
                                         for p in parametrit:
                                                 ot_lause=re.sub(p.nimi+r"(?!\w+)",p.arvo,ot_lause)
                                         if not ot_lause==vanha : korvautuu=True
                                         # pikatie "muk" -> "..mukana" 
                                         ot_lause=re.sub("muk"+r"(?!\w+)","..mukana",ot_lause)
+                                        
                                         # munnos "suor" -> kaikkien vartioiden lasketut suoritukset
                                         try:
                                                 vartion_kaava=parametrit.filter(nimi="vartion_kaava")[0].arvo
+                                                for p in parametrit:
+                                                        vartion_kaava=re.sub(p.nimi+r"(?!\w+)",p.arvo,vartion_kaava)
                                                 ot_lause=re.sub("suor"+r"(?!\w+)",
                                                                 suoritusJoukko(vartion_kaava),
                                                                 ot_lause)

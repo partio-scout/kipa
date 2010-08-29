@@ -121,7 +121,8 @@ def listaksi(joukkio):
 
 
 def suorita1(funktio,a) :
-        if not type(a)==MathDict : return funktio(a)
+        if not type(a)==MathDict : 
+                return funktio(a)
         else : 
                 rValue=MathDict({})
                 for k in a.keys() :
