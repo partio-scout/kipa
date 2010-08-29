@@ -16,12 +16,8 @@ def mediaani(joukko):
         if len(values) % 2 == 1:
                 return DictDecimal(values[(len(values)+1)/2-1])
         else:
-                lower = values[len(values)/2-1]
-                upper = values[len(values)/2]
-                if type(upper)==str or type(lower)==str: 
-                        upper=DictDecimal(upper)
-                        lower=DictDecimal(lower)
-                        
+                lower = DictDecimal(values[len(values)/2-1])
+                upper = DictDecimal(values[len(values)/2])
                 return (DictDecimal(lower + upper)) / 2  
 
 def minimi(joukko,b=None):  
@@ -103,29 +99,17 @@ def __aikavali(a,b):
         return tulos
 def aikavali(a,b) : return suorita2(__aikavali,a,b)
 
-def __logaritmi10(x) : return x.log10()
-def logaritmi10(a) : return suorita1(__logaritmi10,a)
-
-def __luonnollinen_logaritmi(x) : return x.ln()
-def luonnollinen_logaritmi(a) : return suorita1(__luonnollinen_logaritmi,a)
-
 def __lattia(a) : return a.quantize(Decimal('1.'), rounding=ROUND_FLOOR) 
-def lattia(a) : return suorita1(__pohja,a)
-
+def lattia(a) : return suorita1(__lattia,a)
 def __katto(a) : return a.quantize(Decimal('1.'), rounding=ROUND_CEILING) 
 def katto(a) : return suorita1(__katto,a)
 
-def __neliojuuri(a) : return a.sqrt()
-def nelijojuuri(a) : return suorita1(__neliojuuri,a)
-
-def __exponentti(a) : return a.exp()
-def exponentti(a) : return suorita1(__exponentti,a)
-
-def __modulus(a,b) : return getcontext().remainder(a,b)
-def modulus(a,b) : return suorita2(__modulus,a,b)
-
-def __kokonaisosa(a,b) : return getcontext().divmod(a,b)[0]
-def kokonaisosa(a,b) : return suorita2(__kokonaisosa,a,b)
+def logaritmi10(a) : return suorita1(getcontext().log10,a)
+def luonnollinen_logaritmi(a) : return suorita1(getcontext().ln,a)
+def nelijojuuri(a) : return suorita1(getcontext().sqrt,a)
+def exponentti(a) : return suorita1(getcontext().exp,a)
+def modulus(a,b) : return suorita2(getcontext().remainder,a,b)
+def potenssi(a,b) : return suorita2(getcontext().power,a,b)
 
 funktiot= { "interpoloi" : interpoloi ,
                 "aikavali" : aikavali ,
@@ -144,6 +128,7 @@ funktiot= { "interpoloi" : interpoloi ,
                 "sqrt" : nelijojuuri,
                 "exp"  : exponentti,
                 "mod" : modulus,
-                "divmod" : kokonaisosa}
+                "pow" : potenssi,
+                "power" : potenssi }
 
 
