@@ -95,6 +95,7 @@ def listaksi(a,*opt):
                         return lista
                 except : return None 
 
+
 def suorita(funktio,*param):
         mdict=None
         for p in param : 
@@ -111,5 +112,9 @@ def suorita(funktio,*param):
                 except KeyError: pass
                 except TypeError : pass
         return rValue        
+
+def suorita_lista(funktio,a,*param ) :
+        if len(param)==0 : return funktio(a)
+        else : return suorita(funktio,a,*param)
 
 
