@@ -9,7 +9,7 @@ Tässä tiedostossa on määritelty kaikki funktiot joita voi käyttää laskenn
 from laskentatyypit import *
 from math import *
 
-def mediaani(joukko, *sarja):
+def __mediaani(joukko, *sarja):
         """
         Palauttaa mediaanin arvon joukon lukuarvoista:
         joukko voi olla sanakirja tai lista
@@ -23,11 +23,9 @@ def mediaani(joukko, *sarja):
                 lower = DictDecimal(values[len(values)/2-1])
                 upper = DictDecimal(values[len(values)/2])
                 return (DictDecimal(lower + upper)) / 2  
+mediaani = lambda joukko, *sarja : suorita_lista(__mediaani,joukko,*sarja)
 
-def minimi(joukko, *sarja):  return min( listaksi(joukko,*sarja) )
-def maksimi(joukko,*sarja) : return max( listaksi(joukko,*sarja) )
-
-def keskiarvo(joukko, *sarja) :
+def __keskiarvo(joukko, *sarja) :
         """
         Palauttaa joukon lukuarvojen keskiarvon.
         Joukko voi olla sanakirja tai lista.
@@ -39,8 +37,9 @@ def keskiarvo(joukko, *sarja) :
                 total=total+x
         avg = total/len(lista)
         return avg
+keskiarvo = lambda joukko, *sarja : suorita_lista(__keskiarvo,joukko,*sarja)
 
-def summa(joukko,*sarja) :
+def __summa(joukko,*sarja) :
         """
         Palauttaa joukon lukuarvojen summan.
         Joukko voi olla sanakirja tai lista.
@@ -50,6 +49,13 @@ def summa(joukko,*sarja) :
         for v in lista : 
                 if v and not type(v)==unicode and not type(v)==str: s=s+v
         return s
+summa = lambda joukko , *sarja : suorita_lista(__summa,joukko,*sarja)
+
+def __minimi(joukko, *sarja):  return min( listaksi(joukko,*sarja) )
+def minimi(joukko,*sarja) : return suorita_lista(__minimi,joukko,*sarja)
+
+def __maksimi(joukko,*sarja) : return max( listaksi(joukko,*sarja) )
+def maksimi(joukko,*sarja) : return  suorita_lista(__maksimi,joukko,*sarja)
 
 def interpoloi(x,x1,y1,x2,y2=0):
         """
