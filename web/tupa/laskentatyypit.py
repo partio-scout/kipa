@@ -4,104 +4,80 @@
 
 from decimal import *
 
-class MathDict(dict):
+class SequenceOperations :
+        def __add__(self,other): 
+                def operation(a,b) : return a+b
+                return self.operate_to_all( operation , other)
+        def __sub__(self,other):
+                def operation(a,b) : return a-b
+                return self.operate_to_all( operation , other)
+        def __mul__(self,other):
+                def operation(a,b) : return a*b
+                return self.operate_to_all( operation , other)
+        def __div__(self,other):
+                def operation(a,b) : return a/b
+                return self.operate_to_all( operation , other)
+        def __lt__(self, other) :
+                def operation(a,b) : return a<b
+                return self.operate_to_all( operation , other)
+        def __le__(self, other) :
+                def operation(a,b) : return a<=b
+                return self.operate_to_all( operation , other)
+        def __eq__(self, other) :
+                def operation(a,b) : return a==b
+                return self.operate_to_all( operation , other)
+        def __ne__(self, other) : 
+                def operation(a,b) : return a!=b
+                return self.operate_to_all( operation , other)
+        def __gt__(self, other) : 
+                def operation(a,b) : return a>b
+                return self.operate_to_all( operation , other)
+        def __ge__(self, other) :
+                def operation(a,b) : return a>=b
+                return self.operate_to_all( operation , other)
+
+class MathDict(SequenceOperations,dict):
         """
         Sanakirja jonka alkioille voi tehda massoittain 
         laskutoimituksia toisten sanakirjan vastaavien alkioiden kesken.
         """
-        def __add__(self,other): 
-                sum = MathDict({})
+        # Utility function
+        def operate_to_all(self,function2, other) :
+                oper = MathDict({})
                 for k in self.keys() : 
                         try:
-                                if type(other) != MathDict : sum[k]=self[k]+other
-                                else: sum[k]=self[k]+other[k]
-                        except TypeError : pass
-                        except KeyError: pass
-                return sum
-        def __sub__(self,other):
-                sub = MathDict({})
-                for k in self.keys() : 
-                        try:
-                                if type(other) != MathDict : sub[k]=self[k]-other
-                                else: sub[k]=self[k]-other[k]
-                        except TypeError : pass
-                        except KeyError: pass
-                return sub
-        def __mul__(self,other):
-                mult = MathDict({})
-                for k in self.keys() : 
-                        try:
-                                if type(other) != MathDict : mult[k]=self[k]*other
-                                else: mult[k]=self[k]*other[k]
+                                if type(other) != MathDict : oper[k]=function2(self[k],other)
+                                else: oper[k]=function2(self[k],other[k])
                         except KeyError: pass
                         except TypeError : pass
-                return mult
-        def __div__(self,other):
-                div = MathDict({})
-                for k in self.keys() : 
-                        try:
-                                if type(other) != MathDict : div[k]=self[k]/other
-                                else: div[k]=self[k]/other[k]
-                        except KeyError: pass
-                        except TypeError : pass
-                return div
+                return oper
 
-class DictDecimal(Decimal) :
+class DictDecimal(SequenceOperations,Decimal) :
         """
         Desimaali luokka , johon on toteutettu operoiminen MathDict instansseilla.
         """
-        def __add__(self,other):
-                add=DictDecimal()
+        def operate_to_all(self,function2,other ) :
+                oper=DictDecimal()
                 if type(other) == MathDict :
-                        add = MathDict(other)
+                        oper = MathDict(other)
                         for k in other.keys() : 
                                 try:
-                                        add[k]=self+other[k]
+                                        oper[k]=function2(self,other[k])
                                 except KeyError: pass
                                 except TypeError : pass
-                else:  add = DictDecimal(Decimal(self) + other)
-                return add
-
-        def __sub__(self,other):
-                sub = Decimal()
-                if type(other) == MathDict :
-                        sub = MathDict(other)
-                        for k in other.keys() : 
-                                try:
-                                        sub[k]=self-other[k]
-                                except KeyError: pass
-                                except TypeError : pass
-                else: sub = DictDecimal(Decimal(self) - other)
-                return sub
-
-        def __mul__(self,other):
-                mul = DictDecimal()
-                if type(other) == MathDict :
-                        mul = MathDict(other)
-                        for k in other.keys() : 
-                                try:
-                                        mul[k]=self*other[k]
-                                except KeyError: pass
-                                except TypeError : pass
-                else: mul= DictDecimal(Decimal(self) * other )
-                return mul
-
-        def __div__(self,other):
-                div = DictDecimal()
-                if type(other) == MathDict :
-                        div = MathDict(other)
-                        for k in other.keys() : 
-                                try:
-                                        div[k]=self/other[k]
-                                except KeyError: pass
-                                except TypeError : pass
-                else: div= DictDecimal(Decimal(self) / other)
-                return div
-
-def listaksi(joukkio):
+                else:  oper = DictDecimal( function2(Decimal(self), other) )
+                return oper
+        
+def listaksi(a,*opt):
         """
         Muuttaa sanakirjan tai desimaalin listaksi jos syote on joukkio, muuten palauttaa muuttujan itsessaan.
         """
+
+        if len(opt) : 
+                joukkio = [a]
+                joukkio += opt
+        else : joukkio = a 
+
         if type(joukkio)==list:
                 return joukkio
         elif type( joukkio )==DictDecimal:
@@ -119,45 +95,21 @@ def listaksi(joukkio):
                         return lista
                 except : return None 
 
+def suorita(funktio,*param):
+        mdict=None
+        for p in param : 
+                if type(p) == MathDict and not mdict : mdict=p
+        if not mdict : return funktio(*param)
+        rValue=MathDict({})
+        for k in mdict.keys() :
+                parametrit = []
+                for p in param : 
+                        if type(p)== MathDict : parametrit.append(p[k])
+                        else : parametrit.append(p)
+                try: 
+                        rValue[k]= funktio(*parametrit)
+                except KeyError: pass
+                except TypeError : pass
+        return rValue        
 
-def suorita1(funktio,a) :
-        if not type(a)==MathDict : 
-                return funktio(a)
-        else : 
-                rValue=MathDict({})
-                for k in a.keys() :
-                        try: rValue[k]= funktio(a[k])
-                        except KeyError: pass
-                        except TypeError : pass
-                return rValue
-
-
-def suorita2(funktio,a,b) :
-        """
-        Suorittaa valittua funktiota tarpeen mukaan a&b tyypistä riippuen.
-        Muodostaa suoritteista laskukirjan tai yksittäisen desimaaliluvun.
-        """
-        if not type(a)==MathDict and not type(b)==MathDict: 
-                return funktio(a,b)
-        else :
-                rValue=MathDict({})        
-                if type(a)==MathDict :
-                        for ak in a.keys():
-                                if type(b)==MathDict:
-                                        try:
-                                                rValue[ak]= funktio(a[ak],b[ak])
-                                        except KeyError: pass
-                                        except TypeError : pass
-                                else :
-                                        try:
-                                                rValue[ak]= funktio(a[ak],b)
-                                        except KeyError: pass
-                                        except TypeError : pass
-                else :
-                        for bk in b.keys() :
-                                try:
-                                        rValue[bk]= funktio(a,b[bk])
-                                except KeyError: pass
-                                except TypeError : pass
-                return rValue
 
