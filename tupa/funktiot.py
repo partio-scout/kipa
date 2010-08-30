@@ -9,13 +9,13 @@ Tässä tiedostossa on määritelty kaikki funktiot joita voi käyttää laskenn
 from laskentatyypit import *
 from math import *
 
-def mediaani(joukko):
+def mediaani(joukko, *sarja):
         """
         Palauttaa mediaanin arvon joukon lukuarvoista:
         joukko voi olla sanakirja tai lista
         Mikali lukujoukon pituus on parillinen palauttaa kahden keskimmaisen luvun keskiarvon.
         """
-        lista = listaksi(joukko)
+        lista = listaksi(joukko,*sarja)
         values = sorted(lista)
         if len(values) % 2 == 1:
                 return DictDecimal(values[(len(values)+1)/2-1])
@@ -24,32 +24,15 @@ def mediaani(joukko):
                 upper = DictDecimal(values[len(values)/2])
                 return (DictDecimal(lower + upper)) / 2  
 
-def minimi(joukko,b=None):  
-        """
-        Palauttaa joukon pienimman lukuarvon.
-        Joukko voi olla sanakirja tai lista.
-        """
-        tulos=None
-        if b and not type(joukko)==list and not type(b)==unicode: 
-                tulos=min([joukko,b])
-        else : tulos= min(listaksi(joukko))
-        return tulos
+def minimi(joukko, *sarja):  return min( listaksi(joukko,*sarja) )
+def maksimi(joukko,*sarja) : return max( listaksi(joukko,*sarja) )
 
-def maksimi(joukko,b=None) :
-        """
-        Palauttaa joukon suurimman lukuarvon.
-        Joukko voi o    lla sanakirja tai lista.
-        """
-        if b and not type(joukko)==list and not type(b)==unicode : 
-                return max([joukko,b])
-        else : return max(listaksi(joukko))
-
-def keskiarvo(joukko) :
+def keskiarvo(joukko, *sarja) :
         """
         Palauttaa joukon lukuarvojen keskiarvon.
         Joukko voi olla sanakirja tai lista.
         """
-        lista = listaksi(joukko)
+        lista = listaksi(joukko,*sarja)
         if not len(lista): return None
         total=DictDecimal(0) 
         for x in lista :
@@ -57,14 +40,12 @@ def keskiarvo(joukko) :
         avg = total/len(lista)
         return avg
 
-def summa(joukko) :
+def summa(joukko,*sarja) :
         """
         Palauttaa joukon lukuarvojen summan.
         Joukko voi olla sanakirja tai lista.
         """
-        lista=None
-        if type(joukko)==list : lista = joukko
-        else : lista = listaksi(joukko)
+        lista=listaksi(joukko,*sarja)
         s=DictDecimal(0) 
         for v in lista : 
                 if v and not type(v)==unicode and not type(v)==str: s=s+v
@@ -86,8 +67,6 @@ def interpoloi(x,x1,y1,x2,y2=0):
         except InvalidOperation : return None
         return tulos
 
-def itseisarvo(a) : 
-        return suorita1(abs,a) 
 def __aikavali(a,b):
         """
         Palauttaa b-a kun a<b
@@ -95,26 +74,27 @@ def __aikavali(a,b):
         Ajan yksikko on [s]
         a & b voivat olla lukuja tai sanakirjoja.
         """
-        tulos=None
-        # kaksi desimalilukua:
         tulos= b-a
         if tulos < DictDecimal("0"): tulos=tulos+DictDecimal("86400") # lisataan 24h sekuntteina
         return tulos
-def aikavali(a,b) : return suorita2(__aikavali,a,b)
 
-def __lattia(a) : return a.quantize(Decimal('1.'), rounding=ROUND_FLOOR) 
-def lattia(a) : return suorita1(__lattia,a)
-def __katto(a) : return a.quantize(Decimal('1.'), rounding=ROUND_CEILING) 
-def katto(a) : return suorita1(__katto,a)
+def aikavali(a,b) : return suorita(__aikavali,a,b)
 
-def logaritmi10(a) : 
-        return suorita1(getcontext().log10,a)
-def luonnollinen_logaritmi(a) : return suorita1(getcontext().ln,a)
-def nelijojuuri(a) : return suorita1(getcontext().sqrt,a)
-def exponentti(a) : return suorita1(getcontext().exp,a)
-def modulus(a,b) : return suorita2(getcontext().remainder,a,b)
-def potenssi(a,b) : return suorita2(getcontext().power,a,b)
+def lattia(a) : return suorita(lambda a: a.quantize(Decimal('1.'), rounding=ROUND_FLOOR) ,a)
+def katto(a) : return suorita(lambda a: a.quantize(Decimal('1.'), rounding=ROUND_CEILING) ,a)
 
+itseisarvo  = lambda a : suorita(abs,a) 
+logaritmi10 = lambda a :  suorita(getcontext().log10,a)
+luonnollinen_logaritmi = lambda a :  suorita(getcontext().ln,a)
+exponentti = lambda a :  suorita(getcontext().exp,a)
+modulus = lambda a,b :  suorita(getcontext().remainder,a,b)
+potenssi = lambda a,b :  suorita(getcontext().power,a,b)
+neliojuuri = lambda a : suorita(getcontext().sqrt,a)
+
+def __jos(ehto,a,b) : 
+        if ehto : return a 
+        else : return b
+def jos(ehto,a,b): return suorita(__jos,ehto,a,b)
 
 # kavoissa käytettävät funktiot, ja niiden käyttönimet:
 #           käyttönimi : funktio 
@@ -132,10 +112,11 @@ funktiot= { "interpoloi" : interpoloi ,
                 "ln" : luonnollinen_logaritmi ,
                 "floor" : lattia,
                 "ceil" : katto,
-                "sqrt" : nelijojuuri,
+                "sqrt" : neliojuuri ,
                 "exp"  : exponentti,
                 "mod" : modulus,
                 "pow" : potenssi,
-                "power" : potenssi }
+                "power" : potenssi,
+                "if" : jos}
 
 
