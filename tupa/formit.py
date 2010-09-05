@@ -48,7 +48,7 @@ class TuhoaTehtavaForm(ModelForm):
         rastikasky = forms.CharField(widget=forms.HiddenInput,required=False)
         jarjestysnro = forms.CharField(widget=forms.HiddenInput,required=False)
         kaava = forms.CharField(widget=forms.HiddenInput,required=False)
-        sarja = forms.CharField(widget=forms.HiddenInput,required=False)
+        sarja = forms.ModelChoiceField(queryset=Sarja.objects.all(), widget=forms.HiddenInput,required=False)
         tarkistettu = forms.BooleanField(widget=forms.HiddenInput,required=False)
         class Meta :
                 model=Tehtava
