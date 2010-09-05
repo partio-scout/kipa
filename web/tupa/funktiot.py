@@ -102,6 +102,10 @@ def __jos(ehto,a,b) :
         else : return b
 def jos(ehto,a,b): return suorita(__jos,ehto,a,b)
 
+def vakio(muuttuja,arvo) : 
+        muuttuja=arvo
+        return 0 
+
 # kavoissa käytettävät funktiot, ja niiden käyttönimet:
 #           käyttönimi : funktio 
 funktiot= { "interpoloi" : interpoloi ,
@@ -123,6 +127,7 @@ funktiot= { "interpoloi" : interpoloi ,
                 "mod" : modulus,
                 "pow" : potenssi,
                 "power" : potenssi,
-                "if" : jos}
+                "if" : jos,
+                "vakio" :vakio }
 
 
