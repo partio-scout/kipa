@@ -22,6 +22,9 @@ import re
 from formit import *
 from TehtavanMaaritys import *
 
+import time
+from UnicodeTools import *
+
 def kipaResponseRedirect(url) : return HttpResponse('<html><head><meta http-equiv="REFRESH" content="0;url='+url+'"></HEAD><BODY></BODY></HTML>')
 
 def loginSivu(request, kisa_nimi):
@@ -441,11 +444,12 @@ def tulostaSarja(request, kisa_nimi, sarja_id) :
         for i in range(len(mukana[1:])) :
                 mukana[i+1].insert(0,numero)
                 numero=numero+1
-        for i in range(len(ulkona)) :
+        for i in range(len(ulkona)) : 
                 ulkona[i].insert(0,numero)
                 numero=numero+1
         kisa_aika = sarja.kisa.aika
         kisa_paikka = sarja.kisa.paikka
+
         return render_to_response('tupa/tulokset.html', 
 			{'tulos_taulukko' : mukana,
             'ulkona_taulukko' : ulkona,
@@ -454,6 +458,58 @@ def tulostaSarja(request, kisa_nimi, sarja_id) :
 			'kisa_paikka' : kisa_paikka,
 			'heading' : sarja.nimi, 
 			'taakse' : {'url' : '../../', 'title' : 'Tulokset sarjoittain'} }  )
+
+
+def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
+        """
+        Sarjan tulokset csv tiedostoon esim. Exel muokkausta varten.
+        """
+        # Lasketaan tulokset:
+        sarja = Sarja.objects.get(id=sarja_id)
+        tulokset= sarja.laskeTulokset()
+        mukana=tulokset[0]
+        ulkona=tulokset[1]
+        numero=1 
+        # Luodaan HttpResponse objekti CSV hederillä.
+        response = HttpResponse(mimetype='text/csv')
+        response['Content-Disposition'] = 'attachment; filename='+kisa_nimi+"_"+sarja.nimi+'.csv'
+
+        writer = UnicodeWriter(response)
+        writer.writerow([sarja.kisa.nimi, '', sarja.nimi])
+        writer.writerow(['', '', time.strftime("%d.%m.%Y %H:%M ", time.localtime())]) # aika
+        writer.writerow(['']) # tyhjä rivi
+
+        otsikkorivi=['Sij.', 'Nro:', 'Vartio:', 'Pisteet:']
+        for teht in mukana[0][2:] : otsikkorivi.append(unicode(teht.jarjestysnro)+"."+teht.nimi)
+                
+        writer.writerow(otsikkorivi)
+
+        for i in range(len(mukana[1:])) :                
+                vartiorivi = [unicode(numero) , unicode(mukana[i+1][0].nro),unicode(mukana[i+1][0].nimi),]
+                vartiorivi.append( unicode(mukana[i+1][1]) )
+                for num in mukana[i+1][2:] : vartiorivi.append( unicode(num) )
+                writer.writerow( vartiorivi  )
+                numero=numero+1
+        writer.writerow([""])
+        writer.writerow(["","","Ulkopuolella:"])
+        for i in range(len(ulkona)) : 
+                vartiorivi = [unicode(numero) , unicode(mukana[i+1][0].nro),unicode(mukana[i+1][0].nimi),]
+                vartiorivi.append( unicode(mukana[i+1][1]) )
+                for num in mukana[i+1][2:] : vartiorivi.append( unicode(num) )
+                writer.writerow( vartiorivi  )
+
+                ulkona[i].insert(0,numero)
+                numero=numero+1
+        
+        writer.writerow([""])
+        writer.writerow([u"S = syöttämättä"])
+        writer.writerow([u"H = vartion suoritus hylätty"])
+        writer.writerow([u"K = vartio keskeyttänyt"])
+        writer.writerow([u"None = laskentavirhe"])
+        return response
+
+
+
 
 def piirit(request,kisa_nimi) :
         """
