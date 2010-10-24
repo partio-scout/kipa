@@ -1,5 +1,5 @@
 # encoding: utf-8
-# KiPa(KisaPalvelu), tuloslaskentajärjestelmä partiotaitokilpailuihin
+# KiPa(KisaPalvelu), tuloslaskentajarjestelma partiotaitokilpailuihin
 #    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
 
 
@@ -34,6 +34,9 @@ class Sarja(models.Model) :
         vartion_maksimikoko = models.IntegerField(blank=True, null=True, default=0 )
         vartion_minimikoko = models.IntegerField(blank=True, null=True,default=0 )
         kisa = models.ForeignKey(Kisa)
+        tasapiste_teht1 = models.IntegerField(blank=True, null=True )
+        tasapiste_teht2 = models.IntegerField(blank=True, null=True )
+        tasapiste_teht3 = models.IntegerField(blank=True, null=True )
 
         #end_dia_class
         def __unicode__(self) :
