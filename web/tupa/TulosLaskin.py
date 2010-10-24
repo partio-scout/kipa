@@ -264,9 +264,17 @@ def laskeSarja(sarja):
         for t in tehtavat:
                 t_list.append(t)
 
+        #Tasapisteissä määräävät tehtävät
+        tasa1 = 0
+        tasa2 = 0
+        tasa3 = 0
+        if sarja.tasapiste_teht1 : tasa1 = sarja.tasapiste_teht1+1
+        if sarja.tasapiste_teht1 : tasa2 = sarja.tasapiste_teht2+1
+        if sarja.tasapiste_teht1 : tasa3 = sarja.tasapiste_teht3+1
+        
         #järjestetään taulukot
-        tulokset.sort( key=operator.itemgetter(1),reverse=True )
-        ulkona.sort( key=operator.itemgetter(1),reverse=True )
+        tulokset.sort( key=operator.itemgetter(1,tasa1,tasa2,tasa3),reverse=True )
+        ulkona.sort( key=operator.itemgetter(1,tasa1,tasa2,tasa3),reverse=True )
         
         #lisataan tehtävärivi ylos
         mukana.insert(0,t_list)

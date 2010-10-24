@@ -234,6 +234,25 @@ def PostTestFactory(fixture_name):
                                 c.post(osoite,posti)
         return testi
 
+
+
+
+class TasapisteTesti(TestCase) :
+        fixtures = ["fixtures/tests/tasapisteet.xml"]
+        def testJarjestys(self):
+                sarja=Sarja.objects.get(nimi="tiukka")
+                tulokset=sarja.laskeTulokset()
+                assert tulokset[0][1][0].nro==1
+                assert tulokset[0][2][0].nro==2
+                assert tulokset[0][3][0].nro==3
+                assert tulokset[0][4][0].nro==4
+                assert tulokset[0][5][0].nro==5
+                assert tulokset[0][6][0].nro==6
+
+# Tasapisteiss‰ m‰‰r‰‰v‰t teht‰v‰t testi
+testit.append( TasapisteTesti )
+
+
 #luodaan Post testit tekstitiedostoista
 for t in test_fixtures:
         testit.append( PostTestFactory(t) )
@@ -242,6 +261,7 @@ for t in test_fixtures:
 # luodaan tulostestit fixtuureista.
 for t in test_fixtures:
         testit.append( TulosTestFactory(t) )
+
 # luodaan viewtestit fixtuureista.
 for t in test_fixtures:
         testit.append( ViewSanityCheck(t) )
