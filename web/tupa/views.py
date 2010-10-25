@@ -24,7 +24,7 @@ from TehtavanMaaritys import *
 
 import time
 from UnicodeTools import *
-
+import django.db
 def kipaResponseRedirect(url) : return HttpResponse('<html><head><meta http-equiv="REFRESH" content="0;url='+url+'"></HEAD><BODY></BODY></HTML>')
 
 def loginSivu(request, kisa_nimi):
@@ -67,14 +67,26 @@ def tehtavanTilanne(tehtava):
         
         return tila
 
+def testaa_tietokanta(kisa) :
+        sarja=Sarja(kisa=kisa,nimi="tietokantatesti")
+        try :
+            sarja.tasapiste_teht1=1
+            sarja.save()
+            sarja.delete()
+            return None
+        except django.db.DatabaseError: 
+            return True 
+
 def kisa(request,kisa_nimi) :
         """
         Kisakohtainen päävalikko.
         """
         kisa = get_object_or_404(Kisa, nimi=kisa_nimi) 
+        vanha_tietokanta=testaa_tietokanta(kisa)
         return render_to_response('tupa/kisa.html', {'kisa' : kisa, 
                                         'kisa_nimi': kisa_nimi, 
-                                        'heading' : 'Etusivu' },
+                                        'heading' : 'Etusivu',
+                                        'vanha_tietokanta' : vanha_tietokanta},
 				context_instance=RequestContext(request))
 
 def tulosta(request,kisa_nimi):

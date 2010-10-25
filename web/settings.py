@@ -7,7 +7,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 RECORDING=False
 if not hakemisto == tarkistus :
-        #Viittaisi siihen etta kyseessa on apachen alta toimiva joten pakotetaan debugit pois
+        #Viittaisi siihen etta kyseessa on apachen alta toimiva, joten pakotetaan debugit pois
         DEBUG=False
         TEMPLATE_DEBUG = False
 
@@ -18,7 +18,7 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
-DATABASE_NAME = hakemisto + '/tupa.db'             # Or path to database file if using sqlite3.
+DATABASE_NAME = hakemisto + '/tupa.db'     # Or path to database file if using sqlite3.
 DATABASE_USER = ''             # Not used with sqlite3.
 DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
@@ -88,7 +88,7 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -98,5 +98,5 @@ INSTALLED_APPS = (
     #'django.contrib.formtools',
     'django.template',
     'django.contrib.databrowse'
-)
+]
 
