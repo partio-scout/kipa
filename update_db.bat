@@ -12,7 +12,7 @@ echo Nollataan ja p‰ivitet‰‰n tietokantataulut.
 ..\python\python.exe manage.py reset --noinput tupa
 echo Ladataan fixturen data uuteen tietokantaan.
 ..\python\python.exe manage.py loaddata fixture fixtures/old.xml
+echo Valmis!
+pause
 
-set INPUT=
-set /P INPUT=Paina jotain nappia %=%
 
