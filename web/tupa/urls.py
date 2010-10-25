@@ -11,16 +11,13 @@ from django.views.generic.simple import direct_to_template
 from django.views.generic.simple import redirect_to
 from django.conf import settings
 
-genericViews = patterns('django.views.generic.list_detail',        
-                        (r'^$','object_list', 
-                        {'template_name': 'tupa/index.html', 
-                        'queryset': Kisa.objects.all() } ),) 
 
 tal=r"(?P<talletettu>(talletettu)?)/?$"
 
-urlpatterns = genericViews +  patterns('web.tupa.views',
+urlpatterns = patterns('web.tupa.views',
         (r'^admin/(.*)', admin.site.root ),	
         (r'^apua/', 'apua'),
+        (r'^$', 'etusivu'),
         (r'^post_txt/(?P<parametrit>.+)/$', 'post_txt'), 
         (r'^(?P<kisa_nimi>\w+)/tallenna/$', 'tallennaKisa'), 
         (r'^lisaaKisa/$', 'korvaaKisa'),
