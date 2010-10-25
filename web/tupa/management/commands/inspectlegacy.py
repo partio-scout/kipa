@@ -2,22 +2,13 @@ import keyword
 from optparse import make_option
 import re
 from django.core.management.base import NoArgsCommand, CommandError
-from django.db import connections, DEFAULT_DB_ALIAS
-"""
-def korvaaLuokanRunko(koodi,luokka,runko):
-        sisennys_haku =  re.search('.*?(?=#gen_dia_class ' + luokka +'\n)',koodi)
-        sisennys=""
-        if sisennys_haku:
-                sisennys=len(sisennys_haku.group(0)) * " "
-        return re.sub(r'(?s)(?<=#gen_dia_class '+ luokka +'\n).*?#end_dia_class',
-                                runko+"\n"+sisennys +r"#end_dia_class",koodi)
-"""
+from django.db import connection
+
 class Command(NoArgsCommand):
     help = "Introspects the database tables in the given database and outputs a Django model module."
 
     option_list = NoArgsCommand.option_list + (
-        make_option('--database', action='store', dest='database',
-            default=DEFAULT_DB_ALIAS, help='Nominates a database to '
+        make_option('--database', action='store', dest='database', help='Nominates a database to '
                 'introspect.  Defaults to using the "default" database.'),
     )
 
@@ -36,22 +27,10 @@ class Command(NoArgsCommand):
             raise CommandError("Database inspection isn't supported for the currently selected database backend.")
 
     def handle_inspection(self, options,koodi):
-        connection = connections[options.get('database', DEFAULT_DB_ALIAS)]
-
         table2model = lambda table_name: table_name.title().replace('_', '').replace(' ', '').replace('-', '')
 
         cursor = connection.cursor()
-        #yield "# This is an auto-generated Django model module."
-        #yield "# You'll have to do the following manually to clean this up:"
-        #yield "#     * Rearrange models' order"
-        #yield "#     * Make sure each model has one field with primary_key=True"
-        #yield "# Feel free to rename the models, but don't rename db_table values or field names."
-        #yield "#"
-        #yield "# Also note: You'll have to insert the output of 'django-admin.py sqlcustom [appname]'"
-        #yield "# into your database."
-        #yield ''
-        #yield 'from %s import models' % self.db_module
-        #yield ''
+
         for table_name in connection.introspection.get_table_list(cursor):
 
             #yield 'class %s(models.Model):' % table2model(table_name)
