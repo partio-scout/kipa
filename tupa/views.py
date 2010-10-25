@@ -67,22 +67,31 @@ def tehtavanTilanne(tehtava):
         
         return tila
 
-def testaa_tietokanta(kisa) :
-        sarja=Sarja(kisa=kisa,nimi="tietokantatesti")
+def testaa_tietokanta() :
+        sarja=Sarja(nimi="tietokantatesti")
         try :
             sarja.tasapiste_teht1=1
+            sarja.kisa_id=1
             sarja.save()
             sarja.delete()
             return None
         except django.db.DatabaseError: 
             return True 
 
+def etusivu(request) :
+        """
+        Kisakohtainen päävalikko.
+        """
+        vanha_tietokanta=testaa_tietokanta()
+        return render_to_response('tupa/index.html',{ 'vanha_tietokanta' : vanha_tietokanta,
+                                                              'object_list': Kisa.objects.all() } )
+
 def kisa(request,kisa_nimi) :
         """
         Kisakohtainen päävalikko.
         """
         kisa = get_object_or_404(Kisa, nimi=kisa_nimi) 
-        vanha_tietokanta=testaa_tietokanta(kisa)
+        vanha_tietokanta=testaa_tietokanta()
         return render_to_response('tupa/kisa.html', {'kisa' : kisa, 
                                         'kisa_nimi': kisa_nimi, 
                                         'heading' : 'Etusivu',
