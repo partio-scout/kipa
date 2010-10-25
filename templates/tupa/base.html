@@ -57,7 +57,14 @@ document.getElementById(id).style.display = visibility;
 
 <body>
 
-
+{% if vanha_tietokanta == 1%}
+VAROITUS! Järjestelmän tietokanta on epäyhteensopivaa versiota, Se täytyy muuttaa uudempaan muotoon, jotta kipa toimisi oikein.<br> Ota yhteys järjestelmän ylläpitoon tai aja itse muuttokäsky:<br>
+1. Varmuuskopioi vanha tietokantatiedosto kipan web hakemistosta<br>
+Windows:<br>
+2. update_db.bat<br>
+Linux:<br>
+2. ./update_db.sh<br>
+{% endif %}
 
 <div id="wrap">
 
