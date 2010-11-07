@@ -483,7 +483,7 @@ def tulostaSarja(request, kisa_nimi, sarja_id) :
 
 def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
         """
-        Sarjan tulokset csv tiedostoon esim. Exel muokkausta varten.
+        Sarjan tulokset csv tiedostoon esim. Excel-muokkausta varten.
         """
         # Lasketaan tulokset:
         sarja = Sarja.objects.get(id=sarja_id)
@@ -497,7 +497,7 @@ def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
 
         writer = UnicodeWriter(response)
         writer.writerow([sarja.kisa.nimi, '', sarja.nimi])
-        writer.writerow(['', '', time.strftime("%d.%m.%Y %H:%M ", time.localtime())]) # aika
+        writer.writerow(['', '', time.strftime("%e.%m.%Y %H:%M ", time.localtime()).replace('.0', '.')]) # aika
         writer.writerow(['']) # tyhjä rivi
 
         otsikkorivi=['Sij.', 'Nro:', 'Vartio:', 'Pisteet:']
@@ -760,11 +760,33 @@ def raportti_500(request) :
 
 def tulostaSarjaHTML(request, kisa_nimi, sarja_id) :
         """
-        Sarjan tulokset, sivu muotoiltuna tulostusta varten, ilman turhia grafiikoita.
+        Sarjan tulokset, sivu muotoiltuna tulostusta varten ilman turhia grafiikoita.
         """
         sarja = Sarja.objects.get(id=sarja_id)
         tulokset= sarja.laskeTulokset()
-        return render_to_response('tupa/tuloksetHTML.html', {'tulos_taulukko' : tulokset, 'kisa_nimi' : kisa_nimi }  )
+
+        mukana=tulokset[0]
+        ulkona=tulokset[1]
+        numero=1 
+        for i in range(len(mukana[1:])) :
+                mukana[i+1].insert(0,numero)
+                numero=numero+1
+        for i in range(len(ulkona)) : 
+                ulkona[i].insert(0,numero)
+                numero=numero+1
+        kisa_aika = sarja.kisa.aika
+        kisa_paikka = sarja.kisa.paikka
+
+        return render_to_response('tupa/tuloksetHTML.html', 
+			{'tulos_taulukko' : mukana,
+	            	'ulkona_taulukko' : ulkona,
+			'kisa_nimi' : kisa_nimi, 
+			'kisa_aika' : kisa_aika,
+			'kisa_paikka' : kisa_paikka,
+			'heading' : sarja.nimi, 
+			'taakse' : {'url' : '../../', 'title' : 'Tulokset sarjoittain'} }  )
+
+
 def haeTulos(tuloksetSarjalle, vartio, tehtava) :
                 #Mukana olevat
                 sarjanTulokset=tuloksetSarjalle[0]
