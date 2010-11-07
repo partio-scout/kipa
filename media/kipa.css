@@ -1196,3 +1196,11 @@ a.sitetoolbarnavactive:hover { color: #0d3b65; border: 1px solid #486B8A; paddin
 	margin:0; 
 	padding:0;
 }
+
+#version {
+	width:200px;
+	display:inline;
+	float:right;
+	text-align:right;
+	padding-right:10px;
+}

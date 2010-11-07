@@ -81,7 +81,10 @@ document.getElementById(id).style.display = visibility;
 
 	</div><!-- /header -->
 
-    <div id="breadcrumbs"><a href="/kipa/{{kisa_nimi}}/">{{kisa_nimi}}</a> {%if taakse.url and taakse.title%}&raquo; <a href="{{taakse.url}}">{{taakse.title}}</a> {% endif %}&raquo; {{heading}}</div>
+    <div id="breadcrumbs">
+	<a href="/kipa/{{kisa_nimi}}/">{{kisa_nimi}}</a> {%if taakse.url and taakse.title%}&raquo; <a href="{{taakse.url}}">{{taakse.title}}</a> {% endif %}&raquo; {{heading}}   
+	<div id="version">{% include "version.html" %}</div>
+    </div>
 
     
 
@@ -166,10 +169,6 @@ document.getElementById(id).style.display = visibility;
     </div><!-- /main -->
 
 </div><!-- /wrap -->
-
-    
-
-<div id="footer">{% include "version.html" %} &nbsp;</div>
 
 
 
