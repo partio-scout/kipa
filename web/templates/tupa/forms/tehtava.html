@@ -3,18 +3,27 @@
 {{nimi.errors}}
 </b></font>
 Nimi:* <input type="text" id="{{nimi.id}}"  name="{{nimi.name}}" value="{{nimi.value}}" maxlength="255" />
+<span onmouseover="tooltip.show('Anna tehtävän nimi. Älä käytä ääkkösiä, välilyöntiä tai muita erikoismerkkejä. Välit voit korvata alaviivalla.');" onmouseout="tooltip.hide();">
+	<img src="/kipamedia/help_small.png" />
+</span>
 <font color=red><b>
 {{jarjestysnro.errors}}
 </b></font>
 Järjestysnumero:* <input type="text" size="6" id="{{jarjestysnro.id}}" name="{{jarjestysnro.name}}"  value="{{jarjestysnro.value}}"  />
 <font color=red><b>
-{{kaava.errors}}
-</b></font>
-Kaava:* <input type="text" size="50" id="{{kaava.id}}" name="{{kaava.name}}" value="{{kaava.value}}" />
-<font color=red><b>
 {{osatehtavia.errors}}
 </b></font>
 Osatehtäviä:* <input type="text" size="6" id="{{osatehtavia.id}}" name="{{osatehtavia.name}}" value="{{osatehtavia.value}}" />
+<span onmouseover="tooltip.show('Kukin tehtävä koostuu osatehtävistä ja kukin osatehtävä syötteistä. Anna osatehtävien lukumäärä.');" onmouseout="tooltip.hide();">
+	<img src="/kipamedia/help_small.png" />
+</span>
+<font color=red><b>
+{{kaava.errors}}
+</b></font>
+Kaava:* <input type="text" size="50" id="{{kaava.id}}" name="{{kaava.name}}" value="{{kaava.value}}" />
+<span onmouseover="tooltip.show('Anna tässä kaava, jolla osatehtävien pisteistä lasketaan tehtävästä jaettavat pisteet.');" onmouseout="tooltip.hide();">
+	<img src="/kipamedia/help_small.png" />
+</span>
 
 {% for form in osa_tehtavat %}
         {{ form }}

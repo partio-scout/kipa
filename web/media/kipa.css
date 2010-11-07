@@ -593,13 +593,13 @@ tr .odd:hover{
 
 /* TOOLTIP */
 
-#tt {position:absolute; display:block; background:url("/kipamedia/tt_left.gif") top left no-repeat}
+#tt {position:absolute; display:block; background:url("/kipamedia/tt_left.gif") top left no-repeat; z-index:999;}
 
-#tttop {display:block; height:5px; margin-left:5px; background:url("/kipamedia/tt_top.gif") top right no-repeat; overflow:hidden}
+#tttop {display:block; height:5px; margin-left:5px; background:url("/kipamedia/tt_top.gif") top right no-repeat; overflow:hidden; z-index:999;}
 
-#ttcont {display:block; padding:2px 12px 3px 7px; margin-left:5px; background:#666; color:#FFF}
+#ttcont {display:block; padding:2px 12px 3px 7px; margin-left:5px; background:#666; color:#FFF; z-index:999;}
 
-#ttbot {display:block; height:5px; margin-left:5px; background:url("/kipamedia/tt_bottom.gif") top right no-repeat; overflow:hidden}
+#ttbot {display:block; height:5px; margin-left:5px; background:url("/kipamedia/tt_bottom.gif") top right no-repeat; overflow:hidden; z-index:999;}
 
 
 
