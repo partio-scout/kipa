@@ -495,7 +495,7 @@ def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
         response = HttpResponse(mimetype='text/csv')
         response['Content-Disposition'] = 'attachment; filename='+kisa_nimi+"_"+sarja.nimi+'.csv'
 
-        writer = UnicodeWriter(response)
+        writer = UnicodeWriter(response, delimiter=';')
         writer.writerow([sarja.kisa.nimi, '', sarja.nimi])
         writer.writerow(['', '', time.strftime("%e.%m.%Y %H:%M ", time.localtime()).replace('.0', '.')]) # aika
         writer.writerow(['']) # tyhjä rivi
@@ -507,16 +507,16 @@ def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
 
         for i in range(len(mukana[1:])) :                
                 vartiorivi = [unicode(numero) , unicode(mukana[i+1][0].nro),unicode(mukana[i+1][0].nimi),]
-                vartiorivi.append( unicode(mukana[i+1][1]) )
-                for num in mukana[i+1][2:] : vartiorivi.append( unicode(num) )
+                vartiorivi.append( unicode(mukana[i+1][1]).replace(".",",") )
+                for num in mukana[i+1][2:] : vartiorivi.append( unicode(num).replace(".",",") )
                 writer.writerow( vartiorivi  )
                 numero=numero+1
         writer.writerow([""])
         writer.writerow(["","","Ulkopuolella:"])
         for i in range(len(ulkona)) : 
                 vartiorivi = [unicode(numero) , unicode(mukana[i+1][0].nro),unicode(mukana[i+1][0].nimi),]
-                vartiorivi.append( unicode(mukana[i+1][1]) )
-                for num in mukana[i+1][2:] : vartiorivi.append( unicode(num) )
+                vartiorivi.append( unicode(mukana[i+1][1]).replace(".",",") )
+                for num in mukana[i+1][2:] : vartiorivi.append( unicode(num).replace(".",",") )
                 writer.writerow( vartiorivi  )
 
                 ulkona[i].insert(0,numero)
