@@ -80,11 +80,15 @@ def testaa_tietokanta() :
 
 def etusivu(request) :
         """
-        Kisakohtainen päävalikko.
+        Kipan päävalikko.
+
         """
+        kisat=Kisa.objects.all()
+
         vanha_tietokanta=testaa_tietokanta()
+        if vanha_tietokanta : kisat=None
         return render_to_response('tupa/index.html',{ 'vanha_tietokanta' : vanha_tietokanta,
-                                                              'object_list': Kisa.objects.all() } )
+                                                              'object_list': kisat } )
 
 def kisa(request,kisa_nimi) :
         """
