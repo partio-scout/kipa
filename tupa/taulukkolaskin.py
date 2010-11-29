@@ -10,7 +10,7 @@ from funktiot import funktiot
 
 def dictToMathDict(dictionary) :
         """
-        Muuttaa taballisen sanakirjan rekursiivisesti laskennalliseksi sanakirjaksi.
+        Muuttaa tavallisen sanakirjan rekursiivisesti laskennalliseksi sanakirjaksi.
         """
         new=MathDict({})
         for k in dictionary.keys():

@@ -156,7 +156,7 @@ def luoLaskut(sarja) :
                                 parametrit=ot.parametri_set.all()
                                 maaritteet=ot.syotemaarite_set.all()
                                 korvautuu=True
-                                # Suora summa syotteiden valilla
+                                # Suora summa syotteiden välillä
                                 if ot_lause =="ss" and maaritteet :
                                         ot_lause=""
                                         for m in maaritteet:

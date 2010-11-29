@@ -12,4 +12,7 @@ echo Nollataan ja päivitetään tietokantataulut.
 python manage.py reset --noinput tupa
 echo Ladataan fixturen data uuteen tietokantaan.
 python manage.py loaddata fixture fixtures/old.xml
+echo old.xml
+python manage.py loaddata fixture fixtures/old.xml
+
 
