@@ -1,40 +1,19 @@
 # encoding: utf-8
 # KiPa(KisaPalvelu), tuloslaskentajärjestelmä partiotaitokilpailuihin
 #    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
-
 from decimal import *
 
 class SequenceOperations :
-        def __add__(self,other): 
-                def operation(a,b) : return a+b
-                return self.operate_to_all( operation , other)
-        def __sub__(self,other):
-                def operation(a,b) : return a-b
-                return self.operate_to_all( operation , other)
-        def __mul__(self,other):
-                def operation(a,b) : return a*b
-                return self.operate_to_all( operation , other)
-        def __div__(self,other):
-                def operation(a,b) : return a/b
-                return self.operate_to_all( operation , other)
-        def __lt__(self, other) :
-                def operation(a,b) : return a<b
-                return self.operate_to_all( operation , other)
-        def __le__(self, other) :
-                def operation(a,b) : return a<=b
-                return self.operate_to_all( operation , other)
-        def __eq__(self, other) :
-                def operation(a,b) : return a==b
-                return self.operate_to_all( operation , other)
-        def __ne__(self, other) : 
-                def operation(a,b) : return a!=b
-                return self.operate_to_all( operation , other)
-        def __gt__(self, other) : 
-                def operation(a,b) : return a>b
-                return self.operate_to_all( operation , other)
-        def __ge__(self, other) :
-                def operation(a,b) : return a>=b
-                return self.operate_to_all( operation , other)
+        def __add__(self,other): return self.operate_to_all( lambda a,b: a+b , other)
+        def __sub__(self,other): return self.operate_to_all( lambda a,b: a-b , other)
+        def __mul__(self,other): return self.operate_to_all( lambda a,b: a*b , other)
+        def __div__(self,other): return self.operate_to_all( lambda a,b: a/b , other)
+        def __lt__(self, other): return self.operate_to_all( lambda a,b: a<b , other)
+        def __le__(self, other): return self.operate_to_all( lambda a,b: a<=b, other)
+        def __eq__(self, other): return self.operate_to_all( lambda a,b: a==b, other)
+        def __ne__(self, other): return self.operate_to_all( lambda a,b: a!=b, other)
+        def __gt__(self, other): return self.operate_to_all( lambda a,b: a>b , other)
+        def __ge__(self, other): return self.operate_to_all( lambda a,b: a>=b, other)
 
 class MathDict(SequenceOperations,dict):
         """
@@ -72,7 +51,6 @@ def listaksi(a,*opt):
         """
         Muuttaa sanakirjan tai desimaalin listaksi jos syote on joukkio, muuten palauttaa muuttujan itsessaan.
         """
-
         if len(opt) : 
                 joukkio = [a]
                 joukkio += opt
@@ -95,8 +73,7 @@ def listaksi(a,*opt):
                         return lista
                 except : return None 
 
-
-def suorita(funktio,*param):
+def run_dict(list,funktio,*param):
         mdict=None
         for p in param : 
                 if type(p) == MathDict and not mdict : mdict=p
@@ -108,14 +85,17 @@ def suorita(funktio,*param):
                         if type(p)== MathDict : parametrit.append(p[k])
                         else : parametrit.append(p)
                 try: 
-                        rValue[k]= funktio(*parametrit)
+                        if list: rValue[k]= listaksi(*parametrit)
+                        else : rValue[k]= funktio(*parametrit)
                 except KeyError: pass
                 except TypeError : pass
         return rValue        
 
+def suorita(funktio,*param):
+        return run_dict(0,funktio,*param)
+
 def suorita_lista(funktio,a,*param ) :
         if len(param)==0 : 
-                return funktio(a)
-        else : return suorita(funktio,a,*param)
-
+                return funktio( listaksi(a) )
+        else : return run_dict(1,funktio,a,*param)
 
