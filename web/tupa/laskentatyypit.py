@@ -114,7 +114,8 @@ def suorita(funktio,*param):
         return rValue        
 
 def suorita_lista(funktio,a,*param ) :
-        if len(param)==0 : return funktio(a)
+        if len(param)==0 : 
+                return funktio(a)
         else : return suorita(funktio,a,*param)
 
 
