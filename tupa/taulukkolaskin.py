@@ -2,11 +2,26 @@
 # KiPa(KisaPalvelu), tuloslaskentajärjestelmä partiotaitokilpailuihin
 #    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
 
-
 import re
 from laskentatyypit import *
 from decimal import *
 from funktiot import funktiot
+from funktiot import perusfunktiot
+from funktiot import listafunktiot
+
+pfunktiot={}
+lfunktiot={}
+
+
+for k in perusfunktiot.keys() : 
+        def pfunctionfactory( funktio ) : return lambda *a : suorita(funktio,*a)
+        pfunktiot[k]= pfunctionfactory( perusfunktiot[k] )  
+for k in listafunktiot.keys() : 
+        def lfunctionfactory( funktio ) : return lambda *a : suorita_lista(funktio,*a)
+        lfunktiot[k]= lfunctionfactory(listafunktiot[k] )
+
+#for k in perusfunktiot.keys() : pfunktiot[k]=perusfunktiot[k]
+#for k in listafunktiot.keys() : lfunktiot[k]=listafunktiot[k]
 
 def dictToMathDict(dictionary) :
         """
@@ -37,7 +52,6 @@ def laske(lauseke,m={'num':DictDecimal}):
         # Korvataan yksinaiset muuttujat (lahinna funktioita):
         lause=re.sub(r"([a-zA-Z_]+(?![a-zA-Z_]*?[[']))",r"m['\g<1>']",lause) # x -> m[x]
         
-
         tulos=None
         # lasketaan tulos:
         try: 
@@ -60,7 +74,10 @@ def laskeTaulukko(taulukko,muuttujat) :
         """
         # Maaritetaan numeroluokka eli vakiona lasketaan desimaaliluvuilla:
         m = { "num" : DictDecimal }
+        m.update(pfunktiot)
+        m.update(lfunktiot)
         m.update(funktiot)
+
         # Paivitetaan kayttajan muuttujilla:
         m.update(muuttujat)
         m=dictToMathDict(m)

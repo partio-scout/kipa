@@ -196,7 +196,7 @@ def luoLaskut(sarja) :
                                 tehtava_lause=t.kaava
                                 for l in ot_lauseet:
                                         lause=l[1]
-                                        tehtava_lause=re.sub(l[0]+r"(?<![.])(?!\w+)(?![.])","max([0,"+lause+"])",tehtava_lause)
+                                        tehtava_lause=re.sub(r"(?<!\w|[.])"+l[0]+r"(?<![.])(?!\w+)(?![.])","max([0,"+lause+"])",tehtava_lause)
                                 
                         vartioRivi.append(tehtava_lause)
                         pino.pop()
