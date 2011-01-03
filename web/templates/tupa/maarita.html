@@ -9,7 +9,8 @@
     {% for form in forms%}
         <fieldset>
 		<legend>{{form.label}} </legend>
-		{{form}} <br>
+		{{form}} 
+        {{form.helppiteksti}}<br>
 	</fieldset>
     {% endfor%}
 {% endif %}
@@ -17,7 +18,7 @@
 {% if formsets %}
     {% for formset in formsets %}
         <fieldset>
-		<legend>{{formset.label}}</legend>
+		<legend>{{formset.label}} {{formset.helppiteksti}} </legend>
 		{{ formset.management_form }}
 		{% for form in formset.forms %}
 		                {{ form }} <br>

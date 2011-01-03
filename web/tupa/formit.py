@@ -34,10 +34,15 @@ VartioFormSet = inlineformset_factory(Sarja,
 MaariteFormSet = inlineformset_factory(OsaTehtava,SyoteMaarite,extra=3 )
 
 class SarjaForm(ModelForm):
+        nimi = forms.CharField(label = "Nimi:*")
+        tasapiste_teht1 = forms.IntegerField(widget=forms.TextInput(attrs={'size':'3'} ) )
+        tasapiste_teht2 = forms.IntegerField(widget=forms.TextInput(attrs={'size':'3'} ) )
+        tasapiste_teht3 = forms.IntegerField(widget=forms.TextInput(attrs={'size':'3'} ) )
         vartion_maksimikoko = forms.IntegerField(widget=forms.HiddenInput,required=False )
         vartion_minimikoko = forms.IntegerField(widget=forms.HiddenInput,required=False)
 
 SarjaFormSet = inlineformset_factory(Kisa,Sarja,extra=8 , form=SarjaForm)
+SarjaFormSet.helppiteksti=SafeUnicode('<span onmouseover="tooltip.show(\' APUAAAAAAAAAAAAA!  \');" onmouseout="tooltip.hide();"><img src="/kipamedia/help_small.png" /></span>')
 
 TehtavaValintaFormSet = inlineformset_factory(Sarja,Tehtava,fields='jarjestysnro')
 
@@ -68,6 +73,17 @@ class TehtavaLinkkilistaFormset(tuhoaTehtaviaFormset):
                         piirto = piirto.replace("<p>","").replace("</p>","")
                 return SafeUnicode(piirto)
 
+class HelpWidget(forms.TextInput):
+        """
+        Help widget for help text labels
+        """
+        def __init__(self, helptext, *argcv):
+                super(HelpWidget, self).__init__(*argcv)
+                self.helptext=helptext
+
+        def render(self, name , value=None, attrs=None):
+                return SafeUnicode(super(HelpWidget, self).render(name, value, attrs) ) + '<span onmouseover="tooltip.show(\''+ self.helptext +'\');" onmouseout="tooltip.hide();"><img src="/kipamedia/help_small.png" /></span>' 
+
 
 
 class AikaWidget(forms.TextInput):
@@ -89,7 +105,7 @@ class AikaWidget(forms.TextInput):
                                 newValue = str(h) +":"+str(min) +":"+str(sec)
                         except ValueError:
                                 pass
-                return super(AikaWidget,self).render(name,newValue,attrs)
+                return super(AikaWidget,self).render(name,newValue,attrs) 
 
 class PisteField(forms.CharField) :
         """
@@ -244,6 +260,8 @@ TestiTulosForm = tulostauluFormFactory( TestausTulos )
 ####################################################################
 
 class KisaForm(ModelForm):
+        nimi = forms.CharField(label = "Nimi:*" , widget=HelpWidget(helptext="apua") )
+
         def clean_nimi(self):
                 nimi = self.cleaned_data['nimi']
                 nimi = re.sub(r'\s', '_',nimi)

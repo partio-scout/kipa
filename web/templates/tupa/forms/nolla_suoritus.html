@@ -12,13 +12,18 @@
         </b></font>
 </td>
 <td>
-        <input type="radio" id="{{nollan_kerroin.id}}" value="1" name="{{nollan_kerroin.name}}" 
-        {% ifequal nollan_kerroin.value "1" %}checked="checked" {% endifequal %} />
 </td>
 <td>
         <fieldset>
                 <legend>{%if vapaa %} Vapaa: {%else%} Kiinteä {% endif %}</legend>
                 <p>
+        <input type="radio" id="{{nollan_kerroin.id}}" value="1" name="{{nollan_kerroin.name}}" 
+        {% ifequal nollan_kerroin.value "1" %}
+        checked="checked" 
+        {% endifequal %} 
+        {% if not nollan_kerroin.value %}
+        checked="checked" 
+        {% endif %} />
                         {%if vapaa %} kaava: {%else%}  Kiinteä suoritus: {% endif %}
                         <font color=red><b>
                         {{nollan_kaava.errors}}
@@ -46,12 +51,15 @@
 {% ifnotequal nollan_kerroin.value "1.5" %}
 {% ifnotequal nollan_kerroin.value "0.5" %}
 {% ifnotequal nollan_kerroin.value "1" %}
+{% if nollan_kerroin.value %}
+
 checked="checked" 
+{% endif %} 
 {% endifnotequal %} 
 {% endifnotequal %} 
 {% endifnotequal %}/> 
  
-muu:
+muu: {{nollan_kerroin.value}}
 
                         <font color=red><b>
                         {{muu_kerroin.errors}}
