@@ -55,11 +55,13 @@ class TuhoaTehtavaForm(ModelForm):
         kaava = forms.CharField(widget=forms.HiddenInput,required=False)
         sarja = forms.ModelChoiceField(queryset=Sarja.objects.all(), widget=forms.HiddenInput,required=False)
         tarkistettu = forms.BooleanField(widget=forms.HiddenInput,required=False)
+        lyhenne = forms.CharField(widget=forms.HiddenInput,required=False)
+        maksimipisteet = forms.CharField(widget=forms.HiddenInput,required=False)
         class Meta :
                 model=Tehtava
 
-
 tuhoaTehtaviaFormset = modelformset_factory(Tehtava,can_delete=True,extra=0,form=TuhoaTehtavaForm)
+
 class TehtavaLinkkilistaFormset(tuhoaTehtaviaFormset):
         def __unicode__(self) :
                 piirto=unicode(self.management_form)

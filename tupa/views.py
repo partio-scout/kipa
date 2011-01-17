@@ -141,7 +141,10 @@ def maaritaKisa(request, kisa_nimi=None,talletettu=None):
         sarjaFormit.label="Sarjat" 
         # Annetaan tiedot templatelle:
         if posti and sarjaFormit.is_valid() and kisaForm.is_valid() :
-                return kipaResponseRedirect("/kipa/"+kisa.nimi+"/maarita/talletettu/")
+                if "nappi" in posti.keys() and posti['nappi']=="ohjaus" :
+                        return kipaResponseRedirect("/kipa/"+kisa.nimi+"/maarita/vartiot/")
+                else : 
+                        return kipaResponseRedirect("/kipa/"+kisa.nimi+"/maarita/talletettu/")
         else :
                 tal=""
                 if talletettu=="talletettu" and not posti : tal="Talletettu!"
@@ -160,7 +163,8 @@ def maaritaKisa(request, kisa_nimi=None,talletettu=None):
                                       'forms' : (kisaForm,) ,
                                       'formsets' : ( sarjaFormit,),
                                       'kisa_nimi' : kisa_nimi,
-                                      'talletettu': tal })
+                                      'talletettu': tal,
+                                      'ohjaus_nappi' : "siirry vartioiden määrittelyyn"})
 
 def maaritaValitseTehtava(request,kisa_nimi):
         """
@@ -203,6 +207,7 @@ def maaritaVartiot(request,kisa_nimi,talletettu=None):
         taulukko=[]
         if request.method == 'POST':
                 posti=request.POST
+
         for s in sarjat :
                 vartioFormit=VartioFormSet(posti,instance=s,prefix=s.nimi )
                 if vartioFormit.is_valid():
@@ -213,16 +218,21 @@ def maaritaVartiot(request,kisa_nimi,talletettu=None):
                 vartioFormit.id=s.id
                 taulukko.append( vartioFormit )
         if posti and post_ok:
+                if "nappi" in posti.keys() and posti["nappi"]=="ohjaus" :
+                        return kipaResponseRedirect("/kipa/"+kisa_nimi+"/maarita/tehtava/")
                 return kipaResponseRedirect("/kipa/"+kisa_nimi+"/maarita/vartiot/talletettu/")
         else:
                 tal=""
                 if talletettu=="talletettu" and not posti : tal="Talletettu!"
-
+                ohjaus_nappi=None
+                if 'HTTP_REFERER' in request.META.keys() and request.META['HTTP_REFERER'][-23:]== "/kipa/uusiKisa/maarita/" :
+                        ohjaus_nappi="siirry tehtävien määritykseen"
                 return render_to_response('tupa/valitse_formset.html',
                                         { 'taulukko' : taulukko ,
                                         'heading' : "Määritä vartiot",
                                         'kisa_nimi': kisa_nimi,
-                                        'talletettu': tal })
+                                        'talletettu': tal,
+                                        'ohjaus_nappi' : ohjaus_nappi})
 
 def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu=""):
         """
@@ -243,7 +253,7 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
                 sarja= tehtava.sarja
         
         else:
-                sarja = tehtava=get_object_or_404(Sarja, id=sarja_id)
+                sarja = get_object_or_404(Sarja, id=sarja_id)
                 tehtava=Tehtava(sarja)
 
         # Tabs:
@@ -270,6 +280,9 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
 	if tehtava and not tehtava.nimi == '' : otsikko = tehtava.nimi
         
         if posti and not 'lisaa_maaritteita' in posti.keys() and daatta['valid'] :
+                if "nappi" in posti.keys() and posti["nappi"]=="ohjaus":
+                        return kipaResponseRedirect("/kipa/"+ kisa_nimi+ "/maarita/tehtava/uusi/sarja/"+str(sarja.id)+"/")
+
                 return kipaResponseRedirect("/kipa/"+kisa_nimi+"/maarita/tehtava/"+str(tehtava_id)+'/talletettu/' )
         else:
                 tal=""
@@ -277,9 +290,10 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
                 return render_to_response('tupa/maarita.html', 
                                 { 'forms': [tehtavaForm],
                                 'heading' : otsikko,
-				'kisa_nimi': kisa_nimi,
-				'taakse' : {'url' : '/kipa/' + kisa_nimi + '/maarita/tehtava/', 'title' : u'Muokkaa tehtävää' },
-                                'talletettu': tal})
+				                'kisa_nimi': kisa_nimi,
+				                'taakse' : {'url' : '/kipa/' + kisa_nimi + '/maarita/tehtava/', 'title' : u'Muokkaa tehtävää' },
+                                'talletettu': tal,
+                                'ohjaus_nappi': "lisää uusi tehtävä" })
 
 def syotaKisa(request, kisa_nimi,tarkistus=None):
         """
