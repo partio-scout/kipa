@@ -609,6 +609,8 @@ def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehta
                 data['#1']={'sarja' : sarja_id,
                                                 'kaava': 'ss' ,
                                                 'nimi': '' ,
+                                                'lyhenne': '' ,
+                                                'maksimipisteet': '' ,
                                                 'jarjestysnro':suurin_jarjestysnro+1, 
                                                 'osa_tehtavat' : {  } }
 
@@ -690,11 +692,19 @@ def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehta
                                 # Numeroiden validiointi:
                                 if fk=='jarjestysnro' :
                                         if not is_number(value):
-                                                errors="Anna numero! "
+                                                errors="Anna numero!"
                                                 data['valid']=False
                                 # Merkkijonojen validiointi:
                                 if fk=='nimi'  :
                                         if not is_string(value):
+                                                errors="Anna merkkijono [a-zA-Za0-9_]"
+                                                data['valid']=False
+                                if fk=='maksimipisteet' :
+                                        if value and not is_number(value):
+                                                errors="Anna numero!"
+                                                data['valid']=False
+                                if fk=='lyhenne' :
+                                        if value and not is_string(value):
                                                 errors="Anna merkkijono [a-zA-Za0-9_]"
                                                 data['valid']=False
                                                 
