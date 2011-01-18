@@ -2,7 +2,6 @@
 # KiPa(KisaPalvelu), tuloslaskentaj‰rjestelm‰ partiotaitokilpailuihin
 #    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
 
-
 import unittest
 
 from models import *
@@ -99,7 +98,7 @@ def haeTulos(tuloksetSarjalle, vartio, tehtava) :
 
 def ViewSanityCheck(fixture_name):
         """
-        Luo tescasen tarkistamaan sen etta kaikki nakumat toimivat kaatumatta.
+        Luo tescasen tarkistamaan sen etta kaikki n‰kym‰t toimivat kaatumatta.
         fixture name = tietokantafixtuurin nimi jolle testi luodaan.
         palauttaa TestCase:n
         """
@@ -107,8 +106,8 @@ def ViewSanityCheck(fixture_name):
                 fixtures = [fixture_name]
                 def testTulokset(self):
                         """
-                        Ajaa jokaisen nakyman testidatalla
-                        Testi antaa virheen jos jokin nakuma kaatuu.
+                        Ajaa jokaisen n‰kym‰n testidatalla
+                        Testi antaa virheen jos jokin n‰kuma kaatuu.
                         """
                         kisat=Kisa.objects.all()
                         sarjat=Sarja.objects.all()
@@ -116,6 +115,7 @@ def ViewSanityCheck(fixture_name):
                         virheet=[]
                         request =HttpRequest()
                         maaritaKisa(request)
+                        korvaaKisa(request)
                         for k in kisat :
                                 kisa_nimi=k.nimi
                                 kisa(request,kisa_nimi=kisa_nimi)
@@ -124,21 +124,24 @@ def ViewSanityCheck(fixture_name):
                                 maaritaVartiot(request,kisa_nimi=kisa_nimi)
                                 testiTulos(request,kisa_nimi=kisa_nimi)
                                 syotaKisa(request,kisa_nimi=kisa_nimi)
+                                laskennanTilanne(request,kisa_nimi=kisa_nimi)
                                 tulosta(request,kisa_nimi=kisa_nimi)
+                                tallennaKisa(request, kisa_nimi=kisa_nimi)
+                                poistaKisa(request, kisa_nimi=kisa_nimi)
                         for s in sarjat:
                                 sarja_id=s.id
                                 kisa_nimi=s.kisa.nimi
                                 maaritaTehtava(request,kisa_nimi=kisa_nimi,sarja_id=sarja_id)
                                 kopioiTehtavia(request,kisa_nimi=kisa_nimi,sarja_id=sarja_id)
                                 tulostaSarja(request,kisa_nimi=kisa_nimi, sarja_id=sarja_id)
+                                sarjanTuloksetCSV(request, kisa_nimi=kisa_nimi, sarja_id=sarja_id) 
+                                tulostaSarjaHTML(request, kisa_nimi=kisa_nimi, sarja_id=sarja_id)
                         for t in tehtavat:
                                 tehtava_id=t.id
                                 kisa_nimi=t.sarja.kisa.nimi
                                 maaritaTehtava(request,kisa_nimi=kisa_nimi,tehtava_id=tehtava_id)
                                 syotaTehtava(request,kisa_nimi=kisa_nimi,tehtava_id=tehtava_id)
         return testi
-
-
 
 def TulosTestFactory(fixture_name):
         """
@@ -209,8 +212,10 @@ for f in os.listdir(os.curdir+"/fixtures/tests/"):
         if not f.find(".xml") == -1:
                 test_fixtures.append("fixtures/tests/"+f)
 
-
 def PostTestFactory(fixture_name):
+        """
+        Testi joka ajaa n‰kymi‰ ennalta m‰‰ritellyill‰ testdatoilla.
+        """
         from xml.dom.minidom import parse
         class testi(TestCase) :
                 fixtures = [fixture_name]
@@ -234,9 +239,6 @@ def PostTestFactory(fixture_name):
                                 c.post(osoite,posti)
         return testi
 
-
-
-
 class TasapisteTesti(TestCase) :
         fixtures = ["fixtures/tests/tasapisteet.xml"]
         def testJarjestys(self):
@@ -252,11 +254,9 @@ class TasapisteTesti(TestCase) :
 # Tasapisteiss‰ m‰‰r‰‰v‰t teht‰v‰t testi
 testit.append( TasapisteTesti )
 
-
 #luodaan Post testit tekstitiedostoista
 for t in test_fixtures:
         testit.append( PostTestFactory(t) )
-
 
 # luodaan tulostestit fixtuureista.
 for t in test_fixtures:
@@ -273,5 +273,4 @@ def suite():
                 suites.append(unittest.TestLoader().loadTestsFromTestCase(t))
         suite=unittest.TestSuite(suites)
         return suite
-
 
