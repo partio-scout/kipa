@@ -1,6 +1,9 @@
 # encoding: utf-8
+# coding: UTF-8
 # KiPa(KisaPalvelu), tuloslaskentajärjestelmä partiotaitokilpailuihin
 #    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
 
 from django.shortcuts import render_to_response
 from django.shortcuts import get_object_or_404
@@ -498,6 +501,34 @@ def tulostaSarja(request, kisa_nimi, sarja_id) :
 			'heading' : sarja.nimi, 
 			'taakse' : {'url' : '../../', 'title' : 'Tulokset sarjoittain'} }  )
 
+def tulostaSarjaHTML(request, kisa_nimi, sarja_id) :
+        """
+        Sarjan tulokset, sivu muotoiltuna tulostusta varten ilman turhia grafiikoita.
+        """
+        sarja = Sarja.objects.get(id=sarja_id)
+        tulokset= sarja.laskeTulokset()
+
+        mukana=tulokset[0]
+        ulkona=tulokset[1]
+        numero=1 
+        for i in range(len(mukana[1:])) :
+                mukana[i+1].insert(0,numero)
+                numero=numero+1
+        for i in range(len(ulkona)) : 
+                ulkona[i].insert(0,numero)
+                numero=numero+1
+        kisa_aika = sarja.kisa.aika
+        kisa_paikka = sarja.kisa.paikka
+
+        return render_to_response('tupa/tuloksetHTML.html', 
+			{'tulos_taulukko' : mukana,
+	            	'ulkona_taulukko' : ulkona,
+			'kisa_nimi' : kisa_nimi, 
+			'kisa_aika' : kisa_aika,
+			'kisa_paikka' : kisa_paikka,
+			'heading' : sarja.nimi, 
+			'taakse' : {'url' : '../../', 'title' : 'Tulokset sarjoittain'} }  )
+
 
 def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
         """
@@ -511,8 +542,10 @@ def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
         numero=1 
         # Luodaan HttpResponse objekti CSV hederillä.
         response = HttpResponse(mimetype='text/csv')
-        response['Content-Disposition'] = 'attachment; filename='+kisa_nimi+"_"+sarja.nimi+'.csv'
 
+        disposition='attachment; filename='+kisa_nimi+"_"+sarja.nimi+'.csv'
+        response['Content-Disposition'] = disposition.encode('utf-8')
+        
         writer = UnicodeWriter(response, delimiter=';')
         writer.writerow([sarja.kisa.nimi, '', sarja.nimi])
         writer.writerow(['', '', time.strftime("%e.%m.%Y %H:%M ", time.localtime()).replace('.0', '.')]) # aika
@@ -776,33 +809,6 @@ def raportti_500(request) :
         linkki+='/> #00000000'+ str(random.uniform(1, 10)) +'</a>'      
         return render_to_response('500.html', {'error': SafeUnicode(linkki) })
 
-def tulostaSarjaHTML(request, kisa_nimi, sarja_id) :
-        """
-        Sarjan tulokset, sivu muotoiltuna tulostusta varten ilman turhia grafiikoita.
-        """
-        sarja = Sarja.objects.get(id=sarja_id)
-        tulokset= sarja.laskeTulokset()
-
-        mukana=tulokset[0]
-        ulkona=tulokset[1]
-        numero=1 
-        for i in range(len(mukana[1:])) :
-                mukana[i+1].insert(0,numero)
-                numero=numero+1
-        for i in range(len(ulkona)) : 
-                ulkona[i].insert(0,numero)
-                numero=numero+1
-        kisa_aika = sarja.kisa.aika
-        kisa_paikka = sarja.kisa.paikka
-
-        return render_to_response('tupa/tuloksetHTML.html', 
-			{'tulos_taulukko' : mukana,
-	            	'ulkona_taulukko' : ulkona,
-			'kisa_nimi' : kisa_nimi, 
-			'kisa_aika' : kisa_aika,
-			'kisa_paikka' : kisa_paikka,
-			'heading' : sarja.nimi, 
-			'taakse' : {'url' : '../../', 'title' : 'Tulokset sarjoittain'} }  )
 
 
 def haeTulos(tuloksetSarjalle, vartio, tehtava) :
