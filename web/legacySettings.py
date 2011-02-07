@@ -1,3 +1,3 @@
 from settings import *
-INSTALLED_APPS.append( 'web.legacy')
+INSTALLED_APPS.append( 'legacy')
 

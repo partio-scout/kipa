@@ -317,8 +317,6 @@ def syotaKisa(request, kisa_nimi,tarkistus=None):
                                 'heading' : "Syötä tuloksia",
 				'kisa_nimi': kisa_nimi })
 
-
-
 def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None) :
         """
         Määrittää tehtävän syötteet.
