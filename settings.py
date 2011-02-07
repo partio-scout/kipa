@@ -75,11 +75,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    'web.tupa.logger.PostDataRecorder',
+    'tupa.logger.PostDataRecorder',
     'django.middleware.doc.XViewMiddleware',
 )
 
-ROOT_URLCONF = 'web.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     hakemisto + '/templates',
@@ -93,7 +93,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'web.tupa',
+    'tupa',
     'django.contrib.admin',
     #'django.contrib.formtools',
     'django.template',

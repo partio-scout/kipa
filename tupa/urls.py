@@ -14,7 +14,7 @@ from django.conf import settings
 
 tal=r"(?P<talletettu>(talletettu)?)/?$"
 
-urlpatterns = patterns('web.tupa.views',
+urlpatterns = patterns('tupa.views',
         (r'^admin/(.*)', admin.site.root ),	
         (r'^apua/', 'apua'),
         (r'^$', 'etusivu'),
