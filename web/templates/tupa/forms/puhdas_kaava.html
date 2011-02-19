@@ -29,7 +29,7 @@
 </table>
 
 <button name="lisaa_maaritteita" type="submit" class="small blue awesome" value='{{maaritteita.name}}' title="Lisää 5 tyhjää kenttää">Lisää 5 kenttää</button><br><br>
-<font color=red><b>{{kaava.errors}}</b></font>Kaavassa käytettävät funktiot
+<font color=red><b>{{kaava.errors}}</b></font><strong>Kaavassa käytettävät funktiot:</strong>
 <span onmouseover="tooltip.show('<b>Perusfunktiot:</b><br> interpoloi(x,x1,y1,x2,(y2=0))<br>aikavali(a,b) - vuorokauden ylittävä kello<br>abs(x) - iseisarvo<br>log(x) - logaritmi10<br>ln(x) - luonnollinen logaritmi<br>floor(x) - lattia<br>ceil(x) - katto<br>sqrt(x) - neliöjuuri<br>exp(x) - exponentti<br>mod(x) - jakojäännös<br>pow(x) - potenssi<br><br><b>Listafunktiot:</b><br>min(x,(...) ), pienin(x, (...) )<br>max(x, (...) ), suurin(x, (...) )<br>sum(x, (...) ) - summa<br>med(x, (...) ) - mediaani<br>kesk(x, (...) ) - keskiarvo' );" 
 onmouseout="tooltip.hide();">
 	<img src="/kipamedia/help_small.png" />
@@ -39,8 +39,10 @@ Vartion suorituksen kaava:
 <span onmouseover="tooltip.show('Anna kaava, joka määrää suoraan vartion osatehtävän pisteet. Syötteisiin ja osatehtäviin viitataan niiden kirjaimilla. Välilyöntejä sekä rivinvaihtoa voi käyttää vapaasti kaavan jäsentelyyn. <br><br>Esimerkkejä:<br> a+b+c syötteiden summa <br>1/a (käänteisluku)<br>a (vartion syöte) <br>.a (sarjan kaikkien vartioiden syötteet)<br>min(.a) (sarjan vartioiden syötteen minimi)<br>mukana (mukana olevien vartioiden filtteri)<br>max(.a*mukana) (mukana olevien vartioiden syöteen maksimi)<br>vartio (vartion numero)<br>..b.a.vartio (syöte a vartiolle osatehtävästä b)<br>...start.c.a.vartio (syöte a vartiolle osatehtästä c tehtävään start)' );" 
 onmouseout="tooltip.hide();">
 	<img src="/kipamedia/help_small.png" />
-</span>
-                        <textarea name="{{kaava.name}}" id="{{kaava.id}}" cols="80" rows="7">{{kaava.value}}</textarea><br><br>
+</span><br />
+<blockquote>
+	<textarea name="{{kaava.name}}" id="{{kaava.id}}" cols="80" rows="7">{{kaava.value}}</textarea><br><br>
+</blockquote>
 
 <INPUT TYPE=HIDDEN NAME="{{maaritteita.name}}" value="{{maaritteita.value}}">
 
