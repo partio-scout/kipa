@@ -20,8 +20,8 @@ class VartioForm(ModelForm):
         ulkopuolella = forms.IntegerField(
                         widget=forms.TextInput(attrs={'size':'2'} ) ,
                         required=False)
-        keskeyttanyt = forms.IntegerField(widget=forms.TextInput(attrs={'size':'2'} ) ,required=False)
-        nro = forms.IntegerField(widget=forms.TextInput(attrs={'size':'3'} ) )
+        keskeyttanyt = forms.IntegerField(label = "Keskeyttänyt", widget=forms.TextInput(attrs={'size':'2'} ) ,required=False)
+        nro = forms.IntegerField(label = "<b>Nro</b>", widget=forms.TextInput(attrs={'size':'3'} ) )
         class Meta:
                 model = Vartio
 
@@ -35,14 +35,14 @@ MaariteFormSet = inlineformset_factory(OsaTehtava,SyoteMaarite,extra=3 )
 
 class SarjaForm(ModelForm):
         nimi = forms.CharField(label = "Nimi:*")
-        tasapiste_teht1 = forms.IntegerField(widget=forms.TextInput(attrs={'size':'3'} ) )
-        tasapiste_teht2 = forms.IntegerField(widget=forms.TextInput(attrs={'size':'3'} ) )
-        tasapiste_teht3 = forms.IntegerField(widget=forms.TextInput(attrs={'size':'3'} ) )
+        tasapiste_teht1 = forms.IntegerField(label = "Tasapisteissä määräävät tehtävät: 1:" , widget=forms.TextInput(attrs={'size':'3'} ) )
+        tasapiste_teht2 = forms.IntegerField(label = "2:" , widget=forms.TextInput(attrs={'size':'3'} ) )
+        tasapiste_teht3 = forms.IntegerField(label = "3:" , widget=forms.TextInput(attrs={'size':'3'} ) )
         vartion_maksimikoko = forms.IntegerField(widget=forms.HiddenInput,required=False )
         vartion_minimikoko = forms.IntegerField(widget=forms.HiddenInput,required=False)
 
 SarjaFormSet = inlineformset_factory(Kisa,Sarja,extra=8 , form=SarjaForm)
-SarjaFormSet.helppiteksti=SafeUnicode('<span onmouseover="tooltip.show(\' APUAAAAAAAAAAAAA!  \');" onmouseout="tooltip.hide();"><img src="/kipamedia/help_small.png" /></span>')
+SarjaFormSet.helppiteksti=SafeUnicode('<span onmouseover="tooltip.show(\'Sarjan <strong>nimet</strong> voivat sis&auml;lt&auml;&auml; &auml;&auml;kk&ouml;si&auml; ja v&auml;lily&ouml;ntej&auml;.<br><strong>Tasapisteiss&auml; m&auml;&auml;r&auml;&auml;v&auml;t teht&auml;v&auml;t</strong> -kohdat kertovat tasapisteiss&auml; m&auml;&auml;r&auml;&auml;vien teht&auml;vien numerot. Palaa t&auml;ytt&auml;m&auml;&auml;n ne m&auml;&auml;ritelty&auml;si kyseiset teht&auml;v&auml;t.\');" onmouseout="tooltip.hide();"><img src="/kipamedia/help_small.png" /></span>')
 
 TehtavaValintaFormSet = inlineformset_factory(Sarja,Tehtava,fields='jarjestysnro')
 
@@ -262,7 +262,7 @@ TestiTulosForm = tulostauluFormFactory( TestausTulos )
 ####################################################################
 
 class KisaForm(ModelForm):
-        nimi = forms.CharField(label = "Nimi:*" , widget=HelpWidget(helptext="apua") )
+        nimi = forms.CharField(label = "Nimi:*" , widget=HelpWidget(helptext="Kisan yksil&ouml;llinen <strong>nimi</strong>. Ei saa sis&auml;lt&auml;&auml; erikoismerkkej&auml; eik&auml; v&auml;lily&ouml;ntej&auml;. &Auml;&auml;kk&ouml;set eiv&auml;t v&auml;ltt&auml;m&auml;tt&auml; toimi, jos Kipaa k&auml;ytet&auml;&auml;n Internet Explorerilla.<br><strong>Aika</strong> ja <strong>paikka</strong> ovat lis&auml;tietoja, jotka tulostuvat kisan tuloksiin.") )
 
         def clean_nimi(self):
                 nimi = self.cleaned_data['nimi']
