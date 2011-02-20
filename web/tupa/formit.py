@@ -35,9 +35,9 @@ MaariteFormSet = inlineformset_factory(OsaTehtava,SyoteMaarite,extra=3 )
 
 class SarjaForm(ModelForm):
         nimi = forms.CharField(label = "Nimi:*")
-        tasapiste_teht1 = forms.IntegerField(label = "Tasapisteissä määräävät tehtävät: 1:" , widget=forms.TextInput(attrs={'size':'3'} ) )
-        tasapiste_teht2 = forms.IntegerField(label = "2:" , widget=forms.TextInput(attrs={'size':'3'} ) )
-        tasapiste_teht3 = forms.IntegerField(label = "3:" , widget=forms.TextInput(attrs={'size':'3'} ) )
+        tasapiste_teht1 = forms.IntegerField(label = "Tasapisteissä määräävät tehtävät: 1:" ,widget=forms.TextInput(attrs={'size':'3'} ),initial=1 )
+        tasapiste_teht2 = forms.IntegerField(label = "2:", widget=forms.TextInput(attrs={'size':'3'} ),initial=2 )
+        tasapiste_teht3 = forms.IntegerField(label = "3:", widget=forms.TextInput(attrs={'size':'3'} ),initial=3 )
         vartion_maksimikoko = forms.IntegerField(widget=forms.HiddenInput,required=False )
         vartion_minimikoko = forms.IntegerField(widget=forms.HiddenInput,required=False)
 

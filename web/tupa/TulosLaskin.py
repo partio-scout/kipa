@@ -2,7 +2,6 @@
 # KiPa(KisaPalvelu), tuloslaskentajärjestelmä partiotaitokilpailuihin
 #    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
 
-
 from decimal import *
 from laskentatyypit import *
 import re
@@ -261,8 +260,13 @@ def laskeSarja(sarja):
         tulokset=mukana
         #lisataan tehtävä rivi ylos
         t_list=[sarja,"Yht." ,]
+        pisteet_yhteensa=0
         for t in tehtavat:
+                try:
+                        if int(t.maksimipisteet) : pisteet_yhteensa+=int(t.maksimipisteet)
+                except: pass
                 t_list.append(t)
+        t_list[0].maksimipisteet=pisteet_yhteensa
 
         #Tasapisteissä määräävät tehtävät
         tasa1 = 0
