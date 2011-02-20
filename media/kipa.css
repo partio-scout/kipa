@@ -1204,3 +1204,5 @@ a.sitetoolbarnavactive:hover { color: #0d3b65; border: 1px solid #486B8A; paddin
 	text-align:right;
 	padding-right:10px;
 }
+
+#taulukko th.osatehtava_otsikko {color:#000; background-color:#fff; border:1px solid #222; text-align:center;}
