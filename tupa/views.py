@@ -92,7 +92,6 @@ def etusivu(request) :
         if vanha_tietokanta : kisat=None
         return render_to_response('tupa/index.html',{ 'vanha_tietokanta' : vanha_tietokanta,
                                                               'object_list': kisat } )
-
 def kisa(request,kisa_nimi) :
         """
         Kisakohtainen päävalikko.
@@ -113,7 +112,6 @@ def tulosta(request,kisa_nimi):
         return render_to_response('tupa/tulosta.html', {'sarja_list': sarjat,
                                                       'kisa_nimi': kisa_nimi, 
                                                       'heading' : 'Tulokset sarjoittain' })
-
 
 def maaritaKisa(request, kisa_nimi=None,talletettu=None):
         """
@@ -136,9 +134,9 @@ def maaritaKisa(request, kisa_nimi=None,talletettu=None):
         sarjaFormit=SarjaFormSet(posti,instance=kisa)
 
         if kisaForm.is_valid():
-                kisa=kisaForm.save()
                 sarjaFormit=SarjaFormSet(posti,instance=kisa)
                 if sarjaFormit.is_valid():
+                        kisa=kisaForm.save()
                         sarjaFormit.save()
 
         sarjaFormit.label="Sarjat" 
@@ -258,13 +256,11 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
         else:
                 sarja = get_object_or_404(Sarja, id=sarja_id)
                 tehtava=Tehtava(sarja)
-
         # Tabs:
         daatta={}
         if tehtava_id:
                 osatehtavat= tehtava.osatehtava_set.all() 
                 daatta =luoTehtavaData([tehtava]) 
-        
         
         # Haetaan suurin kaytosssa oleva jarjestysnro tassa sarjassa:
         sarjan_tehtavat=Tehtava.objects.filter(sarja=sarja)
@@ -527,7 +523,6 @@ def tulostaSarjaHTML(request, kisa_nimi, sarja_id) :
 			'heading' : sarja.nimi, 
 			'taakse' : {'url' : '../../', 'title' : 'Tulokset sarjoittain'} }  )
 
-
 def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
         """
         Sarjan tulokset csv tiedostoon esim. Excel-muokkausta varten.
@@ -549,11 +544,29 @@ def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
         writer.writerow(['', '', time.strftime("%e.%m.%Y %H:%M ", time.localtime()).replace('.0', '.')]) # aika
         writer.writerow(['']) # tyhjä rivi
 
-        otsikkorivi=['Sij.', 'Nro:', 'Vartio:', 'Pisteet:']
-        for teht in mukana[0][2:] : otsikkorivi.append(unicode(teht.jarjestysnro)+"."+teht.nimi)
-                
+        otsikkorivi=['Sij.', 'Nro:', 'Vartio:', 'Yht:']
+        for teht in mukana[0][2:] :
+                otsikkorivi.append(unicode(teht.jarjestysnro))
         writer.writerow(otsikkorivi)
+        
+        nimirivi = ['','','','']
+        for teht in mukana[0][2:] :
+                teht_nimi=teht.nimi
+                if teht.lyhenne : teht_nimi=teht.lyhenne
+                nimirivi.append( teht_nimi )
+        writer.writerow(nimirivi)
 
+        pisterivi = ['','','Maxpisteet',''] 
+        pisteet_yht = 0
+        for teht in mukana[0][2:] : 
+                try : 
+                        if int( teht.maksimipisteet ) : pisteet_yht += int( teht.maksimipisteet )
+                except: pass
+                pisterivi.append( teht.maksimipisteet )
+        pisterivi[3]=str(pisteet_yht)
+        writer.writerow(pisterivi)
+        writer.writerow(['',''])
+        
         for i in range(len(mukana[1:])) :                
                 vartiorivi = [unicode(numero) , unicode(mukana[i+1][0].nro),unicode(mukana[i+1][0].nimi),]
                 vartiorivi.append( unicode(mukana[i+1][1]).replace(".",",") )
@@ -577,9 +590,6 @@ def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
         writer.writerow([u"K = vartio keskeyttänyt"])
         writer.writerow([u"None = laskentavirhe"])
         return response
-
-
-
 
 def piirit(request,kisa_nimi) :
         """
@@ -806,8 +816,6 @@ def raportti_500(request) :
         linkki=SafeUnicode('<a href=/kipa' )
         linkki+='/> #00000000'+ str(random.uniform(1, 10)) +'</a>'      
         return render_to_response('500.html', {'error': SafeUnicode(linkki) })
-
-
 
 def haeTulos(tuloksetSarjalle, vartio, tehtava) :
                 #Mukana olevat

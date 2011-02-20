@@ -63,12 +63,14 @@
                         {%endfor %}
 
                       <tr> 
-                      <td></td><td></td>
+                      <td></td><td></td><td align="right">Maxpisteet</td>
                         {% for sarake in rivi %}
                                 {% if forloop.first  %}
-                                <td align="right">Maxpisteet</td>
-                                {% else %}
                                <td align="right" style="padding-right:10px;"> {{ sarake.maksimipisteet }} </td>
+                                {% else %}
+                                {% if forloop.counter > 2  %}
+                               <td align="right" style="padding-right:10px;"> {{ sarake.maksimipisteet }} </td>
+                                {% endif %}
                                 {% endif %}
                         {%endfor %}
                       </tr>

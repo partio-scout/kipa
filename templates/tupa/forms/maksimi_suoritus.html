@@ -16,7 +16,12 @@ Parhaat pisteet saa:<br>
 /> suurin</label><br>
 <input type="radio" id="{{parhaan_haku.id}}" value="" name="{{parhaan_haku.name}}" 
 {% ifequal parhaan_haku.value "" %}checked="checked" {% endifequal %}
-/> {%if vapaa %} kaava: {%else%} kiinteä: {% endif %}</label>
+/> {%if vapaa %} kaava: 
+<span onmouseover="tooltip.show('Tähän tulee kaava, joka määrittää suorituksen, jolla saa täydet pisteet.<br> Kaavassa voi käyttää normaalien funktioiden lisäksi muutamaa lisäviitettä:<br>suor (kaikkien vartioiden suoritukset)<br>muk (mukana olevien vartioiden suodatin)<br><br>Esimerkiksi<br>min(suor*muk) pienin mukana olevan vartion suoritus<br>' );" 
+onmouseout="tooltip.hide();">
+<img src="/kipamedia/help_small.png" />
+</span>
+{%else%} kiinteä: {% endif %}</label>
 <font color=red><b> 
         {{kiintea.errors}}
 </b></font>
