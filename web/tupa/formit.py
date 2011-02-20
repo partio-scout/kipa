@@ -21,7 +21,7 @@ class VartioForm(ModelForm):
                         widget=forms.TextInput(attrs={'size':'2'} ) ,
                         required=False)
         keskeyttanyt = forms.IntegerField(label = "Keskeyttänyt", widget=forms.TextInput(attrs={'size':'2'} ) ,required=False)
-        nro = forms.IntegerField(label = "<b>Nro</b>", widget=forms.TextInput(attrs={'size':'3'} ) )
+        nro = forms.IntegerField(label = "Nro", widget=forms.TextInput(attrs={'size':'3'} ) )
         class Meta:
                 model = Vartio
 
@@ -34,7 +34,7 @@ VartioFormSet = inlineformset_factory(Sarja,
 MaariteFormSet = inlineformset_factory(OsaTehtava,SyoteMaarite,extra=3 )
 
 class SarjaForm(ModelForm):
-        nimi = forms.CharField(label = "Nimi:*")
+        nimi = forms.CharField(label = "Nimi")
         tasapiste_teht1 = forms.IntegerField(label = "Tasapisteissä määräävät tehtävät: 1:" ,widget=forms.TextInput(attrs={'size':'3'} ),initial=1 )
         tasapiste_teht2 = forms.IntegerField(label = "2:", widget=forms.TextInput(attrs={'size':'3'} ),initial=2 )
         tasapiste_teht3 = forms.IntegerField(label = "3:", widget=forms.TextInput(attrs={'size':'3'} ),initial=3 )
@@ -262,7 +262,7 @@ TestiTulosForm = tulostauluFormFactory( TestausTulos )
 ####################################################################
 
 class KisaForm(ModelForm):
-        nimi = forms.CharField(label = "Nimi:*" , widget=HelpWidget(helptext="Kisan yksil&ouml;llinen <strong>nimi</strong>. Ei saa sis&auml;lt&auml;&auml; erikoismerkkej&auml; eik&auml; v&auml;lily&ouml;ntej&auml;. &Auml;&auml;kk&ouml;set eiv&auml;t v&auml;ltt&auml;m&auml;tt&auml; toimi, jos Kipaa k&auml;ytet&auml;&auml;n Internet Explorerilla.<br><strong>Aika</strong> ja <strong>paikka</strong> ovat lis&auml;tietoja, jotka tulostuvat kisan tuloksiin.") )
+        nimi = forms.CharField(label = "Nimi" , widget=HelpWidget(helptext="Kisan yksil&ouml;llinen <strong>nimi</strong>. Ei saa sis&auml;lt&auml;&auml; erikoismerkkej&auml; eik&auml; v&auml;lily&ouml;ntej&auml;. &Auml;&auml;kk&ouml;set eiv&auml;t v&auml;ltt&auml;m&auml;tt&auml; toimi, jos Kipaa k&auml;ytet&auml;&auml;n Internet Explorerilla.<br><strong>Aika</strong> ja <strong>paikka</strong> ovat lis&auml;tietoja, jotka tulostuvat kisan tuloksiin.") )
 
         def clean_nimi(self):
                 nimi = self.cleaned_data['nimi']
