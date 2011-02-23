@@ -134,10 +134,10 @@ def maaritaKisa(request, kisa_nimi=None,talletettu=None):
         sarjaFormit=SarjaFormSet(posti,instance=kisa)
 
         if kisaForm.is_valid():
-                sarjaFormit=SarjaFormSet(posti,instance=kisa)
                 if sarjaFormit.is_valid():
                         kisa=kisaForm.save()
-                        sarjaFormit.save()
+                	sarjaFormit=SarjaFormSet(posti,instance=kisa)
+			sarjaFormit.save()
 
         sarjaFormit.label="Sarjat" 
         # Annetaan tiedot templatelle:
