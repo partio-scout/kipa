@@ -144,7 +144,7 @@ h3 {
 }
 
 #infofield {
-	color: #00FF00; 
+	color: #aeba52; 
 	font-size:18px;
 	font-weight:bold;
 	text-align:center;
@@ -152,6 +152,7 @@ h3 {
 	width:300px;
 	height:20px;
 	overflow:hidden;
+	padding-top:3px;
 }
 
 
@@ -1041,7 +1042,7 @@ footer {
 
 	padding-top: 8px; 
 
-	text-shadow: #333333;
+	text-shadow: #333333 1px -1px 2px;
 
 	font-family: Verdana,"Lucida Grande",Lucida,sans-serif;
 
