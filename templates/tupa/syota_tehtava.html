@@ -61,6 +61,16 @@
     <table id="taulukko" border="0" cellpadding="2" cellspacing="0">
         <tr>
             <th colspan="2">
+            Osatehtävä:
+            </th>
+            {% for maarite in maaritteet %}
+               <th class="osatehtava_otsikko" colspan="1">
+                   Osatehtävä {{ maarite.osa_tehtava.nimi }} 
+               </th>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th colspan="2">
             Syötteen nimi:
             </th>
             {% for maarite in maaritteet %}
