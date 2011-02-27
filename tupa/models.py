@@ -137,7 +137,6 @@ class Tehtava(models.Model) :
                                 if laskennassa : 
                                         mukana.append(v)
                 return mukana
-
         def __unicode__(self) :
                 sarja = self.sarja
                 kisa = sarja.kisa
@@ -171,6 +170,7 @@ class OsaTehtava(models.Model) :
                 return kisa.nimi+"."+ sarja.nimi+"."+ tehtava.nimi+"."+self.nimi
         class Meta:
                 verbose_name_plural = "Osatehtavat"
+                ordering = ["nimi"]
                 db_table = u"kipa_osatehtava"
 
 class SyoteMaarite(models.Model) :
