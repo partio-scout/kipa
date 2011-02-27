@@ -318,7 +318,12 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
         Määrittää tehtävän syötteet.
         """
         tehtava = get_object_or_404(Tehtava, id=tehtava_id)
+
+        osatehtavat= OsaTehtava.objects.filter(tehtava=tehtava)
+
         maaritteet = SyoteMaarite.objects.filter(osa_tehtava__tehtava=tehtava)
+        
+        
         vartiot = Vartio.objects.filter(sarja = tehtava.sarja )
         syoteFormit = []
         posti=None
@@ -334,6 +339,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                 rivi=[]
                 for m in maaritteet :
                         syotteet = Syote.objects.filter(vartio = v ).filter(maarite=m)
+                        m.syotteita= len(syotteet)
                         syote=None
                         formi=None
                         if syotteet:
@@ -367,6 +373,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                         { 'tehtava' : tehtava ,
 			            'sarja' : tehtava.sarja.id,
                         'maaritteet' : maaritteet ,
+                        'osatehtavat' : osatehtavat,
                         'syotteet' : syoteFormit,
                         'talletettu': tal ,
                         'tilanne' : tilanne,

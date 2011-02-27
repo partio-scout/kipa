@@ -63,9 +63,9 @@
             <th colspan="2">
             Osatehtävä:
             </th>
-            {% for maarite in maaritteet %}
-               <th class="osatehtava_otsikko" colspan="1">
-                   Osatehtävä {{ maarite.osa_tehtava.nimi }} 
+            {% for osatehtava in osatehtavat %}
+               <th class="osatehtava_otsikko" colspan="{{osatehtava.syotemaarite_set.all|length}}">
+                   Osatehtävä {{ osatehtava.nimi }} 
                </th>
             {% endfor %}
         </tr>
