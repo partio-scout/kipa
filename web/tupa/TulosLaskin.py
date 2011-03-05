@@ -40,7 +40,7 @@ def korvaa(lause,pino,loppu=None) :
         >>> korvaa("funktio(c)",["a","b"])
         'funktio(a.b.c)'
         """
-        haku= re.finditer("(\.{0,3})([a-zA-Z]+)(?:\.(\w+))?(?:\.(\w+))?(?:\.(\w+))?(?!\w*[(])",lause )
+        haku= re.finditer("(\.{0,3})([a-zA-Z]\w*)(?:\.(\w+))?(?:\.(\w+))?(?:\.(\w+))?(?!\w*[(])",lause )
         muutokset=[]
         for h in haku :
                 ryhmat= h.groups()
@@ -78,7 +78,7 @@ def suoritusJoukko(s) :
         >>> suoritusJoukko('a*b+c')
         '.a*.b+.c'
         """
-        haku= re.finditer("(\.{0,3})([a-zA-Z]+)(?!\w*[(])",s)
+        haku= re.finditer("(\.{0,3})([a-zA-Z]\w*)(?!\w*[(])",s)
         muutokset=[]
         for h in haku :
                 uusi= "." + s[h.start():h.end()]

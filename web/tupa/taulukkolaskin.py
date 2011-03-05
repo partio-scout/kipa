@@ -12,16 +12,12 @@ from funktiot import listafunktiot
 pfunktiot={}
 lfunktiot={}
 
-
 for k in perusfunktiot.keys() : 
         def pfunctionfactory( funktio ) : return lambda *a : suorita(funktio,*a)
         pfunktiot[k]= pfunctionfactory( perusfunktiot[k] )  
 for k in listafunktiot.keys() : 
         def lfunctionfactory( funktio ) : return lambda *a : suorita_lista(funktio,*a)
         lfunktiot[k]= lfunctionfactory(listafunktiot[k] )
-
-#for k in perusfunktiot.keys() : pfunktiot[k]=perusfunktiot[k]
-#for k in listafunktiot.keys() : lfunktiot[k]=listafunktiot[k]
 
 def dictToMathDict(dictionary) :
         """
@@ -43,20 +39,18 @@ def laske(lauseke,m={'num':DictDecimal}):
         lause = lause.replace(' ','')
         # Poistetaan "-0" termit
         lause=re.sub(r"([-][0](?![0-9.]))",r"",lause) 
-        # Korvataan numerot merkkijonosta laskettavilla objekteilla
-        lause=re.sub(r"(\d+\.\d+|(?<=[^0-9.])\d+)",r"num('\g<1>')",lause)
+        # Vakionumerot numeroinstansseiksi:
+        lause=re.sub(r"((?<![^-+*/(),])\d+([.]\d+)?)",r"num('\g<1>')",lause)
         # Korvataan muuttujien nimet oikeilla muuttujilla:
-        lause=re.sub(r"\.([a-zA-Z_]+)(?=\.)",r"['\g<1>']",lause) # .x. -> [x].
-        lause=re.sub(r"(?<!\d)\.([a-zA-Z0-9_]+)",r"['\g<1>']",lause)       # .x  -> [x]
-        lause=re.sub(r"([a-zA-Z_]+(?=[[]))",r"m['\g<1>']",lause) # x[  -> m[x][
+        lause=re.sub(r"\.([a-zA-Z_]\w*)(?=\.)",r"['\g<1>']",lause) # .x. -> [x].
+        lause=re.sub(r"(?<!\d)\.([a-zA-Z_0-9]+)",r"['\g<1>']",lause)       # .x  -> [x]
+        lause=re.sub(r"([a-zA-Z_]\w*(?=[[]))",r"m['\g<1>']",lause) # x[  -> m[x][
         # Korvataan yksinaiset muuttujat (lahinna funktioita):
-        lause=re.sub(r"([a-zA-Z_]+(?![a-zA-Z_]*?[[']))",r"m['\g<1>']",lause) # x -> m[x]
-        
+        lause=re.sub(r"([a-zA-Z_]\w*(?![a-zA-Z_0-9.]*?[[']))",r"m['\g<1>']",lause) # x -> m[x]
         tulos=None
         # lasketaan tulos:
         try: 
                 tulos = eval(lause)
-                
         # Poikkeukset laskuille joita ei pysty laskemaan. 
         # Pyrkii myos estamaan koko paska kaadu virheissa.
         except DivisionByZero : return None 
@@ -65,7 +59,7 @@ def laske(lauseke,m={'num':DictDecimal}):
         except SyntaxError: return None
         except NameError : return None
         except : return None
-        if type(tulos==DictDecimal) : return Decimal(tulos)
+        if type(tulos)==DictDecimal : return Decimal(tulos)
         return tulos
 
 def laskeTaulukko(taulukko,muuttujat) :

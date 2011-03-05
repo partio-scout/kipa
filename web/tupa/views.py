@@ -642,7 +642,7 @@ def kopioiTehtavia(request,kisa_nimi,sarja_id ):
                 return kipaResponseRedirect("/kipa/"+kisa.nimi+"/maarita/tehtava/")
         else:
                 return render_to_response('tupa/valitse_form.html',
-                                      { 'heading' : u"Kopioi Tehtavia sarjaan: "+sarjaan.nimi ,
+                                      { 'heading' : u"Kopioi Tehtäviä sarjaan: "+sarjaan.nimi ,
                                       'taulukko' : formit ,
                                       'kisa_nimi' : kisa_nimi,
                                       'taakse' : "/kipa/"+kisa_nimi+"/maarita/tehtava/",
