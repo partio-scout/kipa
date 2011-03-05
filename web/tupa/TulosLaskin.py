@@ -140,7 +140,7 @@ def luoLaskut(sarja) :
         vartiot=sarja.vartio_set.all()
         tehtavat=sarja.tehtava_set.all()
         taulukko=[]
-        pino=[]
+        pino=[] # Pinoon laitetaan kulloinenkin iterointipolku jotta muuttujan nimet voidaan muuttaa suhteellisesta kirjaimesta absoluuttiseen polkuun.
         for v in vartiot:
                 vartioRivi=[]
                 for t in tehtavat:
@@ -168,13 +168,13 @@ def luoLaskut(sarja) :
                                         vanha=ot_lause
                                         for p in parametrit:
                                                 ot_lause=re.sub(p.nimi+r"(?!\w+)",p.arvo,ot_lause)
-                                        # pikatie "muk" -> "..mukana" 
+                                        # Pikatie "muk" -> "..mukana" 
                                         ot_lause=re.sub("muk"+r"(?!\w+)","..mukana",ot_lause)
                                         
-                                        # pikatie vartio -> vartion numero
+                                        # Pikatie vartio -> vartion numero
                                         ot_lause=re.sub("vartio"+r"(?!\w+)", str(v.nro) ,ot_lause)
 
-                                        # munnos "suor" -> kaikkien vartioiden lasketut suoritukset
+                                        # Muunnos "suor" -> kaikkien vartioiden lasketut suoritukset
                                         try:
                                                 vartion_kaava=parametrit.filter(nimi="vartion_kaava")[0].arvo
                                                 for p in parametrit:
@@ -185,13 +185,12 @@ def luoLaskut(sarja) :
                                         except IndexError: pass
                                         if not ot_lause==vanha : korvautuu=True
                                         
-
-                                # Muutetaan muuttujien nimet koko polun mittaiseksi:tehtava.osatehtava.syote.vartio
+                                # Muutetaan muuttujien nimet koko polun mittaisiksi: tehtava(nimi).osatehtava(nimi).syote(nimi).vartio(nro)
                                 ot_lause=korvaa(ot_lause,pino,str(v.nro))
                                 ot_lauseet.append((ot.nimi,ot_lause))
                                 pino.pop()
                         tehtava_lause=""
-                        #Suora summa osatehtavien valilla
+                        #Suora summa osatehtavien välillä:
                         if t.kaava=="ss" and len(ot_lauseet) :
                                 for l in ot_lauseet :
                                         tehtava_lause=tehtava_lause + "max([0,"+l[1]+"])+"
@@ -223,7 +222,7 @@ def laskeSarja(sarja):
         tehtavat=sarja.tehtava_set.all()
         siirrettavat=[]
         for i in range(len(vartiot)):
-                # Merkataan tuloksiin H hylattyihin tehtaviin:
+                # Merkataan tuloksiin H hylättyihin tehtäviin:
                 for t in range(len(tulokset[i])) :
                         hylatty=True
                         syotteet= vartiot[i].syote_set.filter(maarite__osa_tehtava__tehtava=tehtavat[t])
@@ -231,26 +230,29 @@ def laskeSarja(sarja):
                                 if not s.arvo=="h":  hylatty=False
                         if hylatty and len(syotteet): tulokset[i][t]= "H"
 
-                #merkataan sirrettaviksi ulkopuolella olevat:
+                #Merkataan siirrettäviksi ulkopuolella olevat:
                 if vartiot[i].keskeyttanyt or vartiot[i].ulkopuolella : 
-                        # merkataan keskeyttaneille tuloksiin "K" keskeyttamisesta eteenpain
+                        #Merkataan keskeyttaneille tuloksiin "K" keskeyttämisestä eteenpäin
                         if vartiot[i].keskeyttanyt:
                                 kesk=vartiot[i].keskeyttanyt-1
                                 for t in range(kesk,len(tulokset[i])) :tulokset[i][t]= "K"
                         siirrettavat.append(i)
-                # tuomarineuvos
+                #Tuomarineuvosto:
                 vartion_tuomarit=vartiot[i].tuomarineuvostulos_set.all()
                 if len( vartion_tuomarit ):
                         for t in range(len(tulokset[i])) :
                                 tuom=vartion_tuomarit.filter(tehtava=tehtavat[t])
                                 if len(tuom) :
-                                        try:
+                                        try: 
                                                 tulokset[i][t]= Decimal(tuom[0].pisteet)
                                         except:
                                                 tulokset[i][t]= tuom[0].pisteet
-                #kokonaispisteet:
-                tulokset[i].insert(0,summa(tulokset[i]))
-                #vartio objekti jokaisen rivin alkuun:
+                #Kokonaispisteet:
+                summa=0
+                for s in tulokset[i] :
+                        if s and type(s)!=str and type(s)!=unicode : summa+= s 
+                tulokset[i].insert(0,summa)
+                #Vartio objekti jokaisen rivin alkuun:
                 tulokset[i].insert(0,vartiot[i])
                         
         # Siirretään ulkopuoliset ja mukana olevat omiin taulukkoihinsa
@@ -263,7 +265,8 @@ def laskeSarja(sarja):
                 if u : ulkona.append(item)
                 else : mukana.append(item)
         tulokset=mukana
-        #lisataan tehtävä rivi ylos
+
+        #Lisätään tehtävärivi ylös
         t_list=[sarja,"Yht." ,]
         pisteet_yhteensa=0
         for t in tehtavat:
@@ -281,7 +284,7 @@ def laskeSarja(sarja):
         if sarja.tasapiste_teht1 : tasa2 = sarja.tasapiste_teht2+1
         if sarja.tasapiste_teht1 : tasa3 = sarja.tasapiste_teht3+1
         
-        #järjestetään taulukot
+        #Järjestetään taulukot
         try :
                 tulokset.sort( key=operator.itemgetter(1,tasa1,tasa2,tasa3),reverse=True )
                 ulkona.sort( key=operator.itemgetter(1,tasa1,tasa2,tasa3),reverse=True )
@@ -289,7 +292,7 @@ def laskeSarja(sarja):
                 tulokset.sort()
                 ulkona.sort()
 
-        #lisataan tehtävärivi ylos
+        #Lisätään tehtävärivi ylos
         mukana.insert(0,t_list)
         
         return (mukana,ulkona)

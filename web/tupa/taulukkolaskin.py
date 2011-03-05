@@ -5,7 +5,6 @@
 import re
 from laskentatyypit import *
 from decimal import *
-from funktiot import funktiot
 from funktiot import perusfunktiot
 from funktiot import listafunktiot
 
@@ -31,48 +30,51 @@ def dictToMathDict(dictionary) :
 
 def laske(lauseke,m={'num':DictDecimal}):
         """
-        Laskee lauseen mikali se on laskettavissa. Kayttaa muuttujista loytyvia arvoja, seka funktioita.
+        Laskee lauseen mikäli se on laskettavissa. Käyttää muuttujista loytyvia arvoja, seka funktioita.
         """
-        # Poistetaan valilyonnit ja enterit:
+        # Poistetaan välilyonnit ja enterit:
         lause = lauseke.replace('\n','')
         lause = lause.replace('\r','')
         lause = lause.replace(' ','')
         # Poistetaan "-0" termit
         lause=re.sub(r"([-][0](?![0-9.]))",r"",lause) 
         # Vakionumerot numeroinstansseiksi:
-        lause=re.sub(r"((?<![^-+*/(),])\d+([.]\d+)?)",r"num('\g<1>')",lause)
+        lause=re.sub(r"((?<![^-+*/(),[])\d+([.]\d+)?)",r"num('\g<1>')",lause)
         # Korvataan muuttujien nimet oikeilla muuttujilla:
         lause=re.sub(r"\.([a-zA-Z_]\w*)(?=\.)",r"['\g<1>']",lause) # .x. -> [x].
         lause=re.sub(r"(?<!\d)\.([a-zA-Z_0-9]+)",r"['\g<1>']",lause)       # .x  -> [x]
         lause=re.sub(r"([a-zA-Z_]\w*(?=[[]))",r"m['\g<1>']",lause) # x[  -> m[x][
-        # Korvataan yksinaiset muuttujat (lahinna funktioita):
+        # Korvataan yksinäiset muuttujat (lähinnä funktioita):
         lause=re.sub(r"([a-zA-Z_]\w*(?![a-zA-Z_0-9.]*?[[']))",r"m['\g<1>']",lause) # x -> m[x]
         tulos=None
         # lasketaan tulos:
         try: 
                 tulos = eval(lause)
         # Poikkeukset laskuille joita ei pysty laskemaan. 
-        # Pyrkii myos estamaan koko paska kaadu virheissa.
+        # Pyrkii estämaan ettei koko paska kaadu virheissä.
         except DivisionByZero : return None 
-        except KeyError : return "S" # syottamattomia muuttujia
+        except KeyError : return "S" # Syottämättomiä muuttujia
         except TypeError :  return None 
         except SyntaxError: return None
         except NameError : return None
         except : return None
         if type(tulos)==DictDecimal : return Decimal(tulos)
-        return tulos
+        if type(tulos)==Decimal : return tulos
+        if type(tulos)==unicode : return tulos
+        if type(tulos)==int : return tulos
+        if type(tulos)==str : return tulos
+        return "S"
 
 def laskeTaulukko(taulukko,muuttujat) :
         """
         Laskee taulukon alkiot jotka ovat laskettavissa, muuttujista loytyvilla muuttujilla seka funktioilla.
         """
-        # Maaritetaan numeroluokka eli vakiona lasketaan desimaaliluvuilla:
+        # Määritetään numeroluokka eli vakiona lasketaan desimaaliluvuilla:
         m = { "num" : DictDecimal }
         m.update(pfunktiot)
         m.update(lfunktiot)
-        m.update(funktiot)
 
-        # Paivitetaan kayttajan muuttujilla:
+        # Päivitetään käyttajän muuttujilla:
         m.update(muuttujat)
         m=dictToMathDict(m)
         tulokset=[]

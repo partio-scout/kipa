@@ -7,7 +7,7 @@ Tässä tiedostossa on määritelty kaikki funktiot joita voi käyttää laskenn
 from laskentatyypit import *
 from math import *
 
-def mediaani( lista ):
+def mediaani( *lista ):
         """
         Palauttaa mediaanin arvon joukon lukuarvoista:
         joukko voi olla sanakirja tai lista
@@ -22,7 +22,7 @@ def mediaani( lista ):
                 upper = DictDecimal(values[len(values)/2])
                 return (DictDecimal(lower + upper)) / 2  
 
-def keskiarvo( lista ) :
+def keskiarvo( *lista ) :
         """
         Palauttaa joukon lukuarvojen keskiarvon.
         Joukko voi olla sanakirja tai lista.
@@ -35,34 +35,24 @@ def keskiarvo( lista ) :
         avg = total/len(lista)
         return avg
 
-def summa( lista ) :
+def summa( *lista ) :
         """
         Palauttaa joukon lukuarvojen summan.
         Joukko voi olla sanakirja tai lista.
         """
+        print lista
         #lista=listaksi(joukko,*sarja)
         s=DictDecimal(0) 
         for v in lista : 
                 if v and not type(v)==unicode and not type(v)==str: s=s+v
         return s
 
-
 def interpoloi(x,x1,y1,x2,y2=0):
         """
-        Palauttaa pisteen (x,y) y koordinaatin pisteiden (x1,y1) (x2,y2) maarittamalta suoralta.
+        Palauttaa pisteen (x,y) y koordinaatin pisteiden (x1,y1) (x2,y2) maarittamalta suoralta. 
         """
-        # y = (y1-y2)/(x1-x2)*(x-x2)
-        try :
-                X=DictDecimal(x)
-                X1=DictDecimal(x1)
-                Y1=DictDecimal(y1)
-                X2=DictDecimal(x2)
-                Y2=DictDecimal(y2)
-                tulos=(Y1-Y2) / (X1-X2) * (X-X2)
-                tulos=mediaani([DictDecimal(0),DictDecimal(y1),tulos])
-        except InvalidOperation : return None
-        return tulos
-
+        return min([ y1 , (y1-y2)/(x1-x2)*(x-x2)] )
+       
 def aikavali(a,b):
         tulos= b-a
         if tulos < DictDecimal("0"): tulos=tulos+DictDecimal("86400") # lisataan 24h sekuntteina
@@ -72,7 +62,14 @@ def jos(ehto,a,b) :
         if ehto : return a 
         else : return b
 
-perusfunktiot={ "abs" : abs,
+def maksimi(*lista) :
+        return max(lista) 
+                
+"""
+Funktiot joiden parametrit ovat toisistaan riippumattomia
+"""
+perusfunktiot={ "interpoloi" : interpoloi,
+                "abs" : abs,
                 "aikavali" : aikavali , # Alkuaika ja loppuaika
                 "floor" : lambda a: a.quantize(Decimal('1.'), rounding=ROUND_FLOOR),
                 "ceil" : lambda a: a.quantize(Decimal('1.'), rounding=ROUND_CEILING),
@@ -85,6 +82,9 @@ perusfunktiot={ "abs" : abs,
                 "ln" : getcontext().ln ,
                 "if" : jos } # Valintalause
 
+"""
+Funktiot joiden kaikki parametrit ovat samanarvoisia, ja parametrejä voi olla liukuva määrä.
+"""
 listafunktiot={"pienin" : min,
                 "min" :   min,
                 "suurin" : max, 
@@ -93,8 +93,4 @@ listafunktiot={"pienin" : min,
                 "med" : mediaani ,
                 "kesk" : keskiarvo,
                 "mean" : keskiarvo }
-
-# kavoissa käytettävät funktiot, ja niiden käyttönimet:
-#           käyttönimi : funktio 
-funktiot= { "interpoloi" : interpoloi }
 
