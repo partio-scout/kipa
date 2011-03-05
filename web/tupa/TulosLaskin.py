@@ -168,10 +168,12 @@ def luoLaskut(sarja) :
                                         vanha=ot_lause
                                         for p in parametrit:
                                                 ot_lause=re.sub(p.nimi+r"(?!\w+)",p.arvo,ot_lause)
-                                        if not ot_lause==vanha : korvautuu=True
                                         # pikatie "muk" -> "..mukana" 
                                         ot_lause=re.sub("muk"+r"(?!\w+)","..mukana",ot_lause)
                                         
+                                        # pikatie vartio -> vartion numero
+                                        ot_lause=re.sub("vartio"+r"(?!\w+)", str(v.nro) ,ot_lause)
+
                                         # munnos "suor" -> kaikkien vartioiden lasketut suoritukset
                                         try:
                                                 vartion_kaava=parametrit.filter(nimi="vartion_kaava")[0].arvo
@@ -181,6 +183,9 @@ def luoLaskut(sarja) :
                                                                 suoritusJoukko(vartion_kaava),
                                                                 ot_lause)
                                         except IndexError: pass
+                                        if not ot_lause==vanha : korvautuu=True
+                                        
+
                                 # Muutetaan muuttujien nimet koko polun mittaiseksi:tehtava.osatehtava.syote.vartio
                                 ot_lause=korvaa(ot_lause,pino,str(v.nro))
                                 ot_lauseet.append((ot.nimi,ot_lause))
