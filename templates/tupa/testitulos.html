@@ -21,10 +21,11 @@
 		      </tr>    
 		{% endfor %}
 	</table>
-    </form>
 {% endblock%}
 {% block content %}
         <form action="." method="post">     
         {{ block.super }}
         {% include "tupa/tallenna.html" %}
 {% endblock%}
+</form>
+
