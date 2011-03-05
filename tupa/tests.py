@@ -98,7 +98,7 @@ def haeTulos(tuloksetSarjalle, vartio, tehtava) :
 
 def ViewSanityCheck(fixture_name):
         """
-        Luo tescasen tarkistamaan sen etta kaikki n‰kym‰t toimivat kaatumatta.
+        Luo testcasen tarkistamaan sen, ett‰ kaikki n‰kym‰t toimivat kaatumatta.
         fixture name = tietokantafixtuurin nimi jolle testi luodaan.
         palauttaa TestCase:n
         """
@@ -116,7 +116,7 @@ def ViewSanityCheck(fixture_name):
                         request =HttpRequest()
                         maaritaKisa(request)
                         korvaaKisa(request)
-                        for k in kisat :
+                        for k in kisat : # Kisakohtaiset n‰kym‰t
                                 kisa_nimi=k.nimi
                                 kisa(request,kisa_nimi=kisa_nimi)
                                 maaritaKisa(request,kisa_nimi=kisa_nimi)
@@ -128,7 +128,7 @@ def ViewSanityCheck(fixture_name):
                                 tulosta(request,kisa_nimi=kisa_nimi)
                                 tallennaKisa(request, kisa_nimi=kisa_nimi)
                                 poistaKisa(request, kisa_nimi=kisa_nimi)
-                        for s in sarjat:
+                        for s in sarjat: # Sarjakohtaiset n‰kym‰t
                                 sarja_id=s.id
                                 kisa_nimi=s.kisa.nimi
                                 maaritaTehtava(request,kisa_nimi=kisa_nimi,sarja_id=sarja_id)
@@ -136,7 +136,7 @@ def ViewSanityCheck(fixture_name):
                                 tulostaSarja(request,kisa_nimi=kisa_nimi, sarja_id=sarja_id)
                                 sarjanTuloksetCSV(request, kisa_nimi=kisa_nimi, sarja_id=sarja_id) 
                                 tulostaSarjaHTML(request, kisa_nimi=kisa_nimi, sarja_id=sarja_id)
-                        for t in tehtavat:
+                        for t in tehtavat: # teht‰v‰kohtaiset n‰kym‰t
                                 tehtava_id=t.id
                                 kisa_nimi=t.sarja.kisa.nimi
                                 maaritaTehtava(request,kisa_nimi=kisa_nimi,tehtava_id=tehtava_id)
@@ -146,7 +146,7 @@ def ViewSanityCheck(fixture_name):
 def TulosTestFactory(fixture_name):
         """
         Tekee tulostestin halutulle tietokanta fixtuurille.
-        fixture_name = fixtuurin nimi jolle testi tehdaan.
+        fixture_name = fixtuurin nimi jolle testi tehd‰‰n.
         palauttaa TestCase:n
         """
         class testi(TestCase) :
@@ -156,7 +156,7 @@ def TulosTestFactory(fixture_name):
                         Iteroi jokaisen sarjan ja tehtavan.
                         Laskee tulokset ja vertaa tuloksia maariteltyihin testituloksiin.
                         Tunnistaa laskennan kaatavia virheita.
-                        Tunnistaa vaarat tulokset.
+                        Tunnistaa v‰‰rat tulokset.
                         Vaarien tulosten kohdalla tulostaa yhteenvedon.
                         """
                         self.sarjat=Sarja.objects.all()
@@ -240,6 +240,9 @@ def PostTestFactory(fixture_name):
         return testi
 
 class TasapisteTesti(TestCase) :
+        """
+        Testaa tasapisteiss‰ m‰‰r‰‰vien teht‰vien toimintaa.
+        """
         fixtures = ["fixtures/tests/tasapisteet.xml"]
         def testJarjestys(self):
                 sarja=Sarja.objects.get(nimi="tiukka")
