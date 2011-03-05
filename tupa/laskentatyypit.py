@@ -20,7 +20,6 @@ class MathDict(SequenceOperations,dict):
         Sanakirja jonka alkioille voi tehda massoittain 
         laskutoimituksia toisten sanakirjan vastaavien alkioiden kesken.
         """
-        # Utility function
         def operate_to_all(self,function2, other) :
                 oper = MathDict({})
                 for k in self.keys() : 
@@ -77,25 +76,26 @@ def run_dict(list,funktio,*param):
         mdict=None
         for p in param : 
                 if type(p) == MathDict and not mdict : mdict=p
-        if not mdict : return funktio(*param)
+        if not mdict : 
+                return funktio(*param)
         rValue=MathDict({})
         for k in mdict.keys() :
                 parametrit = []
                 for p in param : 
                         if type(p)== MathDict : parametrit.append(p[k])
                         else : parametrit.append(p)
-                try: 
-                        if list: rValue[k]= listaksi(*parametrit)
-                        else : rValue[k]= funktio(*parametrit)
-                except KeyError: pass
-                except TypeError : pass
+                if list: rValue[k]= funktio(listaksi(*parametrit))
+                else : rValue[k]= funktio(*parametrit)
         return rValue        
 
 def suorita(funktio,*param):
-        return run_dict(0,funktio,*param)
-
+        try :
+                return run_dict(0,funktio,*param)
+        except :
+                return DictDecimal(0)
 def suorita_lista(funktio,a,*param ) :
         if len(param)==0 : 
-                return funktio( listaksi(a) )
+                return funktio( *listaksi(a) )
         else : return run_dict(1,funktio,a,*param)
+
 
