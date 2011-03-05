@@ -68,10 +68,16 @@
                                 {% if forloop.first  %}
                                <td align="right" style="padding-right:10px;"> {{ sarake.maksimipisteet }} </td>
                                 {% else %}
-                                {% if forloop.counter > 2  %}
-                               <td align="right" style="padding-right:10px;"> {{ sarake.maksimipisteet }} </td>
+
+                                {% ifnotequal forloop.counter 0 %}
+                                {% ifnotequal forloop.counter 1 %}
+                                {% ifnotequal forloop.counter 2 %}
+                                        <td align="right" style="padding-right:10px;"> {{ sarake.maksimipisteet }} </td>
+                                {% endifnotequal %}
+                                {% endifnotequal %}
+                                {% endifnotequal %}
                                 {% endif %}
-                                {% endif %}
+
                         {%endfor %}
                       </tr>
                       <tr height=10> 

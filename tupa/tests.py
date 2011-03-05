@@ -258,7 +258,7 @@ testit.append( TasapisteTesti )
 for t in test_fixtures:
         testit.append( PostTestFactory(t) )
 
-# luodaan tulostestit fixtuureista.
+#luodaan tulostestit fixtuureista.
 for t in test_fixtures:
         testit.append( TulosTestFactory(t) )
 
