@@ -56,17 +56,17 @@ class aritmeettinen_laskin_test(unittest.TestCase):
     def testEiaritmtetiikkaa(self):
         assert    laske('a+ b-c*d') == "S"
     
-    #def testkaksikertomerkkia(self): (potenssi)
-    #    assert    laske('5+2**5') == None
+    def testkaksikertomerkkia(self): #(potenssi)
+        assert    laske('5+2**5') == Decimal('37')
      
-    #def testkaksiplusmerkkia(self): (ok)
-    #    assert    laske('5+2++5') == None
+    def testkaksiplusmerkkia(self):
+        assert    laske('5+2++5') == Decimal('12')
         
-    #def testkaksimiinusmerkkia(self): (ok)
-        #assert    laske('5+2--5') == None
+    def testkaksimiinusmerkkia(self): 
+        assert    laske('5+2--5') == Decimal('12')
         
-    #def testplusmiinus(self): (ok)
-        #assert    laske('5+2+-5') == None 
+    def testplusmiinus(self): 
+        assert    laske('5+2+-5') == Decimal('2')
       
     def testkertojako(self):
         assert    laske('5+2*/5') == None
@@ -75,7 +75,15 @@ class aritmeettinen_laskin_test(unittest.TestCase):
         assert    laske('3*(1-5)') == Decimal("-12")
     def testPitkadesimaali(self):
         assert not laske('-0.008333333333333333333333333333*0.0') == None
-
+    
+    def testPerusmuuttuja(self):
+        assert laske('a', {'a': 1 } ) == Decimal("1")
+    
+    def testAbsMiinusparametri(self):
+        assert laske('abs(-1)' ) == Decimal("1")
+    
+    def testSulkuMiinus(self):
+        assert laske('(2)-1' ) == Decimal("1")
 
 def haeTulos(tuloksetSarjalle, vartio, tehtava) :
                 #Mukana olevat
