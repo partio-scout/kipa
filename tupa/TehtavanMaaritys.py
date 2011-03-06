@@ -30,6 +30,8 @@ def is_string(s) :
         if re.match("^\w+$",s) : return True
         else : return False
 
+def is_unicode_string(s) : return true
+
 def is_time(s) :
         if re.match(r"^(\d+):(\d+):(\d+)$",s) : return True
         else : return False
@@ -697,15 +699,15 @@ def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehta
                                 # Merkkijonojen validiointi:
                                 if fk=='nimi'  :
                                         if not is_string(value):
-                                                errors="Anna merkkijono [a-zA-Za0-9_]"
+                                                errors="Anna merkkijono [a-zA-Za0-9_]!"
                                                 data['valid']=False
                                 if fk=='maksimipisteet' :
                                         if value and not is_number(value):
                                                 errors="Anna numero!"
                                                 data['valid']=False
                                 if fk=='lyhenne' :
-                                        if value and not is_string(value):
-                                                errors="Anna merkkijono [a-zA-Za0-9_]"
+                                        if value and not is_unicode_string(value):
+                                                errors="Anna merkkijono!"
                                                 data['valid']=False
                                                 
                                 # Kaavan validiointi:
