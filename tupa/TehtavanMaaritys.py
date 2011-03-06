@@ -27,7 +27,8 @@ def is_number(s):
         return True
 
 def is_string(s) :
-        if re.match("^\w+$",s) : return True
+        if re.match("^\w+$", s.replace(" " , "_") ) : 
+                return True
         else : return False
 
 def is_unicode_string(s) : return True
@@ -699,8 +700,10 @@ def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehta
                                 # Merkkijonojen validiointi:
                                 if fk=='nimi'  :
                                         if not is_string(value):
-                                                errors="Anna merkkijono [a-zA-Za0-9_]!"
+                                                errors="Anna merkkijono [a-zA-Za0-9_ ]!"                
                                                 data['valid']=False
+                                        else : value = value.replace(" ","_") #Korvataan väli alaviivalla.
+
                                 if fk=='maksimipisteet' :
                                         if value and not is_number(value):
                                                 errors="Anna numero!"
