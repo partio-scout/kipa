@@ -212,6 +212,11 @@ for f in os.listdir(os.curdir+"/fixtures/tests/"):
         if not f.find(".xml") == -1:
                 test_fixtures.append("fixtures/tests/"+f)
 
+#ajetaan vain haluttu fixtuuri
+# Nollataan fixturet
+#test_fixtures=[]
+#test_fixtures.append("fixtures/tests/tehtavan_nimi_funktio.xml")
+
 def PostTestFactory(fixture_name):
         """
         Testi joka ajaa n‰kymi‰ ennalta m‰‰ritellyill‰ testdatoilla.
