@@ -30,7 +30,7 @@ def is_string(s) :
         if re.match("^\w+$",s) : return True
         else : return False
 
-def is_unicode_string(s) : return true
+def is_unicode_string(s) : return True
 
 def is_time(s) :
         if re.match(r"^(\d+):(\d+):(\d+)$",s) : return True
