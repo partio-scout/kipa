@@ -70,7 +70,8 @@ def listaksi(a,*opt):
                                 if type(joukkio[k])==DictDecimal or type(joukkio[k])==Decimal :
                                         lista.append(DictDecimal(joukkio[k]))
                         return lista
-                except : return None 
+                except :
+                        return None 
 
 def run_dict(list,funktio,*param):
         mdict=None
@@ -93,6 +94,7 @@ def suorita(funktio,*param):
                 return run_dict(0,funktio,*param)
         except :
                 return DictDecimal(0)
+
 def suorita_lista(funktio,a,*param ) :
         if len(param)==0 : 
                 return funktio( *listaksi(a) )

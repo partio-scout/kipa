@@ -11,9 +11,8 @@ def mediaani( *lista ):
         """
         Palauttaa mediaanin arvon joukon lukuarvoista:
         joukko voi olla sanakirja tai lista
-        Mikali lukujoukon pituus on parillinen palauttaa kahden keskimmaisen luvun keskiarvon.
+        Mikäli lukujoukon pituus on parillinen, palauttaa kahden keskimmaisen luvun keskiarvon.
         """
-        #lista = listaksi(joukko,*sarja)
         values = sorted(lista)
         if len(values) % 2 == 1:
                 return DictDecimal(values[(len(values)+1)/2-1])
@@ -27,8 +26,7 @@ def keskiarvo( *lista ) :
         Palauttaa joukon lukuarvojen keskiarvon.
         Joukko voi olla sanakirja tai lista.
         """
-        #lista = listaksi(joukko,*sarja)
-        if not len(lista): return None
+        #if not len(lista): return None
         total=DictDecimal(0) 
         for x in lista :
                 total=total+x
@@ -40,8 +38,6 @@ def summa( *lista ) :
         Palauttaa joukon lukuarvojen summan.
         Joukko voi olla sanakirja tai lista.
         """
-        print lista
-        #lista=listaksi(joukko,*sarja)
         s=DictDecimal(0) 
         for v in lista : 
                 if v and not type(v)==unicode and not type(v)==str: s=s+v
@@ -49,7 +45,7 @@ def summa( *lista ) :
 
 def interpoloi(x,x1,y1,x2,y2=0):
         """
-        Palauttaa pisteen (x,y) y koordinaatin pisteiden (x1,y1) (x2,y2) maarittamalta suoralta. 
+        Palauttaa f(x)=y koordinaatin pisteiden (x1,y1) (x2,y2) määrittämältä suoralta. 
         """
         return min([ y1 , (y1-y2)/(x1-x2)*(x-x2)] )
        
