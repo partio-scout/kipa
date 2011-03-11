@@ -97,7 +97,10 @@ def suorita(funktio,*param):
 
 def suorita_lista(funktio,a,*param ) :
         if len(param)==0 : 
-                return funktio( *listaksi(a) )
-        else : return run_dict(1,funktio,a,*param)
+		if type(a)==Decimal:
+                	return funktio( listaksi(a) )
+        	else : 
+			return funktio( *listaksi(a) )
+	else : return run_dict(1,funktio,a,*param)
 
 
