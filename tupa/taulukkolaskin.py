@@ -53,8 +53,8 @@ def laske(lauseke,m={},funktiot={}):
         lause=re.sub(r"(?<!\d)\.([a-zA-Z_0-9]+)",r"['\g<1>']",lause)       # .x  -> [x]
         lause=re.sub(r"([a-zA-Z_]\w*(?=[[]))",r"m['\g<1>']",lause) # x[  -> m[x][
         # Korvataan yksinäiset muuttujat (lähinnä funktioita):
-        lause=re.sub(r"([a-zA-Z_]\w*(?![a-zA-Z_0-9.(]*?[[']))",r"m['\g<1>']",lause) # x -> m[x]
-        lause=re.sub(r"([a-zA-Z_]\w*(?![a-zA-Z_0-9.]*?[[']))",r"f['\g<1>']",lause) # x( -> f[x](
+        lause=re.sub(r"([a-zA-Z_][a-zA-Z_0-9]*(?![a-zA-Z_0-9.(]|[[']))",r"m['\g<1>']",lause) # x -> m[x]
+        lause=re.sub(r"([a-zA-Z_][a-zA-Z_0-9]*(?![a-zA-Z_0-9.]|[[']))",r"f['\g<1>']",lause) # x( -> f[x](
         tulos=None
         # lasketaan tulos:
         try: 

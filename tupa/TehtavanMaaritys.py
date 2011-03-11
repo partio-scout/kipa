@@ -44,11 +44,17 @@ def is_kaava(s) :
                 kaava=s.replace("." ,"") 
                 haku= re.finditer("([a-zA-Z]+)(?!\w*[(])",kaava)
                 numero=4
+		print kaava
                 for h in haku :
+			print h.groups()
                         muuttujat[h.group(1)]=Decimal(numero)
                         numero+=1
+		print muuttujat
                 tulos = laskeTaulukko([[kaava]],muuttujat)
-                if tulos[0][0]==None or tulos[0][0]=='S' : return False
+		print tulos
+                if tulos[0][0]==None or tulos[0][0]=='S' : 
+			print "NOT!"
+			return False
                 else : return True
 
 def validate(posti,field_name,testFunctions,prefix="" ) :
