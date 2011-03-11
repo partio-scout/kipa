@@ -75,11 +75,12 @@ class aritmeettinen_laskin_test(unittest.TestCase):
         assert    laske('3*(1-5)') == Decimal("-12")
     def testPitkadesimaali(self):
         assert not laske('-0.008333333333333333333333333333*0.0') == None
-    
     def testPerusmuuttuja(self):
         assert laske('a', {'a': 1 } ) == Decimal("1")
     def testPerusFunktio(self):
         assert laske('log(a)', {'a': Decimal("100") } ) == Decimal("2")
+    def testMinimiFunktio(self):
+        assert laske('min(a)', {'a': Decimal("4") } ) == Decimal("4")
     def testListaFunktio(self):
         assert laske('min([a,3,1])', {'a': Decimal("100") } ) == Decimal("1")
     def testAbsMiinusparametri(self):
