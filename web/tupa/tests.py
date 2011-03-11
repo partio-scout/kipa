@@ -78,7 +78,10 @@ class aritmeettinen_laskin_test(unittest.TestCase):
     
     def testPerusmuuttuja(self):
         assert laske('a', {'a': 1 } ) == Decimal("1")
-    
+    def testPerusFunktio(self):
+        assert laske('log(a)', {'a': Decimal("100") } ) == Decimal("2")
+    def testListaFunktio(self):
+        assert laske('min([a,3,1])', {'a': Decimal("100") } ) == Decimal("1")
     def testAbsMiinusparametri(self):
         assert laske('abs(-1)' ) == Decimal("1")
     
