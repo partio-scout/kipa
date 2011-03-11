@@ -64,7 +64,7 @@ document.getElementById(id).style.display = visibility;
 <div id="wrap">
 
     <div id="header"><div id="pageTitle">{{kisa_nimi}}</div><div id="infofield">{{talletettu}}</div>
-
+		{% comment %}  
 		<div style="float:right; margin-top:-4px; margin-bottom:0; padding-bottom:0; height:18px;">		
 			{% if user.is_authenticated %}
 			<pre>Heippa {{ user.username }}! <a href="/kipa/{{kisa.nimi}}/logout">Kirjaudu ulos</a></pre>
@@ -79,6 +79,7 @@ document.getElementById(id).style.display = visibility;
 			</form>			
 			{% endif %}
 		</div>
+		{% endcomment %}
 
 	</div><!-- /header -->
 
