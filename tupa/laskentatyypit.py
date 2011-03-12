@@ -102,6 +102,8 @@ def suorita(funktio,*param):
 
 def suorita_lista(funktio,a,*param ) :
         if len(param)==0 : 
+		if not type(a)==Decimal and len(a)==0 :
+			raise KeyError
 		return funktio( *listaksi(a) )
 	else : return run_dict(1,funktio,a,*param)
 
