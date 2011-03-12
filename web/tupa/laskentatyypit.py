@@ -54,23 +54,28 @@ def listaksi(a,*opt):
                 joukkio = [a]
                 joukkio += opt
         else : joukkio = a 
-
-        if type(joukkio)==list:
+        
+	if type( joukkio )==DictDecimal: 
+		joukkio = [joukkio]
+	if type( joukkio )==Decimal: 
+		joukkio = [DictDecimal(joukkio)]
+	elif type( joukkio )==unicode or type( joukkio )==str:
                 return joukkio
-        elif type( joukkio )==DictDecimal:
-                return [joukkio]
-        elif type( joukkio )==Decimal:
-                return [DictDecimal(joukkio)]
-        elif type( joukkio )==unicode or type( joukkio )==str:
-                return joukkio
-        else:
-                try:
+        #elif type( joukkio )== MathDict:
+	#	return joukkio
+	if type(joukkio)==list:
+                lista=[]
+		for v in joukkio :
+			if type(v)==DictDecimal or type(v)==Decimal :
+                        	lista.append(DictDecimal(v))
+                return lista
+	try:
                         lista=[]
                         for k in joukkio.keys() :
                                 if type(joukkio[k])==DictDecimal or type(joukkio[k])==Decimal :
                                         lista.append(DictDecimal(joukkio[k]))
                         return lista
-                except :
+	except :
                         return None 
 
 def run_dict(list,funktio,*param):
@@ -97,10 +102,7 @@ def suorita(funktio,*param):
 
 def suorita_lista(funktio,a,*param ) :
         if len(param)==0 : 
-		if type(a)==Decimal:
-                	return funktio( listaksi(a) )
-        	else : 
-			return funktio( *listaksi(a) )
+		return funktio( *listaksi(a) )
 	else : return run_dict(1,funktio,a,*param)
 
 

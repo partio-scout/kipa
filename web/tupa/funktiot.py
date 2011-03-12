@@ -7,6 +7,13 @@ Tässä tiedostossa on määritelty kaikki funktiot joita voi käyttää laskenn
 from laskentatyypit import *
 from math import *
 
+def pienin(*lista) :
+	if len(lista)==1 : return min(lista) 
+	return min(*lista)
+def suurin(*lista) :
+	if len(lista)==1 : return max(lista) 
+	return max(*lista)
+
 def mediaani( *lista ):
         """
         Palauttaa mediaanin arvon joukon lukuarvoista:
@@ -14,7 +21,8 @@ def mediaani( *lista ):
         Mikäli lukujoukon pituus on parillinen, palauttaa kahden keskimmaisen luvun keskiarvon.
         """
         values = sorted(lista)
-        if len(values) % 2 == 1:
+	if len(values) % 2 == 1:
+		
                 return DictDecimal(values[(len(values)+1)/2-1])
         else:
                 lower = DictDecimal(values[len(values)/2-1])
@@ -40,7 +48,8 @@ def summa( *lista ) :
         """
         s=DictDecimal(0) 
         for v in lista : 
-                if v and not type(v)==unicode and not type(v)==str: s=s+v
+                if v and not type(v)==unicode and not type(v)==str: 
+			s=s+v
         return s
 
 def interpoloi(x,x1,y1,x2,y2=0):
@@ -81,10 +90,13 @@ perusfunktiot={ "interpoloi" : interpoloi,
 """
 Funktiot joiden kaikki parametrit ovat samanarvoisia, ja parametrejä voi olla liukuva määrä.
 """
-listafunktiot={"pienin" : min,
-                "min" :   min,
-                "suurin" : max, 
-                "max" : max , 
+
+
+
+listafunktiot={"pienin" : pienin,
+                "min" :   pienin,
+                "suurin" : suurin, 
+                "max" : suurin , 
                 "sum" : summa , 
                 "med" : mediaani ,
                 "kesk" : keskiarvo,
