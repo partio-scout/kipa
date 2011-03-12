@@ -136,8 +136,7 @@ def luoMuuttujat(sarja) :
 
                                 dict_maaritteet.append( (m.nimi,MathDict(dict_syotteet)) )
                         dict_ot.append( (ot.nimi,MathDict(dict_maaritteet)) )
-                t_nimi= t.nimi.replace(" ","")
-                t_nimi= t_nimi.replace("!","")
+                t_nimi= t.nimi.replace(" ","").replace("!","").lower()
                 dict_teht.append( (t_nimi,MathDict(dict_ot)) )
         muuttujat= MathDict(dict_teht)
         return muuttujat
@@ -153,14 +152,13 @@ def luoLaskut(sarja) :
         for v in vartiot:
                 vartioRivi=[]
                 for t in tehtavat:
-                        t_nimi= t.nimi.replace(" ","")
-                        t_nimi= t_nimi.replace("!","")
+                        t_nimi= t.nimi.replace(" ","").replace("!","").lower()
                         pino.append(t_nimi)
                         osatehtavat=t.osatehtava_set.all()
                         ot_lauseet=[]
                         for ot in osatehtavat:
                                 pino.append(ot.nimi)
-                                ot_lause=ot.kaava 
+                                ot_lause=ot.kaava #.lower() 
                                 parametrit=ot.parametri_set.all()
                                 maaritteet=ot.syotemaarite_set.all()
                                 korvautuu=True
@@ -202,17 +200,17 @@ def luoLaskut(sarja) :
                                 pino.pop()
                         tehtava_lause=""
                         #Suora summa osatehtavien välillä:
-                        if t.kaava=="ss" and len(ot_lauseet) :
+                        if t.kaava.lower()=="ss" and len(ot_lauseet) :
                                 for l in ot_lauseet :
                                         tehtava_lause=tehtava_lause + "max([0,"+l[1]+"])+"
                                 tehtava_lause=tehtava_lause[:-1]
                         else:
-                                tehtava_lause=t.kaava
+                                tehtava_lause=t.kaava.lower()
                                 for l in ot_lauseet:
                                         lause=l[1]
                                         tehtava_lause=re.sub(r"(?<!\w|[.])"+l[0]+r"(?<![.])(?!\w+)(?![.])","max([0,"+lause+"])",tehtava_lause)
                                 
-                        vartioRivi.append(tehtava_lause)
+                        vartioRivi.append(tehtava_lause.lower())
                         pino.pop()
                 taulukko.append(vartioRivi)
         return taulukko
