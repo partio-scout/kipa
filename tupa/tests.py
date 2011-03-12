@@ -25,52 +25,36 @@ class aritmeettinen_laskin_test(unittest.TestCase):
     """
     def testYhteenlasku(self):
         assert    laske('5+5') == Decimal('10')
-    
     def testYhteenlasku_spacet(self):
         assert    laske(' 5 + 5 ') == Decimal('10')
-    
     def testDesimaaliluku(self):
         assert    Decimal(laske('0.5*2+10.5000')) == Decimal('11.5000')
-    
     def testMuuttujavirhe(self):
         assert    laske('tyhja_muuttuja*5') == 'S'
-
     def testSulkulauseke(self):
         assert    laske('2*(1+9)') == Decimal('20')
-
     def testSulut_sisakkain(self):
         assert    laske('10*((1+2)+(5*10))') == Decimal('530')
-
     def testSulut_vaarinpain(self):
         assert    laske('10*)(1+2)+(5*10))') == None
-
     def testSulut_vaaramaara(self):
         assert    laske('10*(1+2)+(5*10))') == None
-
     def testNollallajako(self):
         assert    laske('10/0') == None
-        
     def testTyhjasyote(self):
         assert    laske('') == None
-        
     def testEiaritmtetiikkaa(self):
         assert    laske('a+ b-c*d') == "S"
-    
     def testkaksikertomerkkia(self): #(potenssi)
         assert    laske('5+2**5') == Decimal('37')
-     
     def testkaksiplusmerkkia(self):
         assert    laske('5+2++5') == Decimal('12')
-        
     def testkaksimiinusmerkkia(self): 
         assert    laske('5+2--5') == Decimal('12')
-        
     def testplusmiinus(self): 
         assert    laske('5+2+-5') == Decimal('2')
-      
     def testkertojako(self):
         assert    laske('5+2*/5') == None
-
     def testLaskettuNegatiivinenOperandi(self):
         assert    laske('3*(1-5)') == Decimal("-12")
     def testPitkadesimaali(self):
@@ -81,11 +65,14 @@ class aritmeettinen_laskin_test(unittest.TestCase):
         assert laske('log(a)', {'a': Decimal("100") } ) == Decimal("2")
     def testMinimiFunktio(self):
         assert laske('min(a)', {'a': Decimal("4") } ) == Decimal("4")
+    def testMedFunktio(self):
+        assert laske('med(a)', {'a': Decimal("4") } ) == Decimal("4")
+    def testMedFunktio2(self):
+        assert laske('med(a)', {'a': {'a' : Decimal("4"),'b' : Decimal("5"),'c' : Decimal("6")} }) == Decimal("5") 
     def testListaFunktio(self):
         assert laske('min([a,3,1])', {'a': Decimal("100") } ) == Decimal("1")
     def testAbsMiinusparametri(self):
         assert laske('abs(-1)' ) == Decimal("1")
-    
     def testSulkuMiinus(self):
         assert laske('(2)-1' ) == Decimal("1")
 
@@ -264,7 +251,7 @@ class TasapisteTesti(TestCase) :
         def testJarjestys(self):
                 sarja=Sarja.objects.get(nimi="tiukka")
                 tulokset=sarja.laskeTulokset()
-                assert tulokset[0][1][0].nro==1
+		assert tulokset[0][1][0].nro==1
                 assert tulokset[0][2][0].nro==2
                 assert tulokset[0][3][0].nro==3
                 assert tulokset[0][4][0].nro==4

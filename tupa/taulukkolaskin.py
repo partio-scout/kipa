@@ -58,15 +58,15 @@ def laske(lauseke,m={},funktiot={}):
         tulos=None
         # lasketaan tulos:
         try: 
-                tulos = eval(lause)
+       		tulos = eval(lause)
         # Poikkeukset laskuille joita ei pysty laskemaan. 
         # Pyrkii estämaan ettei koko paska kaadu virheissä.
-        #except DivisionByZero : return None 
+        except DivisionByZero : return None 
         except KeyError : return "S" # Syottämättomiä muuttujia
         except TypeError :  return None 
         except SyntaxError: return None
         except NameError : return None
-        except : return None
+	except : return None
         if type(tulos)==DictDecimal : return Decimal(tulos)
         if type(tulos)==Decimal : return tulos
         if type(tulos)==unicode : return tulos
