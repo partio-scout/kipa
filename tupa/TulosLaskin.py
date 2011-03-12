@@ -300,8 +300,8 @@ def laskeSarja(sarja):
                 tulokset.sort( key=operator.itemgetter(1,tasa1,tasa2,tasa3),reverse=True )
                 ulkona.sort( key=operator.itemgetter(1,tasa1,tasa2,tasa3),reverse=True )
         except : # tehtäviä < 3
-                tulokset.sort()
-                ulkona.sort()
+                tulokset.sort(key=operator.itemgetter(1) ,reverse=True)
+                ulkona.sort(key=operator.itemgetter(1) ,reverse=True)
 
         #Lisätään tehtävärivi ylos
         mukana.insert(0,t_list)
