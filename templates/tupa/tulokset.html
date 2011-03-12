@@ -9,19 +9,22 @@
 	<td width="33%" align="right">&nbsp;</td>
 </tr>
 <tr>
-	<td>{{kisa_aika}}<br> {{kisa_paikka}}</td>
-	<td align="center"><br>{% now "j.n.Y H:i"%}</td>
+	<td>{%if kisa_aika %}
+    		{{kisa_aika}}<br> 
+        {% endif %}
+        {{kisa_paikka}}
+    </td>
+	<td align="center"><br>{% now "j.n.Y G:i"%}</td>
 	<td align="right">&nbsp;</td>
 </tr>
 </table>
+<br />
 
-<br>
-<p>
 {% if tulos_taulukko %}
 	<table id="tulostaulukko_screen" border=0 >
 		{% for rivi in tulos_taulukko%}
                 {%if forloop.counter|add:"3"|divisibleby:"5" %}      
-                        <tr height=10><td></td></tr>
+                        <tr height="10"><td></td></tr>
                 {% endif %}
                 {% if forloop.first %}
                       <tr>
@@ -29,10 +32,10 @@
                      {% comment %} ylarivi {% endcomment %}
                                 {% if forloop.first  %}
                                         {% comment %} ylarivin eka {% endcomment %}
-                                        <td width="30" align="right"><b>sij.</b></td>
-                                        <td width="30" align="right" style="padding-right:10px;"><b>nro:</b></td>
-                                        <td style="min-width:100px;"><b>vartio:</b></td> 
-                                        <td align="left" width=30 style="padding-right:10px;"><b>yht:</b></td>
+                                        <td width="30" align="right"></td>
+                                        <td width="30" align="right" style="padding-right:10px;"><b></b></td>
+                                        <td style="min-width:100px;"></td> 
+                                        <td align="right" width=30 style="padding-right:10px;"></td>
                                 {% else %}
                                         {% comment %} ylarivi {% endcomment %}
 
@@ -45,6 +48,7 @@
 			    {% endfor %}    
 
                       </tr>
+                      <tr valign="top">
                 
                         <td></td>
 			            {% for sarake in rivi %}
@@ -57,22 +61,28 @@
                                         {%if sarake.lyhenne %}
                                         <td align="right" style="padding-right:10px;"><b>{{sarake.lyhenne}}</b></td>
                                         {% else %}
-                                        <td align="right" style="padding-right:10px;"><b>{{sarake.nimi}}</b></td>
+                                        <td align="right" width="60" style="padding-right:10px;"><b>
+                                            {{sarake.nimi|slice:":6"}}<br />
+                                            {{sarake.nimi|slice:"6:13"}}<br />
+                                            {{sarake.nimi|slice:"13:19"}}<br />
+                                            {{sarake.nimi|slice:"19:25"}}</b>
+                                        </td>
                                         {% endif %}
                                 {% endif %}
                         {%endfor %}
 
+                      </tr>
                       <tr> 
-                      <td></td><td></td><td align="right">Maxpisteet</td>
+                      <td></td><td></td><td align="right"><em>Maxpisteet</em></td>
                         {% for sarake in rivi %}
                                 {% if forloop.first  %}
-                               <td align="right" style="padding-right:10px;"> {{ sarake.maksimipisteet }} </td>
+                               <td align="right" style="padding-right:10px;"><em> {{ sarake.maksimipisteet }} </em></td>
                                 {% else %}
 
                                 {% ifnotequal forloop.counter 0 %}
                                 {% ifnotequal forloop.counter 1 %}
                                 {% ifnotequal forloop.counter 2 %}
-                                        <td align="right" style="padding-right:10px;"> {{ sarake.maksimipisteet }} </td>
+                                        <td align="right" style="padding-right:10px;"><em> {{ sarake.maksimipisteet }} </em></td>
                                 {% endifnotequal %}
                                 {% endifnotequal %}
                                 {% endifnotequal %}
@@ -80,10 +90,12 @@
 
                         {%endfor %}
                       </tr>
-                      <tr height=10> 
-                      <td></td>
+                      <tr>
+                            <td width="30" align="right"><b>SIJ.</b></td>
+                            <td width="30" align="right" style="padding-right:10px;"><b></b></td>
+                            <td style="min-width:100px;"><b>VARTIO</b></td> 
+                            <td align="right" width=30 style="padding-right:10px;"><b>YHT</b></td>
                       </tr>
-
 
                       <tr valign='top'>
                       
@@ -99,7 +111,7 @@
                                                 {{sarake.piiri}}</td>
                      {% else %}
                      {% ifequal forloop.counter 3 %}
-                        <td align = "left">{{sarake}}</td>
+                        <td align="right" style="padding-right:10px;">{{sarake}}</td>
                      {% comment %} muut sarakkeet {% endcomment %}
                      {% else %}
                         <td align="right" style="padding-right:10px;">
@@ -115,7 +127,7 @@
 		      </tr>
                {% comment %} ULKONA OLEVAT: {% endcomment %}
                 {% if forloop.last %}
-                        <tr><td> &nbsp; </td></tr>
+                        <tr><td>&nbsp;  </td></tr>
                         <tr><td> </td> <td></td><td><b>Ulkopuolella:</b> </td></tr>
                         {% for rivi in ulkona_taulukko%}
                         <tr valign='top'>
@@ -147,12 +159,6 @@
                 {% endif %}
         {% endfor %}
         
-        <tr>
-        <br>
-        <br>
-        </tr>
-		
-
 	</table>
        
 {% else %}
@@ -163,10 +169,9 @@
  S = syöttämättä<br>
  H = vartion suoritus hylätty<br>
  K = vartio keskeyttänyt<br>
- None = laskentavirhe
 </p>
 </form>
-<p><a href="../tuloste/{{tulos_taulukko.0.0.id}}/">Tulokset tulostusmuodossa</a></p>
+<p><a href="../tuloste/{{tulos_taulukko.0.0.id}}/" target="_blank">Tulokset tulostusmuodossa</a></p>
 <p><a href="../csv/{{tulos_taulukko.0.0.id}}/">Tulokset CSV tiedostoon</a></p>
 
 {% endblock %}
