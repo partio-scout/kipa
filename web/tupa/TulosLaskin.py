@@ -9,7 +9,7 @@ from taulukkolaskin import *
 from logger import lokkeri
 import math
 import operator
-from django.core.exceptions import ObjectDoesNotExist
+#from django.core.exceptions import ObjectDoesNotExist
 from funktiot import *
 
 def korvaa(lause,pino,loppu=None) :
@@ -39,8 +39,17 @@ def korvaa(lause,pino,loppu=None) :
         'c(a.b.c)'
         >>> korvaa("funktio(c)",["a","b"])
         'funktio(a.b.c)'
+	>>> korvaa("a.b...a..56",["a","b"],"56")
+	'56'
+	>>> korvaa("eka.toka...eka..56",["eka","toka"],"56")
+	'56'
         """
-        haku= re.finditer("(\.{0,3})([a-zA-Z]\w*)(?:\.(\w+))?(?:\.(\w+))?(?:\.(\w+))?(?!\w*[(])",lause )
+	# Ensiksi täytyy poistaa kaikki x..y -> y
+	poistoon= re.search(r"([^-.+*/()]+[.][.])",lause) 
+	while poistoon :
+		lause=re.sub(r"([^-.+*/()]+[.][.])","",lause,count=1)
+		poistoon= re.search(r"([^-.+*/()]+[.][.])",lause) 
+	haku= re.finditer("(\.{0,3})([a-zA-Z]\w*)(?:\.(\w+))?(?:\.(\w+))?(?:\.(\w+))?(?!\w*[(])",lause )
         muutokset=[]
         for h in haku :
                 ryhmat= h.groups()
@@ -177,6 +186,8 @@ def luoLaskut(sarja) :
                                         # Muunnos "suor" -> kaikkien vartioiden lasketut suoritukset
                                         try:
                                                 vartion_kaava=parametrit.filter(nimi="vartion_kaava")[0].arvo
+                                        	vartion_kaava=re.sub("vartio"+r"(?!\w+)", str(v.nro) ,vartion_kaava)
+
                                                 for p in parametrit:
                                                         vartion_kaava=re.sub(p.nimi+r"(?!\w+)",p.arvo,vartion_kaava)
                                                 ot_lause=re.sub("suor"+r"(?!\w+)",
