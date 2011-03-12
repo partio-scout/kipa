@@ -213,7 +213,7 @@ for f in os.listdir(os.curdir+"/fixtures/tests/"):
 
 #ajetaan vain haluttu fixtuuri
 # Nollataan fixturet
-#test_fixtures=[]
+#test_fixtures=['fixtures/tests/tyhja_mediaani.xml']
 #test_fixtures.append("fixtures/tests/tehtavan_nimi_funktio.xml")
 
 def PostTestFactory(fixture_name):
