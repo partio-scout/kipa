@@ -2,15 +2,19 @@
 # KiPa(KisaPalvelu), tuloslaskentajärjestelmä partiotaitokilpailuihin
 #    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
 
+
+if not __name__ == "__main__":
+	from logger import lokkeri
+	from funktiot import *
+
+
 from decimal import *
 from laskentatyypit import *
 import re
 from taulukkolaskin import *
-from logger import lokkeri
 import math
 import operator
 #from django.core.exceptions import ObjectDoesNotExist
-from funktiot import *
 
 def korvaa(lause,pino,loppu=None) :
         """
@@ -80,14 +84,16 @@ def korvaa(lause,pino,loppu=None) :
         return muokattu
 
 def suoritusJoukko(s) :
-        """  Korvaa laittaa kaikkien muuttujien eteen . operaattorin 
+        """  Siirtää parametriä yhden pykälän yleisempään suuntaaan.
         Jolloin esim. vartion suorituksesta a tulee .a Joka on kaikkien saman sarjan vartioiden vastaava suoritus.
         >>> suoritusJoukko('a')
         '.a'
         >>> suoritusJoukko('a*b+c')
         '.a*.b+.c'
+	>>> suoritusJoukko('aikavali(...eka.a.b.2.2, a)')
+	'aikavali(...eka.a.b.2, .a)'
         """
-        haku= re.finditer("(\.{0,3})([a-zA-Z]\w*)(?!\w*[(])",s)
+	haku= re.finditer("(?<![a-zA-Z.])(\.*)([a-zA-Z]\w*)(?!\w*[(.])",s)
         muutokset=[]
         for h in haku :
                 uusi= "." + s[h.start():h.end()]
@@ -99,6 +105,8 @@ def suoritusJoukko(s) :
                 muokattu=muokattu+s[muutokset[i][1]:muutokset[i+1][0]]
         muokattu=muokattu+muutokset[-1][2]
         muokattu=muokattu+s[muutokset[-1][1]:]
+	
+	muokattu= re.sub("(([.][^-,+*/ ]+)+)(\.[^-,+*/ ]*)(?![^-,+*/ ])","\g<1>",muokattu)
         return muokattu
 
 def luoMuuttujat(sarja) :
@@ -178,8 +186,6 @@ def luoLaskut(sarja) :
                                         # Pikatie "muk" -> "..mukana" 
                                         ot_lause=re.sub("muk"+r"(?!\w+)","..mukana",ot_lause)
                                         
-                                        # Pikatie vartio -> vartion numero
-                                        ot_lause=re.sub("vartio"+r"(?!\w+)", str(v.nro) ,ot_lause)
 
                                         # Muunnos "suor" -> kaikkien vartioiden lasketut suoritukset
                                         try:
@@ -196,7 +202,10 @@ def luoLaskut(sarja) :
                                         
                                 # Muutetaan muuttujien nimet koko polun mittaisiksi: tehtava(nimi).osatehtava(nimi).syote(nimi).vartio(nro)
                                 ot_lause=korvaa(ot_lause,pino,str(v.nro))
-                                ot_lauseet.append((ot.nimi,ot_lause))
+                                # Pikatie vartio -> vartion numero
+                                ot_lause=re.sub("vartio"+r"(?!\w+)", str(v.nro) ,ot_lause)
+                                
+				ot_lauseet.append((ot.nimi,ot_lause))
                                 pino.pop()
                         tehtava_lause=""
                         #Suora summa osatehtavien välillä:
@@ -290,19 +299,23 @@ def laskeSarja(sarja):
         tasa2 = 0
         tasa3 = 0
         if sarja.tasapiste_teht1 : tasa1 = sarja.tasapiste_teht1+1
-        if sarja.tasapiste_teht1 : tasa2 = sarja.tasapiste_teht2+1
-        if sarja.tasapiste_teht1 : tasa3 = sarja.tasapiste_teht3+1
+        if sarja.tasapiste_teht2 : tasa2 = sarja.tasapiste_teht2+1
+        if sarja.tasapiste_teht2 : tasa3 = sarja.tasapiste_teht3+1
         
+        tulokset.sort(key=operator.itemgetter(1) ,reverse=True)
+        ulkona.sort(key=operator.itemgetter(1) ,reverse=True)
         #Järjestetään taulukot
         try :
                 tulokset.sort( key=operator.itemgetter(1,tasa1,tasa2,tasa3),reverse=True )
                 ulkona.sort( key=operator.itemgetter(1,tasa1,tasa2,tasa3),reverse=True )
         except : # tehtäviä < 3
-                tulokset.sort(key=operator.itemgetter(1) ,reverse=True)
-                ulkona.sort(key=operator.itemgetter(1) ,reverse=True)
-
+		pass
         #Lisätään tehtävärivi ylos
         mukana.insert(0,t_list)
         
         return (mukana,ulkona)
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
 
