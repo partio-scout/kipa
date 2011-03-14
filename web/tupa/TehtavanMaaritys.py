@@ -579,13 +579,13 @@ def osaTehtavaForm(posti,data,prefix="") :
                 { 'id' : data['nimi'] +'_ka', 'otsikko' : 'Kokonaisaika' ,
                         'tyyppi' : 'ka',
                         'form' : kokonaisAikaForm(posti,data,id)},
-                { 'id' : data['nimi'] +'_ala', 'otsikko' : 'Aikavali',
+                { 'id' : data['nimi'] +'_ala', 'otsikko' : 'Aikaväli',
                         'tyyppi' : 'ala',
                         'form' : aikaValiForm(posti,data,id)},
-                { 'id' : data['nimi'] +'_vk', 'otsikko' :'Vapaa kaava',
+                { 'id' : data['nimi'] +'_vk', 'otsikko' :'Vapaakaava',
                         'tyyppi' : 'vk',
                         'form' : vapaaKaavaForm(posti,data,id)},
-                { 'id' : data['nimi'] +'_pk', 'otsikko' :'Puhdas kaava',
+                { 'id' : data['nimi'] +'_pk', 'otsikko' :'Puhdaskaava',
                         'tyyppi' : 'pk',
                         'form' : puhdasKaavaForm(posti,data,id)}]
         
