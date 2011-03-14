@@ -66,8 +66,6 @@ def jos(ehto,a,b) :
         if ehto : return a 
         else : return b
 
-def maksimi(*lista) :
-        return max(lista) 
                 
 """
 Funktiot joiden parametrit ovat toisistaan riippumattomia
