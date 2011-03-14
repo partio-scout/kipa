@@ -469,7 +469,7 @@ def tuomarineuvos(request, kisa_nimi,talletettu=None):
         tal=""
         if talletettu=="talletettu" and not posti : tal="Talletettu!"
 
-        return render_to_response('tupa/testitulos.html',
+        return render_to_response('tupa/tuomarineuvos.html',
                         { 'taulukko' : taulukko ,
                         'heading' : "Tuomarineuvoston antamien tulosten määritys" ,
 			'kisa_nimi': kisa_nimi,
