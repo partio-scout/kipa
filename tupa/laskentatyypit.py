@@ -50,6 +50,8 @@ def listaksi(a,*opt):
         """
         Muuttaa sanakirjan tai desimaalin listaksi jos syote on joukkio, muuten palauttaa muuttujan itsessaan.
         """
+	#print a
+	#print opt
         if len(opt) : 
                 joukkio = [a]
                 joukkio += opt
@@ -87,8 +89,8 @@ def run_dict(list,funktio,*param):
         rValue=MathDict({})
         for k in mdict.keys() :
                 parametrit = []
-                for p in param : 
-                        if type(p)== MathDict : parametrit.append(p[k])
+                for p in param :
+                       	if type(p)== MathDict and k in p.keys() : parametrit.append(p[k])
                         else : parametrit.append(p)
                 if list: rValue[k]= funktio(listaksi(*parametrit))
                 else : rValue[k]= funktio(*parametrit)
@@ -96,13 +98,14 @@ def run_dict(list,funktio,*param):
 
 def suorita(funktio,*param):
         try :
-                return run_dict(0,funktio,*param)
-        except :
+        	return run_dict(0,funktio,*param)
+  	except :
+	#	print funktio
                 return DictDecimal(0)
 
 def suorita_lista(funktio,a,*param ) :
-        if len(param)==0 : 
-		if not type(a)==Decimal and len(a)==0 :
+        if len(param)==0 :
+		if not type(a)==Decimal and not type(a)==DictDecimal and len(a)==0 :
 			raise KeyError
 		return funktio( *listaksi(a) )
 	else : return run_dict(1,funktio,a,*param)
