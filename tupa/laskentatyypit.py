@@ -89,19 +89,22 @@ def run_dict(list,funktio,*param):
         rValue=MathDict({})
         for k in mdict.keys() :
                 parametrit = []
+	
                 for p in param :
                        	if type(p)== MathDict and k in p.keys() : parametrit.append(p[k])
                         else : parametrit.append(p)
-                if list: rValue[k]= funktio(listaksi(*parametrit))
-                else : rValue[k]= funktio(*parametrit)
+                
+		if list: rValue[k]= funktio(listaksi(*parametrit))
+                else : 
+			try: rValue[k]= funktio(*parametrit)
+			except: pass # Pass all elemets that could not be calculated.
         return rValue        
 
 def suorita(funktio,*param):
         try :
         	return run_dict(0,funktio,*param)
   	except :
-	#	print funktio
-                return DictDecimal(0)
+		return Decimal(0)
 
 def suorita_lista(funktio,a,*param ) :
         if len(param)==0 :
