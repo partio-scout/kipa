@@ -575,7 +575,7 @@ def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
         writer.writerow(['',''])
         
         for i in range(len(mukana[1:])) :                
-                vartiorivi = [unicode(numero) , unicode(mukana[i+1][0].nro),unicode(mukana[i+1][0].nimi),]
+                vartiorivi = [unicode(numero) , unicode(mukana[i+1][0].nro), unicode(mukana[i+1][0].nimi),]
                 vartiorivi.append( unicode(mukana[i+1][1]).replace(".",",") )
                 for num in mukana[i+1][2:] : vartiorivi.append( unicode(num).replace(".",",") )
                 writer.writerow( vartiorivi  )
@@ -583,9 +583,9 @@ def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
         writer.writerow([""])
         writer.writerow(["","","Ulkopuolella:"])
         for i in range(len(ulkona)) : 
-                vartiorivi = [unicode(numero) , unicode(mukana[i+1][0].nro),unicode(mukana[i+1][0].nimi),]
-                vartiorivi.append( unicode(mukana[i+1][1]).replace(".",",") )
-                for num in mukana[i+1][2:] : vartiorivi.append( unicode(num).replace(".",",") )
+                vartiorivi = [unicode(numero) , unicode(ulkona[i][0].nro),unicode(ulkona[i][0].nimi),]
+                vartiorivi.append( unicode(ulkona[i][1]).replace(".",",") )
+                for num in ulkona[i][2:] : vartiorivi.append( unicode(num).replace(".",",") )
                 writer.writerow( vartiorivi  )
 
                 ulkona[i].insert(0,numero)

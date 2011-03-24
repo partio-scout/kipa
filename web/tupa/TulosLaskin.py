@@ -249,9 +249,9 @@ def laskeSarja(sarja):
                         if hylatty and len(syotteet): tulokset[i][t]= "H"
 
                 #Merkataan siirrettäviksi ulkopuolella olevat:
-                if vartiot[i].keskeyttanyt or vartiot[i].ulkopuolella : 
+                if not vartiot[i].keskeyttanyt == None or not vartiot[i].ulkopuolella == None : 
                         #Merkataan keskeyttaneille tuloksiin "K" keskeyttämisestä eteenpäin
-                        if vartiot[i].keskeyttanyt:
+                        if not vartiot[i].keskeyttanyt==None:
                                 kesk=vartiot[i].keskeyttanyt-1
                                 for t in range(kesk,len(tulokset[i])) :tulokset[i][t]= "K"
                         siirrettavat.append(i)
