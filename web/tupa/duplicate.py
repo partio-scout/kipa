@@ -8,7 +8,7 @@ import models
 def kisa_xml(kisa):
         """
         Apufunktio -> Luo xml merkkijonon kaikista kisan objekteista.
-        Jattaa henkilot ja allergiat luomatta.
+        Jättää henkilöt ja allergiat luomatta.
         """
         from django.core import serializers
         objects=[kisa,]
@@ -61,8 +61,8 @@ def kopioiTehtava(tehtava,sarjaan,uusiNimi=None) :
                                         arvo=p.arvo ,
                                         osa_tehtava=uusiot)
                         uusip.save()
-
-                # Kopioi maaritteet:
+                
+		# Kopioi maaritteet:
                 maaritteet = ot.syotemaarite_set.all()
                 for m in maaritteet:
                         uusim=models.SyoteMaarite( nimi=m.nimi,
@@ -71,4 +71,3 @@ def kopioiTehtava(tehtava,sarjaan,uusiNimi=None) :
                                     kali_vihje=m.kali_vihje )
                         uusim.save()
         
-
