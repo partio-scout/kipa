@@ -161,7 +161,7 @@ def TulosTestFactory(fixture_name):
                         self.sarjat=Sarja.objects.all()
                         virheet=[]
                         for s in self.sarjat:
-                                virheilmoitus=""
+                                virheilmoitus=unicode("")
                                 for f in self.fixtures:
                                         virheilmoitus=virheilmoitus+f+" " 
                                         
@@ -213,7 +213,7 @@ for f in os.listdir(os.curdir+"/fixtures/tests/"):
 
 #ajetaan vain haluttu fixtuuri
 # Nollataan fixturet
-test_fixtures=["fixtures/tests/keskeyttanyt_0.xml"]
+#test_fixtures=["fixtures/tests/pelkka_numero_tehtavanimessa.xml"]
 #test_fixtures.append("fixtures/tests/tehtavan_nimi_funktio.xml")
 
 def PostTestFactory(fixture_name):

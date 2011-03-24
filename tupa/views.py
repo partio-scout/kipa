@@ -28,6 +28,7 @@ from TehtavanMaaritys import *
 import time
 from UnicodeTools import *
 import django.db
+
 def kipaResponseRedirect(url) : return HttpResponse('<html><head><meta http-equiv="REFRESH" content="0;url='+url+'"></HEAD><BODY></BODY></HTML>')
 
 def loginSivu(request, kisa_nimi):
