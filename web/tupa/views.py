@@ -73,12 +73,11 @@ def tehtavanTilanne(tehtava):
         return tila
 
 def testaa_tietokanta() :
-        sarja=Sarja(nimi="tietokantatesti")
+        kisa=Kisa(nimi="tietokantatesti")
         try :
-            sarja.tasapiste_teht1=1
-            sarja.kisa_id=1
-            sarja.save()
-            sarja.delete()
+            kisa.save()
+            kisa.paikka="a"
+            kisa.delete()
             return None
         except django.db.DatabaseError: 
             return True 
@@ -144,7 +143,8 @@ def maaritaKisa(request, kisa_nimi=None,talletettu=None):
                 	sarjaFormit=SarjaFormSet(posti,instance=kisa)
 			sarjaFormit.save()
         
-        for s in kisa.sarja_set.all() : s.taustaTulokset() # tulosten taustalaskenta 
+        if kisa :
+                for s in kisa.sarja_set.all() : s.taustaTulokset() # tulosten taustalaskenta 
 
         sarjaFormit.label="Sarjat" 
         # Annetaan tiedot templatelle:
