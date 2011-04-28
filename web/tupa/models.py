@@ -96,8 +96,9 @@ class Sarja(models.Model) :
 
         def tuloksetUusiksi(self) :
                 # Poistetaan tulosten cache
-                cacheName = str(self.kisa.id)+'_'+str(self.id)+'_tulokset'
-                cache.delete(cacheName)
+                if self.kisa:
+                        cacheName = str(self.kisa.id)+'_'+str(self.id)+'_tulokset'
+                        cache.delete(cacheName)
 
         class Meta:
                 verbose_name_plural = "Sarjat"
