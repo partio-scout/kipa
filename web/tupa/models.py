@@ -77,28 +77,27 @@ class Sarja(models.Model) :
                         laskee=cache.get( laskeeName ) 
                 tulokset=cache.get( cacheName )
                 if not tulokset or not settings.CACHE_TULOKSET : # ei cachea -> lasketaan
-                        # Lasketaan tulokset 
+                        cache.set( cacheName , 0 ) # Tunnistetaan laskennanaikainen tallennus
                         cache.set( laskeeName , True , 30) # Merkitään laskennan olevan käynnissä
-                        tulokset = laskeSarja(self) 
+                        tulokset = laskeSarja(self)  # Lasketaan tulokset
                         cache.delete( laskeeName ) # Merkitään laskennan olevan valmis
-                
+                        
+                        ctulos = cache.get( cacheName ) # Muutoksia laskennan aikana 
+                        if ctulos == None :  return tulokset # Jätetään cacheamatta.
                 # Asetetaan cache.
                 cache.set( cacheName , tulokset, settings.CACHE_TULOKSET_TIME)
                 return tulokset
         
         def taustaTulokset(self) :
                 if settings.TAUSTALASKENTA: # Tulosten laskenta taustalla threadissa.
-
                         laskeeName = str(self.kisa.id)+'_'+str(self.id)+'_laskee'
-                        laskee=cache.get( laskeeName ) # Cache
-                        if not laskee:
-                                thread.start_new_thread( self.laskeTulokset,() )
+                        laskee=cache.get( laskeeName ) # Tarkistetaan ollaanko tuloksia jo laskemassa.
+                        if not laskee:  thread.start_new_thread( self.laskeTulokset,() )
 
         def tuloksetUusiksi(self) :
                 # Poistetaan tulosten cache
-                if self.id  :
-                        cacheName = str(self.kisa.id)+'_'+str(self.id)+'_tulokset'
-                        cache.delete(cacheName)
+                cacheName = str(self.kisa.id)+'_'+str(self.id)+'_tulokset'
+                cache.delete(cacheName)
 
         class Meta:
                 verbose_name_plural = "Sarjat"
