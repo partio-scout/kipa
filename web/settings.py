@@ -25,9 +25,15 @@ DATABASE_HOST = ''             # Set to empty string for localhost. Not used wit
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
 # Cache
-CACHE_TULOKSET = True
-CACHE_TULOKSET_TIME = 60 # Seconds from last view () 
-CACHE_BACKEND = 'locmem:///' # Cache system for django to use
+TAUSTALASKENTA = True # Tulokset lasketaan taustalla (Vaatii toimiakseen tomivan cachekokoonpanon)
+CACHE_TULOKSET = True # Etsitaanko tuloksia cachesta
+CACHE_TULOKSET_TIME = 1800 # Tuloscachen voimassaoloaika viimeisesta nayttokerrasta. [s]
+CACHE_BACKEND = 'locmem:///' # Cache system for developement
+#CACHE_BACKEND = 'locmem:///' # Cache system for developement
+
+if not CACHE_TULOKSET : 
+        CACHE_BACKEND = 'dummy:///' # No cache in use
+        TAUSTALASENTA = False
 
 # Local time zone for this installation. 
 TIME_ZONE = 'Europe/Helsinki'

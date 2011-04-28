@@ -29,6 +29,7 @@ import time
 from UnicodeTools import *
 import django.db
 
+
 def kipaResponseRedirect(url) : return HttpResponse('<html><head><meta http-equiv="REFRESH" content="0;url='+url+'"></HEAD><BODY></BODY></HTML>')
 
 def loginSivu(request, kisa_nimi):
@@ -99,6 +100,9 @@ def kisa(request,kisa_nimi) :
         """
         kisa = get_object_or_404(Kisa, nimi=kisa_nimi) 
         vanha_tietokanta=testaa_tietokanta()
+        
+        for s in kisa.sarja_set.all() : s.taustaTulokset() # tulosten taustalaskenta 
+
         return render_to_response('tupa/kisa.html', {'kisa' : kisa, 
                                         'kisa_nimi': kisa_nimi, 
                                         'heading' : 'Etusivu',
@@ -139,6 +143,8 @@ def maaritaKisa(request, kisa_nimi=None,talletettu=None):
                         kisa=kisaForm.save()
                 	sarjaFormit=SarjaFormSet(posti,instance=kisa)
 			sarjaFormit.save()
+        
+        for s in kisa.sarja_set.all() : s.taustaTulokset() # tulosten taustalaskenta 
 
         sarjaFormit.label="Sarjat" 
         # Annetaan tiedot templatelle:
@@ -219,6 +225,9 @@ def maaritaVartiot(request,kisa_nimi,talletettu=None):
                 vartioFormit.otsikko=s.nimi
                 vartioFormit.id=s.id
                 taulukko.append( vartioFormit )
+                
+                s.taustaTulokset() # Taustalaskenta
+
         if posti and post_ok:
                 if "nappi" in posti.keys() and posti["nappi"]=="ohjaus" :
                         return kipaResponseRedirect("/kipa/"+kisa_nimi+"/maarita/tehtava/")
@@ -274,6 +283,8 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
         
         # Tallennetaan formin muokkaama data
         tehtava_id=tallennaTehtavaData( daatta ) 
+        
+        sarja.taustaTulokset() # Taustalaskenta
 
 	otsikko = 'Uusi tehtävä'
 
@@ -324,6 +335,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
 
         maaritteet = SyoteMaarite.objects.filter(osa_tehtava__tehtava=tehtava)
         
+        tehtava.sarja.taustaTulokset() # Taustalaskenta
         
         vartiot = Vartio.objects.filter(sarja = tehtava.sarja )
         syoteFormit = []
@@ -443,6 +455,7 @@ def tuomarineuvos(request, kisa_nimi,talletettu=None):
         if request.method == 'POST':
                 posti=request.POST
         
+        
         validi=True
         for s in sarjat :
                 taulut=s
@@ -465,6 +478,8 @@ def tuomarineuvos(request, kisa_nimi,talletettu=None):
                 taulut.otsikko=s.nimi
                 taulut.id=s.id
                 taulukko.append(taulut)
+                s.taustaTulokset() # Taustalaskenta
+
         if posti and validi:
                 return kipaResponseRedirect("/kipa/"+kisa_nimi+"/maarita/tuomarineuvos/talletettu/")
         tal=""
