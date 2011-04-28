@@ -96,7 +96,7 @@ class Sarja(models.Model) :
 
         def tuloksetUusiksi(self) :
                 # Poistetaan tulosten cache
-                if self.kisa:
+                if self.id:
                         cacheName = str(self.kisa.id)+'_'+str(self.id)+'_tulokset'
                         cache.delete(cacheName)
 
