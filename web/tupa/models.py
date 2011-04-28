@@ -61,11 +61,11 @@ class Sarja(models.Model) :
                 return self.kisa.nimi+"."+self.nimi
         
         def save(self,*args,**kwargs) : # Tulokset uusiksi tallennuksen yhteydessä
-                self.tuloksetUusiksi()
                 super(Sarja,self).save(*args,**kwargs)
-        def delete(self,*args,**kwargs) : # Tulokset uusiksi tallennuksen yhteydessä
                 self.tuloksetUusiksi()
+        def delete(self,*args,**kwargs) : # Tulokset uusiksi tallennuksen yhteydessä
                 super(Sarja,self).delete(*args,**kwargs)
+                self.tuloksetUusiksi()
 
         def laskeTulokset(self) :
                 cacheName = str(self.kisa.id)+'_'+str(self.id)+'_tulokset'
@@ -96,9 +96,8 @@ class Sarja(models.Model) :
 
         def tuloksetUusiksi(self) :
                 # Poistetaan tulosten cache
-                if self.id:
-                        cacheName = str(self.kisa.id)+'_'+str(self.id)+'_tulokset'
-                        cache.delete(cacheName)
+                cacheName = str(self.kisa.id)+'_'+str(self.id)+'_tulokset'
+                cache.delete(cacheName)
 
         class Meta:
                 verbose_name_plural = "Sarjat"
