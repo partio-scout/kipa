@@ -2,11 +2,9 @@
 # KiPa(KisaPalvelu), tuloslaskentajärjestelmä partiotaitokilpailuihin
 #    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
 
-
 if not __name__ == "__main__":
 	from logger import lokkeri
 	from funktiot import *
-
 
 from decimal import *
 from laskentatyypit import *
@@ -15,6 +13,8 @@ from taulukkolaskin import *
 import math
 import operator
 #from django.core.exceptions import ObjectDoesNotExist
+
+from django.core.cache import cache
 
 def korvaa(lause,pino,loppu=None) :
         """
@@ -43,10 +43,10 @@ def korvaa(lause,pino,loppu=None) :
         'c(a.b.c)'
         >>> korvaa("funktio(c)",["a","b"])
         'funktio(a.b.c)'
-	>>> korvaa("a.b...a..56",["a","b"],"56")
-	'56'
-	>>> korvaa("eka.toka...eka..56",["eka","toka"],"56")
-	'56'
+        >>> korvaa("a.b...a..56",["a","b"],"56")
+        '56'
+        >>> korvaa("eka.toka...eka..56",["eka","toka"],"56")
+        '56'
         """
 	# Ensiksi täytyy poistaa kaikki x..y -> y
 	poistoon= re.search(r"([^-.+*/()]+[.][.])",lause) 
@@ -235,6 +235,7 @@ def laskeSarja(sarja):
         muuttujat = luoMuuttujat(sarja)
         laskut= luoLaskut(sarja)
         tulokset = laskeTaulukko(laskut,muuttujat)
+
         #Muokataan oikean muotoinen tulostaulukko:
         vartiot=sarja.vartio_set.all()
         tehtavat=sarja.tehtava_set.all()
