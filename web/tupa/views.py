@@ -521,11 +521,11 @@ def tulostaSarja(request, kisa_nimi, sarja_id, tulostus=0) :
 			'heading' : sarja.nimi, 
 			'taakse' : {'url' : '../../', 'title' : 'Tulokset sarjoittain'} }  )
 
-def tulostaSarjaHTML(request, kisa_nimi, sarja_id,tulostus=1) :
+def tulostaSarjaHTML(request, kisa_nimi, sarja_id) :
         """
         Sarjan tulokset, sivu muotoiltuna tulostusta varten ilman turhia grafiikoita.
         """
-        return tulostaSarja(request, kisa_nimi, sarja_id)
+        return tulostaSarja(request, kisa_nimi, sarja_id,tulostus=1)
 
 
 def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
@@ -549,7 +549,7 @@ def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
         writer.writerow(['', '', time.strftime("%e.%m.%Y %H:%M ", time.localtime()).replace('.0', '.')]) # aika
         writer.writerow(['']) # tyhjä rivi
 
-        otsikkorivi=['Sij.', 'Nro:', 'Vartio:', 'Yht:']
+        otsikkorivi=['','Sij.', 'Nro:', 'Vartio:', 'Yht:']
         for teht in mukana[0][2:] :
                 otsikkorivi.append(unicode(teht.jarjestysnro))
         writer.writerow(otsikkorivi)
@@ -573,15 +573,16 @@ def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
         writer.writerow(['',''])
         
         for i in range(len(mukana[1:])) :                
-                vartiorivi = [unicode(numero) , unicode(mukana[i+1][0].nro), unicode(mukana[i+1][0].nimi),]
+                vartiorivi = [ mukana[i+1][0].tasa , str(numero) , unicode(mukana[i+1][0].nro), unicode(mukana[i+1][0].nimi),]
                 vartiorivi.append( unicode(mukana[i+1][1]).replace(".",",") )
                 for num in mukana[i+1][2:] : vartiorivi.append( unicode(num).replace(".",",") )
                 writer.writerow( vartiorivi  )
                 numero=numero+1
+
         writer.writerow([""])
         writer.writerow(["","","Ulkopuolella:"])
         for i in range(len(ulkona)) : 
-                vartiorivi = [unicode(numero) , unicode(ulkona[i][0].nro),unicode(ulkona[i][0].nimi),]
+                vartiorivi = [ ulkona[i][0].tasa , str(numero), unicode(ulkona[i][0].nro),unicode(ulkona[i][0].nimi),]
                 vartiorivi.append( unicode(ulkona[i][1]).replace(".",",") )
                 for num in ulkona[i][2:] : vartiorivi.append( unicode(num).replace(".",",") )
                 writer.writerow( vartiorivi  )
@@ -593,6 +594,7 @@ def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
         writer.writerow([u"S = syöttämättä"])
         writer.writerow([u"H = vartion suoritus hylätty"])
         writer.writerow([u"K = vartio keskeyttänyt"])
+        writer.writerow([u"! = vartion sijaluku laskettu tasapisteissä määräävien tehtävien perusteella"])
         writer.writerow([u"None = laskentavirhe"])
         return response
 
