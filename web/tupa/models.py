@@ -18,7 +18,6 @@ from socket import socket, AF_INET, SOCK_DGRAM
 from binascii import *
 import sys
 
-
 port = 1200 
 hostname = '192.168.0.11'
 
@@ -30,7 +29,6 @@ class Kipa(models.Model):
         #gen_dia_class Kipa
 
         versio = models.IntegerField()
-
         
         #end_dia_class
         class Meta:
@@ -49,6 +47,7 @@ class Kisa(models.Model) :
         #end_dia_class
         def __unicode__(self) :
                 return self.nimi
+
         class Meta:
                 verbose_name_plural = "Kisat"
                 db_table = u"kipa_kisa"
@@ -92,15 +91,13 @@ class Sarja(models.Model) :
                         
                         ## Dev ledivilkutus
                         ##
-
                         data = a2b_hex("01")
                         udp.sendto(data,(hostname,port))
                         tulokset = laskeSarja(self)  # Lasketaan tulokset
                         data = a2b_hex("00")
                         udp.sendto(data,(hostname,port))
-
                         ##
-                        ##
+                        ## Dev ledivilkutus loppuu
                         
                         cache.delete( laskeeName ) # Merkitään laskennan olevan valmis
                         

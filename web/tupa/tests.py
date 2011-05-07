@@ -103,7 +103,7 @@ def ViewSanityCheck(fixture_name):
         """
         class testi(TestCase) :
                 fixtures = [fixture_name]
-                def testTulokset(self):
+                def testSanity(self):
                         """
                         Ajaa jokaisen näkymän testidatalla
                         Testi antaa virheen jos jokin näkuma kaatuu.
@@ -160,6 +160,10 @@ def TulosTestFactory(fixture_name):
                         """
                         self.sarjat=Sarja.objects.all()
                         virheet=[]
+                        cache.clear()
+                        settings.TAUSTALASKENTA = False 
+                        settings.CACHE_TULOKSET = False 
+
                         for s in self.sarjat:
                                 virheilmoitus=unicode("")
                                 for f in self.fixtures:
@@ -213,7 +217,7 @@ for f in os.listdir(os.curdir+"/fixtures/tests/"):
 
 #ajetaan vain haluttu fixtuuri
 # Nollataan fixturet
-#test_fixtures=["fixtures/tests/pelkka_numero_tehtavanimessa.xml"]
+test_fixtures=["fixtures/tests/jurmo.xml"]
 #test_fixtures.append("fixtures/tests/tehtavan_nimi_funktio.xml")
 
 def PostTestFactory(fixture_name):
