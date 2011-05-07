@@ -4,6 +4,8 @@
 <title>Kipa - {% block title %}  {% endblock %}</title>
 <link rel="stylesheet" type="text/css" href="/kipamedia/kipa.css" />
 <link rel="stylesheet" type="text/css" href="/kipamedia/tabcontent.css" />
+<link rel="stylesheet" type="text/css" href="/kipamedia/jquery.jgrowl.css" />
+
 <!--[if IE 6]>
 	<link rel="stylesheet" type="text/css" href="/kipamedia/IE-6-SPECIFIC.css" />
 <![endif]-->
@@ -20,6 +22,7 @@
 
 {% block header %}  {% endblock %}
 
+<script type="text/javascript" language="javascript" src="/kipamedia/jquery.jgrowl_minimized.js"></script>
 <script type="text/javascript" language="javascript" src="/kipamedia/tooltip.js"></script>
 <script type="text/javascript" src="/kipamedia/tabcontent.js">
 /***********************************************
@@ -34,6 +37,16 @@ function setVisibility(id, visibility) {
 document.getElementById(id).style.display = visibility;
 }
 </script>
+{% if talletettu %}
+	<script type="text/javascript">
+        $(document).ready(function() {
+            $('#infofield').jGrowl('{{talletettu}}', {
+                position: top-left, 
+                life: 3000
+                });
+        });
+    </script>
+{% endif %}
 
 </head>
 
@@ -43,7 +56,7 @@ document.getElementById(id).style.display = visibility;
 
 <div id="wrap">
 
-    <div id="header"><div id="pageTitle">{{kisa_nimi}}</div><div id="infofield">{{talletettu}}</div>
+    <div id="header"><div id="pageTitle">{{kisa_nimi}}</div><div id="infofield"></div>
 		{% comment %}  
 		<div style="float:right; margin-top:-4px; margin-bottom:0; padding-bottom:0; height:18px;">		
 			{% if user.is_authenticated %}

@@ -143,19 +143,6 @@ h3 {
 	font-size: 11px;
 }
 
-#infofield {
-	color: #aeba52; 
-	font-size:18px;
-	font-weight:bold;
-	text-align:center;
-	display:inline-block;
-	width:300px;
-	height:20px;
-	overflow:hidden;
-	padding-top:3px;
-}
-
-
 .etusivunOtsikko {
 
 	font: 20px Georgia,Helvetica,"Lucida Sans Unicode",Tahoma,Verdana,Arial,Helvetica,sans-serif;
