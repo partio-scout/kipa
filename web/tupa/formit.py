@@ -198,10 +198,10 @@ class PisteTarkistusForm(ModelForm):
                 model = Syote
 
 class AikaSyoteForm(PisteSyoteForm) :
-        arvo=AikaField(required=False,widget=AikaWidget( attrs={'class': '','value': ''} ))
+        arvo=AikaField(required=False,widget=AikaWidget( attrs={'class': 'time','value': ''} ))
 
 class AikaTarkistusForm(PisteTarkistusForm) :
-        tarkistus=AikaField(required=False,widget=AikaWidget( attrs={'class': '','value': ''} ))
+        tarkistus=AikaField(required=False,widget=AikaWidget( attrs={'class': 'time','value': ''} ))
              
 def SyoteForm(*argv,**argkw) :
         if argv[0].tyyppi=="aika":
