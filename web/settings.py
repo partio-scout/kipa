@@ -1,5 +1,7 @@
 import os
 
+import tupa
+
 hakemisto=os.path.normpath(os.path.dirname(__file__))
 tarkistus= os.getcwd()
 
@@ -82,7 +84,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    'tupa.logger.PostDataRecorder',
     'django.middleware.doc.XViewMiddleware',
 )
 
