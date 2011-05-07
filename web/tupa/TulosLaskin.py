@@ -310,7 +310,24 @@ def laskeSarja(sarja):
                 tulokset.sort( key=operator.itemgetter(1,tasa1,tasa2,tasa3),reverse=True )
                 ulkona.sort( key=operator.itemgetter(1,tasa1,tasa2,tasa3),reverse=True )
         except : # tehtäviä < 3
-		pass
+		        pass
+        
+        # Etsitään tasapistetulokset :
+        edellinen=None
+        for vi, vartio in enumerate(ulkona) :
+                vartio[0].tasa='' # merkitään tasatulos
+                if edellinen and vartio[1]==edellinen[1] :
+                        ulkona[vi][0].tasa='!' # merkitään tasatulos
+                        ulkona[vi-1][0].tasa='!' # merkitään tasatulos
+                edellinen = vartio
+        edellinen=None
+        for vi, vartio in enumerate(mukana) :
+                vartio[0].tasa='' # merkitään tasatulos
+                if edellinen and vartio[1]==edellinen[1] :
+                        tulokset[vi][0].tasa='!' # merkitään tasatulos
+                        tulokset[vi-1][0].tasa='!' # merkitään tasatulos
+                edellinen = vartio
+
         #Lisätään tehtävärivi ylos
         mukana.insert(0,t_list)
         

@@ -491,7 +491,7 @@ def tuomarineuvos(request, kisa_nimi,talletettu=None):
 			'kisa_nimi': kisa_nimi,
                         'talletettu': tal })
 
-def tulostaSarja(request, kisa_nimi, sarja_id) :
+def tulostaSarja(request, kisa_nimi, sarja_id, tulostus=0) :
         """
         Sarjan tulokset.
         """
@@ -501,15 +501,18 @@ def tulostaSarja(request, kisa_nimi, sarja_id) :
         ulkona=tulokset[1]
         numero=1 
         for i in range(len(mukana[1:])) :
-                mukana[i+1].insert(0,numero)
+                mukana[i+1].insert(0, mukana[i+1][0].tasa +  str(numero) )
                 numero=numero+1
         for i in range(len(ulkona)) : 
-                ulkona[i].insert(0,numero)
+                ulkona[i].insert(0,ulkona[i][0].tasa + str(numero))
                 numero=numero+1
         kisa_aika = sarja.kisa.aika
         kisa_paikka = sarja.kisa.paikka
 
-        return render_to_response('tupa/tulokset.html', 
+        templaatti='tupa/tulokset.html'
+        if tulostus: templaatti= 'tupa/tuloksetHTML.html'
+
+        return render_to_response( templaatti, 
 			{'tulos_taulukko' : mukana,
             'ulkona_taulukko' : ulkona,
 			'kisa_nimi' : kisa_nimi, 
@@ -518,33 +521,12 @@ def tulostaSarja(request, kisa_nimi, sarja_id) :
 			'heading' : sarja.nimi, 
 			'taakse' : {'url' : '../../', 'title' : 'Tulokset sarjoittain'} }  )
 
-def tulostaSarjaHTML(request, kisa_nimi, sarja_id) :
+def tulostaSarjaHTML(request, kisa_nimi, sarja_id,tulostus=1) :
         """
         Sarjan tulokset, sivu muotoiltuna tulostusta varten ilman turhia grafiikoita.
         """
-        sarja = Sarja.objects.get(id=sarja_id)
-        tulokset= sarja.laskeTulokset()
+        return tulostaSarja(request, kisa_nimi, sarja_id)
 
-        mukana=tulokset[0]
-        ulkona=tulokset[1]
-        numero=1 
-        for i in range(len(mukana[1:])) :
-                mukana[i+1].insert(0,numero)
-                numero=numero+1
-        for i in range(len(ulkona)) : 
-                ulkona[i].insert(0,numero)
-                numero=numero+1
-        kisa_aika = sarja.kisa.aika
-        kisa_paikka = sarja.kisa.paikka
-
-        return render_to_response('tupa/tuloksetHTML.html', 
-			{'tulos_taulukko' : mukana,
-	            	'ulkona_taulukko' : ulkona,
-			'kisa_nimi' : kisa_nimi, 
-			'kisa_aika' : kisa_aika,
-			'kisa_paikka' : kisa_paikka,
-			'heading' : sarja.nimi, 
-			'taakse' : {'url' : '../../', 'title' : 'Tulokset sarjoittain'} }  )
 
 def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
         """
