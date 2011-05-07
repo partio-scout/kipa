@@ -93,7 +93,7 @@ def etusivu(request,paska=0) :
         return render_to_response('tupa/index.html',{ 'vanha_tietokanta' : vanha_tietokanta,
                                                     'object_list': kisat },
                                                     context_instance=RequestContext(request),)
-@permission_required('tupa.change_kisa')
+#@permission_required('tupa.change_kisa')
 def kisa(request,kisa_nimi) :
         """
         Kisakohtainen päävalikko.
