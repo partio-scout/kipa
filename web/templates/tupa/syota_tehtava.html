@@ -86,6 +86,7 @@
             {% for maarite in maaritteet %}
                <th>
                    {{ maarite.tyyppi }} 
+                   {% ifequal maarite.tyyppi "aika" %}(hh:mm:ss){% endifequal %}
                </th>
             {% endfor %}
         </tr>
