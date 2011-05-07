@@ -56,20 +56,9 @@ document.getElementById(id).style.display = visibility;
 
 <div id="wrap">
 
-    <div id="header"><div id="pageTitle">{{kisa_nimi}}</div><div id="infofield"></div>
+    <div id="header"><div id="pageTitle">{{kisa_nimi}}</div><div id="infofield">{{talletettu}}</div>  
 		<div style="float:right; margin-top:-4px; margin-bottom:0; padding-bottom:0; height:18px;">		
-			{% if user.is_authenticated %}
-			<pre>Heippa {{ user.username }}! <a href="/kipa/{{kisa.nimi}}/logout">Kirjaudu ulos</a></pre>
-			{% else %}
-                {% if login_fail %}
-                    Kirjautuminen epäonnistui<br>
-                {% endif %}
-			<form action="/kipa/{{kisa.nimi}}/login/" name="form1" id="form1" method="post">
-				<input type="text" id="uname" name="uname">
-				<input type="password" id="pword" name="pword">
-				<button type="submit" class="small blue awesome" style="height:20px;">Kirjaudu »</button>
-			</form>			
-			{% endif %}
+			{% include "tupa/login.html" %}
 		</div>
 
 	</div><!-- /header -->

@@ -1,0 +1,12 @@
+{% if user.is_authenticated %}
+<pre>Heippa {{ user.username }}! <a href="/kipa/logout">Kirjaudu ulos</a></pre>
+{% else %}
+    {% if login_fail %}
+        Kirjautuminen epäonnistui<br>
+    {% endif %}
+<form action="/kipa/login/" name="form1" id="form1" method="post">
+    <input type="text" id="uname" name="uname">
+    <input type="password" id="pword" name="pword">
+    <button type="submit" class="small blue awesome" style="height:20px;">Kirjaudu »</button>
+</form>         
+{% endif %}

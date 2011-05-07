@@ -20,6 +20,8 @@ urlpatterns = patterns('tupa.views',
         (r'^$', 'etusivu'),
         (r'^post_txt/(?P<parametrit>[^/]+)/$', 'post_txt'), 
         (r'^(?P<kisa_nimi>[^/]+)/tallenna/$', 'tallennaKisa'), 
+        (r'^login/$', 'loginSivu'), 
+        (r'^logout/$', 'logoutSivu'),
         (r'^lisaaKisa/$', 'korvaaKisa'),
         (r'^(?P<kisa_nimi>[^/]+)/$', 'kisa'),
         (r'^uusiKisa/maarita/$', 'maaritaKisa'),
@@ -42,8 +44,6 @@ urlpatterns = patterns('tupa.views',
         (r'^(?P<kisa_nimi>[^/]+)/tulosta/sarja/tuloste/(?P<sarja_id>\d+)/$', 'tulostaSarjaHTML'),
         (r'^(?P<kisa_nimi>[^/]+)/tulosta/sarja/csv/(?P<sarja_id>\d+)/$', 'sarjanTuloksetCSV'),
         (r'^(?P<kisa_nimi>[^/]+)/tulosta/piirit/$', 'piirit'), 
-        (r'^(?P<kisa_nimi>[^/]+)/login/$', 'loginSivu'), 
-        (r'^(?P<kisa_nimi>[^/]+)/logout/$', 'logoutSivu'),
         )
 
 if settings.DEBUG :

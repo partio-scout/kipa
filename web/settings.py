@@ -21,7 +21,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
+DATABASE_ENGINE = 'django.db.backends.sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
 DATABASE_NAME = hakemisto + '/tupa.db'     # Or path to database file if using sqlite3.
 DATABASE_USER = ''             # Not used with sqlite3.
 DATABASE_PASSWORD = ''         # Not used with sqlite3.
@@ -108,3 +108,5 @@ INSTALLED_APPS = [
     'django.contrib.databrowse'
 ]
 
+LOGIN_URL = ('/kipa/')
+LOGIN_REDIRECT_URL = ('/kipa/')
