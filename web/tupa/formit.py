@@ -148,7 +148,7 @@ class AikaField(forms.CharField):
                 elif value=="H":
                         return "h"
                 else :
-                        raise forms.ValidationError('Syötä aikaa muodossa: (hh:mm:ss)')
+                        raise forms.ValidationError('Syötä aikaa muodossa: hh:mm:ss')
 
 def initPisteSyote(self,fieldName):
         kesk= self.vartio.keskeyttanyt
@@ -183,7 +183,7 @@ class PisteSyoteForm(ModelForm):
                 model = Syote
 
 class PisteTarkistusForm(ModelForm):
-        tarkistus = PisteField(required=False,widget=forms.TextInput(attrs={'size':'8'} ) )
+        tarkistus = PisteField(required=False,widget=forms.TextInput(attrs={'size':'8', 'class':'numeric'} ) )
         arvo = PisteField(required=False,widget=forms.HiddenInput  )
         def __init__(self,maarite,vartio,*argv,**argkw) :
                 super(ModelForm,self).__init__(*argv,**argkw)
@@ -198,10 +198,10 @@ class PisteTarkistusForm(ModelForm):
                 model = Syote
 
 class AikaSyoteForm(PisteSyoteForm) :
-        arvo=AikaField(required=False,widget=AikaWidget( attrs={'class': 'TCMask[##:##:##]','value': ''} ))
+        arvo=AikaField(required=False,widget=AikaWidget( attrs={'class': '','value': ''} ))
 
 class AikaTarkistusForm(PisteTarkistusForm) :
-        tarkistus=AikaField(required=False,widget=AikaWidget( attrs={'class': 'TCMask[##:##:##]','value': ''} ))
+        tarkistus=AikaField(required=False,widget=AikaWidget( attrs={'class': '','value': ''} ))
              
 def SyoteForm(*argv,**argkw) :
         if argv[0].tyyppi=="aika":
