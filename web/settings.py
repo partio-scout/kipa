@@ -25,8 +25,8 @@ DATABASE_HOST = ''             # Set to empty string for localhost. Not used wit
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
 # Cache
-TAUSTALASKENTA = False # Tulokset lasketaan taustalla (Vaatii toimiakseen tomivan cachekokoonpanon)
-CACHE_TULOKSET = False # Etsitaanko tuloksia cachesta
+TAUSTALASKENTA = True # Tulokset lasketaan taustalla (Vaatii toimiakseen tomivan cachekokoonpanon)
+CACHE_TULOKSET = True # Etsitaanko tuloksia cachesta
 CACHE_TULOKSET_TIME = 1800 # Tuloscachen voimassaoloaika viimeisesta nayttokerrasta. [s]
 CACHE_BACKEND = 'locmem:///' # Cache system for developement
 #CACHE_BACKEND = 'locmem:///' # Cache system for developement
