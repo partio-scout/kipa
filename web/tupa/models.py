@@ -313,7 +313,7 @@ class Syote(models.Model) :
 
         def delete(self,*args,**kwargs) : # Tulokset uusiksi tallennuksen yhteydessä
                 self.vartio.sarja.tuloksetUusiksi()
-                super(SyoteMaarite,self).delete(*args,**kwargs)
+                super(Syote,self).delete(*args,**kwargs)
 
         def __unicode__(self) :
                 vartio = self.vartio
