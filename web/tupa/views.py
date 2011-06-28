@@ -358,6 +358,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
 
         for v in vartiot :
                 rivi=[]
+                colnum = 0
                 for m in maaritteet :
                         syotteet = Syote.objects.filter(vartio = v ).filter(maarite=m)
                         m.syotteita= len(syotteet)
@@ -367,7 +368,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                                 syote=syotteet[0]
                         if tarkistus : formi =  TarkistusSyoteForm(m,v,posti,instance=syote,prefix=v.nimi+str(m.pk),)
                         else : formi = SyoteForm(m,v,posti,instance=syote,prefix=v.nimi+str(m.pk),)
-                        
+                        formi.fields['arvo'].widget.attrs["class"] = "col" + str(colnum)
                         tarkistaVirhe(syote)
                         if tarkistaVirhe(syote): 
                                 formi.syottovirhe="virhe"
@@ -376,6 +377,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                                 formi.save()
                         else :
                                 validi=False
+                        colnum += 1
                         rivi.append( formi )
                 syoteFormit.append( (v,rivi))
         
