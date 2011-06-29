@@ -357,7 +357,8 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
         validi=True
 
         for v in vartiot :
-                rivi=[]
+                rivi = []
+                colnum = 0
                 colnum = 0
                 for m in maaritteet :
                         syotteet = Syote.objects.filter(vartio = v ).filter(maarite=m)
@@ -379,6 +380,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                                 validi=False
                         colnum += 1
                         rivi.append( formi )
+                        colnum += 1 
                 syoteFormit.append( (v,rivi))
         
         if posti and validi  :

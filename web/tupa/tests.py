@@ -212,12 +212,13 @@ testit=[aritmeettinen_laskin_test]
 # haetaan kaikki post txt:t
 test_fixtures=[]
 for f in os.listdir(os.curdir+"/fixtures/tests/"):
-        if not f.find(".xml") == -1:
+        if not f.find(".xml") == -1 :
                 test_fixtures.append("fixtures/tests/"+f)
 
+print "kee"#test_fixtures
 #ajetaan vain haluttu fixtuuri
 # Nollataan fixturet
-#test_fixtures=["fixtures/tests/jurmo.xml"]
+#test_fixtures=["fixtures/tests/numero_t_nimi.xml"]
 #test_fixtures.append("fixtures/tests/tehtavan_nimi_funktio.xml")
 
 def PostTestFactory(fixture_name):
