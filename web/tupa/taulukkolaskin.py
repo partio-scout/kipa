@@ -47,7 +47,9 @@ def laske(lauseke,m={},funktiot={}):
         lause=re.sub(r"([-][0](?![0-9.]))",r"",lause) 
         # Korvataan funktiot
         # Vakionumerot numeroinstansseiksi:
-        lause=re.sub(r"((?<![^-+*/(,[])-?\d+([.]\d+)?)(?![\.0-9])",r"num('\g<1>')",lause)
+        oper=r"-+*/(,["
+        num = "-?\d+([.]\d+)?"
+        lause=re.sub(r"((?<![^"+oper+"])"+num+")(?=["+oper+"]|$|\]|\))",r"num('\g<1>')",lause)
         # Korvataan muuttujien nimet oikeilla muuttujilla:
         lause=re.sub(r"\.([a-zA-Z_]\w*)(?=\.)",r"['\g<1>']",lause) # .x. -> [x].
         lause=re.sub(r"(?<!\d)\.([a-zA-Z_0-9]+)",r"['\g<1>']",lause)       # .x  -> [x]
