@@ -32,42 +32,44 @@ def kisa_xml(kisa):
                                 objects.append(ot)
         return serializers.serialize("xml", objects , indent=4)
 
-def kopioiTehtava(tehtava,sarjaan,uusiNimi=None) :
+def copy_model_instance(obj):
+    initial = dict([(f.name, getattr(obj, f.name)) for f in obj._meta.fields])
+    return obj.__class__(**initial)
+
+def kopioiTehtava(teht,sarjaan,uusiNimi=None) :
         """
         Kopioi maaritellyn tehtavan haluttuun sarjaan.
         """
         # Kopioi itse tehtava:
-        tNimi=tehtava.nimi
+        tNimi=teht.nimi
         if uusiNimi:
                 tNimi=uusiNimi
-        uusiTehtava=models.Tehtava( sarja = sarjaan,
-                             nimi = tNimi,
-                             kaava = tehtava.kaava,
-                             jarjestysnro = tehtava.jarjestysnro )
+        uusiTehtava=copy_model_instance(teht)
+        uusiTehtava.id=None # Luodaan uusi seuraavalla savella.
+        uusiTehtava.nimi=tNimi
+        uusiTehtava.sarja=sarjaan
         uusiTehtava.save()
-        
         # Kopioi osatehtavat:
-        osatehtavat = tehtava.osatehtava_set.all()
+        
+        osatehtavat = teht.osatehtava_set.all()
         for ot in osatehtavat:
-                uusiot=models.OsaTehtava(nimi=ot.nimi,
-                                kaava=ot.kaava,
-                                tyyppi=ot.tyyppi,
-                                tehtava=uusiTehtava)
+                uusiot=copy_model_instance(ot)
+                uusiot.tehtava_id=uusiTehtava.id
+                uusiot.id=None # Luodaan uusi seuraavalla savella.
                 uusiot.save()
                 # Kopioi parametrit
                 parametrit = ot.parametri_set.all()
                 for p in parametrit :
-                        uusip=models.Parametri(nimi=p.nimi,
-                                        arvo=p.arvo ,
-                                        osa_tehtava=uusiot)
+                        uusip=copy_model_instance(p)
+                        uusip.osa_tehtava_id=uusiot.id
+                        uusip.id=None # Luodaan uusi seuraavalla savella.
                         uusip.save()
                 
 		# Kopioi maaritteet:
                 maaritteet = ot.syotemaarite_set.all()
                 for m in maaritteet:
-                        uusim=models.SyoteMaarite( nimi=m.nimi,
-                                    osa_tehtava=uusiot,
-                                    tyyppi=m.tyyppi,
-                                    kali_vihje=m.kali_vihje )
+                        uusim=copy_model_instance(m) 
+                        uusim.osa_tehtava_id=uusiot.id
+                        uusim.id=None
                         uusim.save()
         
