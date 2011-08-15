@@ -118,14 +118,6 @@ class MathListDict(SequenceOperations,dict) :
                         lista.extend(v)
                 return lista
 
-        #def operate_to_all(self,function2, other) :
-        #    oper = MathList([])
-        #    for i,v in enumerate(self) : 
-        #        if type(other) != MathList : 
-        #            oper.append(function2(v,other))
-        #        else: oper.append(function2(v,other[i]))
-        #    return oper
-
 class DictDecimal(SequenceOperations,Decimal) :
         """
         Desimaali luokka , johon on toteutettu operoiminen MathDict sekä MathList instansseilla.
@@ -188,7 +180,7 @@ def listaksi(a,*opt):
                 joukkio += opt
         else : joukkio = a 
         
-        if type( joukkio )==DictDecimal: 
+        if type( joukkio )==DictDecimal or type(joukkio)==bool: 
 		        joukkio = [joukkio]
         if type( joukkio )==Decimal: 
 		        joukkio = [DictDecimal(joukkio)]
@@ -250,11 +242,11 @@ def suorita(funktio,*param):
 
 def suorita_lista(funktio,a,*param ) :
         if len(param)==0 :
-                if not type(a)==Decimal and not type(a)==DictDecimal and len(a)==0 :
+                if not type(a)==bool and not type(a)==Decimal and not type(a)==DictDecimal and len(a)==0 :
                         raise KeyError
                 if type(a)==unicode : 
                         return None
-                if type(a) == Decimal: 
+                if type(a) == Decimal or type(a)==bool : 
                         return karsi(listaksi(a),funktio) 
                         #return funktio( *listaksi(a) )
                 if type(a)==list : 

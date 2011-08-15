@@ -24,7 +24,7 @@ for f in os.listdir(os.curdir+"/fixtures/tests/"):
 
 #ajetaan vain haluttu fixtuuri
 # Nollataan fixturet
-#test_fixtures=["fixtures/tests/matikkafunktiot.xml"]
+#test_fixtures=["fixtures/tests/jarjestys.xml"]
 
 def is_number(s):
         if not s : return False

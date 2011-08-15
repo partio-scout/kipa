@@ -7,26 +7,7 @@ Tässä tiedostossa on määritelty kaikki funktiot joita voi käyttää laskenn
 from laskentatyypit import *
 from math import *
 from decimal import *
-"""
-def pienin(eka,*lista) :
-        pienin=eka 
-        for a in lista:
-                vertaus=a<pienin
-                if hasattr(vertaus, '__contains__'): # is iterable
-                                for i,b in enumerate(vertaus):
-                                        if b :
-                                                if hasattr(a, '__contains__') : vertaus[i] = a[i]
-                                                else: vertaus[i] = a
 
-                                        elif hasattr(pienin, '__contains__'):
-                                                vertaus[i] = pienin[i]
-                                        else : 
-                                                vertaus[i] = pienin
-                                
-                                pienin = vertaus
-                elif vertaus: pienin = a
-        return pienin
-"""
 def pienin(*lista) :
         if len(lista)==1 : return min(lista) 
         return min(*lista)
@@ -75,6 +56,7 @@ def summa( *lista ) :
 def interpoloi(x,x1,y1,x2,y2=0):
         """
         Palauttaa f(x)=y koordinaatin pisteiden (x1,y1) (x2,y2) määrittämältä suoralta. 
+        Mikäli f(x)>y1 f(x)=y1
         """
         #print x
         #print y1

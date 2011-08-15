@@ -47,7 +47,7 @@ def laske(lauseke,m={},funktiot={}):
         lause=re.sub(r"([-][0](?![0-9.]))",r"",lause) 
         # Korvataan funktiot
         # Vakionumerot numeroinstansseiksi:
-        oper=r"-+*/(,["
+        oper=r"-+*/(,[<>="
         num = "-?\d+([.]\d+)?"
         lause=re.sub(r"((?<![^"+oper+"])"+num+")(?=["+oper+"]|$|\]|\))",r"num('\g<1>')",lause)
         #lause=re.sub(r"((?<![^-+*/(,[])-?\d+([.]\d+)?)(?![\.0-9])",r"num('\g<1>')",lause)
@@ -63,19 +63,24 @@ def laske(lauseke,m={},funktiot={}):
         # lasketaan tulos:
         try: 
                 tulos = eval(lause)
+                #print "tulostyyppi " + str( type(tulos) )
+                #print "tulos " + str( tulos )
         # Poikkeukset laskuille joita ei pysty laskemaan. 
         # Pyrkii estämaan ettei koko paska kaadu virheissä.
-        except DivisionByZero : return None 
+        #except DivisionByZero : return None 
         except KeyError : return "S" # Syottämättomiä muuttujia
-        except TypeError :  return None 
-        except SyntaxError: return None
-        except NameError : return None
-        except : return None
+        #except TypeError :  return None 
+        #except SyntaxError: return None
+        #except NameError : return None
+        #except : return None
         if type(tulos)==DictDecimal : return Decimal(tulos)
         if type(tulos)==Decimal : return tulos
         if type(tulos)==unicode : return tulos
         if type(tulos)==int : return tulos
+        if type(tulos)==bool : return tulos
         if type(tulos)==str : return tulos
+        #print "jee"
+        #print tulos
         return "S"
 
 def laskeTaulukko(taulukko,muuttujat) :
