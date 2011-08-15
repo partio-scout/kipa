@@ -5,8 +5,6 @@ import tupa
 hakemisto=os.path.normpath(os.path.dirname(__file__))
 tarkistus= os.getcwd()
 
-
-
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 RECORDING=False

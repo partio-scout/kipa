@@ -14,6 +14,14 @@ from taulukkolaskin import laskeTaulukko
 from models import *
 from django.core import serializers
 
+def peruskaava(data):
+        maksimisuoritus= "parhaan_haku(arvio(parhaan_kaava-oikea))"
+        nollasuoritus= "nollan_kerroin*tapa(arvio(nollan_kaava-oikea))"
+        suoritus = "parhaan_haku([arvio(vartion_kaava-oikea),"+nollasuoritus+"])"
+        data['kaava']="max(interpoloi("+suoritus+","+maksimisuoritus+",jaettavat,"+ nollasuoritus+"))"
+        #suoritus = "parhaan_haku(arvio(vartion_kaava-oikea))"
+        #data['kaava']="interpoloi("+suoritus+","+maksimisuoritus+",jaettavat,"+ nollasuoritus+")"
+
 """ This file is made with no explainable logic. It has only been made to work. Most propably the best way to improveis simply rewriting. Anyway the task is not simple. Strongly recommend of using the already defined database syntax. See developement documentation for the actual syntax definition.
 """
 #########################
@@ -277,8 +285,6 @@ def lataa_parametrit(state,data,prefix,ot_tyyppi,muunnos=None):
 
                 except : pass
 
-def peruskaava(data):
-        data['kaava']="interpoloi(arvio(vartion_kaava-oikea),parhaan_haku(arvio(parhaan_kaava-oikea)),jaettavat,nollan_kerroin*tapa(arvio(nollan_kaava-oikea)))"""
 
 ####################################
 # Yleiset osatehtävien parametrit: #

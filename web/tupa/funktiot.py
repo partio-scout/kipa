@@ -6,13 +6,34 @@ Tässä tiedostossa on määritelty kaikki funktiot joita voi käyttää laskenn
 """
 from laskentatyypit import *
 from math import *
+from decimal import *
+"""
+def pienin(eka,*lista) :
+        pienin=eka 
+        for a in lista:
+                vertaus=a<pienin
+                if hasattr(vertaus, '__contains__'): # is iterable
+                                for i,b in enumerate(vertaus):
+                                        if b :
+                                                if hasattr(a, '__contains__') : vertaus[i] = a[i]
+                                                else: vertaus[i] = a
 
+                                        elif hasattr(pienin, '__contains__'):
+                                                vertaus[i] = pienin[i]
+                                        else : 
+                                                vertaus[i] = pienin
+                                
+                                pienin = vertaus
+                elif vertaus: pienin = a
+        return pienin
+"""
 def pienin(*lista) :
-	if len(lista)==1 : return min(lista) 
-	return min(*lista)
+        if len(lista)==1 : return min(lista) 
+        return min(*lista)
+
 def suurin(*lista) :
-	if len(lista)==1 : return max(lista) 
-	return max(*lista)
+        if len(lista)==1 : return max(lista) 
+        return max(*lista)
 
 def mediaani( *lista ):
         """
@@ -21,7 +42,7 @@ def mediaani( *lista ):
         Mikäli lukujoukon pituus on parillinen, palauttaa kahden keskimmaisen luvun keskiarvon.
         """
         values = sorted(lista)
-	if len(values) % 2 == 1:
+        if len(values) % 2 == 1:
                 return DictDecimal(values[(len(values)+1)/2-1])
         else:
                 lower = DictDecimal(values[len(values)/2-1])
@@ -55,7 +76,11 @@ def interpoloi(x,x1,y1,x2,y2=0):
         """
         Palauttaa f(x)=y koordinaatin pisteiden (x1,y1) (x2,y2) määrittämältä suoralta. 
         """
-        return min([ y1 , (y1-y2)/(x1-x2)*(x-x2)] )
+        #print x
+        #print y1
+        #print suorita_lista(pienin,y1,(y1-y2)/(x1-x2)*(x-x2))
+        #print "\n"
+        return suorita_lista(pienin,y1,(y1-y2)/(x1-x2)*(x-x2))
        
 def aikavali(a,b):
         tulos= b-a
@@ -65,7 +90,6 @@ def aikavali(a,b):
 def jos(ehto,a,b) : 
         if ehto : return a 
         else : return b
-
                 
 """
 Funktiot joiden parametrit ovat toisistaan riippumattomia
@@ -87,9 +111,6 @@ perusfunktiot={ "interpoloi" : interpoloi,
 """
 Funktiot joiden kaikki parametrit ovat samanarvoisia, ja parametrejä voi olla liukuva määrä.
 """
-
-
-
 listafunktiot={"pienin" : pienin,
                 "min" :   pienin,
                 "suurin" : suurin, 

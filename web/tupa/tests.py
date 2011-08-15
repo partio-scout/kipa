@@ -12,6 +12,19 @@ from views import *
 import os
 from django.test.client import Client
 from django.http import HttpRequest,QueryDict
+import re
+import settings
+
+# Testeiss‰ k‰ytett‰v‰t fixturet:
+# haetaan kaikki xml fixtuurien nimet.
+test_fixtures=[]
+for f in os.listdir(os.curdir+"/fixtures/tests/"):
+        if not f.find(".xml") == -1 :
+                test_fixtures.append("fixtures/tests/"+f)
+
+#ajetaan vain haluttu fixtuuri
+# Nollataan fixturet
+#test_fixtures=["fixtures/tests/matikkafunktiot.xml"]
 
 def is_number(s):
         if not s : return False
@@ -204,22 +217,52 @@ def TulosTestFactory(fixture_name):
                         for v in virheet:
                                 virhe=virhe + "\n--------------------------------\n" + v 
                         self.failUnless( len(virheet) == 0 , unicode(virhe).encode('ascii', 'replace'))
+                
+                def testTehtavanUudelleenTallennus(self) :
+                        """
+                        Tallettaa jokaisen teht‰v‰n uudestaan.
+                        Tarkistaa ett‰ tulokset lasketaan t‰m‰nkin j‰lkeen oikein.
+                        """
+                        #Kytket‰‰n taustalaskenta pois p‰‰lt‰ testin ajaki
+                        self.TAUSTALASKENTA=settings.TAUSTALASKENTA                        
+                        settings.TAUSTALASKENTA=None
+                        for s in Sarja.objects.all():
+                                for t in s.tehtava_set.all() :
+                                        # Parsitaan post data html sivusta: 
+                                        posti={}
+                                        c = Client()
+                                        osoite ="/kipa/"+s.kisa.nimi+"/maarita/tehtava/"+str(t.id)+"/"
+                                        page=str(c.get(osoite).content)
+                                        page=page.replace("\n","")
+                                        page=re.sub("\s+"," ",page)
+                                        all=re.findall('<input.*?type="(text|checkbox|radio)"+?(.*?)(>)',page)
+                                        if all :
+                                                for i in all:
+                                                        value=re.search('value=["\'](.*?)["\']',i[1])
+                                                        name=re.search('name=["\'](.*?)["\']',i[1])
+                                                        check=re.search('checked=["\'](checked)["\']',i[1])
+                                                        if name and value :
+                                                                if i[0]=="text" :
+                                                                        posti[name.group(1)]=value.group(1)
+                                                                elif check :
+                                                                        posti[name.group(1)]=value.group(1)
+                                        
+                                        all=re.findall(r'<select\s*?name=["\'](.*?)["\'].*?>(.*?)</select>',page)
+                                        if all : 
+                                           for i in all:
+                                              j=re.search('<(\s*?option.*?selected=["\']selected["\'].*?)>',i[1])
+                                              if j:
+                                                    value=re.search('value=["\'](.*?)["\']',j.group(1))
+                                                    if value:
+                                                        posti[i[0]]=value.group(1)
+
+                                        # ajetaan post m‰‰ritys n‰kym‰lle:
+                                        c.post(osoite,posti)
+                        self.testTulokset()
+                        settings.TAUSTALASKENTA=self.TAUSTALASKENTA
         return testi
 
 testit=[aritmeettinen_laskin_test]
-
-# haetaan kaikki xml fixtuurien nimet.
-# haetaan kaikki post txt:t
-test_fixtures=[]
-for f in os.listdir(os.curdir+"/fixtures/tests/"):
-        if not f.find(".xml") == -1 :
-                test_fixtures.append("fixtures/tests/"+f)
-
-print "kee"#test_fixtures
-#ajetaan vain haluttu fixtuuri
-# Nollataan fixturet
-#test_fixtures=["fixtures/tests/numero_t_nimi.xml"]
-#test_fixtures.append("fixtures/tests/tehtavan_nimi_funktio.xml")
 
 def PostTestFactory(fixture_name):
         """
@@ -263,6 +306,8 @@ class TasapisteTesti(TestCase) :
                 assert tulokset[0][5][0].nro==5
                 assert tulokset[0][6][0].nro==6
 
+
+
 # Tasapisteiss‰ m‰‰r‰‰v‰t teht‰v‰t testi
 testit.append( TasapisteTesti )
 
@@ -270,6 +315,7 @@ testit.append( TasapisteTesti )
 for t in test_fixtures:
         testit.append( PostTestFactory(t) )
 
+testit=[]
 #luodaan tulostestit fixtuureista.
 for t in test_fixtures:
         testit.append( TulosTestFactory(t) )
