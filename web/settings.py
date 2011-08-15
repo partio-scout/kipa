@@ -1,6 +1,16 @@
 import os
 
 import tupa
+import time
+try :
+        fin = open("templates/version.html", "r")
+        revision_line=fin.readline() ;
+        fin.close()
+        fout = open("templates/version.html", "w") 
+        fout.write( revision_line )
+        fout.write( "{% comment %} " +time.strftime('%X %x') +" {% endcomment %}" ) # Add clock to force svn commit 
+        fout.close()
+except: pass
 
 hakemisto=os.path.normpath(os.path.dirname(__file__))
 tarkistus= os.getcwd()

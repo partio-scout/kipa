@@ -608,8 +608,8 @@ def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
         writer.writerow([u"S = syöttämättä"])
         writer.writerow([u"H = vartion suoritus hylätty"])
         writer.writerow([u"K = vartio keskeyttänyt"])
+        writer.writerow([u"E = vartio ei ole tehnyt tehtävää"])
         writer.writerow([u"! = vartion sijaluku laskettu tasapisteissä määräävien tehtävien perusteella"])
-        writer.writerow([u"None = laskentavirhe"])
         return response
 
 def piirit(request,kisa_nimi) :

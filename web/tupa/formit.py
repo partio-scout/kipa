@@ -121,9 +121,13 @@ class PisteField(forms.CharField) :
                 if value=="kesk":
                         return value
                 elif value=="h":
-                        return value
+                        return "h"
                 elif value=="H":
                         return "h"
+                elif value=="e":
+                        return "e"
+                elif value=="E":
+                        return "e"
                 elif value=="" :
                         return value
                 else:
@@ -147,6 +151,10 @@ class AikaField(forms.CharField):
                         return "h"
                 elif value=="H":
                         return "h"
+                elif value=="e":
+                        return "e"
+                elif value=="E":
+                        return "e"
                 else :
                         raise forms.ValidationError('Syötä aikaa muodossa: hh:mm:ss')
 

@@ -244,9 +244,13 @@ def laskeSarja(sarja):
                 # Merkataan tuloksiin H hylättyihin tehtäviin:
                 for t in range(len(tulokset[i])) :
                         hylatty=True
+                        tekematta=True
                         syotteet= vartiot[i].syote_set.filter(maarite__osa_tehtava__tehtava=tehtavat[t])
                         for s in syotteet:
                                 if not s.arvo=="h":  hylatty=False
+                                if not s.arvo=="e":  tekematta=False
+                        
+                        if tekematta and len(syotteet): tulokset[i][t]= "E"
                         if hylatty and len(syotteet): tulokset[i][t]= "H"
 
                 #Merkataan siirrettäviksi ulkopuolella olevat:
