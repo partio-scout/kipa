@@ -47,12 +47,12 @@ def laske(lauseke,m={},funktiot={}):
         lause=re.sub(r"([-][0](?![0-9.]))",r"",lause) 
         # Korvataan funktiot
         # Vakionumerot numeroinstansseiksi:
-        oper=r"-+*/(,["
+        oper= r"-+*/(,["
         num = "-?\d+([.]\d+)?"
         lause=re.sub(r"((?<![^"+oper+"])"+num+")(?=["+oper+"]|$|\]|\))",r"num('\g<1>')",lause)
         # Korvataan muuttujien nimet oikeilla muuttujilla:
         lause=re.sub(r"\.([a-zA-Z_]\w*)(?=\.)",r"['\g<1>']",lause) # .x. -> [x].
-        lause=re.sub(r"(?<!\d)\.([a-zA-Z_0-9]+)",r"['\g<1>']",lause)       # .x  -> [x]
+        lause=re.sub(r"\.([a-zA-Z_0-9]+)(?=["+oper+"\])])",r"['\g<1>']",lause)       # .x  -> [x]
         lause=re.sub(r"([a-zA-Z_0-9]\w*(?=[[]))",r"m['\g<1>']",lause) # x[  -> m[x][
         # Korvataan yksinäiset muuttujat (lähinnä funktioita):
         lause=re.sub(r"([a-zA-Z_][a-zA-Z_0-9]*(?![a-zA-Z_0-9.(]|[[']))",r"m['\g<1>']",lause) # x -> m[x]
@@ -68,7 +68,7 @@ def laske(lauseke,m={},funktiot={}):
         except TypeError :  return None 
         except SyntaxError: return None
         except NameError : return None
-	except : return None
+        except : return None
         if type(tulos)==DictDecimal : return Decimal(tulos)
         if type(tulos)==Decimal : return tulos
         if type(tulos)==unicode : return tulos
@@ -92,6 +92,4 @@ def laskeTaulukko(taulukko,muuttujat) :
                         else: rivi.append(tulos)
                 tulokset.append(rivi)
         return tulokset
-
-
 

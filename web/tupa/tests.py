@@ -190,16 +190,64 @@ def TulosTestFactory(fixture_name):
                                                         for p in Parametri.objects.filter(osa_tehtava=k):
                                                                 ilmoitus=ilmoitus + "\n    "+p.nimi+"="+p.arvo+" "
                                                         ilmoitus=ilmoitus + "\nSyotteet: "
-                                                        for s in Syote.objects.filter(maarite__osa_tehtava=k).filter(vartio=t.vartio):
+                                                        for syo in Syote.objects.filter(maarite__osa_tehtava=k).filter(vartio=t.vartio):
 
-                                                                ilmoitus=ilmoitus + s.maarite.nimi+"="+ s.arvo + " "
+                                                                ilmoitus=ilmoitus + syo.maarite.nimi+"="+ syo.arvo + " "
                                                 ilmoitus=ilmoitus + "\nVartio: "  + t.vartio.nimi  
                                                 ilmoitus=ilmoitus + "\nTulos: "   + str(tulos)+' != '+str(vaadittava)
                                                 virheet.append(ilmoitus) 
+                                
+                                for t in s.tehtava_set.all() : # Tarkistetaan mik‰‰n tulos ei ole None
+                                                for v in s.vartio_set.all() :
+                                                        tulos=haeTulos(tulokset,v,t)
+                                                        if tulos==None or tulos=="None":
+                                                                ilmoitus= virheilmoitus
+                                                                ilmoitus+= "\nTehtava: " + t.nimi
+                                                                ilmoitus+= "\nTuloksessa laskentavirhe: None"
+                                                                virheet.append(ilmoitus) 
+                                
                         virhe= str(len(virheet)) + " errors"
                         for v in virheet:
                                 virhe=virhe + "\n--------------------------------\n" + v 
                         self.failUnless( len(virheet) == 0 , unicode(virhe).encode('ascii', 'replace'))
+                def testTehtavanUudelleenTallennus(self) :
+                        """
+                        Tallettaa jokaisen teht‰v‰n uudestaan.
+                        Tarkistaa ett‰ tulokset lasketaan t‰m‰nkin j‰lkeen oikein.
+                        """
+                        for s in Sarja.objects.all():
+                                for t in s.tehtava_set.all() :
+                                        # Parsitaan post data html sivusta: 
+                                        posti={}
+                                        c = Client()
+                                        osoite ="/kipa/"+s.kisa.nimi+"/maarita/tehtava/"+str(t.id)+"/"
+                                        page=str(c.get(osoite).content)
+                                        page=page.replace("\n","")
+                                        page=re.sub("\s+"," ",page)
+                                        all=re.findall('<input.*?type="(text|checkbox|radio)"+?(.*?)(>)',page)
+                                        if all :
+                                                for i in all:
+                                                        value=re.search('value=["\'](.*?)["\']',i[1])
+                                                        name=re.search('name=["\'](.*?)["\']',i[1])
+                                                        check=re.search('checked=["\'](checked)["\']',i[1])
+                                                        if name and value :
+                                                                if i[0]=="text" :
+                                                                        posti[name.group(1)]=value.group(1)
+                                                                elif check :
+                                                                        posti[name.group(1)]=value.group(1)
+                                        
+                                        all=re.findall(r'<select\s*?name=["\'](.*?)["\'].*?>(.*?)</select>',page)
+                                        if all : 
+                                           for i in all:
+                                              j=re.search('<(\s*?option.*?selected=["\']selected["\'].*?)>',i[1])
+                                              if j:
+                                                    value=re.search('value=["\'](.*?)["\']',j.group(1))
+                                                    if value:
+                                                        posti[i[0]]=value.group(1)
+
+                                        # ajetaan post m‰‰ritys n‰kym‰lle:
+                                        c.post(osoite,posti)
+                        self.testTulokset()
         return testi
 
 testit=[aritmeettinen_laskin_test]
@@ -213,7 +261,7 @@ for f in os.listdir(os.curdir+"/fixtures/tests/"):
 
 #ajetaan vain haluttu fixtuuri
 # Nollataan fixturet
-#test_fixtures=["fixtures/tests/skandit.xml"]
+#test_fixtures=["fixtures/tests/tietokanta.xml"]
 
 def PostTestFactory(fixture_name):
         """
