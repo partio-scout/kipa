@@ -89,12 +89,13 @@ def korvaaLuokanRunko(koodi,luokka):
         if sisennys_haku:
                 sisennys=len(sisennys_haku.group(0)) * " "
         runko=haeLuokanRunko(luokka,sisennys)
-        return re.sub(r'(?s)(?<=#gen_dia_class '+ luokka.nimi +'\n).*?#end_dia_class',
+        return re.sub(ur'(?s)(?<=#gen_dia_class '+ luokka.nimi +'\n).*?#end_dia_class',
                                 runko+"\n"+sisennys +r"#end_dia_class",koodi)
 
 def luoMallienRungot(kaavion_nimi,koodin_nimi):
         source=open( koodin_nimi , "r" )
         koodi=source.read()
+        koodi=unicode(koodi,"utf-8")
         source.close()            
 
         f=codecs.open(kaavion_nimi,"rb")
@@ -104,8 +105,10 @@ def luoMallienRungot(kaavion_nimi,koodin_nimi):
 
         for l in haeLuokat(objektit):
                 koodi= korvaaLuokanRunko(koodi,l)
+        print type(koodi)
+        print koodi
         source=open( koodin_nimi,"w" )
-        source.write(koodi)
+        source.write( koodi.encode("utf-8"))
 
 
 if __name__ == '__main__':

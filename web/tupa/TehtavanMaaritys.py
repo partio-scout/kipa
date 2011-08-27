@@ -51,10 +51,10 @@ def is_kaava(s) :
                 muuttujat={}
                 kaava=s.replace("." ,"") 
                 haku= re.finditer("([a-zA-Z]+)(?!\w*[(])",kaava)
-                numero=4
+                numero=1
                 for h in haku :
                         muuttujat[h.group(1)]=Decimal(numero)
-                        numero+=1
+                        #numero+=1
                 tulos = laskeTaulukko([[kaava]],muuttujat)
                 if tulos[0][0]==None or tulos[0][0]=='S' : 
 			return False

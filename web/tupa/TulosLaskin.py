@@ -53,7 +53,7 @@ def korvaa(lause,pino,loppu=None) :
 	while poistoon :
 		lause=re.sub(r"([^-.+*/()]+[.][.])","",lause,count=1)
 		poistoon= re.search(r"([^-.+*/()]+[.][.])",lause) 
-	haku= re.finditer("(\.{0,3})([a-zA-Z]\w*)(?:\.(\w+))?(?:\.(\w+))?(?:\.(\w+))?(?!\w*[(])",lause )
+	haku= re.finditer("(?<![]])(\.{0,3})([a-zA-Z]\w*)(?:\.(\w+))?(?:\.(\w+))?(?:\.(\w+))?(?!\w*[(])",lause )
         muutokset=[]
         for h in haku :
                 ryhmat= h.groups()
@@ -93,7 +93,7 @@ def suoritusJoukko(s) :
 	>>> suoritusJoukko('aikavali(...eka.a.b.2.2, a)')
 	'aikavali(...eka.a.b.2, .a)'
         """
-	haku= re.finditer("(?<![a-zA-Z.])(\.*)([a-zA-Z]\w*)(?!\w*[(.])",s)
+	haku= re.finditer("(?<![]a-zA-Z.])(\.*)([a-zA-Z]\w*)(?!\w*[(.])",s)
         muutokset=[]
         for h in haku :
                 uusi= "." + s[h.start():h.end()]
@@ -106,7 +106,7 @@ def suoritusJoukko(s) :
         muokattu=muokattu+muutokset[-1][2]
         muokattu=muokattu+s[muutokset[-1][1]:]
 	
-	muokattu= re.sub("(([.][^-,+*/ ]+)+)(\.[^-,+*/ ]*)(?![^-,+*/ ])","\g<1>",muokattu)
+	muokattu= re.sub("(([.][^-,+*/ ]+)+)(\.[^-,+*/ ]*)(?![^-,+*/ ])","\g<1>",muokattu, re.UNICODE)
         return muokattu
 
 def luoMuuttujat(sarja) :

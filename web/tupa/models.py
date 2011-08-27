@@ -29,7 +29,7 @@ class Kipa(models.Model):
         #gen_dia_class Kipa
 
         versio = models.IntegerField()
-        
+
         #end_dia_class
         class Meta:
                 db_table = "versio"
@@ -43,6 +43,7 @@ class Kisa(models.Model) :
         nimi = models.CharField(max_length=255)
         aika = models.CharField(max_length=255, blank=True, null=True )
         paikka = models.CharField(max_length=255, blank=True )
+        tunnistus = models.BooleanField()
 
         #end_dia_class
         def __unicode__(self) :
@@ -64,7 +65,7 @@ class Sarja(models.Model) :
         tasapiste_teht1 = models.IntegerField(blank=True, null=True )
         tasapiste_teht2 = models.IntegerField(blank=True, null=True )
         tasapiste_teht3 = models.IntegerField(blank=True, null=True )
-        
+
         #end_dia_class
         def __unicode__(self) :
                 return self.kisa.nimi+"."+self.nimi
@@ -362,13 +363,7 @@ class Parametri(models.Model) :
         nimi = models.CharField(max_length=255)
         arvo = models.CharField(max_length=255)
         osa_tehtava = models.ForeignKey(OsaTehtava)
-        
-        def save(self,*args,**kwargs) : # Tulokset uusiksi tallennuksen yhteydessä
-                self.osa_tehtava.tehtava.sarja.tuloksetUusiksi()
-                super(Parametri,self).save(*args,**kwargs)
-        def delete(self,*args,**kwargs) : # Tulokset uusiksi tallennuksen yhteydessä
-                self.osa_tehtava.tehtava.sarja.tuloksetUusiksi()
-                super(Parametri,self).delete(*args,**kwargs)
+
         #end_dia_class
         class Meta:
                 verbose_name_plural = "OsaTehtavan paramentrit" 
