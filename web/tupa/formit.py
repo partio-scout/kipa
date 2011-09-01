@@ -44,7 +44,7 @@ class SarjaForm(ModelForm):
 SarjaFormSet = inlineformset_factory(Kisa,Sarja,extra=8 , form=SarjaForm)
 SarjaFormSet.helppiteksti=SafeUnicode('<span onmouseover="tooltip.show(\'Sarjan <strong>nimet</strong> voivat sis&auml;lt&auml;&auml; &auml;&auml;kk&ouml;si&auml; ja v&auml;lily&ouml;ntej&auml;.<br><strong>Tasapisteiss&auml; m&auml;&auml;r&auml;&auml;v&auml;t teht&auml;v&auml;t</strong> -kohdat kertovat tasapisteiss&auml; m&auml;&auml;r&auml;&auml;vien teht&auml;vien numerot. Palaa t&auml;ytt&auml;m&auml;&auml;n ne m&auml;&auml;ritelty&auml;si kyseiset teht&auml;v&auml;t.\');" onmouseout="tooltip.hide();"><img src="/kipamedia/help_small.png" /></span>')
 
-TehtavaValintaFormSet = inlineformset_factory(Sarja,Tehtava,fields='jarjestysnro')
+TehtavaValintaFormSet = inlineformset_factory(Sarja,Tehtava,fields=('jarjestysnro',))
 
 class TuhoaTehtavaForm(ModelForm):
         nimi = forms.CharField(widget=forms.HiddenInput,required=False )
