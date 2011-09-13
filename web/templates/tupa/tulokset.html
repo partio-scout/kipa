@@ -1,5 +1,10 @@
 {% extends "tupa/base.html" %}
 {% block title %}Sarjakohtaiset tulokset{% endblock title %} 
+{% block header %}
+{% if vaihtoaika %}
+<meta http-equiv="REFRESH" content="{{vaihtoaika}};url=/kipa/{{kisa_nimi}}/heijasta/sarja/{{vaihto_id}}/">
+{% endif %}
+{% endblock header %}
 {% block content %} 
 
 <table width="100%" border="0" id="tulostaulukko_otsikko">

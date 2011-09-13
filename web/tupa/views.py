@@ -5,7 +5,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render_to_response
 from django.shortcuts import get_object_or_404
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 import operator
@@ -33,8 +33,8 @@ import django.db
 
 def kipaResponseRedirect(url) : return HttpResponse('<html><head><meta http-equiv="REFRESH" content="0;url='+url+'"></HEAD><BODY></BODY></HTML>')
 
-def loginSivu(request):
-    posti=None
+'''def loginSivu(request):
+    Posti=None
     if request.method == 'POST':
         posti=request.POST
         user = authenticate(username=posti['uname'], password=posti['pword'])
@@ -48,7 +48,7 @@ def loginSivu(request):
 
 def logoutSivu(request):
 	logout(request)
-        return kipaResponseRedirect("/kipa/")	
+        return kipaResponseRedirect("/kipa/")'''	
 
 def tarkistaVirhe(syote):
         syottovirhe=None
@@ -505,7 +505,7 @@ def tuomarineuvos(request, kisa_nimi,talletettu=None):
 			'kisa_nimi': kisa_nimi,
                         'talletettu': tal })
 
-def tulostaSarja(request, kisa_nimi, sarja_id, tulostus=0) :
+def tulostaSarja(request, kisa_nimi, sarja_id, tulostus=0,vaihtoaika=None,vaihto_id=None) :
         """
         Sarjan tulokset.
         """
@@ -533,8 +533,32 @@ def tulostaSarja(request, kisa_nimi, sarja_id, tulostus=0) :
 			'kisa_aika' : kisa_aika,
 			'kisa_paikka' : kisa_paikka,
 			'heading' : sarja.nimi, 
+			'vaihtoaika' : vaihtoaika,
+			'vaihto_id' : vaihto_id,
 			'taakse' : {'url' : '../../', 'title' : 'Tulokset sarjoittain'} },
+			
             context_instance=RequestContext(request),)
+			
+def elavaTulos(request, kisa_nimi, sarja_id=None,tulostus=0) :
+     kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
+     sarjat=kisa.sarja_set.all()
+     sarjat= sorted(sarjat, key=lambda sarja: sarja.id )
+	 
+     if sarja_id==None: 
+         sarja_id=sarjat[0].id
+     
+     sarja_id=int(sarja_id)
+     seuraava_id=None
+     for index in range(len(sarjat)-1):  
+         if sarjat[index].id==sarja_id: seuraava_id=sarjat[index+1].id
+ 
+     if seuraava_id==None : seuraava_id=sarjat[0].id
+		  
+          
+		  
+     return tulostaSarja(request,kisa_nimi,sarja_id,vaihtoaika=15,vaihto_id=seuraava_id)
+
+	
 
 def tulostaSarjaHTML(request, kisa_nimi, sarja_id) :
         """
