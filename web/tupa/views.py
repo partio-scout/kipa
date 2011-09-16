@@ -525,7 +525,7 @@ def tulostaSarja(request, kisa_nimi, sarja_id, tulostus=0,vaihtoaika=None,vaihto
 
         templaatti='tupa/tulokset.html'
         if tulostus: templaatti= 'tupa/tuloksetHTML.html'
-
+        if vaihtoaika: templaatti= 'tupa/heijasta.html'
         return render_to_response( templaatti, 
 			{'tulos_taulukko' : mukana,
             'ulkona_taulukko' : ulkona,
@@ -539,7 +539,7 @@ def tulostaSarja(request, kisa_nimi, sarja_id, tulostus=0,vaihtoaika=None,vaihto
 			
             context_instance=RequestContext(request),)
 			
-def elavaTulos(request, kisa_nimi, sarja_id=None,tulostus=0) :
+def heijasta(request, kisa_nimi, sarja_id=None,tulostus=0) :
      kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
      sarjat=kisa.sarja_set.all()
      sarjat= sorted(sarjat, key=lambda sarja: sarja.id )
