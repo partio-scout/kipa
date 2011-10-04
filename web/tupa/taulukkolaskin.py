@@ -53,19 +53,14 @@ def laske(lauseke,m={},funktiot={}):
         lause=re.sub(r"((?<![^"+oper+"])"+num+")(?=["+oper+"]|$|\]|\))",r"num('\g<1>')",lause)
         #lause=re.sub(r"((?<![^-+*/(,[])-?\d+([.]\d+)?)(?![\.0-9])",r"num('\g<1>')",lause)
         
-        print lause
         # Korvataan muuttujien nimet oikeilla muuttujilla:
         lause=re.sub(r"\.([a-zA-Z_]\w*)(?=\.)",r"['\g<1>']",lause) # .x. -> [x].
-        print lause
         lause=re.sub(r"\.([a-zA-Z_]+[a-zA-Z_0-9]*)",r"['\g<1>']",lause)       # .x  -> [x]
-        print lause
+        lause=re.sub(r"\.(\d+)(?=["+oper+"]|$|\]|\))",r"['\g<1>']",lause)       # .n  -> [n]
         lause=re.sub(r"(?<=["+oper+r"])([a-zA-Z_0-9]\w*(?=[[]))",r"m['\g<1>']",lause) # x[  -> m[x][
-        print lause
         # Korvataan yksinäiset muuttujat (lähinnä funktioita):
         lause=re.sub(r"([a-zA-Z_][a-zA-Z_0-9]*(?![a-zA-Z_0-9.(]|[[']))",r"m['\g<1>']",lause) # x -> m[x]
-        print lause
         lause=re.sub(r"([a-zA-Z_][a-zA-Z_0-9]*(?![a-zA-Z_0-9.]|[[']))",r"f['\g<1>']",lause) # x( -> f[x](
-        print lause
         tulos=None
         # lasketaan tulos:
         if settings.DEBUG:

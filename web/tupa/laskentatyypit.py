@@ -193,6 +193,7 @@ def listaksi(a,*opt):
                 for v in joukkio :
                         if type(v)==DictDecimal or type(v)==Decimal :
                                 lista.append(DictDecimal(v))
+                        else : lista.append(v)
                 return lista
         try:
                 lista=[]
@@ -216,7 +217,8 @@ def run_dict(list,funktio,*param):
                 if not list :
                         return funktio(*params)
                 else :
-                        return karsi(params,funktio)             
+                        return karsi(params,funktio)
+
         rValue=MathDict({})
         for k in mdict.keys() :
                 parametrit = []
@@ -248,11 +250,10 @@ def suorita_lista(funktio,a,*param ) :
                         return None
                 if type(a) == Decimal or type(a)==bool : 
                         return karsi(listaksi(a),funktio) 
-                        #return funktio( *listaksi(a) )
                 if type(a)==list : 
-                        return karsi(a,funktio)# (*a)
+                        return karsi(a,funktio)
                 else : 
-                        return karsi(listaksi(a.listaksi()), funktio) #  funktio( *listaksi(a.listaksi()) )
+                        return karsi(listaksi(a.listaksi()), funktio) 
         else : 
                 return run_dict(1,funktio,a,*param)
 

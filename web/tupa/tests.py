@@ -171,6 +171,7 @@ def TulosTestFactory(fixture_name):
                         Tunnistaa v‰‰rat tulokset.
                         Vaarien tulosten kohdalla tulostaa yhteenvedon.
                         """
+                        settings.DEBUG=False
                         self.sarjat=Sarja.objects.all()
                         virheet=[]
                         #cache.clear()
@@ -224,6 +225,7 @@ def TulosTestFactory(fixture_name):
                         Tarkistaa ett‰ tulokset lasketaan t‰m‰nkin j‰lkeen oikein.
                         """
                         #Kytket‰‰n taustalaskenta pois p‰‰lt‰ testin ajaki
+                        settings.DEBUG=False
                         self.TAUSTALASKENTA=settings.TAUSTALASKENTA                        
                         settings.TAUSTALASKENTA=None
                         for s in Sarja.objects.all():
