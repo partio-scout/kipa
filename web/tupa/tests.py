@@ -173,7 +173,7 @@ def TulosTestFactory(fixture_name):
                         """
                         self.sarjat=Sarja.objects.all()
                         virheet=[]
-                        cache.clear()
+                        #cache.clear()
                         settings.TAUSTALASKENTA = False 
                         settings.CACHE_TULOKSET = False 
 
