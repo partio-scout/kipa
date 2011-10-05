@@ -152,8 +152,11 @@ def karsi(lista,lfunktio):
             varvi=[]
             tavaraa=0
             for l in lista :
-                if hasattr(l, '__contains__') : # on lista
-                        if len(l)>index and not type(l)==str and not type(l)==unicode:
+                if hasattr(l, 'keys') :  # on sanakirja
+                        pakotus=1 # Tähän täytyisi tehdä rekursiivinen sanakirjojen operointi
+                
+                elif hasattr(l, '__contains__') : # on lista
+                        if len(l)>index and not type(l)==str and not type(l)==unicode :
                                         tavaraa=1
                                         varvi.append( l[index] )
                 else: 
