@@ -172,7 +172,7 @@ def TulosTestFactory(fixture_name):
                         Vaarien tulosten kohdalla tulostaa yhteenvedon.
                         """
                         settings.DEBUG=False
-                        self.sarjat=Sarja.objects.all()
+                        self.sarjat=Sarja.objects.select_related().all()
                         virheet=[]
                         #cache.clear()
                         settings.TAUSTALASKENTA = False 
@@ -184,7 +184,7 @@ def TulosTestFactory(fixture_name):
                                         virheilmoitus=virheilmoitus+f+" " 
                                         
                                 virheilmoitus=virheilmoitus+"\nSarja: "+s.nimi+""
-                                self.testausTulokset=TestausTulos.objects.filter(tehtava__sarja=s)
+                                self.testausTulokset=TestausTulos.objects.select_related().filter(tehtava__sarja=s)
                                 tulokset=s.laskeTulokset()
                                 for t in self.testausTulokset :
                                         tulos=haeTulos(tulokset,t.vartio,t.tehtava)
@@ -228,7 +228,7 @@ def TulosTestFactory(fixture_name):
                         settings.DEBUG=False
                         self.TAUSTALASKENTA=settings.TAUSTALASKENTA                        
                         settings.TAUSTALASKENTA=None
-                        for s in Sarja.objects.all():
+                        for s in Sarja.objects.select_related().all():
                                 for t in s.tehtava_set.all() :
                                         # Parsitaan post data html sivusta: 
                                         posti={}

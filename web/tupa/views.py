@@ -32,8 +32,8 @@ import django.db
 
 
 def kipaResponseRedirect(url) : return HttpResponse('<html><head><meta http-equiv="REFRESH" content="0;url='+url+'"></HEAD><BODY></BODY></HTML>')
-
-'''def loginSivu(request):
+"""
+def loginSivu(request):
     Posti=None
     if request.method == 'POST':
         posti=request.POST
@@ -45,10 +45,10 @@ def kipaResponseRedirect(url) : return HttpResponse('<html><head><meta http-equi
             return redirect('/kipa/', context_instance=RequestContext(request))
 
     return redirect('/kipa/', context_instance=RequestContext(request))
-
+"""
 def logoutSivu(request):
 	logout(request)
-        return kipaResponseRedirect("/kipa/")'''	
+        return kipaResponseRedirect("/kipa/")
 
 def tarkistaVirhe(syote):
         syottovirhe=None
@@ -113,7 +113,7 @@ def tulosta(request,kisa_nimi):
         """
         Valintalista kisan sarjojen tuloksista.
         """
-        sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
+        sarjat = Sarja.objects.select_related().filter(kisa__nimi=kisa_nimi)
         return render_to_response('tupa/tulosta.html', {'sarja_list': sarjat,
                                                         'kisa_nimi': kisa_nimi, 
                                                         'heading' : 'Tulokset sarjoittain' },
@@ -355,29 +355,36 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                 else : tehtava.tarkistettu=False
         tarkistettu=tehtava.tarkistettu
         validi=True
+        
+        tehtavan_syotteet =Syote.objects.filter(maarite__osa_tehtava__tehtava=tehtava)
+        if tehtavan_syotteet : hot=69 # Viettelee syotteet kannasta.
 
+        tehtava.svirhe=0
         for v in vartiot :
                 rivi = []
                 colnum = 0
                 colnum = 0
                 for m in maaritteet :
-                        syotteet = Syote.objects.filter(vartio = v ).filter(maarite=m)
-                        m.syotteita= len(syotteet)
+                        maaritteen_syotteet = tehtavan_syotteet.filter(vartio = v ).filter(maarite=m)
+                        m.syotteita= len(maaritteen_syotteet)
                         syote=None
                         formi=None
-                        if syotteet:
-                                syote=syotteet[0]
+                        if maaritteen_syotteet:
+                                syote=maaritteen_syotteet[0]
                         if tarkistus : formi =  TarkistusSyoteForm(m,v,posti,instance=syote,prefix=v.nimi+str(m.pk),)
                         else : formi = SyoteForm(m,v,posti,instance=syote,prefix=v.nimi+str(m.pk),)
                         formi.fields['arvo'].widget.attrs["class"] = "col" + str(colnum)
-                        tarkistaVirhe(syote)
-                        if tarkistaVirhe(syote): 
-                                formi.syottovirhe="virhe"
-                                syottovirhe="virhe"
+                                
                         if formi.is_valid() :
                                 formi.save()
                         else :
                                 validi=False
+                        syote = formi.instance
+                        if tarkistaVirhe(syote): 
+                                formi.syottovirhe="virhe"
+                                syottovirhe="virhe"
+                                tehtava.svirhe=1
+
                         colnum += 1
                         rivi.append( formi )
                         colnum += 1 
@@ -926,16 +933,14 @@ def laskennanTilanne(request,kisa_nimi) :
         taulukko.append(rivi)
         sarake=1
         for s in kisa.sarja_set.all() :
-                vartioita=len(s.vartio_set.all())
+                vartioita=s.vartio_set.all().count()
                 syotteita=0
                 for t in s.tehtava_set.all() :
                         taulukko[t.jarjestysnro][sarake]= tehtavanTilanne(t)
-                        syotteet= Syote.objects.filter(maarite__osa_tehtava__tehtava=t) 
-                        for syo in syotteet:
-                                syotteita=syotteita+1
-                                if tarkistaVirhe(syo): taulukko[t.jarjestysnro][sarake]=('v',t.nimi)
+                        syotteita=Syote.objects.filter(maarite__osa_tehtava__tehtava=t).count()
+                        if(t.svirhe) : taulukko[t.jarjestysnro][sarake]=('v',t.nimi)
 
-                maaritteita=len( SyoteMaarite.objects.filter(osa_tehtava__tehtava__sarja=s) )
+                maaritteita=SyoteMaarite.objects.filter(osa_tehtava__tehtava__sarja=s).count()
                 if syotteita>0  and maaritteita>0: 
                         prosentit=Decimal(syotteita*100)/(maaritteita*vartioita)
                         prosentit=prosentit.quantize(Decimal('1.'), rounding=ROUND_UP)
@@ -952,5 +957,6 @@ def apua(request) :
         Apua onnettomalle ja surulliselle käyttäjälle
         """
         return kipaResponseRedirect('/kipamedia/manual_v02.pdf')
+
 
 

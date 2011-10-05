@@ -91,7 +91,9 @@ class Sarja(models.Model) :
                 # Asetetaan cache.
                 cache.set( cacheName , tulokset, settings.CACHE_TULOKSET_TIME)
                 """
-                tulokset = laskeSarja(self) 
+                syotteet=Syote.objects.filter(maarite__osa_tehtava__tehtava__sarja=self)
+                if syotteet: onjoo=1 # Pakotetaan syotteiden haku tähän.
+                tulokset = laskeSarja(self,syotteet) 
                 return tulokset
         
         
@@ -179,6 +181,7 @@ class Tehtava(models.Model) :
         sarja = models.ForeignKey(Sarja)
         tarkistettu = models.BooleanField()
         maksimipisteet = models.CharField(max_length=255)
+        svirhe = models.BooleanField()
 
         #end_dia_class
         def mukanaOlevatVartiot(self):
