@@ -3,6 +3,14 @@
 #    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
 
 from decimal import *
+from tupa.log import *
+def decimal_uni(self) :
+        return str(self.quantize(Decimal('0.1'),rounding=ROUND_HALF_UP ) )
+def decimal_repr(self) :
+        return unicode(self.quantize(Decimal('0.1'),rounding=ROUND_HALF_UP ) )
+
+Decimal.__repr__= decimal_repr
+Decimal.__unicode__= decimal_uni
 
 class SequenceOperations :
         def __add__(self,other): return self.operate_to_all( lambda a,b: a+b , other)
@@ -42,6 +50,7 @@ class MathDict(SequenceOperations,dict):
                         for k in self.keys() : 
                                 oper[k]=function2(self[k],other)
                 return oper
+
         def listaksi(self) :
                 """
                 Palauttaa kaikki alkiot yhdessä listasa
@@ -50,7 +59,13 @@ class MathDict(SequenceOperations,dict):
                 for k,v in self.items(): lista.append(v)
                 return lista
 
-
+        def __unicode__(self):
+                stringi = u"{"
+                for k,v in self.items(): 
+                        if v:stringi+= unicode(k) + ": " + unicode(v) + ", "
+                stringi=stringi[:-2]
+                stringi+="}"
+                return stringi
 
 class MathList(SequenceOperations,list):
         """
@@ -73,8 +88,15 @@ class MathList(SequenceOperations,list):
                 for l in self :
                         ajettava
 
-
         def listaksi(self) : return list(self)
+
+        def __unicode__(self):
+                stringi=u"["
+                for l in self :
+                        if l : stringi+= unicode(l) + ", " 
+                stringi= stringi[:-2]
+                stringi+="]"
+                return stringi
 
 class MathListDict(SequenceOperations,dict) :
         """
@@ -138,6 +160,8 @@ class DictDecimal(SequenceOperations,Decimal) :
                 else:  
                         oper = DictDecimal( function2(Decimal(self), other) )
                 return oper
+        __repr__=decimal_repr
+
         def listaksi(self) :
                 return [self]
      
@@ -240,23 +264,35 @@ def run_dict(list,funktio,*param):
         return rValue        
 
 def suorita(funktio,*param):
+        tulos=None
         try :
-                return run_dict(0,funktio,*param)
+                tulos= run_dict(0,funktio,*param)
         except :
-                return Decimal(0)
+                tulos= Decimal(0)
+        logFunction(funktio,param,tulos)
+        return tulos
 
 def suorita_lista(funktio,a,*param ) :
+        tulos=None
+
         if len(param)==0 :
                 if not type(a)==bool and not type(a)==Decimal and not type(a)==DictDecimal and len(a)==0 :
                         raise KeyError
-                if type(a)==unicode : 
-                        return None
-                if type(a) == Decimal or type(a)==bool : 
-                        return karsi(listaksi(a),funktio) 
-                if type(a)==list : 
-                        return karsi(a,funktio)
+                elif type(a)==unicode : 
+                        tulos=None
+                elif type(a) == Decimal or type(a)==bool : 
+                        tulos=karsi(listaksi(a),funktio) 
+                elif type(a)==list : 
+                        tulos=karsi(a,funktio)
                 else : 
-                        return karsi(listaksi(a.listaksi()), funktio) 
+                        tulos=karsi(listaksi(a.listaksi()), funktio) 
+
+                parametrit= [a]
+                logFunction(funktio,parametrit,tulos)
         else : 
-                return run_dict(1,funktio,a,*param)
+                tulos= run_dict(1,funktio,a,*param)
+                parametrit= [a]
+                parametrit= parametrit.extend(param)
+                logFunction(funktio,parametrit,tulos)
+        return tulos
 

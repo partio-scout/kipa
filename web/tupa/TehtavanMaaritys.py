@@ -603,7 +603,7 @@ def osaTehtavaForm(posti,data,prefix="") :
 #####################
 # Tehtävän määritys #
 #####################
-def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehtava_") :
+def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehtava_",tags={}) :
         formidata=[]
         # luodaan uusi tehtava jos vanhaa ei loydy
         if len(data.items() ) == 0 : 
@@ -732,7 +732,10 @@ def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehta
                                                         'errors' : errors } ) )
                         data[k][fk]=value
                 formidata.append( ('osa_tehtavat',ot_formit) )
-        return render_to_string("tupa/forms/tehtava.html",  dict(formidata) )
+                #formidata.append( ('tehtava_id',k) )
+                #formidata.append( ('kisa_nimi',) )
+                tags.update(formidata)
+        return render_to_string("tupa/forms/tehtava.html",  tags )
 
 
 

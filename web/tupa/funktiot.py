@@ -5,8 +5,9 @@
 Tässä tiedostossa on määritelty kaikki funktiot joita voi käyttää laskennan kaavoissa.
 """
 from laskentatyypit import *
+
 from math import *
-from decimal import *
+#from decimal import *
 
 def pienin(*lista) :
         if len(lista)==1 : return min(lista) 
@@ -58,10 +59,6 @@ def interpoloi(x,x1,y1,x2,y2=0):
         Palauttaa f(x)=y koordinaatin pisteiden (x1,y1) (x2,y2) määrittämältä suoralta. 
         Mikäli f(x)>y1 f(x)=y1
         """
-        #print x
-        #print y1
-        #print suorita_lista(pienin,y1,(y1-y2)/(x1-x2)*(x-x2))
-        #print "\n"
         return suorita_lista(pienin,y1,(y1-y2)/(x1-x2)*(x-x2))
        
 def aikavali(a,b):
@@ -73,14 +70,18 @@ def jos(ehto,a,b) :
         if ehto : return a 
         else : return b
                 
+
+def floor(x) : return x.quantize(DictDecimal('1.'), rounding=ROUND_FLOOR)
+def ceil(x) : return x.quantize(DictDecimal('1.'), rounding=ROUND_CEILING)
+
 """
 Funktiot joiden parametrit ovat toisistaan riippumattomia
 """
 perusfunktiot={ "interpoloi" : interpoloi,
                 "abs" : abs,
                 "aikavali" : aikavali , # Alkuaika ja loppuaika
-                "floor" : lambda a: a.quantize(Decimal('1.'), rounding=ROUND_FLOOR),
-                "ceil" : lambda a: a.quantize(Decimal('1.'), rounding=ROUND_CEILING),
+                "floor" : floor,
+                "ceil" : ceil,
                 "sqrt" : getcontext().sqrt ,
                 "exp"  : getcontext().exp ,
                 "mod" : getcontext().remainder , # Jakojäännös
@@ -101,4 +102,5 @@ listafunktiot={"pienin" : pienin,
                 "med" : mediaani ,
                 "kesk" : keskiarvo,
                 "mean" : keskiarvo }
+
 

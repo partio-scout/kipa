@@ -14,6 +14,7 @@ import settings
 import thread
 import time 
 
+from log import *
 from binascii import *
 import sys
 
@@ -93,6 +94,7 @@ class Sarja(models.Model) :
                 """
                 syotteet=Syote.objects.filter(maarite__osa_tehtava__tehtava__sarja=self)
                 if syotteet: onjoo=1 # Pakotetaan syotteiden haku tähän.
+                disableLogging() 
                 tulokset = laskeSarja(self,syotteet) 
                 return tulokset
         

@@ -153,12 +153,22 @@ def luoTehtavanKaava(t,v):
         pino.append(t_nimi)
         osatehtavat=t.osatehtava_set.all()
         ot_lauseet=[]
+        
+        logString( u"<h3>Tehtävä: " + t.nimi.upper()+"</h3>" )
+        logString( u"kaava =  " + t.kaava.upper() )
         for ot in osatehtavat:
+                logString( u"\n<b>Osatehtävä: " + ot.nimi.upper()+"</b>" )
                 pino.append(ot.nimi)
                 ot_lause=ot.kaava #.lower() 
+                logString( "  kaava = " + ot_lause )
                 parametrit=ot.parametri_set.all()
                 maaritteet=ot.syotemaarite_set.all()
                 korvautuu=True
+
+                logString( u"    Parametrit: "  )
+                for p in parametrit:
+                        logString( "         " + p.nimi +"= " + p.arvo  )
+
                 # Suora summa syotteiden välillä
                 if ot_lause =="ss" and maaritteet :
                         ot_lause=""
@@ -184,7 +194,9 @@ def luoTehtavanKaava(t,v):
                                         ot_lause=re.sub("suor"+r"(?!\w+)",suoritusJoukko(vartion_kaava),ot_lause)
                                 except IndexError: pass
                                 if not ot_lause==vanha : korvautuu=True
-                                        
+                
+                logString( "  sijoitettu = " + ot_lause )
+                     
                 # Muutetaan muuttujien nimet koko polun mittaisiksi: 
                 #tehtava(nimi).osatehtava(nimi).syote(nimi).vartio(nro)
                 ot_lause=korvaa(ot_lause,pino,str(v.nro))
@@ -219,7 +231,7 @@ def luoLaskut(vartiot,tehtavat) :
                 taulukko.append(vartioRivi)
         return taulukko
 
-def laskeSarja(sarja,syotteet):
+def laskeSarja(sarja,syotteet,vartiot=None,tehtavat=None):
         """
         Laskee tulokset halutulle sarjalle. 
         Palauttaa kaksiuloitteisen taulukon[vartio][tehtävä] = pisteet.
@@ -227,12 +239,13 @@ def laskeSarja(sarja,syotteet):
         Taulukon vasemmassa ylänurkassa on sarjan objekti
         """
         #syotteetr=Syote.objects.all() #(maarite__osa_tehtava__tehtava__sarja=sarja )
-        vartiot=sarja.vartio_set.all()
-        tehtavat=sarja.tehtava_set.all()
+        
+        if not vartiot : vartiot=sarja.vartio_set.all()
+        if not tehtavat: tehtavat=sarja.tehtava_set.all()
         if vartiot and tehtavat : jee=1 # Pakotetaan tietokantahaku.
 
         #Lasketaan tulokset:
-        muuttujat = luoMuuttujat(vartiot,tehtavat,syotteet)
+        muuttujat = luoMuuttujat(sarja.vartio_set.all(),tehtavat,syotteet)
         laskut= luoLaskut(vartiot,tehtavat)
         tulokset = laskeTaulukko(laskut,muuttujat)
 
@@ -265,6 +278,7 @@ def laskeSarja(sarja,syotteet):
                         for t in range(len(tulokset[i])) :
                                 tuom=vartion_tuomarit.filter(tehtava=tehtavat[t])
                                 if len(tuom) :
+                                        logString( u"Tuomarineuvoston ylimääritys: " + str(tuom[0].pisteet) )
                                         try: 
                                                 tulokset[i][t]= Decimal(tuom[0].pisteet)
                                         except:
@@ -276,7 +290,11 @@ def laskeSarja(sarja,syotteet):
                 tulokset[i].insert(0,summa)
                 #Vartio objekti jokaisen rivin alkuun:
                 tulokset[i].insert(0,vartiot[i])
-                        
+        
+        # Kirjataan välivaiheisiin lopputulos
+        try:
+                logString( "\n<b>TULOS = " + str(tulokset[0][2])+"</b>" )
+        except: pass
         # Siirretään ulkopuoliset ja mukana olevat omiin taulukkoihinsa
         mukana=[]
         ulkona=[]
@@ -331,10 +349,12 @@ def laskeSarja(sarja,syotteet):
                         tulokset[vi-1][0].tasa='!' # merkitään tasatulos
                 edellinen = vartio
 
+
         #Lisätään tehtävärivi ylos
         mukana.insert(0,t_list)
         
         return (mukana,ulkona)
+
 
 if __name__ == "__main__":
     import doctest

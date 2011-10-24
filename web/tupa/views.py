@@ -30,6 +30,8 @@ import time
 from UnicodeTools import *
 import django.db
 
+from TulosLaskin import *
+from log import *
 
 def kipaResponseRedirect(url) : return HttpResponse('<html><head><meta http-equiv="REFRESH" content="0;url='+url+'"></HEAD><BODY></BODY></HTML>')
 """
@@ -93,6 +95,7 @@ def etusivu(request,paska=0) :
         return render_to_response('tupa/index.html',{ 'vanha_tietokanta' : vanha_tietokanta,
                                                     'object_list': kisat },
                                                     context_instance=RequestContext(request),)
+
 #@permission_required('tupa.change_kisa')
 def kisa(request,kisa_nimi) :
         """
@@ -285,7 +288,11 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
                 if nro < t.jarjestysnro : nro = t.jarjestysnro
         
         # Luodaan tehtavan maaritys form
-        tehtavaForm = tehtavanMaaritysForm(posti,daatta,sarja_id=sarja_id,suurin_jarjestysnro=nro)
+        tehtavaForm = tehtavanMaaritysForm(posti,
+                                          daatta,
+                               sarja_id=sarja_id,
+                         suurin_jarjestysnro=nro,
+                         tags={"kisa_nimi": kisa_nimi, "tehtava_id" : tehtava_id })
         
         # Tallennetaan formin muokkaama data
         tehtava_id=tallennaTehtavaData( daatta ) 
@@ -308,7 +315,9 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
                                 { 'forms': [tehtavaForm],
                                 'heading' : otsikko,
 				                'kisa_nimi': kisa_nimi,
-				                'taakse' : {'url' : '/kipa/' + kisa_nimi + '/maarita/tehtava/', 'title' : u'Muokkaa tehtävää' },
+				                'tehtava_ida': 5,
+				                'taakse' : {'url' : '/kipa/' + kisa_nimi + '/maarita/tehtava/',
+                                                'title' : u'Muokkaa tehtävää' },
                                 'talletettu': tal,
                                 'ohjaus_nappi': "lisää uusi tehtävä" },
                                 context_instance=RequestContext(request),)
@@ -958,5 +967,27 @@ def apua(request) :
         """
         return kipaResponseRedirect('/kipamedia/manual_v02.pdf')
 
+def tehtavanVaiheet(request,kisa_nimi,tehtava_id,vartio_id=None):
+        kisa= get_object_or_404(Kisa , nimi=kisa_nimi )
+        tehtava = get_object_or_404(Tehtava , id=tehtava_id )
+        vartiot = Vartio.objects.filter(sarja=tehtava.sarja)
+        vartio = vartiot[0]
+        if vartio_id=="": 
+                vartio_id=str(tehtava.sarja.vartio_set.all()[0].id)
+                vartio= get_object_or_404(Vartio , id=vartio_id )
+        tehtava = get_object_or_404(Tehtava , id=tehtava_id )
+        
+        responssi = u"<html><body>Vartion laskennan vaiheet tehtävässä " + tehtava.nimi + " <br> "
+        clearLoki()
+        tehtavan_syotteet =Syote.objects.filter(maarite__osa_tehtava__tehtava=tehtava)
+        if tehtavan_syotteet : hot=69 # Viettelee syotteet kannasta.
+        
+        laskeSarja(tehtava.sarja,tehtavan_syotteet,Vartio.objects.filter(id=vartio_id),[tehtava])
 
+        responssi += '<a href="/kipa/'+kisa_nimi+'/maarita/tehtava/'+str(tehtava_id)+'/">'+ u'Takaisin määrittelyyn </a> <br><br>'
+        for v in vartiot :
+                responssi += '<a href="/kipa/'+kisa_nimi+'/maarita/vaiheet/'+str(tehtava_id)+'/'+str(v.id) +'/">'+ str(v.nro) +' '+ v.nimi+ '</a> &nbsp &nbsp  '
+        responssi += palautaLoki() 
+        responssi += "</body></html>"
+        return HttpResponse( responssi )
 
