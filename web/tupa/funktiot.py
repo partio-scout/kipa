@@ -59,7 +59,7 @@ def interpoloi(x,x1,y1,x2,y2=0):
         Palauttaa f(x)=y koordinaatin pisteiden (x1,y1) (x2,y2) määrittämältä suoralta. 
         Mikäli f(x)>y1 f(x)=y1
         """
-        return suorita_lista(pienin,y1,(y1-y2)/(x1-x2)*(x-x2))
+        return suorita_lista(suurin,DictDecimal(0), suorita_lista(pienin,y1,(y1-y2)/(x1-x2)*(x-x2)) )
        
 def aikavali(a,b):
         tulos= b-a

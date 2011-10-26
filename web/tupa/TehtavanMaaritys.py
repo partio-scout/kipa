@@ -19,15 +19,13 @@ def peruskaava(data):
         nollasuoritus= "nollan_kerroin*tapa(arvio(nollan_kaava-oikea))"
         suoritus = "parhaan_haku([arvio(vartion_kaava-oikea),"+nollasuoritus+"])"
         data['kaava']="max(interpoloi("+suoritus+","+maksimisuoritus+",jaettavat,"+ nollasuoritus+"))"
-        #suoritus = "parhaan_haku(arvio(vartion_kaava-oikea))"
-        #data['kaava']="interpoloi("+suoritus+","+maksimisuoritus+",jaettavat,"+ nollasuoritus+")"
 
 """ This file is made with no explainable logic. It has only been made to work. Most propably the best way to improveis simply rewriting. Anyway the task is not simple. Strongly recommend of using the already defined database syntax. See developement documentation for the actual syntax definition.
 """
+
 #########################
 # Validiointi funktiot: #
 #########################
-
 def is_number(s):
         if not s : return False
         try: float(s)
@@ -109,7 +107,7 @@ def syotteen_tyyppi_field(posti,data,prefix,syote_id,tyyppi):
         value="piste"
         
         # formin taytto 
-        if data['tyyppi'] == tyyppi :
+        if data['tyyppi'] == tyyppi or tyyppi== "vk" or tyyppi=="pk"  :
                 maarite_index=0
                 maaritteet=[]
                 for k,v in data['maaritteet'].items() : maaritteet.append( (v['nimi'], k ) )
@@ -187,7 +185,7 @@ def syotteen_kuvaus_field(posti,data,prefix,syote_id,tyyppi):
         field_name="kali_vihje_"+nimi
         if posti and id in posti.keys(): value=posti[id]
         
-        if posti and prefix in posti.keys() and posti[prefix]==tyyppi or not posti and data['tyyppi'] == tyyppi :
+        if posti and prefix in posti.keys() and posti[prefix]==tyyppi or not posti and (data['tyyppi'] == tyyppi or tyyppi=='pk' or tyyppi=='vk' ):
                 # Formin data:
                 if not 'maaritteet' in data.keys(): data['maaritteet']={}
                 maarite_index=0
@@ -246,7 +244,7 @@ def poistaYlimaaraisetMaaritteet(posti,data,prefix,tyyppi,tarvittava_maara):
 
 
 def lataa_parametrit(state,data,prefix,ot_tyyppi,muunnos=None):
-        if "tyyppi" in data.keys() and data['tyyppi']==ot_tyyppi[1:]:
+        if "tyyppi" in data.keys() and (data['tyyppi']==ot_tyyppi[1:] or (ot_tyyppi[1:]=="vk" and not data['tyyppi']=="pk") ) :
                 loadField(state,data,"kiintea",['parametrit'],'parhaan_kaava','arvo',prefix+ot_tyyppi)
                 loadField(state,data,"jaettavat",['parametrit'],'jaettavat','arvo',prefix+ot_tyyppi)
                 loadField(state,data,"parhaan_haku",['parametrit'],'parhaan_haku','arvo',prefix+ot_tyyppi)
@@ -448,7 +446,7 @@ def aikaValiForm(posti,data,prefix) :
 
 def vapaaKaavaForm(posti,data,prefix) :
         maara=5
-        if 'maaritteet' in data.keys() : 
+        if 'maaritteet' in data.keys() :  # Määritteet:
                 maara=int(len(data['maaritteet']))
                 if posti and prefix+'_maaritteita' in posti.keys() : maara= int(posti[prefix+'_maaritteita'])
                 if maara > int(maara/5)*5 : maara= int(maara/5)*5+5

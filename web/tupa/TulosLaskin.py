@@ -147,19 +147,13 @@ def luoMuuttujat(vartiot,tehtavat,syotteet) :
         muuttujat= MathDict(dict_teht)
         return muuttujat
 
-def luoTehtavanKaava(t,v):
-        pino=[] # Pinoon laitetaan kulloinenkin iterointipolku, 
-                #jotta muuttujan nimet voidaan muuttaa suhteellisesta kirjaimesta absoluuttiseen polkuun.
-        t_nimi= t.nimi.replace(" ","").replace("!","").lower()
-        pino.append(t_nimi)
-        osatehtavat=t.osatehtava_set.all()
-        ot_lauseet=[]
-        
-        log.logString( u"<h3>Tehtävä: " + t.nimi.upper()+"</h3>" )
-        log.logString( u"kaava =  " + t.kaava.upper() )
-        for ot in osatehtavat:
-                log.logString( u"\n<b>Osatehtävä: " + ot.nimi.upper()+"</b>" )
-                pino.append(ot.nimi)
+def luoOsatehtavanKaava(ot):
+                """
+                Luo yhden puhtaan kaavan jolla osatehtävän tulokset lasketaan.
+                -Sijoittaa parametrit
+                -Toteuttaa muk->..mukana pikatien
+                -Muuntaa suor pikatien kaikkien vartioiden suorituksiin parametristä vartion_kaava
+                """
                 ot_lause=ot.kaava #.lower() 
                 log.logString( "  kaava = " + ot_lause )
                 parametrit=ot.parametri_set.all()
@@ -189,13 +183,35 @@ def luoTehtavanKaava(t,v):
                                 # Muunnos "suor" -> kaikkien vartioiden lasketut suoritukset
                                 try:
                                         vartion_kaava=parametrit.filter(nimi="vartion_kaava")[0].arvo
-                                        vartion_kaava=re.sub("vartio"+r"(?!\w+)", str(v.nro) ,vartion_kaava)
+                                        #vartion_kaava=re.sub("vartio"+r"(?!\w+)", str(v.nro) ,vartion_kaava)
                                         for p in parametrit:
                                                 vartion_kaava=re.sub(p.nimi+r"(?!\w+)",p.arvo,vartion_kaava)
                                         ot_lause=re.sub("suor"+r"(?!\w+)",suoritusJoukko(vartion_kaava),ot_lause)
                                 except IndexError: pass
                                 if not ot_lause==vanha : korvautuu=True
-                
+                return ot_lause
+
+def luoTehtavanKaava(t,v):
+        pino=[] # Pinoon laitetaan kulloinenkin iterointipolku, 
+                #jotta muuttujan nimet voidaan muuttaa suhteellisesta kirjaimesta absoluuttiseen polkuun.
+        t_nimi= t.nimi.replace(" ","").replace("!","").lower()
+        pino.append(t_nimi)
+        osatehtavat=t.osatehtava_set.all()
+        ot_lauseet=[]
+        
+        log.logString( u"<h3>Tehtävä: " + t.nimi.upper()+"</h3>" )
+        log.logString( u"kaava =  " + t.kaava.upper() )
+        for ot in osatehtavat:
+                log.logString( u"\n<b>Osatehtävä: " + ot.nimi.upper()+"</b>" )
+                pino.append(ot.nimi)
+                ot_lause=luoOsatehtavanKaava(ot)
+                korvautuu=True
+                while korvautuu:
+                        korvautuu=False
+                        vanha=ot_lause
+                        ot_lasue=re.sub("vartio"+r"(?!\w+)", str(v.nro) ,ot_lause)
+                        if not ot_lause==vanha : korvautuu=True
+
                 log.logString( "  sijoitettu = " + ot_lause )
                      
                 # Muutetaan muuttujien nimet koko polun mittaisiksi: 
