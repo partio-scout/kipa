@@ -147,47 +147,40 @@ def luoMuuttujat(vartiot,tehtavat,syotteet) :
         muuttujat= MathDict(dict_teht)
         return muuttujat
 
-def luoOsatehtavanKaava(ot):
+def luoOsatehtavanKaava(ot_lause,parametrit):
                 """
+                paremtrit ovat sanakirja[parametrin nimi]=arvo
                 Luo yhden puhtaan kaavan jolla osatehtävän tulokset lasketaan.
                 -Sijoittaa parametrit
-                -Toteuttaa muk->..mukana pikatien
+                -Toteuttaa muk -> ..mukana pikatien
                 -Muuntaa suor pikatien kaikkien vartioiden suorituksiin parametristä vartion_kaava
                 """
-                ot_lause=ot.kaava #.lower() 
+                ot_lause #=ot.kaava #.lower() 
                 log.logString( "  kaava = " + ot_lause )
-                parametrit=ot.parametri_set.all()
-                maaritteet=ot.syotemaarite_set.all()
                 korvautuu=True
 
                 log.logString( u"    Parametrit: "  )
-                for p in parametrit:
-                        log.logString( "         " + p.nimi +"= " + p.arvo  )
+                for p_nimi,p_arvo in parametrit.items():
+                        log.logString( "         " + p_nimi +"= " + p_arvo  )
 
-                # Suora summa syotteiden välillä
-                if ot_lause =="ss" and maaritteet :
-                        ot_lause=""
-                        for m in maaritteet:
-                                ot_lause=ot_lause+m.nimi+"+"
-                        ot_lause=ot_lause[:-1]
                 else :
                         # Korvataan parametrit
                         while korvautuu:
                                 korvautuu=False
                                 vanha=ot_lause
-                                for p in parametrit:
-                                        ot_lause=re.sub(p.nimi+r"(?!\w+)",p.arvo,ot_lause)
+                                for p_nimi,p_arvo in parametrit.items():
+                                        ot_lause=re.sub(p_nimi+r"(?!\w+)",p_arvo,ot_lause)
                                 # Pikatie "muk" -> "..mukana" 
                                 ot_lause=re.sub("muk"+r"(?!\w+)","..mukana",ot_lause)
-                                        
                                 # Muunnos "suor" -> kaikkien vartioiden lasketut suoritukset
                                 try:
-                                        vartion_kaava=parametrit.filter(nimi="vartion_kaava")[0].arvo
+                                        vartion_kaava=parametrit["vartion_kaava"] #.filter(nimi="vartion_kaava")[0].arvo
                                         #vartion_kaava=re.sub("vartio"+r"(?!\w+)", str(v.nro) ,vartion_kaava)
-                                        for p in parametrit:
-                                                vartion_kaava=re.sub(p.nimi+r"(?!\w+)",p.arvo,vartion_kaava)
+                                        for p_nimi,p_arvo in parametrit.items() :
+                                                vartion_kaava=re.sub(p_nimi+r"(?!\w+)",p_arvo,vartion_kaava)
                                         ot_lause=re.sub("suor"+r"(?!\w+)",suoritusJoukko(vartion_kaava),ot_lause)
                                 except IndexError: pass
+                                except KeyError: pass
                                 if not ot_lause==vanha : korvautuu=True
                 return ot_lause
 
@@ -204,7 +197,20 @@ def luoTehtavanKaava(t,v):
         for ot in osatehtavat:
                 log.logString( u"\n<b>Osatehtävä: " + ot.nimi.upper()+"</b>" )
                 pino.append(ot.nimi)
-                ot_lause=luoOsatehtavanKaava(ot)
+
+                ot_lause = ot.kaava
+                maaritteet=ot.syotemaarite_set.all()
+                # Suora summa syotteiden välillä
+                if ot_lause =="ss" and maaritteet :
+                        ot_lause=""
+                        for m in maaritteet:
+                                ot_lause=ot_lause+m.nimi+"+"
+                        ot_lause=ot_lause[:-1]
+                
+                parametrit={}
+                for p in ot.parametri_set.all():
+                        parametrit[p.nimi]=p.arvo
+                ot_lause=luoOsatehtavanKaava(ot_lause,parametrit)
                 korvautuu=True
                 while korvautuu:
                         korvautuu=False

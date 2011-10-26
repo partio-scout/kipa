@@ -227,6 +227,8 @@ def TulosTestFactory(fixture_name):
                         settings.DEBUG=False
                         self.TAUSTALASKENTA=settings.TAUSTALASKENTA                        
                         settings.TAUSTALASKENTA=None
+                        posti_vapaa={}
+                        posti_puhdas={}
                         for s in Sarja.objects.select_related().all():
                                 for t in s.tehtava_set.all() :
                                         # Parsitaan post data html sivusta: 
@@ -256,11 +258,10 @@ def TulosTestFactory(fixture_name):
                                                     value=re.search('value=["\'](.*?)["\']',j.group(1))
                                                     if value:
                                                         posti[i[0]]=value.group(1)
-
-                                        # ajetaan post m‰‰ritys n‰kym‰lle:
                                         c.post(osoite,posti)
                         self.testTulokset()
                         settings.TAUSTALASKENTA=self.TAUSTALASKENTA
+
         return testi
 
 testit=[aritmeettinen_laskin_test]

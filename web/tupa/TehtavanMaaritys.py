@@ -9,16 +9,18 @@ import string
 import operator
 from decimal import *
 from taulukkolaskin import laskeTaulukko
+from TulosLaskin import luoOsatehtavanKaava
 
 # Lataamista varten:
 from models import *
 from django.core import serializers
 
-def peruskaava(data):
-        maksimisuoritus= "parhaan_haku(arvio(parhaan_kaava-oikea))"
-        nollasuoritus= "nollan_kerroin*tapa(arvio(nollan_kaava-oikea))"
-        suoritus = "parhaan_haku([arvio(vartion_kaava-oikea),"+nollasuoritus+"])"
-        data['kaava']="max(interpoloi("+suoritus+","+maksimisuoritus+",jaettavat,"+ nollasuoritus+"))"
+# Tehtävätyyppien kaavapohja:
+maksimisuoritus= "parhaan_haku(arvio(parhaan_kaava-oikea))"
+nollasuoritus= "nollan_kerroin*tapa(arvio(nollan_kaava-oikea))"
+suoritus = "parhaan_haku([arvio(vartion_kaava-oikea),"+nollasuoritus+"])"
+peruskaava ="max(interpoloi("+suoritus+","+maksimisuoritus+",jaettavat,"+ nollasuoritus+"))"
+
 
 """ This file is made with no explainable logic. It has only been made to work. Most propably the best way to improveis simply rewriting. Anyway the task is not simple. Strongly recommend of using the already defined database syntax. See developement documentation for the actual syntax definition.
 """
@@ -137,8 +139,6 @@ def field(posti,field_name,prefix,errors=""):
                                'value' : value ,
                               'errors' : errors } }
 
-
-
 def save_data(data,data_path,data_nimi,data_field,value) :
         pos=data
         for p in data_path:
@@ -164,8 +164,9 @@ def saveField(posti,data,field_name,data_path,nimi,field,prefix="",muunnos=None)
                 if muunnos : value = muunnos(value)
                 save_data(data,data_path,nimi,field,value)
 
-def loadField(state,data,field_name,data_path,nimi,field,prefix="",muunnos=None) :
-        id=prefix+"_"+field_name
+def loadField(state,data,field_name,data_path,nimi,field,prefix=None,muunnos=None) :
+        if prefix: id=prefix+"_"+field_name
+        else :id= field_name
         pos=data
         for p in data_path :
                 if not p in pos.keys() : break
@@ -241,10 +242,8 @@ def poistaYlimaaraisetMaaritteet(posti,data,prefix,tyyppi,tarvittava_maara):
                                         del data['maaritteet'][k]
                         index+=1
 
-
-
 def lataa_parametrit(state,data,prefix,ot_tyyppi,muunnos=None):
-        if "tyyppi" in data.keys() and (data['tyyppi']==ot_tyyppi[1:] or (ot_tyyppi[1:]=="vk" and not data['tyyppi']=="pk") ) :
+        if "tyyppi" in data.keys() and (data['tyyppi']==ot_tyyppi[1:] or (ot_tyyppi[1:]=="vk" and not data['tyyppi']=="pk") or ot_tyyppi[1:]=="pk" ) :
                 loadField(state,data,"kiintea",['parametrit'],'parhaan_kaava','arvo',prefix+ot_tyyppi)
                 loadField(state,data,"jaettavat",['parametrit'],'jaettavat','arvo',prefix+ot_tyyppi)
                 loadField(state,data,"parhaan_haku",['parametrit'],'parhaan_haku','arvo',prefix+ot_tyyppi)
@@ -253,6 +252,19 @@ def lataa_parametrit(state,data,prefix,ot_tyyppi,muunnos=None):
                 loadField(state,data,"oikea",['parametrit'],'oikea','arvo',prefix+ot_tyyppi)
                 loadField(state,data,"kaava",['parametrit'],'vartion_kaava','arvo',prefix+ot_tyyppi)
                 loadField(state,data,"arvio",['parametrit'],'arvio','arvo',prefix+ot_tyyppi)
+                
+                if ot_tyyppi[1:]=="pk" : # Puhdaskaavan generointi muista tyypeistä
+                        parametrit={}
+                        loadField(parametrit,data,"parhaan_kaava",['parametrit'],'parhaan_kaava','arvo')
+                        loadField(parametrit,data,"jaettavat",['parametrit'],'jaettavat','arvo')
+                        loadField(parametrit,data,"parhaan_haku",['parametrit'],'parhaan_haku','arvo')
+                        loadField(parametrit,data,"nollan_kerroin",['parametrit'],'nollan_kerroin','arvo')
+                        loadField(parametrit,data,"nollan_kaava",['parametrit'],'nollan_kaava','arvo')
+                        loadField(parametrit,data,"oikea",['parametrit'],'oikea','arvo')
+                        loadField(parametrit,data,"vartion_kaava",['parametrit'],'vartion_kaava','arvo')
+                        loadField(parametrit,data,"arvio",['parametrit'],'arvio','arvo')
+                        loadField(parametrit,data,"tapa",['parametrit'],'tapa','arvo')
+                        state[prefix+ot_tyyppi+'_kaava']="No??" #luoOsatehtavanKaava(peruskaava,parametrit)
                 try:
                         if not state[prefix+ot_tyyppi+"_parhaan_haku"]=="": 
                                 state[prefix+ot_tyyppi+'_kiintea']=""
@@ -282,7 +294,6 @@ def lataa_parametrit(state,data,prefix,ot_tyyppi,muunnos=None):
                                         state[prefix+ot_tyyppi+'_oikea']= value
 
                 except : pass
-
 
 ####################################
 # Yleiset osatehtävien parametrit: #
@@ -378,7 +389,7 @@ def raakaPisteForm(posti,data,prefix) :
         if posti and prefix in posti.keys() and posti[prefix]=="rp":
                 for k,v in data['maaritteet'].items(): v['tyyppi']='piste'
                 save_data(data,['parametrit'],'vartion_kaava','arvo',"a")
-                peruskaava(data) 
+                data["kaava"]=peruskaava
         
         state=None
         # Aloitusarvot kannasta
@@ -400,7 +411,7 @@ def kokonaisAikaForm(posti,data,prefix) :
         if posti and prefix in posti.keys() and posti[prefix]=="ka":
                 for k,v in data['maaritteet'].items(): v['tyyppi']='aika'
                 save_data(data,['parametrit'],'vartion_kaava','arvo',"a")
-                peruskaava(data) 
+                data["kaava"]=peruskaava
         # Aloitusarvot kannasta
         if not posti : 
                 state={}
@@ -429,7 +440,7 @@ def aikaValiForm(posti,data,prefix) :
                 save_data(data,['parametrit'],'oikea','arvo',"0")
                 for k,v in data['maaritteet'].items(): v['tyyppi']='aika'
                 save_data(data,['parametrit'],'vartion_kaava','arvo',"aikavali(a,b)")
-                peruskaava(data) 
+                data["kaava"]=peruskaava 
         # Aloitusarvot kannasta
         state=None
         if not posti : 
@@ -473,7 +484,7 @@ def vapaaKaavaForm(posti,data,prefix) :
                                 else :
                                         data['maaritteet'][-maaritteet[i][0]] = maaritteet[i][1]
                                         del data['maaritteet'][maaritteet[i][0]]
-             peruskaava(data) 
+             data["kaava"]=peruskaava
              
         poistaYlimaaraisetMaaritteet(posti,data,prefix,"vk",maara)
         
@@ -504,7 +515,6 @@ def vapaaKaavaForm(posti,data,prefix) :
 ################
 # Puhdas kaava #
 ################
-
 def puhdasKaavaForm(posti,data,prefix) :
         maara=5
         if 'maaritteet' in data.keys() : 
@@ -547,7 +557,7 @@ def puhdasKaavaForm(posti,data,prefix) :
                 state={}
                 lataa_parametrit(state,data,prefix,"_pk")
         else : state=posti.copy()
-        formi.update( field(state,"parhaan_haku",prefix+"_pk")  )
+        #formi.update( field(state,"parhaan_haku",prefix+"_pk")  )
         
         errors=""
         if state and prefix in state.keys() and state[prefix]=="pk":
@@ -558,7 +568,6 @@ def puhdasKaavaForm(posti,data,prefix) :
         formi.update( field(state,"kaava",prefix+"_pk",errors=errors)  )
 
         return render_to_string("tupa/forms/puhdas_kaava.html",  formi )
-
 
 ##########################
 # Osatehtävän kokoonpano #
@@ -734,8 +743,6 @@ def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehta
                 #formidata.append( ('kisa_nimi',) )
                 tags.update(formidata)
         return render_to_string("tupa/forms/tehtava.html",  tags )
-
-
 
 ########################
 # Tietokannan muokkaus #
