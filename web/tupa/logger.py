@@ -7,7 +7,6 @@ from django.conf import settings
 from xml.dom.minidom import parse, parseString
 import os.path
 import re
-lokkeri=None
 ##from tupa.models import Kisa
 from django.shortcuts import get_object_or_404
 from duplicate import kisa_xml

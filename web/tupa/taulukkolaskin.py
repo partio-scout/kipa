@@ -7,7 +7,8 @@ from laskentatyypit import *
 from funktiot import perusfunktiot
 from funktiot import listafunktiot
 import settings
-from tupa.log import * 
+#from tupa.log import * 
+import log
 
 pfunktiot={}
 lfunktiot={}
@@ -40,8 +41,8 @@ def laske(lauseke,m={},funktiot={}):
         f.update(lfunktiot)
         f=dictToMathDict(f)
         
-        logString( "<h4> Laskenta: </h4>" )
-        logString( u"Tehtävän lause = " + lauseke )
+        log.logString( "<h4> Laskenta: </h4>" )
+        log.logString( u"Tehtävän lause = " + lauseke )
         
         # Poistetaan välilyonnit ja enterit:
         lause = lauseke.replace('\n','')
@@ -75,16 +76,16 @@ def laske(lauseke,m={},funktiot={}):
                         tulos = eval(lause)
                 # Poikkeukset laskuille joita ei pysty laskemaan. 
                 # Pyrkii estämaan ettei koko paska kaadu virheissä.
-                except DivisionByZero : tulos= None 
+                #except DivisionByZero : tulos= None 
                 except KeyError : tulos= "S" # Syottämättomiä muuttujia
-                except TypeError :  tulos= None 
-                except SyntaxError: tulos= None
-                except NameError : tulos= None
-                except : tulos= None
+                #except TypeError :  tulos= None 
+                #except SyntaxError: tulos= None
+                #except NameError : tulos= None
+                #except : tulos= None
         try :
-                logString( "laskettu tulos= " + str(tulos.quantize(Decimal('0.1'),rounding=ROUND_HALF_UP ))  )
+                log.logString( "laskettu tulos= " + str(tulos.quantize(Decimal('0.1'),rounding=ROUND_HALF_UP ))  )
         except : 
-                logString( "laskettu tulos= " + str(tulos)  )
+                log.logString( "laskettu tulos= " + str(tulos)  )
         if type(tulos)==DictDecimal : tulos= Decimal(tulos)
         return tulos
 

@@ -177,7 +177,6 @@ def TulosTestFactory(fixture_name):
                         #cache.clear()
                         settings.TAUSTALASKENTA = False 
                         settings.CACHE_TULOKSET = False 
-
                         for s in self.sarjat:
                                 virheilmoitus=unicode("")
                                 for f in self.fixtures:

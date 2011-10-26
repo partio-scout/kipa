@@ -14,7 +14,7 @@ import settings
 import thread
 import time 
 
-from log import *
+import log
 from binascii import *
 import sys
 
@@ -94,7 +94,10 @@ class Sarja(models.Model) :
                 """
                 syotteet=Syote.objects.filter(maarite__osa_tehtava__tehtava__sarja=self)
                 if syotteet: onjoo=1 # Pakotetaan syotteiden haku tähän.
-                disableLogging() 
+                log.disableLogging()
+                #log.logString= lambda x : 1
+                #log.logFunction= lambda x : 1
+
                 tulokset = laskeSarja(self,syotteet) 
                 return tulokset
         
@@ -145,6 +148,7 @@ class Vartio(models.Model) :
         
         def __unicode__(self) :
                 return self.sarja.kisa.nimi+"."+self.sarja.nimi+"."+str(self.nro)
+
         class Meta:
                 verbose_name_plural = "Vartiot"
                 db_table = u"kipa_vartio"

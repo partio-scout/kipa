@@ -1,3 +1,4 @@
+import settings
 
 laskentaloki=""
 
@@ -30,8 +31,8 @@ def __logFunction(function,params,result):
                 laskentaloki+= ")= " + unicode(result)
         laskentaloki += "<br>"
 
-logString= __logString
-logFunction= __logFunction
+
+
 def enableLogging() :
         global logString
         global logFunction
@@ -52,5 +53,17 @@ def palautaLoki() :
         global laskentaloki
         return laskentaloki
 
-disableLogging()
+
+try:
+        logString
+except:
+        logString=None
+
+try:
+        logFunction
+except:
+        logFunction=None
+
+if not logString or not logFunction:
+        enableLogging()
 

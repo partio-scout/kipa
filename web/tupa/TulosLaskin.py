@@ -3,7 +3,6 @@
 #    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
 
 if not __name__ == "__main__":
-	from logger import lokkeri
 	from funktiot import *
 
 from decimal import *
@@ -15,6 +14,8 @@ import operator
 #from django.core.exceptions import ObjectDoesNotExist
 from django.core.cache import cache
 from models import *
+import log
+
 def korvaa(lause,pino,loppu=None) :
         """
         Korvaa lauseen muuttujat pinon mukaisella etuliitteella a.b.c jne.
@@ -154,20 +155,20 @@ def luoTehtavanKaava(t,v):
         osatehtavat=t.osatehtava_set.all()
         ot_lauseet=[]
         
-        logString( u"<h3>Tehtävä: " + t.nimi.upper()+"</h3>" )
-        logString( u"kaava =  " + t.kaava.upper() )
+        log.logString( u"<h3>Tehtävä: " + t.nimi.upper()+"</h3>" )
+        log.logString( u"kaava =  " + t.kaava.upper() )
         for ot in osatehtavat:
-                logString( u"\n<b>Osatehtävä: " + ot.nimi.upper()+"</b>" )
+                log.logString( u"\n<b>Osatehtävä: " + ot.nimi.upper()+"</b>" )
                 pino.append(ot.nimi)
                 ot_lause=ot.kaava #.lower() 
-                logString( "  kaava = " + ot_lause )
+                log.logString( "  kaava = " + ot_lause )
                 parametrit=ot.parametri_set.all()
                 maaritteet=ot.syotemaarite_set.all()
                 korvautuu=True
 
-                logString( u"    Parametrit: "  )
+                log.logString( u"    Parametrit: "  )
                 for p in parametrit:
-                        logString( "         " + p.nimi +"= " + p.arvo  )
+                        log.logString( "         " + p.nimi +"= " + p.arvo  )
 
                 # Suora summa syotteiden välillä
                 if ot_lause =="ss" and maaritteet :
@@ -195,7 +196,7 @@ def luoTehtavanKaava(t,v):
                                 except IndexError: pass
                                 if not ot_lause==vanha : korvautuu=True
                 
-                logString( "  sijoitettu = " + ot_lause )
+                log.logString( "  sijoitettu = " + ot_lause )
                      
                 # Muutetaan muuttujien nimet koko polun mittaisiksi: 
                 #tehtava(nimi).osatehtava(nimi).syote(nimi).vartio(nro)
@@ -278,7 +279,7 @@ def laskeSarja(sarja,syotteet,vartiot=None,tehtavat=None):
                         for t in range(len(tulokset[i])) :
                                 tuom=vartion_tuomarit.filter(tehtava=tehtavat[t])
                                 if len(tuom) :
-                                        logString( u"Tuomarineuvoston ylimääritys: " + str(tuom[0].pisteet) )
+                                        log.logString( u"Tuomarineuvoston ylimääritys: " + str(tuom[0].pisteet) )
                                         try: 
                                                 tulokset[i][t]= Decimal(tuom[0].pisteet)
                                         except:
@@ -293,7 +294,7 @@ def laskeSarja(sarja,syotteet,vartiot=None,tehtavat=None):
         
         # Kirjataan välivaiheisiin lopputulos
         try:
-                logString( "\n<b>TULOS = " + str(tulokset[0][2])+"</b>" )
+                log.logString( "\n<b>TULOS = " + str(tulokset[0][2])+"</b>" )
         except: pass
         # Siirretään ulkopuoliset ja mukana olevat omiin taulukkoihinsa
         mukana=[]

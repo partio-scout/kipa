@@ -216,36 +216,36 @@ def maaritaVartiot(request,kisa_nimi,talletettu=None):
         """
         Määrittää kisan vartiot sarjoittain.
         """
-        sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
+        sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi) 
         sarjaVartiot=[]
         posti=None
         post_ok=True
-        taulukko=[]
+        taulukko=[] # 2 ulotteinen taulukko joka tulee sisältämään vartioiden formeja sarjoittain.
         if request.method == 'POST':
-                posti=request.POST
+                posti=request.POST 
 
         for s in sarjat :
-                vartioFormit=VartioFormSet(posti,instance=s,prefix=s.nimi )
-                if vartioFormit.is_valid():
+                vartioFormit=VartioFormSet(posti,instance=s,prefix=s.nimi ) # Luodaan kasa vartioformeja sarjalle
+                if vartioFormit.is_valid(): # Katsotaan onko data oikein
                         vartioFormit.save() 
-                else :
+                else : # Syöttö perseellään.
                         post_ok=False
                 vartioFormit.otsikko=s.nimi
                 vartioFormit.id=s.id
                 taulukko.append( vartioFormit )
                 
-                s.taustaTulokset() # Taustalaskenta
+                s.taustaTulokset() # Taustalaskenta käyntiin.
 
-        if posti and post_ok:
+        if posti and post_ok: # Talletetaanko?
                 if "nappi" in posti.keys() and posti["nappi"]=="ohjaus" :
                         return kipaResponseRedirect("/kipa/"+kisa_nimi+"/maarita/tehtava/")
                 return kipaResponseRedirect("/kipa/"+kisa_nimi+"/maarita/vartiot/talletettu/")
-        else:
+        else: # Ei tallennusta
                 tal=""
-                if talletettu=="talletettu" and not posti : tal="Talletettu!"
+                if talletettu=="talletettu" and not posti : tal="Talletettu!" # Talletettu info yläpalkkiin.
                 ohjaus_nappi=None
                 if 'HTTP_REFERER' in request.META.keys() and request.META['HTTP_REFERER'][-23:]== "/kipa/uusiKisa/maarita/" :
-                        ohjaus_nappi="siirry tehtävien määritykseen"
+                        ohjaus_nappi="siirry tehtävien määritykseen" # Ensimmäisellä talletuksella näkyy siirry nappi.
                 return render_to_response('tupa/valitse_formset.html',
                                         { 'taulukko' : taulukko ,
                                         'heading' : "Määritä vartiot",
@@ -268,22 +268,21 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
 
         tehtava = None
         sarja = None
-        if tehtava_id:
-                tehtava=get_object_or_404(Tehtava, id=tehtava_id)
-                sarja= tehtava.sarja
-        
-        else:
-                sarja = get_object_or_404(Sarja, id=sarja_id)
-                tehtava=Tehtava(sarja)
         # Tabs:
         daatta={}
-        if tehtava_id:
+        if tehtava_id: # Muokataan vanhaa tehtävää
+                tehtava=get_object_or_404(Tehtava, id=tehtava_id)
+                sarja= tehtava.sarja
                 osatehtavat= tehtava.osatehtava_set.all() 
-                daatta =luoTehtavaData([tehtava]) 
+                daatta =luoTehtavaData([tehtava]) # alkudata tehtävänmääritysformihässäkälle.
+        
+        else: # Luodaan uutta tehtävää
+                sarja = get_object_or_404(Sarja, id=sarja_id)
+                tehtava=Tehtava(sarja) 
         
         # Haetaan suurin kaytosssa oleva jarjestysnro tassa sarjassa:
         sarjan_tehtavat=Tehtava.objects.filter(sarja=sarja)
-        nro =0 
+        nro =0 # Uuden tehtävän aloitus järjestysnro.
         for t in sarjan_tehtavat :
                 if nro < t.jarjestysnro : nro = t.jarjestysnro
         
@@ -303,14 +302,15 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
 
 	if tehtava and not tehtava.nimi == '' : otsikko = tehtava.nimi
         
-        if posti and not 'lisaa_maaritteita' in posti.keys() and daatta['valid'] :
-                if "nappi" in posti.keys() and posti["nappi"]=="ohjaus":
+        # Talletetaanko ja siirrytäänkö talletettu sivuun?
+        if posti and not 'lisaa_maaritteita' in posti.keys() and daatta['valid'] : 
+                if "nappi" in posti.keys() and posti["nappi"]=="ohjaus": # Talleta ja luo uusi.
                         return kipaResponseRedirect("/kipa/"+ kisa_nimi+ "/maarita/tehtava/uusi/sarja/"+str(sarja.id)+"/")
 
                 return kipaResponseRedirect("/kipa/"+kisa_nimi+"/maarita/tehtava/"+str(tehtava_id)+'/talletettu/' )
-        else:
+        else: # Ei talletusta tällä kertaa
                 tal=""
-                if talletettu=="talletettu" and not posti : tal="Talletettu!"
+                if talletettu=="talletettu" and not posti : tal="Talletettu!" # Edellisellä sivulla talletettu
                 return render_to_response('tupa/maarita.html', 
                                 { 'forms': [tehtavaForm],
                                 'heading' : otsikko,
@@ -347,11 +347,8 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
         Määrittää tehtävän syötteet.
         """
         tehtava = get_object_or_404(Tehtava, id=tehtava_id)
-
         osatehtavat= OsaTehtava.objects.filter(tehtava=tehtava)
-
         maaritteet = SyoteMaarite.objects.filter(osa_tehtava__tehtava=tehtava)
-        
         tehtava.sarja.taustaTulokset() # Taustalaskenta
         
         vartiot = Vartio.objects.filter(sarja = tehtava.sarja )
@@ -360,7 +357,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
         syottovirhe=None
         if request.method == 'POST':
                 posti=request.POST
-                if 'tarkistettu' in posti.keys():  tehtava.tarkistettu=True
+                if 'tarkistettu' in posti.keys():  tehtava.tarkistettu=True  # Tarkistettu täppä
                 else : tehtava.tarkistettu=False
         tarkistettu=tehtava.tarkistettu
         validi=True
@@ -380,11 +377,14 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                         formi=None
                         if maaritteen_syotteet:
                                 syote=maaritteen_syotteet[0]
-                        if tarkistus : formi =  TarkistusSyoteForm(m,v,posti,instance=syote,prefix=v.nimi+str(m.pk),)
-                        else : formi = SyoteForm(m,v,posti,instance=syote,prefix=v.nimi+str(m.pk),)
+                        
+                        if tarkistus : # Syötetäänkö tarkistus syötteitä?
+                                formi =  TarkistusSyoteForm(m,v,posti,instance=syote,prefix=v.nimi+str(m.pk),)
+                        else : # Syötetään normi syötteitä.
+                                formi = SyoteForm(m,v,posti,instance=syote,prefix=v.nimi+str(m.pk),)
                         formi.fields['arvo'].widget.attrs["class"] = "col" + str(colnum)
                                 
-                        if formi.is_valid() :
+                        if formi.is_valid() : # Talletetaan syöte
                                 formi.save()
                         else :
                                 validi=False
@@ -399,7 +399,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                         colnum += 1 
                 syoteFormit.append( (v,rivi))
         
-        if posti and validi  :
+        if posti and validi  : # Sivu oikein
                 tehtava.save()
                 if tarkistus : 
                         osoite="/kipa/"+kisa_nimi+"/syota/tarkistus/tehtava/"+str(tehtava.id)+'/talletettu/'
@@ -978,12 +978,12 @@ def tehtavanVaiheet(request,kisa_nimi,tehtava_id,vartio_id=None):
         tehtava = get_object_or_404(Tehtava , id=tehtava_id )
         
         responssi = u"<html><body>Vartion laskennan vaiheet tehtävässä " + tehtava.nimi + " <br> "
+        enableLogging()
         clearLoki()
         tehtavan_syotteet =Syote.objects.filter(maarite__osa_tehtava__tehtava=tehtava)
         if tehtavan_syotteet : hot=69 # Viettelee syotteet kannasta.
         
         laskeSarja(tehtava.sarja,tehtavan_syotteet,Vartio.objects.filter(id=vartio_id),[tehtava])
-
         responssi += '<a href="/kipa/'+kisa_nimi+'/maarita/tehtava/'+str(tehtava_id)+'/">'+ u'Takaisin määrittelyyn </a> <br><br>'
         for v in vartiot :
                 responssi += '<a href="/kipa/'+kisa_nimi+'/maarita/vaiheet/'+str(tehtava_id)+'/'+str(v.id) +'/">'+ str(v.nro) +' '+ v.nimi+ '</a> &nbsp &nbsp  '

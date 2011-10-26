@@ -3,7 +3,9 @@
 #    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
 
 from decimal import *
-from tupa.log import *
+
+import log
+
 def decimal_uni(self) :
         return str(self.quantize(Decimal('0.1'),rounding=ROUND_HALF_UP ) )
 def decimal_repr(self) :
@@ -269,7 +271,7 @@ def suorita(funktio,*param):
                 tulos= run_dict(0,funktio,*param)
         except :
                 tulos= Decimal(0)
-        logFunction(funktio,param,tulos)
+        log.logFunction(funktio,param,tulos)
         return tulos
 
 def suorita_lista(funktio,a,*param ) :
@@ -288,11 +290,11 @@ def suorita_lista(funktio,a,*param ) :
                         tulos=karsi(listaksi(a.listaksi()), funktio) 
 
                 parametrit= [a]
-                logFunction(funktio,parametrit,tulos)
+                log.logFunction(funktio,parametrit,tulos)
         else : 
                 tulos= run_dict(1,funktio,a,*param)
                 parametrit= [a]
                 parametrit= parametrit.extend(param)
-                logFunction(funktio,parametrit,tulos)
+                log.logFunction(funktio,parametrit,tulos)
         return tulos
 

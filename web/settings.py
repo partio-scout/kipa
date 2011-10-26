@@ -118,3 +118,5 @@ INSTALLED_APPS = [
 
 LOGIN_URL = ('/kipa/')
 LOGIN_REDIRECT_URL = ('/kipa/')
+
+
