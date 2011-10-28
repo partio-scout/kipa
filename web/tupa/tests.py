@@ -174,9 +174,9 @@ def TulosTestFactory(fixture_name):
                         settings.DEBUG=False
                         self.sarjat=Sarja.objects.select_related().all()
                         virheet=[]
-                        #cache.clear()
                         settings.TAUSTALASKENTA = False 
                         settings.CACHE_TULOKSET = False 
+                        settings.CACHE_BACKEND = 'dummy:///' # No cache in use
                         for s in self.sarjat:
                                 virheilmoitus=unicode("")
                                 for f in self.fixtures:

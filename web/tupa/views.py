@@ -63,9 +63,9 @@ def tarkistaVirhe(syote):
         return syottovirhe
 
 def tehtavanTilanne(tehtava):
-        vartioita=len( tehtava.sarja.vartio_set.all() )
-        syotteita=len( Syote.objects.filter(maarite__osa_tehtava__tehtava=tehtava) )
-        maaritteita=len( SyoteMaarite.objects.filter(osa_tehtava__tehtava=tehtava) )
+        vartioita=tehtava.sarja.vartio_set.all().count() 
+        syotteita=Syote.objects.filter(maarite__osa_tehtava__tehtava=tehtava).count
+        maaritteita=SyoteMaarite.objects.filter(osa_tehtava__tehtava=tehtava).count()
         tila=("a",tehtava.nimi)
         if syotteita: tila=("o",tehtava.nimi)
         if syotteita==vartioita*maaritteita : tila=("s",tehtava.nimi)

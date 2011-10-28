@@ -66,14 +66,14 @@ class Sarja(models.Model) :
                 return self.kisa.nimi+"."+self.nimi
         
         def save(self,*args,**kwargs) : # Tulokset uusiksi tallennuksen yhteydessä
-                #self.tuloksetUusiksi()
+                self.tuloksetUusiksi()
                 super(Sarja,self).save(*args,**kwargs)
         def delete(self,*args,**kwargs) : # Tulokset uusiksi tallennuksen yhteydessä
-                #self.tuloksetUusiksi()
+                self.tuloksetUusiksi()
                 super(Sarja,self).delete(*args,**kwargs)
 
         def laskeTulokset(self) :
-                """
+                log.disableLogging()
                 cacheName = str(self.kisa.id)+'_'+str(self.id)+'_tulokset'
                 laskeeName = str(self.kisa.id)+'_'+str(self.id)+'_laskee'
                 laskee=cache.get( laskeeName ) 
@@ -85,35 +85,28 @@ class Sarja(models.Model) :
                 if not tulokset or not settings.CACHE_TULOKSET : # ei cachea -> lasketaan
                         cache.set( cacheName , 0 ) # Tunnistetaan laskennanaikainen tallennus
                         cache.set( laskeeName , True , 30) # Merkitään laskennan olevan käynnissä
-                        tulokset = laskeSarja(self) 
+                        syotteet=Syote.objects.filter(maarite__osa_tehtava__tehtava__sarja=self)
+                        if syotteet: onjoo=1 # Pakotetaan syotteiden haku tähän.
+                        tulokset = laskeSarja(self,syotteet) 
                         cache.delete( laskeeName ) # Merkitään laskennan olevan valmis
                         ctulos = cache.get( cacheName ) # Muutoksia laskennan aikana 
                         if ctulos == None :  return tulokset # Jätetään cacheamatta.
                 # Asetetaan cache.
                 cache.set( cacheName , tulokset, settings.CACHE_TULOKSET_TIME)
-                """
-                syotteet=Syote.objects.filter(maarite__osa_tehtava__tehtava__sarja=self)
-                if syotteet: onjoo=1 # Pakotetaan syotteiden haku tähän.
-                log.disableLogging()
-                #log.logString= lambda x : 1
-                #log.logFunction= lambda x : 1
-
-                tulokset = laskeSarja(self,syotteet) 
                 return tulokset
         
         
         def taustaTulokset(self) :
-                pakkotehtajotain=1
-                #if settings.TAUSTALASKENTA: # Tulosten laskenta taustalla threadissa.
-                #        laskeeName = str(self.kisa.id)+'_'+str(self.id)+'_laskee'
-                #        laskee=cache.get( laskeeName ) # Tarkistetaan ollaanko tuloksia jo laskemassa.
-                #        if not laskee:  thread.start_new_thread( self.laskeTulokset,() )
+                if settings.TAUSTALASKENTA: # Tulosten laskenta taustalla threadissa.
+                        log.disableLogging()
+                        laskeeName = str(self.kisa.id)+'_'+str(self.id)+'_laskee'
+                        laskee=cache.get( laskeeName ) # Tarkistetaan ollaanko tuloksia jo laskemassa.
+                        if not laskee:  thread.start_new_thread( self.laskeTulokset,() )
         
         def tuloksetUusiksi(self) :
                 # Poistetaan tulosten cache
-                pakkotehdajotain=1
-                #cacheName = str(self.kisa.id)+'_'+str(self.id)+'_tulokset'
-                #cache.delete(cacheName)
+                cacheName = str(self.kisa.id)+'_'+str(self.id)+'_tulokset'
+                cache.delete(cacheName)
         
         class Meta:
                 verbose_name_plural = "Sarjat"
