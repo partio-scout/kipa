@@ -193,7 +193,11 @@ def luoTehtavanKaava(t,v):
         ot_lauseet=[]
         
         log.logString( u"<h3>Tehtävä: " + t.nimi.upper()+"</h3>" )
-        log.logString( u"kaava =  " + t.kaava.upper() )
+        if t.kaava.upper()=="SS" :
+                log.logString( u"kaava = ⚡⚡" )
+        else:
+                log.logString( u"kaava =  " + t.kaava.upper() )
+        
         for ot in osatehtavat:
                 log.logString( u"\n<b>Osatehtävä: " + ot.nimi.upper()+"</b>" )
                 pino.append(ot.nimi)

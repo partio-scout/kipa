@@ -112,15 +112,16 @@ def kisa(request,kisa_nimi) :
                                         'vanha_tietokanta' : vanha_tietokanta},
                                         context_instance=RequestContext(request),)
 
-def tulosta(request,kisa_nimi):
+def tulosta(request,kisa_nimi,tulostyyppi=""):
         """
         Valintalista kisan sarjojen tuloksista.
         """
         sarjat = Sarja.objects.select_related().filter(kisa__nimi=kisa_nimi)
         return render_to_response('tupa/tulosta.html', {'sarja_list': sarjat,
                                                         'kisa_nimi': kisa_nimi, 
-                                                        'heading' : 'Tulokset sarjoittain' },
-                                                        context_instance=RequestContext(request),)
+                                                        'tulostyyppi': tulostyyppi,
+                                                        'heading': 'Tulokset sarjoittain' },
+                                                        context_instance=RequestContext(request) ,)
 
 def maaritaKisa(request, kisa_nimi=None,talletettu=None):
         """
