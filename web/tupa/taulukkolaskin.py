@@ -76,12 +76,12 @@ def laske(lauseke,m={},funktiot={}):
                         tulos = eval(lause)
                 # Poikkeukset laskuille joita ei pysty laskemaan. 
                 # Pyrkii estämaan ettei koko paska kaadu virheissä.
-                #except DivisionByZero : tulos= None 
+                except DivisionByZero : tulos= None 
                 except KeyError : tulos= "S" # Syottämättomiä muuttujia
-                #except TypeError :  tulos= None 
-                #except SyntaxError: tulos= None
-                #except NameError : tulos= None
-                #except : tulos= None
+                except TypeError :  tulos= None 
+                except SyntaxError: tulos= None
+                except NameError : tulos= None
+                except : tulos= None
         try :
                 log.logString( "laskettu tulos= " + str(tulos.quantize(Decimal('0.1'),rounding=ROUND_HALF_UP ))  )
         except : 

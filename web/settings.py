@@ -113,10 +113,10 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     #'django.contrib.formtools',
     'django.template',
-    'django.contrib.databrowse'
+    'django.contrib.databrowse'     
+
 ]
 
 LOGIN_URL = ('/kipa/')
 LOGIN_REDIRECT_URL = ('/kipa/')
-
-
+TEST_RUNNER = ('tupa.tests.run_one_fixture')
