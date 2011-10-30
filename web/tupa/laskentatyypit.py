@@ -267,16 +267,17 @@ def run_dict(list,funktio,*param):
 
 def suorita(funktio,*param):
         tulos=None
+        log.muteLogging()
         try :
                 tulos= run_dict(0,funktio,*param)
         except :
                 tulos= Decimal(0)
+        log.unmuteLogging()
         log.logFunction(funktio,param,tulos)
         return tulos
 
 def suorita_lista(funktio,a,*param ) :
         tulos=None
-
         if len(param)==0 :
                 if not type(a)==bool and not type(a)==Decimal and not type(a)==DictDecimal and len(a)==0 :
                         raise KeyError
@@ -294,7 +295,8 @@ def suorita_lista(funktio,a,*param ) :
         else : 
                 tulos= run_dict(1,funktio,a,*param)
                 parametrit= [a]
-                parametrit= parametrit.extend(param)
+                for p in param :
+                        parametrit.append(p)
                 log.logFunction(funktio,parametrit,tulos)
         return tulos
 

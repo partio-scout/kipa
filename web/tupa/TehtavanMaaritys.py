@@ -253,7 +253,7 @@ def lataa_parametrit(state,data,prefix,ot_tyyppi,muunnos=None):
                 loadField(state,data,"kaava",['parametrit'],'vartion_kaava','arvo',prefix+ot_tyyppi)
                 loadField(state,data,"arvio",['parametrit'],'arvio','arvo',prefix+ot_tyyppi)
                 
-                if ot_tyyppi[1:]=="pk" : # Puhdaskaavan generointi muista tyypeistä
+                if ot_tyyppi[1:]=="pk" and not data['tyyppi']=="pk" : # Puhdaskaavan generointi muista tyypeistä
                         parametrit={}
                         loadField(parametrit,data,"parhaan_kaava",['parametrit'],'parhaan_kaava','arvo')
                         loadField(parametrit,data,"jaettavat",['parametrit'],'jaettavat','arvo')
@@ -264,7 +264,7 @@ def lataa_parametrit(state,data,prefix,ot_tyyppi,muunnos=None):
                         loadField(parametrit,data,"vartion_kaava",['parametrit'],'vartion_kaava','arvo')
                         loadField(parametrit,data,"arvio",['parametrit'],'arvio','arvo')
                         loadField(parametrit,data,"tapa",['parametrit'],'tapa','arvo')
-                        state[prefix+ot_tyyppi+'_kaava']="No??" #luoOsatehtavanKaava(peruskaava,parametrit)
+                        state[prefix+ot_tyyppi+'_kaava']=luoOsatehtavanKaava(peruskaava,parametrit)
                 try:
                         if not state[prefix+ot_tyyppi+"_parhaan_haku"]=="": 
                                 state[prefix+ot_tyyppi+'_kiintea']=""

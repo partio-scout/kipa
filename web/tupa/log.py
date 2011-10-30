@@ -1,6 +1,11 @@
 import settings
 
 laskentaloki=""
+try:
+        stack
+except: 
+        stack=[]
+
 
 def __noLogString(string):
         return None
@@ -17,12 +22,8 @@ def __noLogFunction(function,params,result):
 def __logFunction(function,params,result):
         global laskentaloki
         if(params):
+
                 laskentaloki += "<br>"
-            #if hasattr(params, '__len__') and len(params)==1 and (hasattr(params[0], 'keys') or hasattr(params[0], '__contains__' )) and  len(params[0])>5 :
-            #    laskentaloki+= unicode(function.__name__)  + u"(x)=<b>" + unicode(result) + "</b>  kun <br>"
-            #    laskentaloki+= "x= <b>" + unicode(params[0]) +"</b>"
-                
-            #else :
                 laskentaloki+= unicode(function.__name__)  + "("
                 try :
                         for p in params : laskentaloki += unicode(p) + ", "
@@ -31,7 +32,6 @@ def __logFunction(function,params,result):
                 laskentaloki+= ")=<br><b> " + unicode(result)
                 laskentaloki+= "</b>"
                 laskentaloki += "<br>"
-
 
 
 def enableLogging() :
@@ -46,6 +46,21 @@ def disableLogging() :
         logString= __noLogString
         logFunction= __noLogFunction
 
+def muteLogging() :
+        global stack
+        global logString
+        global logFunction
+        stack.append(logString)
+        stack.append(logFunction)
+        disableLogging()
+
+def unmuteLogging() :
+        global stack
+        global logString
+        global logFunction
+        logFunction=stack.pop()
+        logString=stack.pop()
+
 def clearLoki() :
         global laskentaloki
         laskentaloki=""
@@ -53,7 +68,6 @@ def clearLoki() :
 def palautaLoki() :
         global laskentaloki
         return laskentaloki
-
 
 try:
         logString

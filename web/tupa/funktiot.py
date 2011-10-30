@@ -9,6 +9,8 @@ from laskentatyypit import *
 from math import *
 #from decimal import *
 
+import log
+
 def pienin(*lista) :
         if len(lista)==1 : return min(lista) 
         return min(*lista)
