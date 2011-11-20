@@ -1,5 +1,10 @@
 {% extends "tupa/base.html" %}
 {% block title %}Sarjakohtaiset tulokset{% endblock title %} 
+{% block header %}
+{% if vaihtoaika %}
+<meta http-equiv="REFRESH" content="{{vaihtoaika}};url=/kipa/{{kisa_nimi}}/heijasta/sarja/{{vaihto_id}}/">
+{% endif %}
+{% endblock header %}
 {% block content %} 
 
 <table width="100%" border="0" id="tulostaulukko_otsikko">
@@ -173,7 +178,8 @@
  ! = vartion sijaluku laskettu tasapisteissä määräävien tehtävien perusteella
 </p>
 </form>
-<p><a href="../tuloste/{{tulos_taulukko.0.0.id}}/" target="_blank">Tulokset tulostusmuodossa</a></p>
-<p><a href="../csv/{{tulos_taulukko.0.0.id}}/">Tulokset CSV tiedostoon</a></p>
+<p><a href="/kipa/{{kisa_nimi}}/tulosta/sarja/tuloste/{{tulos_taulukko.0.0.id}}/" target="_blank">Tulokset tulostusmuodossa</a></p>
+<p><a href="/kipa/{{kisa_nimi}}/tulosta/sarja/csv/{{tulos_taulukko.0.0.id}}/">Tulokset CSV tiedostoon</a></p>
+<p><a href="/kipa/{{kisa_nimi}}/heijasta/sarja/">Heijasta tuloksia</a></p>
 
 {% endblock %}

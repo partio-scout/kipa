@@ -4,6 +4,16 @@
 
 from decimal import *
 
+import log
+
+def decimal_uni(self) :
+        return str(self.quantize(Decimal('0.1'),rounding=ROUND_HALF_UP ) )
+def decimal_repr(self) :
+        return unicode(self.quantize(Decimal('0.1'),rounding=ROUND_HALF_UP ) )
+
+Decimal.__repr__= decimal_repr
+Decimal.__unicode__= decimal_uni
+
 class SequenceOperations :
         def __add__(self,other): return self.operate_to_all( lambda a,b: a+b , other)
         def __radd__(self,other): return self.operate_to_all(lambda a,b: a+b , other)
@@ -42,6 +52,7 @@ class MathDict(SequenceOperations,dict):
                         for k in self.keys() : 
                                 oper[k]=function2(self[k],other)
                 return oper
+
         def listaksi(self) :
                 """
                 Palauttaa kaikki alkiot yhdessä listasa
@@ -50,7 +61,13 @@ class MathDict(SequenceOperations,dict):
                 for k,v in self.items(): lista.append(v)
                 return lista
 
-
+        def __unicode__(self):
+                stringi = u"{"
+                for k,v in self.items(): 
+                        if v:stringi+= unicode(k) + ": " + unicode(v) + ", "
+                stringi=stringi[:-2]
+                stringi+="}"
+                return stringi
 
 class MathList(SequenceOperations,list):
         """
@@ -73,8 +90,15 @@ class MathList(SequenceOperations,list):
                 for l in self :
                         ajettava
 
-
         def listaksi(self) : return list(self)
+
+        def __unicode__(self):
+                stringi=u"["
+                for l in self :
+                        if l : stringi+= unicode(l) + ", " 
+                stringi= stringi[:-2]
+                stringi+="]"
+                return stringi
 
 class MathListDict(SequenceOperations,dict) :
         """
@@ -138,6 +162,8 @@ class DictDecimal(SequenceOperations,Decimal) :
                 else:  
                         oper = DictDecimal( function2(Decimal(self), other) )
                 return oper
+        __repr__=decimal_repr
+
         def listaksi(self) :
                 return [self]
      
@@ -152,8 +178,11 @@ def karsi(lista,lfunktio):
             varvi=[]
             tavaraa=0
             for l in lista :
-                if hasattr(l, '__contains__') : # on lista
-                        if len(l)>index and not type(l)==str and not type(l)==unicode:
+                if hasattr(l, 'keys') :  # on sanakirja
+                        pakotus=1 # Tähän täytyisi tehdä rekursiivinen sanakirjojen operointi
+                
+                elif hasattr(l, '__contains__') : # on lista
+                        if len(l)>index and not type(l)==str and not type(l)==unicode :
                                         tavaraa=1
                                         varvi.append( l[index] )
                 else: 
@@ -193,6 +222,7 @@ def listaksi(a,*opt):
                 for v in joukkio :
                         if type(v)==DictDecimal or type(v)==Decimal :
                                 lista.append(DictDecimal(v))
+                        else : lista.append(v)
                 return lista
         try:
                 lista=[]
@@ -216,7 +246,8 @@ def run_dict(list,funktio,*param):
                 if not list :
                         return funktio(*params)
                 else :
-                        return karsi(params,funktio)             
+                        return karsi(params,funktio)
+
         rValue=MathDict({})
         for k in mdict.keys() :
                 parametrit = []
@@ -235,24 +266,37 @@ def run_dict(list,funktio,*param):
         return rValue        
 
 def suorita(funktio,*param):
+        tulos=None
+        log.muteLogging()
         try :
-                return run_dict(0,funktio,*param)
+                tulos= run_dict(0,funktio,*param)
         except :
-                return Decimal(0)
+                tulos= Decimal(0)
+        log.unmuteLogging()
+        log.logFunction(funktio,param,tulos)
+        return tulos
 
 def suorita_lista(funktio,a,*param ) :
+        tulos=None
         if len(param)==0 :
                 if not type(a)==bool and not type(a)==Decimal and not type(a)==DictDecimal and len(a)==0 :
                         raise KeyError
-                if type(a)==unicode : 
-                        return None
-                if type(a) == Decimal or type(a)==bool : 
-                        return karsi(listaksi(a),funktio) 
-                        #return funktio( *listaksi(a) )
-                if type(a)==list : 
-                        return karsi(a,funktio)# (*a)
+                elif type(a)==unicode : 
+                        tulos=None
+                elif type(a) == Decimal or type(a)==bool : 
+                        tulos=karsi(listaksi(a),funktio) 
+                elif type(a)==list : 
+                        tulos=karsi(a,funktio)
                 else : 
-                        return karsi(listaksi(a.listaksi()), funktio) #  funktio( *listaksi(a.listaksi()) )
+                        tulos=karsi(listaksi(a.listaksi()), funktio) 
+
+                parametrit= [a]
+                log.logFunction(funktio,parametrit,tulos)
         else : 
-                return run_dict(1,funktio,a,*param)
+                tulos= run_dict(1,funktio,a,*param)
+                parametrit= [a]
+                for p in param :
+                        parametrit.append(p)
+                log.logFunction(funktio,parametrit,tulos)
+        return tulos
 

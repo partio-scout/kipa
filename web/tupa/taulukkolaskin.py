@@ -4,9 +4,11 @@
 
 import re
 from laskentatyypit import *
-from decimal import *
 from funktiot import perusfunktiot
 from funktiot import listafunktiot
+import settings
+#from tupa.log import * 
+import log
 
 pfunktiot={}
 lfunktiot={}
@@ -38,7 +40,10 @@ def laske(lauseke,m={},funktiot={}):
         f.update(pfunktiot)
         f.update(lfunktiot)
         f=dictToMathDict(f)
-
+        
+        log.logString( "<h4> Laskenta: </h4>" )
+        log.logString( u"Tehtävän lause = " + lauseke )
+        
         # Poistetaan välilyonnit ja enterit:
         lause = lauseke.replace('\n','')
         lause = lause.replace('\r','')
@@ -54,34 +59,35 @@ def laske(lauseke,m={},funktiot={}):
         
         # Korvataan muuttujien nimet oikeilla muuttujilla:
         lause=re.sub(r"\.([a-zA-Z_]\w*)(?=\.)",r"['\g<1>']",lause) # .x. -> [x].
-        lause=re.sub(r"(?<!\d)\.([a-zA-Z_0-9]+)",r"['\g<1>']",lause)       # .x  -> [x]
-        lause=re.sub(r"([a-zA-Z_0-9]\w*(?=[[]))",r"m['\g<1>']",lause) # x[  -> m[x][
+        lause=re.sub(r"\.([a-zA-Z_]+[a-zA-Z_0-9]*)",r"['\g<1>']",lause)       # .x  -> [x]
+        lause=re.sub(r"\.(\d+)(?=["+oper+"]|$|\]|\))",r"['\g<1>']",lause)       # .n  -> [n]
+        lause=re.sub(r"(?<=["+oper+r"])([a-zA-Z_0-9]\w*(?=[[]))",r"m['\g<1>']",lause) # x[  -> m[x][
         # Korvataan yksinäiset muuttujat (lähinnä funktioita):
         lause=re.sub(r"([a-zA-Z_][a-zA-Z_0-9]*(?![a-zA-Z_0-9.(]|[[']))",r"m['\g<1>']",lause) # x -> m[x]
         lause=re.sub(r"([a-zA-Z_][a-zA-Z_0-9]*(?![a-zA-Z_0-9.]|[[']))",r"f['\g<1>']",lause) # x( -> f[x](
         tulos=None
         # lasketaan tulos:
-        try: 
-                tulos = eval(lause)
-                #print "tulostyyppi " + str( type(tulos) )
-                #print "tulos " + str( tulos )
-        # Poikkeukset laskuille joita ei pysty laskemaan. 
-        # Pyrkii estämaan ettei koko paska kaadu virheissä.
-        except DivisionByZero : return None 
-        except KeyError : return "S" # Syottämättomiä muuttujia
-        except TypeError :  return None 
-        except SyntaxError: return None
-        except NameError : return None
-        except : return None
-        if type(tulos)==DictDecimal : return Decimal(tulos)
-        if type(tulos)==Decimal : return tulos
-        if type(tulos)==unicode : return tulos
-        if type(tulos)==int : return tulos
-        if type(tulos)==bool : return tulos
-        if type(tulos)==str : return tulos
-        #print "jee"
-        #print tulos
-        return "S"
+        if settings.DEBUG:
+                try: 
+                        tulos = eval(lause)
+                except KeyError : tulos = "S" # Syottämättomiä muuttujia
+        else :
+                try: 
+                        tulos = eval(lause)
+                # Poikkeukset laskuille joita ei pysty laskemaan. 
+                # Pyrkii estämaan ettei koko paska kaadu virheissä.
+                except DivisionByZero : tulos= None 
+                except KeyError : tulos= "S" # Syottämättomiä muuttujia
+                except TypeError :  tulos= None 
+                except SyntaxError: tulos= None
+                except NameError : tulos= None
+                except : tulos= None
+        try :
+                log.logString( "laskettu tulos= " + str(tulos.quantize(Decimal('0.1'),rounding=ROUND_HALF_UP ))  )
+        except : 
+                log.logString( "laskettu tulos= " + str(tulos)  )
+        if type(tulos)==DictDecimal : tulos= Decimal(tulos)
+        return tulos
 
 def laskeTaulukko(taulukko,muuttujat) :
         """

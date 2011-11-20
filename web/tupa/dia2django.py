@@ -105,8 +105,6 @@ def luoMallienRungot(kaavion_nimi,koodin_nimi):
 
         for l in haeLuokat(objektit):
                 koodi= korvaaLuokanRunko(koodi,l)
-        print type(koodi)
-        print koodi
         source=open( koodin_nimi,"w" )
         source.write( koodi.encode("utf-8"))
 

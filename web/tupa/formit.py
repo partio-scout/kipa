@@ -57,6 +57,7 @@ class TuhoaTehtavaForm(ModelForm):
         tarkistettu = forms.BooleanField(widget=forms.HiddenInput,required=False)
         lyhenne = forms.CharField(widget=forms.HiddenInput,required=False)
         maksimipisteet = forms.CharField(widget=forms.HiddenInput,required=False)
+        svirhe = forms.BooleanField(widget=forms.HiddenInput,required=False)
         class Meta :
                 model=Tehtava
 

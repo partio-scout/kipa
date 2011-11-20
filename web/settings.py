@@ -1,6 +1,5 @@
 import os
 
-import tupa
 import time
 try :
         fin = open("templates/version.html", "r")
@@ -40,9 +39,9 @@ DATABASE_PORT = ''             # Set to empty string for default. Not used with 
 TAUSTALASKENTA = True # Tulokset lasketaan taustalla (Vaatii toimiakseen tomivan cachekokoonpanon)
 CACHE_TULOKSET = True # Etsitaanko tuloksia cachesta
 CACHE_TULOKSET_TIME = 1800 # Tuloscachen voimassaoloaika viimeisesta nayttokerrasta. [s]
-CACHE_BACKEND = 'locmem:///' # Cache system for developement
 #CACHE_BACKEND = 'locmem:///' # Cache system for developement
-
+#CACHE_BACKEND = 'locmem:///' # Cache system for developement
+CACHE_BACKEND = 'db://tupa_tulos_cache'
 if not CACHE_TULOKSET : 
         CACHE_BACKEND = 'dummy:///' # No cache in use
         TAUSTALASENTA = False
@@ -113,8 +112,12 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     #'django.contrib.formtools',
     'django.template',
-    'django.contrib.databrowse'
+    'django.contrib.databrowse'     
+
 ]
 
 LOGIN_URL = ('/kipa/')
 LOGIN_REDIRECT_URL = ('/kipa/')
+
+TEST_RUNNER = ('tupa.tests.run_one_fixture')
+
