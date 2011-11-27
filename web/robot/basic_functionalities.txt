@@ -1,0 +1,41 @@
+*** Settings ***
+Documentation   simple login
+Suite Setup     Start Selenium Server
+Suite Teardown  Stop Selenium Server
+Force Tags      regression  smoke
+Library         SeleniumLibrary
+
+*** Variables ***
+${BROWSER}  Firefox
+${KIPA MAIN PAGE}  http://localhost:8000/kipa/
+${COMPETITION SET}  http://localhost:8000/kipa/uusiKisa/maarita/
+
+*** Test Cases ***
+Login To Main Page Should Succeed
+    [Documentation]  This test case tries to login to admin page an after that create new competition on normal GUI.
+    Open Kipa Main Page
+
+Creating of new competition should succeed
+    Create new Competition  testi_kisa
+
+*** Keywords ***
+Open KiPa Main Page
+    Open Browser  ${KIPA MAIN PAGE}  ${BROWSER}
+    Maximize Browser Window
+    Title Should Be  Kipa - kaikki kisat
+
+Create New Competition
+    [Arguments]  ${competition}
+    [Documentation]  Creates new competition and checks that it exist. Expects Competition name to be given as argument.
+    Open Browser  ${KIPA MAIN PAGE}  ${BROWSER}
+    Maximize Browser Window
+    Click Link  Luo uusi kisa
+    Location Should Be  ${COMPETITION SET}
+    Input Text  id_nimi  ${competition}
+    Click Button  tallenna
+    Close Browser
+    Open Browser  ${KIPA MAIN PAGE}
+    Click Link  ${competition}
+    Location Should Be  ${KIPA MAIN PAGE}${competition}/
+    Close Browser
+
