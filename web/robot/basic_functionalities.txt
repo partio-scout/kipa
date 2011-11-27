@@ -20,22 +20,27 @@ Creating of new competition should succeed
 
 *** Keywords ***
 Open KiPa Main Page
-    Open Browser  ${KIPA MAIN PAGE}  ${BROWSER}
+    Open Browser And Maximize  ${KIPA MAIN PAGE}
     Maximize Browser Window
     Title Should Be  Kipa - kaikki kisat
 
 Create New Competition
     [Arguments]  ${competition}
     [Documentation]  Creates new competition and checks that it exist. Expects Competition name to be given as argument.
-    Open Browser  ${KIPA MAIN PAGE}  ${BROWSER}
-    Maximize Browser Window
+    Open Browser And Maximize  ${KIPA MAIN PAGE}
     Click Link  Luo uusi kisa
     Location Should Be  ${COMPETITION SET}
     Input Text  id_nimi  ${competition}
     Click Button  tallenna
     Close Browser
-    Open Browser  ${KIPA MAIN PAGE}
+    Open Browser And Maximize  ${KIPA MAIN PAGE}
     Click Link  ${competition}
     Location Should Be  ${KIPA MAIN PAGE}${competition}/
+    Title Should Be  Kipa - ${competition}
     Close Browser
+
+Open Browser and Maximize
+    [Arguments]  ${page}
+    Open Browser  ${page}  ${BROWSER}
+    Maximize Browser Window
 
