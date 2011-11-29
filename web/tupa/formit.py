@@ -115,6 +115,7 @@ class PisteField(forms.CharField) :
         Decimal field accepting "kesk",h and ,/. as decimal delimiter 
         """
         def clean(self, value) :
+                value = value.strip()
                 haku = re.match(r"^((\d*)[,.]?\d+)$",value)
                 if haku:
                         merkkijono='0'+haku.group(0)
@@ -140,6 +141,7 @@ class AikaField(forms.CharField):
         Converts input to an string number, time in seconds.
         """
         def clean(self, value) :
+                value = value.strip()
                 super(AikaField, self).clean(value)
                 haku = re.match(r"^(\d+):(\d+):(\d+)$",value)    
                 if haku:
