@@ -1,21 +1,20 @@
 *** Settings ***
-Documentation   simple login
+Documentation   Testataan perustoiminnallisuudet
 Suite Setup     Start Selenium Server
 Suite Teardown  Stop Selenium Server
 Force Tags      regression  smoke
 Library         SeleniumLibrary
 
 *** Variables ***
-${BROWSER}  firefox
+${BROWSER}  Firefox
 ${KIPA MAIN PAGE}  http://localhost:8000/kipa/
 ${COMPETITION SET}  http://localhost:8000/kipa/uusiKisa/maarita/
 
 *** Test Cases ***
-Login To Main Page Should Succeed
-    [Documentation]  This test case tries to login to admin page an after that create new competition on normal GUI.
+Avataan pääsivu
     Open Kipa Main Page
 
-Creating of new competition should succeed
+Luodaan uusi kisa
     Create new Competition  testi_kisa
 
 *** Keywords ***
