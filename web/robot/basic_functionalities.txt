@@ -1,21 +1,28 @@
 *** Settings ***
 Documentation   Testataan perustoiminnallisuudet
-Suite Setup     Start Selenium Server
+Suite Setup     Kipa Suite Setup
 Suite Teardown  Stop Selenium Server
+Test Setup      Open Competition
+Test Teardown   Close Browser
 Force Tags      regression  smoke
 Library         SeleniumLibrary
 
 *** Variables ***
 ${BROWSER}  Firefox
 ${KIPA MAIN PAGE}  http://localhost:8000/kipa/
-${COMPETITION SET}  http://localhost:8000/kipa/uusiKisa/maarita/
+${CREATE COMPETITION URL}  http://localhost:8000/kipa/uusiKisa/maarita/
+${COMPETITION NAME}  ${EMPTY}
 
 *** Test Cases ***
-Avataan pääsivu
-    Open Kipa Main Page
-
 Luodaan uusi kisa
+    [Setup]  Open Kipa Main Page
     Create new Competition  testi_kisa
+
+Testaa syötä suorituksia
+    Open Sub Page Verify Location And Title  syötä suorituksia  http://localhost:8000/kipa/testi_kisa/syota/  Kipa - Syötä tuloksia
+
+Testaa syötä suorituksia - tarkistus
+    Open Sub Page Verify Location And Title  syötä suorituksia - tarkistus  http://localhost:8000/kipa/testi_kisa/syota/tarkistus/  Kipa - Syötä tuloksia
 
 *** Keywords ***
 Open KiPa Main Page
@@ -26,9 +33,8 @@ Open KiPa Main Page
 Create New Competition
     [Arguments]  ${competition}
     [Documentation]  Creates new competition and checks that it exist. Expects Competition name to be given as argument.
-    Open Browser And Maximize  ${KIPA MAIN PAGE}
     Click Link  Luo uusi kisa
-    Location Should Be  ${COMPETITION SET}
+    Location Should Be  ${CREATE COMPETITION URL}
     Input Text  id_nimi  ${competition}
     Click Button  tallenna
     Close Browser
@@ -36,10 +42,35 @@ Create New Competition
     Click Link  ${competition}
     Location Should Be  ${KIPA MAIN PAGE}${competition}/
     Title Should Be  Kipa - ${competition}
-    Close Browser
+    Set Global Variable  ${COMPETITION NAME}  ${competition}
 
 Open Browser and Maximize
     [Arguments]  ${page}
     Open Browser  ${page}  ${BROWSER}
     Maximize Browser Window
+
+Kipa Suite Setup
+    Start Selenium Server
+    Open Kipa Main Page
+
+Open Sub Page Verify Location And Title
+    [Arguments]  ${link_name}  ${link}  ${page_title}
+    Click Link  ${link_name}
+    Location Should Be  ${link}
+    Title Should Be  ${page_title}
+
+Open Competition
+    Open KiPa Main Page
+    Click Link  ${COMPETITION NAME}
+    Title Should Be  Kipa - ${COMPETITION NAME}
+
+Remove Competition
+    [Arguments]  ${competition}
+    Open KiPa Main Page
+    click link  ${competition}
+    title should be  Kipa - ${competition}
+    Click Link  poista kisa
+    Title Should Be  Kipa - poista kisa
+    Click Button  Kyllä
+    Location Should Be  ${KIPA MAIN PAGE}
 
