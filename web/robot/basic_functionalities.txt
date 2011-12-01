@@ -9,43 +9,51 @@ Library         SeleniumLibrary
 
 *** Variables ***
 ${BROWSER}  Firefox
-${KIPA MAIN PAGE URL}  http://localhost:8000/kipa/
-${CREATE COMPETITION URL}  http://localhost:8000/kipa/uusiKisa/maarita/
-${COMPETITION NAME}  ${EMPTY}
+${KIPA_URL}  ${EMPTY}
+${KISAN_MAARITYS_URL}  ${EMPTY}
+${TESTIKISA}  testikisa
 
 *** Test Cases ***
 Luodaan uusi kisa
     [Setup]  Open Kipa Main Page
-    Create new Competition  testi_kisa
+    Create new Competition  ${TESTIKISA}
 
 Testaa syötä suorituksia
-    Open Sub Page Verify Location And Title  syötä suorituksia  http://localhost:8000/kipa/testi_kisa/syota/  Kipa - Syötä tuloksia
+    Open Sub Page Verify Location And Title  syötä suorituksia  ${TULOSTEN_SYOTTO_URL}  Kipa - Syötä tuloksia
 
 Testaa syötä suorituksia - tarkistus
-    Open Sub Page Verify Location And Title  syötä suorituksia - tarkistus  http://localhost:8000/kipa/testi_kisa/syota/tarkistus/  Kipa - Syötä tuloksia
+    Open Sub Page Verify Location And Title  syötä suorituksia - tarkistus  ${TULOSTEN_SYOTTO_TARKISTUS_URL}  Kipa - Syötä tuloksia
+
+Testataan tulossivu
+    Open Sub Page Verify Location And Title  sarjan tulokset  ${TULOSTEN_TARKISTUS_URL}  ${TULOSTEN_TARKISTUS_OTSIKKO}
+
+Testaa Tuomarineuvosto
+    Open Sub Page Verify Location And Title  tuomarineuvoston työkalu  ${TUOMARINEUVOSTO_URL}  Kipa - Tuomarineuvoston antamien tulosten määritys
+
+Testaa laskennan tilanne
+    Open Sub Page Verify Location And Title  laskennan tilanne  ${LASKENNAN_TILANNE_URL}  ${LASKENNAN_TILANNE_OTSIKKO}
 
 Poista Luotu Kisa
-    Remove Competition  ${COMPETITION NAME}
+    Remove Competition  ${TESTIKISA}
 
 *** Keywords ***
 Open KiPa Main Page
-    Open Browser And Maximize  ${KIPA MAIN PAGE URL}
+    Open Browser And Maximize  ${KIPA_URL}/
     Maximize Browser Window
-    Title Should Be  Kipa - kaikki kisat
+    Title Should Be  ${KIPA_OTSIKKO}
 
 Create New Competition
     [Arguments]  ${competition}
-    [Documentation]  Creates new competition and checks that it exist. Expects Competition name to be given as argument.
+    [Documentation]  Creates new competition and checks that it exist. Expects TESTIKISA to be given as argument.
     Click Link  Luo uusi kisa
-    Location Should Be  ${CREATE COMPETITION URL}
+    Location Should Be  ${KIPA_URL}/${KISAN_MAARITYS_URL}/
     Input Text  id_nimi  ${competition}
     Click Button  tallenna
     Close Browser
-    Open Browser And Maximize  ${KIPA MAIN PAGE URL}
+    Open Browser And Maximize  ${KIPA_URL}/
     Click Link  ${competition}
-    Location Should Be  ${KIPA MAIN PAGE URL}${competition}/
+    Location Should Be  ${KIPA_URL}/${competition}/
     Title Should Be  Kipa - ${competition}
-    Set Global Variable  ${COMPETITION NAME}  ${competition}
 
 Open Browser and Maximize
     [Arguments]  ${page}
@@ -59,13 +67,13 @@ Kipa Suite Setup
 Open Sub Page Verify Location And Title
     [Arguments]  ${link_name}  ${link}  ${page_title}
     Click Link  ${link_name}
-    Location Should Be  ${link}
+    Location Should Be  ${KIPA_URL}/${TESTIKISA}/${link}/
     Title Should Be  ${page_title}
 
 Open Competition
     Open KiPa Main Page
-    Click Link  ${COMPETITION NAME}
-    Title Should Be  Kipa - ${COMPETITION NAME}
+    Click Link  ${TESTIKISA}
+    Title Should Be  Kipa - ${TESTIKISA}
 
 Remove Competition
     [Arguments]  ${competition}
@@ -73,9 +81,9 @@ Remove Competition
     click link  ${competition}
     title should be  Kipa - ${competition}
     Click Link  poista kisa
-    Title Should Be  Kipa - Poista kisa
+    Title Should Be  ${KISAN_POISTO_OTSIKKO}
     Click Button  Kyllä
-    sleep   2 sec
+    sleep  2 sec
     Title Should Be  Kipa - kaikki kisat
-    Location Should Be  ${KIPA MAIN PAGE URL}
+    Location Should Be  ${KIPA_URL}/
 
