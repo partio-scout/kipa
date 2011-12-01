@@ -1,48 +1,57 @@
-# Kipan sivu
-#
+# Kipa pääsivu
+
+KIPA_OTSIKKO = 'Kipa - kaikki kisat'
+KIPA_URL = 'http://127.0.0.1:8000/'
+
 #Suoritusten syöttö
 
-http://127.0.0.1:8000/kipa/testi_kisa/syota/
-Kipa - Syötä tuloksia
+TULOSTEN_SYOTTO_OTSIKKO = 'Kipa - Syötä tuloksia'
+TULOSTEN_SYOTTO_URL' = syota/'
 
-http://127.0.0.1:8000/kipa/testi_kisa/syota/tarkistus/
-Kipa - Syötä tuloksia
+TULOSTEN_SYOTTO_TARKISTUS_OTSIKKO = 'Kipa - Syötä tuloksia'
+TULOSTEN_SYOTTO_TARKISTUS_URL = 'syota/tarkistus/'
 
 #Tulokset
-http://127.0.0.1:8000/kipa/testi_kisa/tulosta/
-Kipa - Tulokset sarjoittain
 
-http://127.0.0.1:8000/kipa/testi_kisa/maarita/tuomarineuvos/
-Kipa - Tuomarineuvoston antamien tulosten määritys
+TULOSTEN_TARKISTUS_OTSIKKO = 'Kipa - Tulokset sarjoittain'
+TULOSTEN_TARKISTUS_URL = 'tulosta/'
 
-http://127.0.0.1:8000/kipa/testi_kisa/tulosta/tilanne/
-Kipa - Tupa - laskennan tilanne
+TUOMARINEUVOSTO_OTSIKKO = 'Kipa - Tuomarineuvoston antamien tulosten määritys'
+TUOMARINEUVOSTO_URL = 'maarita/tuomarineuvos/'
 
-http://127.0.0.1:8000/kipa/testi_kisa/heijasta/sarja/
-Sarjakohtaiset tulokset
+LASKENNAN_TILANNE_OTSIKKO = 'Kipa - Tupa - laskennan tilanne'
+LASKENNAN_TILANNE_URL = 'tulosta/tilanne/'
+
+SARJAKOHTAISET_TULOKSET_OTSIKKO = 'Sarjakohtaiset tulokset'
+SARJAKOHTAISET_TULOKSET_URL = 'heijasta/sarja/'
 
 #Kisan Määritykset
-http://127.0.0.1:8000/kipa/testi_kisa/maarita/
-Kipa - Määritä kisa
 
-http://127.0.0.1:8000/kipa/testi_kisa/maarita/vartiot/
-Kipa - Määritä vartiot
+KISAN_MAARITYS_OTSIKKO = 'Kipa - Määritä kisa'
+KISAN_MAARITYS_URL = 'maarita/'
 
-http://127.0.0.1:8000/kipa/testi_kisa/maarita/tehtava/
-Kipa - Muokkaa tehtävää
+VARTIOIDEN_MAARITYS_OTSIKKO = 'Kipa - Määritä vartiot'
+VARTIOIDEN_MAARITYS_URL = 'maarita/vartiot/'
 
-http://127.0.0.1:8000/kipa/testi_kisa/maarita/testitulos/
-Kipa - Testituloksien määritys
+TEHTAVAN_MAARITYS_OTSIKKO = 'Kipa - Muokkaa tehtävää'
+TEHTAVAN_MAARITYS_URL = 'maarita/tehtava/'
+
+TESTITUOKSIEN_MAARITYS_OTSIKKO = 'Kipa - Testituloksien määritys'
+TESTITUOKSIEN_MAARITYS_URL = 'maarita/testitulos/'
 
 #Ylläpito
-http://127.0.0.1:8000/kipa/
-Kipa - kaikki kisat
 
-http://127.0.0.1:8000/kipa/testi_kisa/tallenna/
-????
+# huom Listaa kaikki kisat linkki vie pääsivulle
+KAIKKI_KISAT_OTSIKKO = 'Kipa - kaikki kisat'
+KAIKKI_KISAT_URL = KIPA_OTSIKKO
 
-http://127.0.0.1:8000/kipa/testi_kisa/korvaa/
-Kipa - Korvaa kisa tiedostosta
+# Tallenna kisa, ei vielä osaamista filen vastaanottoon, TBD
+"http://127.0.0.1:8000/kipa/testi_kisa/tallenna/
 
-http://127.0.0.1:8000/kipa/testi_kisa/poista/
-Kipa - Poista kisa
+# Kisan tuonti tiedostosta, tod.näk helppoa käyttämällä fixtuuria. TBD 
+#http://127.0.0.1:8000/kipa/testi_kisa/korvaa/
+#Kipa - Korvaa kisa tiedostosta
+
+KISAN_POISTO_OTSIKKO = 'Kipa - Poista kisa'
+KISAN_POISTO_URL = 'poista/'
+
