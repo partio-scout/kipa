@@ -9,7 +9,7 @@ Library         SeleniumLibrary
 
 *** Variables ***
 ${BROWSER}  Firefox
-${KIPA MAIN PAGE}  http://localhost:8000/kipa/
+${KIPA MAIN PAGE URL}  http://localhost:8000/kipa/
 ${CREATE COMPETITION URL}  http://localhost:8000/kipa/uusiKisa/maarita/
 ${COMPETITION NAME}  ${EMPTY}
 
@@ -24,9 +24,12 @@ Testaa syötä suorituksia
 Testaa syötä suorituksia - tarkistus
     Open Sub Page Verify Location And Title  syötä suorituksia - tarkistus  http://localhost:8000/kipa/testi_kisa/syota/tarkistus/  Kipa - Syötä tuloksia
 
+Poista Luotu Kisa
+    Remove Competition  ${COMPETITION NAME}
+
 *** Keywords ***
 Open KiPa Main Page
-    Open Browser And Maximize  ${KIPA MAIN PAGE}
+    Open Browser And Maximize  ${KIPA MAIN PAGE URL}
     Maximize Browser Window
     Title Should Be  Kipa - kaikki kisat
 
@@ -38,9 +41,9 @@ Create New Competition
     Input Text  id_nimi  ${competition}
     Click Button  tallenna
     Close Browser
-    Open Browser And Maximize  ${KIPA MAIN PAGE}
+    Open Browser And Maximize  ${KIPA MAIN PAGE URL}
     Click Link  ${competition}
-    Location Should Be  ${KIPA MAIN PAGE}${competition}/
+    Location Should Be  ${KIPA MAIN PAGE URL}${competition}/
     Title Should Be  Kipa - ${competition}
     Set Global Variable  ${COMPETITION NAME}  ${competition}
 
@@ -70,7 +73,9 @@ Remove Competition
     click link  ${competition}
     title should be  Kipa - ${competition}
     Click Link  poista kisa
-    Title Should Be  Kipa - poista kisa
+    Title Should Be  Kipa - Poista kisa
     Click Button  Kyllä
-    Location Should Be  ${KIPA MAIN PAGE}
+    sleep   2 sec
+    Title Should Be  Kipa - kaikki kisat
+    Location Should Be  ${KIPA MAIN PAGE URL}
 
