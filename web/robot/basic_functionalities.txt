@@ -63,6 +63,7 @@ Open Browser and Maximize
 Kipa Suite Setup
     Start Selenium Server
     Open Kipa Main Page
+    Close Browser
 
 Open Sub Page Verify Location And Title
     [Arguments]  ${link_name}  ${link}  ${page_title}
