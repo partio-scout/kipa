@@ -41,8 +41,8 @@ VARTIOIDEN_MAARITYS_URL = 'maarita/vartiot'
 TEHTAVAN_MAARITYS_OTSIKKO = 'Kipa - Muokkaa tehtävää'
 TEHTAVAN_MAARITYS_URL = 'maarita/tehtava'
 
-TESTITUOKSIEN_MAARITYS_OTSIKKO = 'Kipa - Testituloksien määritys'
-TESTITUOKSIEN_MAARITYS_URL = 'maarita/testitulos'
+TESTITULOKSIEN_MAARITYS_OTSIKKO = 'Kipa - Testituloksien määritys'
+TESTITULOKSIEN_MAARITYS_URL = 'maarita/testitulos'
 
 #Ylläpito
 
@@ -57,7 +57,7 @@ KAIKKI_KISAT_URL = KIPA_OTSIKKO
 #http://127.0.0.1:8000/kipa/testi_kisa/korvaa/
 #Kipa - Korvaa kisa tiedostosta
 
-# Posta Kisa
+# Poista Kisa
 KISAN_POISTO_OTSIKKO = 'Kipa - Poista kisa'
 KISAN_POISTO_URL = 'poista'
 

@@ -33,6 +33,15 @@ Testaa Tuomarineuvosto
 Testaa laskennan tilanne
     Open Sub Page Verify Location And Title  laskennan tilanne  ${LASKENNAN_TILANNE_URL}  ${LASKENNAN_TILANNE_OTSIKKO}
 
+Testaa vartioiden määritys
+    Open Sub Page Verify Location And Title  määrittele vartiot  ${VARTIOIDEN_MAARITYS_URL}  Kipa - Määritä vartiot
+
+Testaa tehtävien määritys
+    Open Sub Page Verify Location And Title  määrittele tehtävät  ${TEHTAVAN_MAARITYS_URL}  Kipa - Muokkaa tehtävää
+
+Testaa Testituloksien määritys
+    Open Sub Page Verify Location And Title  määrittele testituloksia  ${TESTITULOKSIEN_MAARITYS_URL}  Kipa - Testituloksien määritys
+
 Poista Luotu Kisa
     Remove Competition  ${TESTIKISA}
 
