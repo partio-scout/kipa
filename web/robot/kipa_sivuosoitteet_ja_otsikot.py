@@ -53,9 +53,9 @@ KAIKKI_KISAT_URL = KIPA_OTSIKKO
 # Tallenna kisa, ei vielä osaamista filen vastaanottoon, TBD
 #"http://127.0.0.1:8000/kipa/testi_kisa/tallenna/
 
-# Kisan tuonti tiedostosta, tod.näk helppoa käyttämällä fixtuuria. TBD 
-#http://127.0.0.1:8000/kipa/testi_kisa/korvaa/
-#Kipa - Korvaa kisa tiedostosta
+# Kisan tuonti tiedostosta, tod.näk helppoa käyttämällä fixtuuria.TBD 
+KISAN_TUONTI_URL = 'korvaa'
+KISAN_TUONTI_OTSIKKO = 'Kipa - Korvaa kisa tiedostosta'
 
 # Poista Kisa
 KISAN_POISTO_OTSIKKO = 'Kipa - Poista kisa'

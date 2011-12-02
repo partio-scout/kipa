@@ -18,35 +18,45 @@ Luodaan uusi kisa
     [Setup]  Open Kipa Main Page
     Create new Competition  ${TESTIKISA}
 
-Testaa syötä suorituksia
+Tarkista syötä suorituksia
     Open Sub Page Verify Location And Title  syötä suorituksia  ${TULOSTEN_SYOTTO_URL}  Kipa - Syötä tuloksia
 
-Testaa syötä suorituksia - tarkistus
+Tarkista syötä suorituksia - tarkistus
     Open Sub Page Verify Location And Title  syötä suorituksia - tarkistus  ${TULOSTEN_SYOTTO_TARKISTUS_URL}  Kipa - Syötä tuloksia
 
-Testataan tulossivu
+Tarkista tulossivu
     Open Sub Page Verify Location And Title  sarjan tulokset  ${TULOSTEN_TARKISTUS_URL}  ${TULOSTEN_TARKISTUS_OTSIKKO}
 
-Testaa Tuomarineuvosto
+Tarkista Tuomarineuvosto
     Open Sub Page Verify Location And Title  tuomarineuvoston työkalu  ${TUOMARINEUVOSTO_URL}  Kipa - Tuomarineuvoston antamien tulosten määritys
     Page Should Contain Button  Peruuta
     Page Should Contain Button  tallenna
 
-Testaa laskennan tilanne
+Tarkista laskennan tilanne
     Open Sub Page Verify Location And Title  laskennan tilanne  ${LASKENNAN_TILANNE_URL}  ${LASKENNAN_TILANNE_OTSIKKO}
 
-Testaa vartioiden määritys
+Tarkista vartioiden määritys
     Open Sub Page Verify Location And Title  määrittele vartiot  ${VARTIOIDEN_MAARITYS_URL}  Kipa - Määritä vartiot
     Page Should Contain Button  Peruuta
     Page Should Contain Button  tallenna
 
-Testaa tehtävien määritys
+Tarkista tehtävien määritys
     Open Sub Page Verify Location And Title  määrittele tehtävät  ${TEHTAVAN_MAARITYS_URL}  Kipa - Muokkaa tehtävää
 
-Testaa Testituloksien määritys
+Tarkista Testituloksien määritys
     Open Sub Page Verify Location And Title  määrittele testituloksia  ${TESTITULOKSIEN_MAARITYS_URL}  Kipa - Testituloksien määritys
     Page Should Contain Button  Peruuta
     Page Should Contain Button  tallenna
+
+Tarkista palauta kisa
+    Open Sub Page Verify Location And Title  palauta kisa  ${KISAN_TUONTI_URL}  ${KISAN_TUONTI_OTSIKKO}
+    Page Should Contain Button  Peruuta
+    Page Should Contain Button  tallenna
+    Page Should Contain Element  file
+
+Tarkista sarjan tulokset
+    Open Sub Page Verify Location And Title  sarjan tulokset  ${TULOSTEN_TARKISTUS_URL}  ${TULOSTEN_TARKISTUS_OTSIKKO}
+    Page Should Contain Link  Heijasta tuloksia
 
 Poista Luotu Kisa
     Remove Competition  ${TESTIKISA}
