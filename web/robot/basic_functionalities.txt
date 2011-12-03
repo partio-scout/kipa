@@ -73,7 +73,7 @@ Create New Competition
     Click Link  Luo uusi kisa
     Location Should Be  ${KIPA_URL}/${KISAN_MAARITYS_URL}/
     Input Text  id_nimi  ${competition}
-    Click Button  Tallenna &raquo;
+    Click Button  Tallenna
     Close Browser
     Open Browser And Maximize  ${KIPA_URL}/
     Click Link  ${competition}
