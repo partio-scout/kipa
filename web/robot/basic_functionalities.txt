@@ -112,4 +112,6 @@ Remove Competition
     sleep  2 sec
     Title Should Be  Kipa - kaikki kisat
     Location Should Be  ${KIPA_URL}/
+    Page Should Not Contain Link  ${competition}
+    Page Should Not Contain  ${competition}
 
