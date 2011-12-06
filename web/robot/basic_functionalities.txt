@@ -7,12 +7,6 @@ Test Teardown   Close Browser
 Force Tags      regression  smoke
 Library         SeleniumLibrary
 
-*** Variables ***
-${BROWSER}  Firefox
-${KIPA_URL}  ${EMPTY}
-${KISAN_MAARITYS_URL}  ${EMPTY}
-${TESTIKISA}  testikisa
-
 *** Test Cases ***
 Luodaan uusi kisa
     [Setup]  Open Kipa Main Page

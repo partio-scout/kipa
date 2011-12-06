@@ -1,7 +1,7 @@
 # coding=UTF8
 
 # Testikisan nimimääritys, oletusarvona: testikisa
-# TESTIKISA = 'Kisa testausta varten'
+TESTIKISA = 'testikisa'
 
 # Kipa pääsivu
 
