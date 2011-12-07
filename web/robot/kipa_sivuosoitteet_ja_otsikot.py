@@ -1,4 +1,4 @@
-# coding=UTF8
+# encoding=UTF8
 
 # Testikisan nimimääritys, oletusarvona: testikisa
 TESTIKISA = 'testikisa'
@@ -33,7 +33,7 @@ SARJAKOHTAISET_TULOKSET_URL = 'heijasta/sarja'
 #Kisan Määritykset
 
 KISAN_MAARITYS_OTSIKKO = 'Kipa - Määritä kisa'
-KISAN_MAARITYS_URL = 'uusiKisa/maarita'
+KISAN_MAARITYS_URL = 'maarita'
 
 VARTIOIDEN_MAARITYS_OTSIKKO = 'Kipa - Määritä vartiot'
 VARTIOIDEN_MAARITYS_URL = 'maarita/vartiot'
