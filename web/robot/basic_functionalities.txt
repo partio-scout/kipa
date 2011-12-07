@@ -64,7 +64,19 @@ Lisätään sarjoja kisaan
     Open Competition
     Open Sub Page Verify Location And Title  määrittele vartiot  ${VARTIOIDEN_MAARITYS_URL}  Kipa - Määritä vartiot
     Page Should Contain Link  sininen
-    Page Should Contain Link  sininen
+    Page Should Contain Link  harmaa
+
+Poistetaan sarja kisasta
+    Click Link  määrittele kisan perustiedot
+    Location Should Be  ${KIPA_URL}/${TESTIKISA}/${KISAN_MAARITYS_URL}/
+    comment  Valitaan eka chekboxi, sininen
+    Select Checkbox  id_sarja_set-0-DELETE
+    Click Button  tallenna
+    Close Browser
+    Open Competition
+    Open Sub Page Verify Location And Title  määrittele vartiot  ${VARTIOIDEN_MAARITYS_URL}  Kipa - Määritä vartiot
+    Page Should Contain Link  harmaa
+    Page Should Not Contain Link  sininen
 
 Poista Luotu Kisa
     Remove Competition  ${TESTIKISA}
