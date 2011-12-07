@@ -107,9 +107,12 @@ def syotteen_tyyppi_field(posti,data,prefix,syote_id,tyyppi):
         id=prefix+"_"+tyyppi+"_"+nimi+"_tyyppi"
         field_name="tyyppi_"+nimi
         value="piste"
-        
+
+        validi=True
+        if 'valid' in data.keys() and data['valid'] == False: validi=False
+
         # formin taytto 
-        if data['tyyppi'] == tyyppi or tyyppi== "vk" or tyyppi=="pk"  :
+        if data['tyyppi'] == tyyppi or (not posti and (tyyppi== "vk" or tyyppi=="pk") )  :
                 maarite_index=0
                 maaritteet=[]
                 for k,v in data['maaritteet'].items() : maaritteet.append( (v['nimi'], k ) )
