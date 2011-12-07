@@ -5,6 +5,7 @@ Suite Teardown  Stop Selenium Server
 Test Setup      Open Competition
 Test Teardown   Close Browser
 Force Tags      regression  smoke
+Metadata        encoding  utf-8
 Library         SeleniumLibrary
 
 *** Test Cases ***
@@ -52,6 +53,19 @@ Tarkista sarjan tulokset
     Open Sub Page Verify Location And Title  sarjan tulokset  ${TULOSTEN_TARKISTUS_URL}  ${TULOSTEN_TARKISTUS_OTSIKKO}
     Page Should Contain Link  Heijasta tuloksia
 
+Lisätään sarjoja kisaan
+    Click Link  määrittele kisan perustiedot
+    Location Should Be  ${KIPA_URL}/${TESTIKISA}/${KISAN_MAARITYS_URL}/
+    Title Should Be  Kipa - Määritä kisa
+    Input Text  id_sarja_set-0-nimi  sininen
+    Input Text  id_sarja_set-1-nimi  harmaa
+    Click Button  tallenna
+    Close Browser
+    Open Competition
+    Open Sub Page Verify Location And Title  määrittele vartiot  ${VARTIOIDEN_MAARITYS_URL}  Kipa - Määritä vartiot
+    Page Should Contain Link  sininen
+    Page Should Contain Link  sininen
+
 Poista Luotu Kisa
     Remove Competition  ${TESTIKISA}
 
@@ -65,7 +79,7 @@ Create New Competition
     [Arguments]  ${competition}
     [Documentation]  Creates new competition and checks that it exist. Expects TESTIKISA to be given as argument.
     Click Link  Luo uusi kisa
-    Location Should Be  ${KIPA_URL}/${KISAN_MAARITYS_URL}/
+    Location Should Be  ${KIPA_URL}/uusiKisa/${KISAN_MAARITYS_URL}/
     Input Text  id_nimi  ${competition}
     Click Button  tallenna
     Close Browser
