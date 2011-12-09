@@ -1,63 +1,63 @@
 # encoding=UTF8
 
 # Testikisan nimimääritys, oletusarvona: testikisa
-TESTIKISA = 'testikisa'
+TESTIKISA = u'testikisa'
 
 # Kipa pääsivu
 
-KIPA_OTSIKKO = 'Kipa - kaikki kisat'
-KIPA_URL = 'http://127.0.0.1:8000/kipa'
+KIPA_OTSIKKO = u'Kipa - kaikki kisat'
+KIPA_URL = u'http://127.0.0.1:8000/kipa'
 
 #Suoritusten syöttö
 
-TULOSTEN_SYOTTO_OTSIKKO = 'Kipa - Syötä tuloksia'
-TULOSTEN_SYOTTO_URL = 'syota'
+TULOSTEN_SYOTTO_OTSIKKO = u'Kipa - Syötä tuloksia'
+TULOSTEN_SYOTTO_URL = u'syota'
 
-TULOSTEN_SYOTTO_TARKISTUS_OTSIKKO = 'Kipa - Syötä tuloksia'
-TULOSTEN_SYOTTO_TARKISTUS_URL = 'syota/tarkistus'
+TULOSTEN_SYOTTO_TARKISTUS_OTSIKKO = u'Kipa - Syötä tuloksia'
+TULOSTEN_SYOTTO_TARKISTUS_URL = u'syota/tarkistus'
 
 #Tulokset
 
-TULOSTEN_TARKISTUS_OTSIKKO = 'Kipa - Tulokset sarjoittain'
-TULOSTEN_TARKISTUS_URL = 'tulosta'
+TULOSTEN_TARKISTUS_OTSIKKO = u'Kipa - Tulokset sarjoittain'
+TULOSTEN_TARKISTUS_URL = u'tulosta'
 
-TUOMARINEUVOSTO_OTSIKKO = 'Kipa - Tuomarineuvoston antamien tulosten määritys'
-TUOMARINEUVOSTO_URL = 'maarita/tuomarineuvos'
+TUOMARINEUVOSTO_OTSIKKO = u'Kipa - Tuomarineuvoston antamien tulosten määritys'
+TUOMARINEUVOSTO_URL = u'maarita/tuomarineuvos'
 
-LASKENNAN_TILANNE_OTSIKKO = 'Kipa - Tupa - laskennan tilanne'
-LASKENNAN_TILANNE_URL = 'tulosta/tilanne'
+LASKENNAN_TILANNE_OTSIKKO = u'Kipa - Tupa - laskennan tilanne'
+LASKENNAN_TILANNE_URL = u'tulosta/tilanne'
 
-SARJAKOHTAISET_TULOKSET_OTSIKKO = 'Sarjakohtaiset tulokset'
-SARJAKOHTAISET_TULOKSET_URL = 'heijasta/sarja'
+SARJAKOHTAISET_TULOKSET_OTSIKKO = u'Sarjakohtaiset tulokset'
+SARJAKOHTAISET_TULOKSET_URL = u'heijasta/sarja'
 
 #Kisan Määritykset
 
-KISAN_MAARITYS_OTSIKKO = 'Kipa - Määritä kisa'
-KISAN_MAARITYS_URL = 'maarita'
+KISAN_MAARITYS_OTSIKKO = u'Kipa - Määritä kisa'
+KISAN_MAARITYS_URL = u'maarita'
 
-VARTIOIDEN_MAARITYS_OTSIKKO = 'Kipa - Määritä vartiot'
-VARTIOIDEN_MAARITYS_URL = 'maarita/vartiot'
+VARTIOIDEN_MAARITYS_OTSIKKO = u'Kipa - Määritä vartiot'
+VARTIOIDEN_MAARITYS_URL = u'maarita/vartiot'
 
-TEHTAVAN_MAARITYS_OTSIKKO = 'Kipa - Muokkaa tehtävää'
-TEHTAVAN_MAARITYS_URL = 'maarita/tehtava'
+TEHTAVAN_MAARITYS_OTSIKKO = u'Kipa - Muokkaa tehtävää'
+TEHTAVAN_MAARITYS_URL = u'maarita/tehtava'
 
-TESTITULOKSIEN_MAARITYS_OTSIKKO = 'Kipa - Testituloksien määritys'
-TESTITULOKSIEN_MAARITYS_URL = 'maarita/testitulos'
+TESTITULOKSIEN_MAARITYS_OTSIKKO = u'Kipa - Testituloksien määritys'
+TESTITULOKSIEN_MAARITYS_URL = u'maarita/testitulos'
 
 #Ylläpito
 
 # huom Listaa kaikki kisat linkki vie pääsivulle
-KAIKKI_KISAT_OTSIKKO = 'Kipa - kaikki kisat'
+KAIKKI_KISAT_OTSIKKO = u'Kipa - kaikki kisat'
 KAIKKI_KISAT_URL = KIPA_OTSIKKO
 
 # Tallenna kisa, ei vielä osaamista filen vastaanottoon, TBD
 #"http://127.0.0.1:8000/kipa/testi_kisa/tallenna/
 
 # Kisan tuonti tiedostosta, tod.näk helppoa käyttämällä fixtuuria.TBD 
-KISAN_TUONTI_URL = 'korvaa'
-KISAN_TUONTI_OTSIKKO = 'Kipa - Korvaa kisa tiedostosta'
+KISAN_TUONTI_URL = u'korvaa'
+KISAN_TUONTI_OTSIKKO = u'Kipa - Korvaa kisa tiedostosta'
 
 # Poista Kisa
-KISAN_POISTO_OTSIKKO = 'Kipa - Poista kisa'
-KISAN_POISTO_URL = 'poista'
+KISAN_POISTO_OTSIKKO = u'Kipa - Poista kisa'
+KISAN_POISTO_URL = u'poista'
 

@@ -5,7 +5,6 @@ Suite Teardown  Stop Selenium Server
 Test Setup      Open Competition
 Test Teardown   Close Browser
 Force Tags      regression  smoke
-Metadata        encoding  utf-8
 Library         SeleniumLibrary
 
 *** Test Cases ***
@@ -14,16 +13,16 @@ Luodaan uusi kisa
     Create new Competition  ${TESTIKISA}
 
 Tarkista syötä suorituksia
-    Open Sub Page Verify Location And Title  syötä suorituksia  ${TULOSTEN_SYOTTO_URL}  Kipa - Syötä tuloksia
+    Open Sub Page Verify Location And Title  syötä suorituksia  ${TULOSTEN_SYOTTO_URL}  ${TULOSTEN_SYOTTO_OTSIKKO}
 
 Tarkista syötä suorituksia - tarkistus
-    Open Sub Page Verify Location And Title  syötä suorituksia - tarkistus  ${TULOSTEN_SYOTTO_TARKISTUS_URL}  Kipa - Syötä tuloksia
+    Open Sub Page Verify Location And Title  syötä suorituksia - tarkistus  ${TULOSTEN_SYOTTO_TARKISTUS_URL}  ${TULOSTEN_SYOTTO_TARKISTUS_OTSIKKO}
 
 Tarkista tulossivu
     Open Sub Page Verify Location And Title  sarjan tulokset  ${TULOSTEN_TARKISTUS_URL}  ${TULOSTEN_TARKISTUS_OTSIKKO}
 
 Tarkista Tuomarineuvosto
-    Open Sub Page Verify Location And Title  tuomarineuvoston työkalu  ${TUOMARINEUVOSTO_URL}  Kipa - Tuomarineuvoston antamien tulosten määritys
+    Open Sub Page Verify Location And Title  tuomarineuvoston työkalu  ${TUOMARINEUVOSTO_URL}  ${TUOMARINEUVOSTO_OTSIKKO}
     Page Should Contain Button  Peruuta
     Page Should Contain Button  tallenna
 
@@ -31,15 +30,15 @@ Tarkista laskennan tilanne
     Open Sub Page Verify Location And Title  laskennan tilanne  ${LASKENNAN_TILANNE_URL}  ${LASKENNAN_TILANNE_OTSIKKO}
 
 Tarkista vartioiden määritys
-    Open Sub Page Verify Location And Title  määrittele vartiot  ${VARTIOIDEN_MAARITYS_URL}  Kipa - Määritä vartiot
+    Open Sub Page Verify Location And Title  määrittele vartiot  ${VARTIOIDEN_MAARITYS_URL}  ${VARTIOIDEN_MAARITYS_OTSIKKO}
     Page Should Contain Button  Peruuta
     Page Should Contain Button  tallenna
 
 Tarkista tehtävien määritys
-    Open Sub Page Verify Location And Title  määrittele tehtävät  ${TEHTAVAN_MAARITYS_URL}  Kipa - Muokkaa tehtävää
+    Open Sub Page Verify Location And Title  määrittele tehtävät  ${TEHTAVAN_MAARITYS_URL}  ${TEHTAVAN_MAARITYS_OTSIKKO}
 
 Tarkista Testituloksien määritys
-    Open Sub Page Verify Location And Title  määrittele testituloksia  ${TESTITULOKSIEN_MAARITYS_URL}  Kipa - Testituloksien määritys
+    Open Sub Page Verify Location And Title  määrittele testituloksia  ${TESTITULOKSIEN_MAARITYS_URL}  ${TESTITULOKSIEN_MAARITYS_OTSIKKO}
     Page Should Contain Button  Peruuta
     Page Should Contain Button  tallenna
 
@@ -62,7 +61,7 @@ Lisätään sarjoja kisaan
     Click Button  tallenna
     Close Browser
     Open Competition
-    Open Sub Page Verify Location And Title  määrittele vartiot  ${VARTIOIDEN_MAARITYS_URL}  Kipa - Määritä vartiot
+    Open Sub Page Verify Location And Title  määrittele vartiot  ${VARTIOIDEN_MAARITYS_URL}  ${VARTIOIDEN_MAARITYS_OTSIKKO}
     Page Should Contain Link  sininen
     Page Should Contain Link  harmaa
 
@@ -74,7 +73,7 @@ Poistetaan sarja kisasta
     Click Button  tallenna
     Close Browser
     Open Competition
-    Open Sub Page Verify Location And Title  määrittele vartiot  ${VARTIOIDEN_MAARITYS_URL}  Kipa - Määritä vartiot
+    Open Sub Page Verify Location And Title  määrittele vartiot  ${VARTIOIDEN_MAARITYS_URL}  ${VARTIOIDEN_MAARITYS_OTSIKKO}
     Page Should Contain Link  harmaa
     Page Should Not Contain Link  sininen
 
@@ -130,7 +129,7 @@ Remove Competition
     Title Should Be  ${KISAN_POISTO_OTSIKKO}
     Click Button  Kyllä
     sleep  2 sec
-    Title Should Be  Kipa - kaikki kisat
+    Title Should Be  ${KAIKKI_KISAT_OTSIKKO}
     Location Should Be  ${KIPA_URL}/
     Page Should Not Contain Link  ${competition}
     Page Should Not Contain  ${competition}
