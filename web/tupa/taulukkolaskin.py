@@ -47,7 +47,7 @@ def laske(lauseke,m={},funktiot={}):
         lause=re.sub(r"([-][0](?![0-9.]))",r"",lause) 
         # Korvataan funktiot
         # Vakionumerot numeroinstansseiksi:
-        oper= r"-+*/(,["
+        oper=r"-+*/(,["
         num = "-?\d+([.]\d+)?"
         lause=re.sub(r"((?<![^"+oper+"])"+num+")(?=["+oper+"]|$|\]|\))",r"num('\g<1>')",lause)
         # Korvataan muuttujien nimet oikeilla muuttujilla:
@@ -60,7 +60,7 @@ def laske(lauseke,m={},funktiot={}):
         tulos=None
         # lasketaan tulos:
         try: 
-       		tulos = eval(lause)
+       	        tulos = eval(lause)
         # Poikkeukset laskuille joita ei pysty laskemaan. 
         # Pyrkii estämaan ettei koko paska kaadu virheissä.
         except DivisionByZero : return None 
