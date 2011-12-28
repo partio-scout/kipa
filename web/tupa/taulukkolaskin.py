@@ -38,7 +38,6 @@ def laske(lauseke,m={},funktiot={}):
         f.update(pfunktiot)
         f.update(lfunktiot)
         f=dictToMathDict(f)
-
         # Poistetaan välilyonnit ja enterit:
         lause = lauseke.replace('\n','')
         lause = lause.replace('\r','')

@@ -17,45 +17,45 @@ import operator
 #from django.core.exceptions import ObjectDoesNotExist
 
 def korvaa(lause,pino,loppu=None) :
-        """
-        Korvaa lauseen muuttujat pinon mukaisella etuliitteella a.b.c jne.
-        "." lausessa muuttujan edessa liikuttaa muuttujaa pinossa ylospain 
-        optionaalinen loppu parametri lisaa muuttujan peraan arvon. 
-        loppu parametri poistuu ensimmaisella .a operaatiola
-        esim: 
-        >>> korvaa("c",["a","b"])
-        'a.b.c'
-        >>> korvaa(".c",["a","b"])
-        'a.c'
-        >>> korvaa("5+..c",["a","b"])
-        '5+c'
-        >>> korvaa("c",["a","b"],"56")
-        'a.b.c.56'
-        >>> korvaa(".c",["a","b"],"56")
-        'a.b.c'
-        >>> korvaa("..c",["a","b"],"56")
-        'a.c'
-        >>> korvaa("5+...c",["a","b"],"56")
-        '5+c'
-        >>> korvaa("5+...c*c",["a","b"],"56")
-        '5+c*a.b.c.56'
-        >>> korvaa("c(c)",["a","b"])
-        'c(a.b.c)'
-        >>> korvaa("funktio(c)",["a","b"])
-        'funktio(a.b.c)'
-	>>> korvaa("a.b...a..56",["a","b"],"56")
-	'56'
-	>>> korvaa("eka.toka...eka..56",["eka","toka"],"56")
-	'56'
-        """
-	# Ensiksi täytyy poistaa kaikki x..y -> y
-	poistoon= re.search(r"([^-.+*/()]+[.][.])",lause) 
-	while poistoon :
-		lause=re.sub(r"([^-.+*/()]+[.][.])","",lause,count=1)
-		poistoon= re.search(r"([^-.+*/()]+[.][.])",lause) 
-	haku= re.finditer("(\.{0,3})([a-zA-Z]\w*)(?:\.(\w+))?(?:\.(\w+))?(?:\.(\w+))?(?!\w*[(])",lause )
-        muutokset=[]
-        for h in haku :
+    """
+    Korvaa lauseen muuttujat pinon mukaisella etuliitteella a.b.c jne.
+    "." lausessa muuttujan edessa liikuttaa muuttujaa pinossa ylospain 
+    optionaalinen loppu parametri lisaa muuttujan peraan arvon. 
+    loppu parametri poistuu ensimmaisella .a operaatiola
+    esim: 
+    >>> korvaa("c",["a","b"])
+    'a.b.c'
+    >>> korvaa(".c",["a","b"])
+    'a.c'
+    >>> korvaa("5+..c",["a","b"])
+    '5+c'
+    >>> korvaa("c",["a","b"],"56")
+    'a.b.c.56'
+    >>> korvaa(".c",["a","b"],"56")
+    'a.b.c'
+    >>> korvaa("..c",["a","b"],"56")
+    'a.c'
+    >>> korvaa("5+...c",["a","b"],"56")
+    '5+c'
+    >>> korvaa("5+...c*c",["a","b"],"56")
+    '5+c*a.b.c.56'
+    >>> korvaa("c(c)",["a","b"])
+    'c(a.b.c)'
+    >>> korvaa("funktio(c)",["a","b"])
+    'funktio(a.b.c)'
+    >>> korvaa("a.b...a..56",["a","b"],"56")
+    '56'
+    >>> korvaa("eka.toka...eka..56",["eka","toka"],"56")
+    '56'
+    """
+    # Ensiksi täytyy poistaa kaikki x..y -> y
+    poistoon= re.search(r"([^-.+*/(),]+[.][.])",lause) 
+    while poistoon :
+        lause=re.sub(r"([^-.+*/()]+[.][.])","",lause,count=1)
+        poistoon= re.search(r"([^-.+*/()]+[.][.])",lause) 
+    haku= re.finditer("(\.{0,3})([a-zA-Z]\w*)(?:\.(\w+))?(?:\.(\w+))?(?:\.(\w+))?(?!\w*[(])",lause )
+    muutokset=[]
+    for h in haku :
                 ryhmat= h.groups()
                 vanha=ryhmat[0]
                 uusi=""
@@ -74,40 +74,45 @@ def korvaa(lause,pino,loppu=None) :
                         uusi=uusi+"."+loppu
                 uusi=uusi[1:]
                 muutokset.append((h.start(),h.end(),uusi))
-        if not len(muutokset) : return lause
-        muokattu=lause[:muutokset[0][0]]
-        for i in range(len(muutokset)-1):
+    if not len(muutokset) : return lause
+    muokattu=lause[:muutokset[0][0]]
+    for i in range(len(muutokset)-1):
                 muokattu=muokattu+muutokset[i][2]
                 muokattu=muokattu+lause[muutokset[i][1]:muutokset[i+1][0]]
-        muokattu=muokattu+muutokset[-1][2]
-        muokattu=muokattu+lause[muutokset[-1][1]:]
-        return muokattu
+    muokattu=muokattu+muutokset[-1][2]
+    muokattu=muokattu+lause[muutokset[-1][1]:]
+    return muokattu
 
 def suoritusJoukko(s) :
-        """  Siirtää parametriä yhden pykälän yleisempään suuntaaan.
-        Jolloin esim. vartion suorituksesta a tulee .a Joka on kaikkien saman sarjan vartioiden vastaava suoritus.
-        >>> suoritusJoukko('a')
-        '.a'
-        >>> suoritusJoukko('a*b+c')
-        '.a*.b+.c'
-	>>> suoritusJoukko('aikavali(...eka.a.b.2.2, a)')
-	'aikavali(...eka.a.b.2, .a)'
-        """
-	haku= re.finditer("(?<![a-zA-Z.])(\.*)([a-zA-Z]\w*)(?!\w*[(.])",s)
-        muutokset=[]
-        for h in haku :
-                uusi= "." + s[h.start():h.end()]
-                muutokset.append( (h.start(),h.end(),uusi) )
-        
-        muokattu=s[:muutokset[0][0]]
-        for i in range(len(muutokset)-1):
-                muokattu=muokattu+muutokset[i][2]
-                muokattu=muokattu+s[muutokset[i][1]:muutokset[i+1][0]]
+    """  Siirtää parametriä yhden pykälän yleisempään suuntaaan.
+    Jolloin esim. vartion suorituksesta a tulee .a Joka on kaikkien saman sarjan vartioiden vastaava suoritus.
+    >>> suoritusJoukko('a')
+    '.a'
+    >>> suoritusJoukko('a*b+c')
+    '.a*.b+.c'
+    >>> suoritusJoukko('aikavali(...eka.a.b.2.2, a)')
+    'aikavali(...eka.a.b.2, .a)'
+    >>> suoritusJoukko('aikavali(...eka.a.b.2, a)')
+    'aikavali(...eka.a.b, .a)'
+    """
+    muokattu= re.sub("(([.][^-,+*/ ]+)+)(\.[^-,+*/)(]*)(?![^-,+*/() ])","\g<1>",s) # poistettavat osat
+    muokattu= re.sub("(?<![a-zA-Z.])([a-zA-Z]\w*)(?!\w*[(.])",".\g<1>",muokattu)
+    """
+    haku= re.finditer("(?<![a-zA-Z.])([a-zA-Z]\w*)(?!\w*[(.])",s)
+    muutokset=[]
+    for h in haku : # pelkät muuttujat
+        uusi= "." + s[h.start():h.end()]
+        print uusi
+        muutokset.append( (h.start(),h.end(),uusi) )
+    muokattu=s[:muutokset[0][0]]
+    for i in range(len(muutokset)-1): 
+        muokattu=muokattu+muutokset[i][2]
+        muokattu=muokattu+s[muutokset[i][1]:muutokset[i+1][0]]
         muokattu=muokattu+muutokset[-1][2]
         muokattu=muokattu+s[muutokset[-1][1]:]
-	
-	muokattu= re.sub("(([.][^-,+*/ ]+)+)(\.[^-,+*/ ]*)(?![^-,+*/ ])","\g<1>",muokattu)
-        return muokattu
+        #muokattu= re.sub("(([.][^-,+*/ ]+)+)(\.[^-,+*/ ]*)(?![^-,+*/ ])","\g<1>",muokattu) # poistettavat osat
+    """
+    return muokattu
 
 def luoMuuttujat(sarja) :
         """ 
@@ -185,8 +190,6 @@ def luoLaskut(sarja) :
                                                 ot_lause=re.sub(p.nimi+r"(?!\w+)",p.arvo,ot_lause)
                                         # Pikatie "muk" -> "..mukana" 
                                         ot_lause=re.sub("muk"+r"(?!\w+)","..mukana",ot_lause)
-                                        
-
                                         # Muunnos "suor" -> kaikkien vartioiden lasketut suoritukset
                                         try:
                                                 vartion_kaava=parametrit.filter(nimi="vartion_kaava")[0].arvo
@@ -204,7 +207,6 @@ def luoLaskut(sarja) :
                                 ot_lause=korvaa(ot_lause,pino,str(v.nro))
                                 # Pikatie vartio -> vartion numero
                                 ot_lause=re.sub("vartio"+r"(?!\w+)", str(v.nro) ,ot_lause)
-                                
 				ot_lauseet.append((ot.nimi,ot_lause))
                                 pino.pop()
                         tehtava_lause=""
