@@ -33,7 +33,7 @@
 {% include "tupa/forms/funktiot_apu.html" %}
 <br>
 Vartion suorituksen kaava:
-<span onmouseover="tooltip.show('Anna kaava, joka määrää suoraan vartion osatehtävän pisteet. Syötteisiin ja osatehtäviin viitataan niiden kirjaimilla. Välilyöntejä sekä rivinvaihtoa voi käyttää vapaasti kaavan jäsentelyyn. Aikaa käsitellään laskennallisesti sekunteina. <br><br>Esimerkkejä:<br> a+b+c syötteiden summa <br>1/a (käänteisluku)<br>a (vartion syöte) <br>.a (sarjan kaikkien vartioiden syötteet)<br>min(.a) (sarjan vartioiden syötteen minimi)<br>mukana (mukana olevien vartioiden filtteri)<br>max(.a*mukana) (mukana olevien vartioiden syöteen maksimi)<br>vartio (vartion numero)<br>..b.a.vartio (syöte a vartiolle osatehtävästä b)<br>...start.c.a.vartio (syöte a vartiolle osatehtästä c tehtävään start)' );" 
+<span onmouseover="tooltip.show('Anna kaava, joka määrää suoraan vartion osatehtävän pisteet. Syötteisiin ja osatehtäviin viitataan niiden kirjaimilla. Välilyöntejä sekä rivinvaihtoa voi käyttää vapaasti kaavan jäsentelyyn. Aikaa käsitellään laskennallisesti sekunteina. <br><br>Esimerkkejä:<br> a+b+c syötteiden summa <br>1/a (käänteisluku)<br>a (vartion syöte) <br>.a (sarjan kaikkien vartioiden syötteet)<br>.a.vartio (vartion syöte)  <br>min(.a) (sarjan vartioiden syötteen minimi)<br>muk ja ..mukana (mukana olevien vartioiden filtteri)<br>max(.a*muk) (mukana olevien vartioiden syöteen maksimi)<br>vartio (vartion numero)<br>..b.a.vartio (syöte a vartiolle osatehtävästä b)<br>...start.c.a.vartio (syöte a vartiolle osatehtästä c tehtävään start)' );" 
 onmouseout="tooltip.hide();">
 	<img src="/kipamedia/help_small.png" />
 </span><br />
