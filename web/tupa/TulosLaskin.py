@@ -17,172 +17,158 @@ from models import *
 import log
 
 def korvaa(lause,pino,loppu=None) :
-        """
-        Korvaa lauseen muuttujat pinon mukaisella etuliitteella a.b.c jne.
-        "." lausessa muuttujan edessa liikuttaa muuttujaa pinossa ylospain 
-        optionaalinen loppu parametri lisaa muuttujan peraan arvon. 
-        loppu parametri poistuu ensimmaisella .a operaatiola
-        esim: 
-        >>> korvaa("c",["a","b"])
-        'a.b.c'
-        >>> korvaa(".c",["a","b"])
-        'a.c'
-        >>> korvaa("5+..c",["a","b"])
-        '5+c'
-        >>> korvaa("c",["a","b"],"56")
-        'a.b.c.56'
-        >>> korvaa(".c",["a","b"],"56")
-        'a.b.c'
-        >>> korvaa("..c",["a","b"],"56")
-        'a.c'
-        >>> korvaa("5+...c",["a","b"],"56")
-        '5+c'
-        >>> korvaa("5+...c*c",["a","b"],"56")
-        '5+c*a.b.c.56'
-        >>> korvaa("c(c)",["a","b"])
-        'c(a.b.c)'
-        >>> korvaa("funktio(c)",["a","b"])
-        'funktio(a.b.c)'
-        >>> korvaa("a.b...a..56",["a","b"],"56")
-        '56'
-        >>> korvaa("eka.toka...eka..56",["eka","toka"],"56")
-        '56'
-        """
-	# Ensiksi täytyy poistaa kaikki x..y -> y
-	poistoon= re.search(r"([^-.+*/()]+[.][.])",lause) 
-	while poistoon :
-		lause=re.sub(r"([^-.+*/()]+[.][.])","",lause,count=1)
-		poistoon= re.search(r"([^-.+*/()]+[.][.])",lause) 
-	haku= re.finditer("(?<![]])(\.{0,3})([a-zA-Z]\w*)(?:\.(\w+))?(?:\.(\w+))?(?:\.(\w+))?(?!\w*[(])",lause )
-        muutokset=[]
-        for h in haku :
-                ryhmat= h.groups()
-                vanha=ryhmat[0]
-                uusi=""
-                paluu=len(ryhmat[0])
-                if loppu:
-                        if paluu>0 : paluu=paluu-1
-                kohtaan = len(pino)-paluu
-                for i in range(kohtaan) :
-                        uusi=uusi+"." +pino[i]
-                for g in ryhmat[1:] :
-                        if g: 
-                                uusi=uusi+"."+g
-                                vanha=vanha+"."+g
-                vanha=vanha[1:]
-                if loppu and len(ryhmat[0])==0: 
-                        uusi=uusi+"."+loppu
-                uusi=uusi[1:]
-                muutokset.append((h.start(),h.end(),uusi))
-        if not len(muutokset) : return lause
-        muokattu=lause[:muutokset[0][0]]
-        for i in range(len(muutokset)-1):
-                muokattu=muokattu+muutokset[i][2]
-                muokattu=muokattu+lause[muutokset[i][1]:muutokset[i+1][0]]
-        muokattu=muokattu+muutokset[-1][2]
-        muokattu=muokattu+lause[muutokset[-1][1]:]
-        return muokattu
+    """
+    Korvaa lauseen muuttujat pinon mukaisella etuliitteella a.b.c jne.
+    "." lausessa muuttujan edessa liikuttaa muuttujaa pinossa ylospain 
+    optionaalinen loppu parametri lisaa muuttujan peraan arvon. 
+    loppu parametri poistuu ensimmaisella .a operaatiola
+    esim: 
+    >>> korvaa("c",["a","b"])
+    'a.b.c'
+    >>> korvaa(".c",["a","b"])
+    'a.c'
+    >>> korvaa("5+..c",["a","b"])
+    '5+c'
+    >>> korvaa("c",["a","b"],"56")
+    'a.b.c.56'
+    >>> korvaa(".c",["a","b"],"56")
+    'a.b.c'
+    >>> korvaa("..c",["a","b"],"56")
+    'a.c'
+    >>> korvaa("5+...c",["a","b"],"56")
+    '5+c'
+    >>> korvaa("5+...c*c",["a","b"],"56")
+    '5+c*a.b.c.56'
+    >>> korvaa("c(c)",["a","b"])
+    'c(a.b.c)'
+    >>> korvaa("funktio(c)",["a","b"])
+    'funktio(a.b.c)'
+    >>> korvaa("a.b...a..56",["a","b"],"56")
+    '56'
+    >>> korvaa("eka.toka...eka..56",["eka","toka"],"56")
+    '56'
+    """
+    # Ensiksi täytyy poistaa kaikki x..y -> y
+    poistoon= re.search(r"([^-.+*/(),]+[.][.])",lause) 
+    while poistoon :
+        lause=re.sub(r"([^-.+*/()]+[.][.])","",lause,count=1)
+        poistoon= re.search(r"([^-.+*/()]+[.][.])",lause) 
+    haku= re.finditer("(?<![]])(\.{0,3})([a-zA-Z]\w*)(?:\.(\w+))?(?:\.(\w+))?(?:\.(\w+))?(?!\w*[(])",lause )
+    muutokset=[]
+    for h in haku :
+        ryhmat= h.groups()
+        vanha=ryhmat[0]
+        uusi=""
+        paluu=len(ryhmat[0])
+        if loppu:
+            if paluu>0 : paluu=paluu-1
+            kohtaan = len(pino)-paluu
+            for i in range(kohtaan) :
+                uusi=uusi+"." +pino[i]
+            for g in ryhmat[1:] :
+                if g: 
+                    uusi=uusi+"."+g
+                    vanha=vanha+"."+g
+            vanha=vanha[1:]
+            if loppu and len(ryhmat[0])==0: 
+                uusi=uusi+"."+loppu
+            uusi=uusi[1:]
+            muutokset.append((h.start(),h.end(),uusi))
+    if not len(muutokset) : return lause
+    muokattu=lause[:muutokset[0][0]]
+    for i in range(len(muutokset)-1):
+        muokattu=muokattu+muutokset[i][2]
+        muokattu=muokattu+lause[muutokset[i][1]:muutokset[i+1][0]]
+    muokattu=muokattu+muutokset[-1][2]
+    muokattu=muokattu+lause[muutokset[-1][1]:]
+    return muokattu
 
 def suoritusJoukko(s) :
-        """  Siirtää parametriä yhden pykälän yleisempään suuntaaan.
-        Jolloin esim. vartion suorituksesta a tulee .a Joka on kaikkien saman sarjan vartioiden vastaava suoritus.
-        >>> suoritusJoukko('a')
-        '.a'
-        >>> suoritusJoukko('a*b+c')
-        '.a*.b+.c'
-	>>> suoritusJoukko('aikavali(...eka.a.b.2.2, a)')
-	'aikavali(...eka.a.b.2, .a)'
-        """
-	haku= re.finditer("(?<![]a-zA-Z.])(\.*)([a-zA-Z]\w*)(?!\w*[(.])",s)
-        muutokset=[]
-        for h in haku :
-                uusi= "." + s[h.start():h.end()]
-                muutokset.append( (h.start(),h.end(),uusi) )
-        
-        muokattu=s[:muutokset[0][0]]
-        for i in range(len(muutokset)-1):
-                muokattu=muokattu+muutokset[i][2]
-                muokattu=muokattu+s[muutokset[i][1]:muutokset[i+1][0]]
-        muokattu=muokattu+muutokset[-1][2]
-        muokattu=muokattu+s[muutokset[-1][1]:]
-	
-	muokattu= re.sub("(([.][^-,+*/ ]+)+)(\.[^-,+*/ ]*)(?![^-,+*/ ])","\g<1>",muokattu, re.UNICODE)
-        return muokattu
+    """  Siirtää parametriä yhden pykälän yleisempään suuntaaan.
+    Jolloin esim. vartion suorituksesta a tulee .a Joka on kaikkien saman sarjan vartioiden vastaava suoritus.
+    >>> suoritusJoukko('a')
+    '.a'
+    >>> suoritusJoukko('a*b+c')
+    '.a*.b+.c'
+    >>> suoritusJoukko('aikavali(...eka.a.b.2.2, a)')
+    'aikavali(...eka.a.b.2, .a)'
+    """
+    muokattu= re.sub("(([.][^-,+*/ ]+)+)(\.[^-,+*/)(]*)(?![^-,+*/() ])","\g<1>",s, re.UNICODE)
+    muokattu= re.sub("(?<![a-zA-Z.])([a-zA-Z]\w*)(?!\w*[(.])",".\g<1>",muokattu, re.UNICODE)
+    return muokattu
 
 def luoMuuttujat(vartiot,tehtavat,syotteet) :
-        """ 
-        Luo sarjan syotteiden muuttujasanakirjan:
-        rakenne on muotoa: muuttujat[tehtavan_nimi][osatatehtavan_nimi][syotteen_nimi][vartion_nro]=arvo
-        mukana olevien vartioista loytyy tieto: muuttujat[tehtavan_nimi]["mukana"][vartion_nro]=1
-        """
-        dict_teht=[]
-        for t in tehtavat:
-                dict_ot=[]
-                mukana_olevat=t.mukanaOlevatVartiot()
-                dict_m=[]
-                for m in mukana_olevat :
+    """ 
+    Luo sarjan syotteiden muuttujasanakirjan:
+    rakenne on muotoa: muuttujat[tehtavan_nimi][osatatehtavan_nimi][syotteen_nimi][vartion_nro]=arvo
+    mukana olevien vartioista loytyy tieto: muuttujat[tehtavan_nimi]["mukana"][vartion_nro]=1
+    """
+    dict_teht=[]
+    for t in tehtavat:
+        dict_ot=[]
+        mukana_olevat=t.mukanaOlevatVartiot()
+        dict_m=[]
+        for m in mukana_olevat :
                         dict_m.append( (str(m.nro),1)  )
-                dict_ot.append(("mukana" , MathDict(dict_m) ) )
-                osatehtavat=t.osatehtava_set.all()
-                for ot in osatehtavat:
-                        dict_maaritteet=[]
-                        maaritteet = ot.syotemaarite_set.all()
-                        for m in maaritteet:
-                                maaritteen_syotteet=syotteet.filter( maarite=m ) #m.syote_set.all()
-                                dict_syotteet=[]
-                                for v in vartiot :
-                                        s=maaritteen_syotteet.filter(vartio=v)
-                                        if len(s)==1 : 
-                                                try :
-                                                        dict_syotteet.append((str(v.nro),DictDecimal(s[0].arvo)))
-                                                except InvalidOperation: 
-                                                        if not s[0].arvo=="kesk":
-                                                                dict_syotteet.append((str(v.nro),s[0].arvo))
-                                                except TypeError : pass
-
-                                dict_maaritteet.append( (m.nimi,MathDict(dict_syotteet)) )
-                        dict_ot.append( (ot.nimi,MathDict(dict_maaritteet)) )
-                t_nimi= t.nimi.replace(" ","").replace("!","").lower()
-                dict_teht.append( (t_nimi,MathDict(dict_ot)) )
-        muuttujat= MathDict(dict_teht)
-        return muuttujat
+        dict_ot.append(("mukana" , MathDict(dict_m) ) )
+        osatehtavat=t.osatehtava_set.all()
+        for ot in osatehtavat:
+            dict_maaritteet=[]
+            maaritteet = ot.syotemaarite_set.all()
+            for m in maaritteet:
+                maaritteen_syotteet=syotteet.filter( maarite=m ) #m.syote_set.all()
+                dict_syotteet=[]
+                for v in vartiot :
+                    s=maaritteen_syotteet.filter(vartio=v)
+                    if len(s)==1 : 
+                        try :
+                            dict_syotteet.append((str(v.nro),DictDecimal(s[0].arvo)))
+                        except InvalidOperation: 
+                            if not s[0].arvo=="kesk":
+                                dict_syotteet.append((str(v.nro),s[0].arvo))
+                        except TypeError : pass
+                dict_maaritteet.append( (m.nimi,MathDict(dict_syotteet)) )
+            dict_ot.append( (ot.nimi,MathDict(dict_maaritteet)) )
+        t_nimi= t.nimi.replace(" ","").replace("!","").lower()
+        dict_teht.append( (t_nimi,MathDict(dict_ot)) )
+    muuttujat= MathDict(dict_teht)
+    return muuttujat
 
 def luoOsatehtavanKaava(ot_lause,parametrit):
-                """
-                paremtrit ovat sanakirja[parametrin nimi]=arvo
-                Luo yhden puhtaan kaavan jolla osatehtävän tulokset lasketaan.
-                -Sijoittaa parametrit
-                -Toteuttaa muk -> ..mukana pikatien
-                -Muuntaa suor pikatien kaikkien vartioiden suorituksiin parametristä vartion_kaava
-                """
-                ot_lause #=ot.kaava #.lower() 
-                log.logString( "  kaava = " + ot_lause )
-                korvautuu=True
+    """
+    paremtrit ovat sanakirja[parametrin nimi]=arvo
+    Luo yhden puhtaan kaavan jolla osatehtävän tulokset lasketaan.
+    -Sijoittaa parametrit
+    -Toteuttaa muk -> ..mukana pikatien
+    -Muuntaa suor pikatien kaikkien vartioiden suorituksiin parametristä vartion_kaava
+    """
+    ot_lause #=ot.kaava #.lower() 
+    log.logString( "  kaava = " + ot_lause )
+    korvautuu=True
 
-                log.logString( u"    Parametrit: "  )
-                for p_nimi,p_arvo in parametrit.items():
-                        log.logString( "         " + p_nimi +"= " + p_arvo  )
+    log.logString( u"    Parametrit: "  )
+    for p_nimi,p_arvo in parametrit.items():
+        log.logString( "         " + p_nimi +"= " + p_arvo  )
 
-                else :
-                        # Korvataan parametrit
-                        while korvautuu:
-                                korvautuu=False
-                                vanha=ot_lause
-                                for p_nimi,p_arvo in parametrit.items():
-                                        ot_lause=re.sub(p_nimi+r"(?!\w+)",p_arvo,ot_lause)
-                                # Pikatie "muk" -> "..mukana" 
-                                ot_lause=re.sub("muk"+r"(?!\w+)","..mukana",ot_lause)
-                                # Muunnos "suor" -> kaikkien vartioiden lasketut suoritukset
-                                try:
-                                        vartion_kaava=parametrit["vartion_kaava"] #.filter(nimi="vartion_kaava")[0].arvo
-                                        #vartion_kaava=re.sub("vartio"+r"(?!\w+)", str(v.nro) ,vartion_kaava)
-                                        for p_nimi,p_arvo in parametrit.items() :
-                                                vartion_kaava=re.sub(p_nimi+r"(?!\w+)",p_arvo,vartion_kaava)
-                                        ot_lause=re.sub("suor"+r"(?!\w+)",suoritusJoukko(vartion_kaava),ot_lause)
-                                except IndexError: pass
-                                except KeyError: pass
-                                if not ot_lause==vanha : korvautuu=True
-                return ot_lause
+    # Korvataan parametrit
+    while korvautuu:
+        korvautuu=False
+        vanha=ot_lause
+        for p_nimi,p_arvo in parametrit.items():
+            ot_lause=re.sub(p_nimi+r"(?!\w+)",p_arvo,ot_lause)
+        # Pikatie "muk" -> "..mukana" 
+        ot_lause=re.sub("muk"+r"(?!\w+)","..mukana",ot_lause)
+        # Muunnos "suor" -> kaikkien vartioiden lasketut suoritukset
+        try:
+            vartion_kaava=parametrit["vartion_kaava"] #.filter(nimi="vartion_kaava")[0].arvo
+            #vartion_kaava=re.sub("vartio"+r"(?!\w+)", str(v.nro) ,vartion_kaava)
+            for p_nimi,p_arvo in parametrit.items() :
+                vartion_kaava=re.sub(p_nimi+r"(?!\w+)",p_arvo,vartion_kaava)
+            ot_lause=re.sub("suor"+r"(?!\w+)",suoritusJoukko(vartion_kaava),ot_lause)
+        except IndexError: pass
+        except KeyError: pass
+        if not ot_lause==vanha : korvautuu=True
+    return ot_lause
 
 def luoTehtavanKaava(t,v):
         pino=[] # Pinoon laitetaan kulloinenkin iterointipolku, 
@@ -375,13 +361,10 @@ def laskeSarja(sarja,syotteet,vartiot=None,tehtavat=None):
                         tulokset[vi][0].tasa='!' # merkitään tasatulos
                         tulokset[vi-1][0].tasa='!' # merkitään tasatulos
                 edellinen = vartio
-
-
         #Lisätään tehtävärivi ylos
         mukana.insert(0,t_list)
         
         return (mukana,ulkona)
-
 
 if __name__ == "__main__":
     import doctest
