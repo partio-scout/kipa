@@ -118,6 +118,7 @@ Open Sub Page Verify Location And Title
 
 Open Competition
     Open KiPa Main Page
+    ${original timeout}=  Set Selenium Timeout  10 sec
     Click Link  ${TESTIKISA}
     Title Should Be  Kipa - ${TESTIKISA}
 
