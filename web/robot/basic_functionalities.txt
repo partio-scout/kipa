@@ -105,9 +105,9 @@ Open Browser and Maximize
     Maximize Browser Window
 
 Kipa Suite Setup
-    ${original timeout}=  Set Selenium Timeout  60
+    Comment  ${original timeout}=  Set Selenium Timeout  60
     Start Selenium Server
-    Open Kipa Main Page
+    Wait Until Keyword Succeeds  2 min  1 min  Open Kipa Main Page
     Close Browser
 
 Open Sub Page Verify Location And Title
