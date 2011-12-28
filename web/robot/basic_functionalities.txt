@@ -105,7 +105,7 @@ Open Browser and Maximize
     Maximize Browser Window
 
 Kipa Suite Setup
-    ${original timeout}  Set Selenium Timeout  60
+    ${original timeout}=  Set Selenium Timeout  60
     Start Selenium Server
     Open Kipa Main Page
     Close Browser
