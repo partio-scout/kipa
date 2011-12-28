@@ -83,7 +83,7 @@ Poista Luotu Kisa
 *** Keywords ***
 Open KiPa Main Page
     Open Browser And Maximize  ${KIPA_URL}/
-    Maximize Browser Window
+    Comment  Set Selenium Speed  2 sec
     Title Should Be  ${KIPA_OTSIKKO}
 
 Create New Competition
@@ -105,8 +105,8 @@ Open Browser and Maximize
     Maximize Browser Window
 
 Kipa Suite Setup
-    Comment  ${original timeout}=  Set Selenium Timeout  60
     Start Selenium Server
+    comment  Uudelleenyritys testiserverin mahdollisen kuormituksen vuoksi.
     Wait Until Keyword Succeeds  3 min  1 min  Open Kipa Main Page
     Close Browser
 
