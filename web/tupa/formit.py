@@ -21,7 +21,7 @@ class VartioForm(ModelForm):
                         widget=forms.TextInput(attrs={'size':'2'} ) ,
                         required=False)
         keskeyttanyt = forms.IntegerField(label = "Keskeyttänyt", widget=forms.TextInput(attrs={'size':'2'} ) ,required=False)
-        nro = forms.IntegerField(label = "Nro", widget=forms.TextInput(attrs={'size':'3'} ) )
+        nro = forms.IntegerField(label = "Nro", widget=forms.TextInput(attrs={'size':'4'} ) )
         class Meta:
                 model = Vartio
 
@@ -179,7 +179,7 @@ def savePisteSyote(self,syote,field,fieldName,alternateName):
                 syote.delete()
 
 class PisteSyoteForm(ModelForm):
-        arvo = PisteField(required=False,widget=forms.TextInput(attrs={'size':'8', 'class':'numeric'} ) )
+        arvo = PisteField(required=False,widget=forms.TextInput(attrs={'size':'16', 'class':'numeric'} ) )
         tarkistus = PisteField(required=False,widget=forms.HiddenInput ) 
         def __init__(self,maarite,vartio,*argv,**argkw) :
                 super(ModelForm,self).__init__(*argv,**argkw)
@@ -194,7 +194,7 @@ class PisteSyoteForm(ModelForm):
                 model = Syote
 
 class PisteTarkistusForm(ModelForm):
-        tarkistus = PisteField(required=False,widget=forms.TextInput(attrs={'size':'8', 'class':'numeric'} ) )
+        tarkistus = PisteField(required=False,widget=forms.TextInput(attrs={'size':'16', 'class':'numeric'} ) )
         arvo = PisteField(required=False,widget=forms.HiddenInput  )
         def __init__(self,maarite,vartio,*argv,**argkw) :
                 super(ModelForm,self).__init__(*argv,**argkw)
