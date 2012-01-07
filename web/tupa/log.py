@@ -12,7 +12,7 @@ def __noLogString(string):
 
 def __logString(string):
         string=string.replace("\n","<br>")
-        string=string.replace(" ","&nbsp")
+        string=string.replace(" ","&nbsp;")
         global laskentaloki
         laskentaloki+=string+"<br>"
 
