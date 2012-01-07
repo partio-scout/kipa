@@ -17,6 +17,8 @@
 
 {% if sarja_vartiot %} 
         <form action="." method="post">     
+        <p>{% include "tupa/tallenna.html" %}</p>
+
 	<ul id="sarjatabs" class="shadetabs">
 		{% for sarja in sarja_vartiot%}
 			    <li><a href="#" rel="sarja{{ sarja.0.id }}"
