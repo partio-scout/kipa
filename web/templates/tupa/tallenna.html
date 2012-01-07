@@ -1,10 +1,6 @@
 <br>
-<table>
-<tr>
-<td width="200" align="right"><button type="button" class="small awesome" onClick="history.back();" title="Palaa edelliselle sivulle tallentamatta muutoksia">Peruuta</button></td>
-<td width="100" align="right"><button name="tallenna" type="submit" class="small blue awesome" title="Tallenna sivulla näkyvät tiedot">Tallenna &raquo;</button></td>
+<button type="button" class="small awesome" onClick="history.back();" title="Palaa edelliselle sivulle tallentamatta muutoksia">Peruuta</button>&nbsp;&nbsp;&nbsp;
+<button name="tallenna" type="submit" class="small blue awesome" title="Tallenna sivulla näkyvät tiedot">Tallenna &raquo;</button>
 {% if ohjaus_nappi %}
-<td width="250" align="right"><button name="nappi" type="submit" value="ohjaus" class="small blue awesome" title="Tallenna sivulla näkyvät tiedot">Tallenna ja {{ohjaus_nappi}}</button></td>
+<button name="nappi" type="submit" value="ohjaus" class="small blue awesome" title="Tallenna sivulla näkyvät tiedot">Tallenna ja {{ohjaus_nappi}}</button>
 {% endif %}
-</tr>
-</table>
