@@ -4,7 +4,7 @@
 {{ block.super }}
 <script type="text/javascript" language="javascript" src="/kipamedia/jquery.form-changed-warning.js"></script>
 <script type="text/javascript" language="javascript" src="/kipamedia/jquery.maskedinput-1.3.js"></script>
-<script type="text/javascript" language="javascript" src="/kipamedia/jquery.columnhover.js"></script>
+<script type="text/javascript" language="javascript" src="/kipamedia/jquery.stickytableheaders.js"></script>
 <script type="text/javascript" language="javascript" src="/kipamedia/keyhandler.js"></script>
 <script type="text/javascript" language="javascript" src="/kipamedia/tooltip.js"></script>
 <style type="text/css">
@@ -13,14 +13,13 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function(){
-	$('#taulukko').columnHover({eachCell:true, hoverClass:'highlight', ignoreCols: [1]});
-
-   if ($.browser.mozilla) {
-        $("input").keypress(checkForEnter);
-    } else {
-        $("input").keydown(checkForEnter);
-    }
-
+	$("#taulukko").stickyTableHeaders();
+	
+	if ($.browser.mozilla) {
+		$("input").keypress(checkForEnter);
+	} else {
+		$("input").keydown(checkForEnter);
+	}
 });
 
 	jQuery(function($){
@@ -79,6 +78,7 @@ $(document).ready(function(){
 
    
     <table id="taulukko" border="0" cellpadding="2" cellspacing="0">
+    <thead>
         <tr>
             <th colspan="2">
             Osatehtävä:
@@ -120,7 +120,9 @@ $(document).ready(function(){
                </th>
             {% endfor %}
         </tr>
+    </thead>
 
+    <tbody>
         {% for vartio in syotteet %}
             <tr valign="top" class="{% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
                   <td width="15">
@@ -141,8 +143,7 @@ $(document).ready(function(){
                   {% endfor %}
             </tr>
         {% endfor %}
-
-     
+    </tbody>
     </table>
     {% include "tupa/tallenna.html" %}
     </form>

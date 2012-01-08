@@ -202,10 +202,10 @@ tr .odd:hover
 	color:#fff;
 	background-color:#222;
 	/* #5169b3;*/
-	padding:3px;
+	padding:3px; /* NOTE: th padding must be set explicitly in order to support sticky table headers in IE */
 }
 
-.inputhighlighted
+#taulukko input:focus
 {
 	/* Highlight style */
 	border:2px solid #FC0;
