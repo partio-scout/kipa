@@ -163,6 +163,7 @@ e - vartio ei ole tehnyt tehtävää<br />
 h - vartion suoritus on hylätty<br />
 </p>
 
+{% if tarkistus %}<p>Syötät tällä hetkellä tarkistussyötteitä. <a href="{{varsinaiset_syotteet_url}}">Katso tehtävän varsinaiset syötteet</a></p>{% endif %}
 <p><a href="{{maaritys_url}}">Tehtävän määrittely</a></p>
 <p><a href="{{tulokset_url}}">Tämän sarjan tulokset</a></p>
 
