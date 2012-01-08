@@ -1,1149 +1,429 @@
-@charset "utf-8";
-
-/* CSS Document */
-
-
-
-BODY {
-
-	FONT-SIZE: 11px; 
-
-	LINE-HEIGHT: 120%; 
-
-	FONT-FAMILY: Tahoma, Verdana, Arial, Helvetica, sans-serif; 
-
-	BACKGROUND-COLOR: white;
-
-/*	background-image: url("bg-body.gif");*/
-
-	background-repeat: repeat-x;
-
-	background-attachment: scroll;
-
-	background-position: 100% 0pt;
-
-/*	margin-top: 15px;
-
-	margin-left: 20px;*/
-
+@import url("static.css");
+body
+{
+	font-size:11px;
+	line-height:120%;
+	font-family:Tahoma, Verdana, Arial, Helvetica, sans-serif;
+	background-color:#FFF;
+	min-width:630px; /* 2 x (LC fullwidth + CC padding) + RC fullwidth */
 }
 
+html,body,#wrap
+{
+	height:100%;
+	margin:0;
+	padding:0;
+	font-size:11px;
+	line-height:120%;
+	font-family:Tahoma,Verdana,Arial,Helvetica,sans-serif;
+	background-color:#FFF;
+}
 
+body > #wrap
+{
+	height:auto;
+	min-height:100%;
+	background:url(/kipamedia/matte-blue.png) repeat-y;
+}
 
-a, a:visited {
+#main
+{
+	padding-bottom:20px;
+/* must be same height as the footer */
+}
 
+a,a:visited
+{
 	color:#006ea6;
-
-	text-decoration: underline;
-
-/*	border-bottom-style: dashed;*/
-
-}
-
-
-
-TABLE {
-
-	BORDER-RIGHT: 0px;
-
-	BORDER-TOP: 0px;
-
-	MARGIN-LEFT: 0px;
-
-	BORDER-LEFT: 0px;
-
-	MARGIN-RIGHT: 0px;
-
-	BORDER-BOTTOM: 0px;
-
-}
-
-TD {
-
-	FONT-SIZE: 11px;
-
-}
-
-SELECT {
-
-	FONT-SIZE: 10px; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif
-
-}
-
-INPUT {
-
-	FONT-SIZE: 10px;
-
-	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
-
-	text-align: left;
-
-}
-
-TEXTAREA {
-
-	FONT-SIZE: 10px; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif
-
-}
-
-
-ul {
-	list-style-type: none;
-}
-
-
-h1, h2, h3, h4, h5 {
-
-	margin-top: 10pt;
-
-	margin-right: 0pt;
-
-	margin-bottom: 5pt;
-
-	margin-left: 0pt;
-
-	text-transform: lowercase;
-
-	font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif; 
-
-	font-weight: normal;
-
-	color: #006ea6;
-
-}
-
-
-
-h1 {
-
-	/* tämä on sivuotsikko	*/
-
-	margin-bottom: 20px;
-
-	text-transform: uppercase;
-
-	color:#333;
-
-}
-
-
-
-h2 {
-
-	text-transform:capitalize;
-
-	margin-top:20px;
-
-}
-
-
-h3 {
-	background: url(/kipamedia/arrow_blue.gif) no-repeat 0 1px;
-	padding-left: 15px;
-	font-size: 11px;
-}
-
-.etusivunOtsikko {
-
-	font: 20px Georgia,Helvetica,"Lucida Sans Unicode",Tahoma,Verdana,Arial,Helvetica,sans-serif;
-
-	letter-spacing:0;
-
-	border:0;
-
-	color:#006ea6;
-
-	margin:0 0 0 0;
-
-}
-
-
-
-.etusivunLinkit, .etusivunLinkit a, .etusivunLinkit:visited {
-
-	text-decoration:none;
-
-	padding-left:30px; /*oli 50 px*/
-
-	letter-spacing:0;
-
-	border:0;
-
-	color:#006ea6;
-
-	margin:1.3em 0 0 0;
-
-}
-
-
-
-.etusivunLinkitTulossa, .etusivunLinkitTulossa a, .etusivunLinkitTulossa:visited {
-
-	font-style:italic;
-
-	text-decoration:none;
-
-	padding-left:30px; /*oli 50 px*/
-
-	letter-spacing:0;
-
-	border:0;
-
-	color:#ccc;
-
-	margin:1.3em 0 0 0;
-
-	cursor:default;
-
-}
-
-
-
-.etusivunLinkit a:hover, .etusivunLinkit:visited:hover {
-
 	text-decoration:underline;
-
 }
 
+table
+{
+	border-right:0;
+	border-top:0;
+	margin-left:0;
+	border-left:0;
+	margin-right:0;
+	border-bottom:0;
+}
 
+td
+{
+	font-size:11px;
+}
 
-.etusivunOtsikko img{
+select
+{
+	font-size:10px;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+}
 
-	padding: 10px;
-
-	padding-left:40px;
-
+input
+{
+	font-size:10px;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
 	text-align:left;
-
-	vertical-align:middle;
-
 }
 
-
-
-#etusivu th {
-
-	font-size: 13px;
-
-	font-weight: normal;
-
-	background-color: #b9c9fe;
-
-	background-image: none;
-
-	background-repeat: repeat;
-
-	background-attachment: scroll;
-
-	background-position: 0% 0%;
-
-	border-top-width: 4px;
-
-	border-top-style: solid;
-
-	border-top-color: #aabcfe;
-
-	border-bottom-width: 1px;
-
-	border-bottom-style: solid;
-
-	border-bottom-color: #ffffff;
-
-	color: #003399;
-
-	padding-top: 8px;
-
-	padding-right: 8px;
-
-	padding-bottom: 8px;
-
-	padding-left: 8px;
-
+textarea
+{
+	font-size:10px;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
 }
 
-
-
-/*#taulukko th {
-
-	font-size: 13px;
-
-	font-weight: normal;
-
-	background-color: #b9c9fe;
-
-	background-image: none;
-
-	background-repeat: repeat;
-
-	background-attachment: scroll;
-
-	background-position: 0% 0%;
-
-	border-top-width: 4px;
-
-	border-top-style: solid;
-
-	border-top-color: #aabcfe;
-
-	border-bottom-width: 1px;
-
-	border-bottom-style: solid;
-
-	border-bottom-color: #ffffff;
-
-	color: #003399;
-
-	padding-top: 8px;
-
-	padding-right: 8px;
-
-	padding-bottom: 8px;
-
-	padding-left: 8px;
-
-}*/
-
-
-
-#taulukko .odd {
-
-	background:#e8edff;
-
-	vertical-align: middle;
-
+ul
+{
+	list-style-type:none;
 }
 
-
-
-#taulukko .even {
-
-	vertical-align: middle;
-
-}
-
-
-
-tr .odd:hover{
-
-	background:#FFFF99;
-
-}
-
-
-
-#taulukko th {
-
-	font-size: 11px;
-
-	text-align: left;
-
-	font-weight: bold;
-
-	color: #fff;
-
-	background-color: #222; /* #5169b3;*/
-
-	padding:3px;
-
-}
-
-
-
-.inputHighlighted{  /* Highlight style */
-
-	border:2px solid #FC0;
-
-}
-
-
-
-.tblHeader {	/* ei käytössä */
-
-	border: 1px solid rgb(0, 0, 0); 
-
-	padding: 5px; 
-
-	font-size: 12px; 
-
-	background-color: rgb(31, 150, 207); 
-
-	color: rgb(238, 238, 238); 
-
-	text-align: left; 
-
-	vertical-align: top; 
-
-	font-family: Consolas, Lucida Console, Courier mono; 
-
-	background-image: url(tableHBG.png); 
-
-	background-repeat: repeat-x;
-
-}
-
-
-
-.top {
-
-	background-image:url(logo-leima.png);
-
-	background-position:right;
-
-	background-repeat:no-repeat;
-
-	padding-left:50px;
-
-	padding-top:80px;
-
-}
-
-
-
-#box-table-a tr:hover td {
-
-	background-color: #d0dafd;
-
-	background-image: none;
-
-	background-repeat: repeat;
-
-	background-attachment: scroll;
-
-	background-position: 0% 0%;
-
-	color: #333399;
-
-}
-
-.tauluOtsikko {
-
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-
-	font-size: x-small;
-
-	font-weight: bold;
-
-	color: #fff;
-
-	background-color: #222; /* #5169b3;  oli #b9c9fe; */
-
-	vertical-align: top;
-
-	padding: 5px;
-
-}
-
-.keskeyttanyt {
-
-	font-style: italic;
-
-	color: #666; 
-
-	background-color:#CCC;
-
-}
-
-
-
-#tehtava-taulukko {
-
-	font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-
-	/*font-size:12px;*/
-
-	/*width:480px;*/
-
-	text-align:center;
-
-	border-collapse:collapse;
-
-	border-top:7px solid #9baff1;
-
-	border-bottom:7px solid #9baff1;
-
-	margin:20px;
-
-}
-
-
-
-#tehtava-taulukko th {
-
-	font-size:13px;
-
+h1,h2,h3,h4,h5
+{
+	margin-top:10pt;
+	margin-right:0;
+	margin-bottom:5pt;
+	margin-left:0;
+	text-transform:lowercase;
+	font-family:Tahoma, Verdana, Arial, Helvetica, sans-serif;
 	font-weight:normal;
+	color:#006ea6;
+}
 
-	background:#b9c9fe;
+h1
+{
+	/* tämä on sivuotsikko	*/
+	margin-bottom:20px;
+	text-transform:uppercase;
+	color:#333;
+}
 
-	border-right:1px solid #9baff1;
-
-	border-left:1px solid #9baff1;
-
-	color:#039;
-
-	padding:8px;
-
+h2
+{
 	text-transform:capitalize;
-
+	margin-top:20px;
 }
 
-
-
-#tehtava-taulukko td {
-
-	background:#e8edff;
-
-	border-right:1px solid #aabcfe;
-
-	border-left:1px solid #aabcfe;
-
-	color:#669;
-
-	padding:3px;
-
-	text-align: left;
-
-	vertical-align:top;
-
+h3
+{
+	background:url(/kipamedia/arrow_blue.gif) no-repeat 0 1px;
+	padding-left:15px;
+	font-size:11px;
 }
 
+.etusivunotsikko
+{
+	font:20px Georgia,Helvetica,"Lucida Sans Unicode",Tahoma,Verdana,Arial,Helvetica,sans-serif;
+	letter-spacing:0;
+	border:0;
+	color:#006ea6;
+	margin:0;
+}
 
-
-#tehtava-taulukko a {
-
+.etusivunlinkit,.etusivunlinkit a,.etusivunlinkit:visited
+{
 	text-decoration:none;
-
-	color:#669;
-
-	cursor:pointer;
-
+	padding-left:30px;
+	/*oli 50 px*/
+	letter-spacing:0;
+	border:0;
+	color:#006ea6;
+	margin:1.3em 0 0;
 }
 
+.etusivunlinkittulossa,.etusivunlinkittulossa a,.etusivunlinkittulossa:visited
+{
+	font-style:italic;
+	text-decoration:none;
+	padding-left:30px;
+	/*oli 50 px*/
+	letter-spacing:0;
+	border:0;
+	color:#ccc;
+	margin:1.3em 0 0;
+	cursor:default;
+}
 
-
-#tehtava-taulukko a:hover {
-
+.etusivunlinkit a:hover,.etusivunlinkit:visited:hover
+{
 	text-decoration:underline;
-
 }
 
-
-
-.tehtavan_tila {
-
-	background-color: #b9c9fe;
-
-	width: 400px;
-
+.etusivunotsikko img
+{
+	padding:10px;
+	padding-left:40px;
+	text-align:left;
+	vertical-align:middle;
 }
 
-
-
-.etusivuloota {
-
-	background-color: #EEE;
-
-	border-left-color: #cccccc;
-
-	border-left-style: solid;
-
-	border-left-width: 1px;
-
-	border-right-color: #cccccc;
-
-	border-right-style: solid;
-
-	border-right-width: 1px;
-
-	margin-bottom: 5px;
-
-	margin-left: 0pt;
-
-	margin-right: 0pt;
-
-	margin-top: 0pt;
-
-	padding-bottom: 9px;
-
-	padding-left: 9px;
-
-	padding-right: 9px;
-
-	padding-top: 9px;
-
-	border: 1px solid #cccccc;
-
+#etusivu th
+{
+	font-size:13px;
+	font-weight:normal;
+	background-color:#b9c9fe;
+	background-image:none;
+	background-repeat:repeat;
+	background-attachment:scroll;
+	background-position:0 0;
+	border-top-width:4px;
+	border-top-style:solid;
+	border-top-color:#aabcfe;
+	border-bottom-width:1px;
+	border-bottom-style:solid;
+	border-bottom-color:#fff;
+	color:#039;
+	padding-top:8px;
+	padding-right:8px;
+	padding-bottom:8px;
+	padding-left:8px;
 }
 
-
-
-
-
-/* TOOLTIP */
-
-#tt {position:absolute; display:block; background:url("/kipamedia/tt_left.gif") top left no-repeat; z-index:999;}
-
-#tttop {display:block; height:5px; margin-left:5px; background:url("/kipamedia/tt_top.gif") top right no-repeat; overflow:hidden; z-index:999;}
-
-#ttcont {display:block; padding:2px 12px 3px 7px; margin-left:5px; background:#666; color:#FFF; z-index:999;}
-
-#ttbot {display:block; height:5px; margin-left:5px; background:url("/kipamedia/tt_bottom.gif") top right no-repeat; overflow:hidden; z-index:999;}
-
-
-
-/* NAPPULAT */
-
-.awesome {
-
-	background: #222 url(alert-overlay.png) repeat-x;
-
-	display: inline-block;
-
-	padding: 2px 10px 4px;
-
-	color: #fff;
-
-	text-decoration: none;
-
-	font-weight: bold;
-
-	line-height: 1;
-
-	-moz-border-radius: 5px;
-
-	-webkit-border-radius: 5px;
-
-	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-
-	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-
-	text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
-
-	border-bottom: 1px solid rgba(0,0,0,0.25);
-
-	position: relative;
-
-	cursor: pointer;
-
+#taulukko .odd
+{
+	background:#e8edff;
+	vertical-align:middle;
 }
 
-.small.awesome {
-
-	font-size: 9px;
-
+#taulukko .even
+{
+	vertical-align:middle;
 }
 
-
-
-.awesome:hover {
-
-	background-color: #111111;
-
-	color: #ffffff;
-
+tr .odd:hover
+{
+	background:#FF9;
 }
 
-
-
-.blue.awesome {
-
-	background-color: #2daebf;
-
-}
-
-
-
-.blue.awesome:hover {
-
-	background-color: #007d9a;
-
-}
-
-
-
-.red.awesome {
-
-	background-color: #e33100;
-
-}
-
-
-
-.red.awesome:hover {
-
-	background-color: #872300;
-
-}
-
-
-
-.takaisinlinkki, .takaisinlinkki:visited {
-
-    padding-top: 1px;
-
-    padding-right: 10px;
-
-    padding-bottom: 2px;
-
-    padding-left: 10px;
-
-    border-right-style: solid;
-
-    border-left-style: solid;
-
-    border-left-width: 1px;
-
-    border-right-width: 1px;
-
-    border-left-color: #d9dfea;
-
-    border-right-color: #0e1f5b;
-
-    color: #F60;
-
-    font-size: 10px;
-
-    font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
-
-    margin-bottom: 20px;
-
-    vertical-align: middle;
-
-    font-weight: bold;
-
-/*    font-variant: small-caps;*/
-
-    text-decoration: none;
-
-}
-
-
-
-
-
-
-
-/* jQuery Autocomplete */
-
-.ac_results {
-
-	padding: 0px;
-
-	border: 1px solid black;
-
-	background-color: white;
-
-	overflow: hidden;
-
-	z-index: 99999;
-
-}
-
-
-
-.ac_results ul {
-
-	width: 100%;
-
-	list-style-position: outside;
-
-	list-style: none;
-
-	padding: 0;
-
-	margin: 0;
-
-}
-
-
-
-.ac_results li {
-
-	margin: 0px;
-
-	padding: 2px 5px;
-
-	cursor: default;
-
-	display: block;
-
-	/* 
-
-	if width will be 100% horizontal scrollbar will apear 
-
-	when scroll mode will be used
-
-	*/
-
-	/*width: 100%;*/
-
-	font: menu;
-
-	font-size: 12px;
-
-	/* 
-
-	it is very important, if line-height not setted or setted 
-
-	in relative units scroll will be broken in firefox
-
-	*/
-
-	line-height: 16px;
-
-	overflow: hidden;
-
-}
-
-
-
-.ac_loading {
-
-	background: white url('indicator.gif') right center no-repeat;
-
-}
-
-
-
-.ac_odd {
-
-	background-color: #eee;
-
-}
-
-
-
-.ac_over {
-
-	background-color: #0A246A;
-
-	color: white;
-
-}
-
-
-
-/* /jQuery Autocomplete*/
-
-
-
-
-
-/* ---- SIIVOTTU TÄSTÄ ALASPÄIN ---------*/
-
-body {
-
-	min-width: 630px;         /* 2 x (LC fullwidth + CC padding) + RC fullwidth */
-
-}
-
-
-
-html, body, #wrap {
-
-	height: 100%; 
-
-    margin:0; 
-
-    padding:0;
-
-   	font-size: 11px;
-
-	line-height: 120%;
-
-	font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-
-	background-color: white;
-
-}
-
-
-
-body > #wrap {
-
-	height: auto; 
-
-	min-height: 100%;
-
-	background: url(/kipamedia/matte-blue.png) repeat-y;
-
-}
-
-
-
-#main {
-
-	padding-bottom: 20px;  /* must be same height as the footer */
-
-}
-
-
-
-footer {
-
-	position: relative;
-
-	margin-top: -21px; /* negative value of footer height */
-
-	height: 12px;
-
-	clear:both;
-
-	text-align:right;
-
-	font-family: Tahoma,Arial,sans-serif;
-
-	color: #4f5959;
-
-	text-transform: uppercase;
-
-	letter-spacing: 0.2em;
-
-	word-spacing: 0.25em;
-
-	font: 8px Verdana, "Lucida Grande", Lucida, sans-serif;
-
-	font-weight: bold;
-
-	text-shadow: #d1d8d8 0 1px 0;
-
-	background: #9fafb1 url(/kipamedia/white-overlays.png) repeat-x;
-
-	margin: 0 0 0 0;
-
-	padding: 4px 0;
-
-	border-top: 1px solid #abbdbe;
-
-} 
-
-
-
-/* --- CLEARFIXES --- */
-
-.clearfix:after {content: ".";
-
-	display: block;
-
-	height: 0;
-
-	clear: both;
-
-	visibility: hidden;
-
-}
-
-.clearfix {display: inline-block;}
-
-/* Hides from IE-mac \*/
-
-* html .clearfix { height: 1%;}
-
-.clearfix {display: block;}
-
-/* End hide from IE-mac */
-
-
-
-
-
-/* --- Grid --- */
-
-#container {
-
-	padding-left: 70px;      /* LC fullwidth */
-
-	padding-right: 10px;     /* RC fullwidth + CC padding */
-
-}
-
-
-
-#container .column {
-
-	position: relative;
-
-	float: left;
-
-}
-
-
-
-#right {
-
-	padding: 10px 0;       /* CC padding */
-
-	width: 100%;
-
-}
-
-
-
-#left {
-
-	width: 40px;             /* LC width */
-
-	padding: 5px;          /* LC padding */
-
-	right: 5px;             /* LC fullwidth + CC padding */
-
-	margin-left: -65px;
-
-}
-
-				
-
-/*** IE Fix ***/
-
-* html #left {
-
-	left: 100%;              /* RC fullwidth */
-
-}
-
-
-
-
-
-#header {
-
-	height: 20px;
-
-	background:#ff0;
-
-	padding:8px;
-
-	background: url(/kipamedia/header.png) repeat-x;
-
-}
-
-
-
-#pageTitle {
-
-	text-transform: uppercase;
-
-	color: #9fa8a9;
-
-	float: left;
-
-	padding-top: 8px; 
-
-	text-shadow: #333333 1px -1px 2px;
-
-	font-family: Verdana,"Lucida Grande",Lucida,sans-serif;
-
-	font-size: 1.33em;
-
-	line-height: normal;
-
-}
-
-
-
-#breadcrumbs {
-
-	background: url(/kipamedia/green-bar.png);
-
-	height:15px;
-
-	margin-bottom: -1px;
-
-	padding: 3px 0 3px 8px;
-
-	position: relative;
-
-	z-index: 2;
-
-	color:#5D5D5D;
-
-	font-size: 11px;
-
-	font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-
-	overflow:hidden;
-
-}
-
-
-
-#breadcrumbs a {
-
-	text-decoration:none;
-
-	color:#5D5D5D;
-
-}
-
-
-
-#breadcrumbs a:hover {
-
-	text-decoration:none;
-
+#taulukko th
+{
+	font-size:11px;
+	text-align:left;
+	font-weight:bold;
 	color:#fff;
-
+	background-color:#222;
+	/* #5169b3;*/
+	padding:3px;
 }
 
-
-
-
-
-a.sitetoolbarnav img { 
-
-	border: none;
-
+.inputhighlighted
+{
+	/* Highlight style */
+	border:2px solid #FC0;
 }
 
-
-
-
-
-div.sitetoolbarrow {padding:2px; font-weight:bold}
-
-a.sitetoolbarnav { 
-
-	color: #0d3b65; 
-
-	padding: 3px; 
-
-	margin: 2px;
-
-	font-family: Arial, Helvetica,Geneva,Swiss,SunSans-Regular, Verdana; 
-
-	width: 35px; 
-
-	float: left;
-
-	font-weight: bold; 
-
-	font-size: 10px; 
-
-	text-decoration: none;
-
-	border: 1px solid #EDEDED;
-
+.top
+{
+	background-image:url(logo-leima.png);
+	background-position:right;
+	background-repeat:no-repeat;
+	padding-left:50px;
+	padding-top:80px;
 }
 
-
-
-a.sitetoolbarnav:hover { 
-
-	color: #0d3b65; 
-
-	border: 1px solid #486B8A;
-
-	padding: 3px; 
-
-	width: 35px; 
-
-	float: left; 
-
-	background: #D8E0E7;
-
+#box-table-a tr:hover td
+{
+	background-color:#d0dafd;
+	background-image:none;
+	background-repeat:repeat;
+	background-attachment:scroll;
+	background-position:0 0;
+	color:#339;
 }
 
+.tauluotsikko
+{
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:x-small;
+	font-weight:bold;
+	color:#fff;
+	background-color:#222;
+	/* #5169b3;  oli #b9c9fe; */
+	vertical-align:top;
+	padding:5px;
+}
 
+.keskeyttanyt
+{
+	font-style:italic;
+	color:#666;
+	background-color:#CCC;
+}
+
+#tehtava-taulukko
+{
+	font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	/*font-size:12px;*/
+	/*width:480px;*/
+	text-align:center;
+	border-collapse:collapse;
+	border-top:7px solid #9baff1;
+	border-bottom:7px solid #9baff1;
+	margin:20px;
+}
+
+#tehtava-taulukko th
+{
+	font-size:13px;
+	font-weight:normal;
+	background:#b9c9fe;
+	border-right:1px solid #9baff1;
+	border-left:1px solid #9baff1;
+	color:#039;
+	padding:8px;
+	text-transform:capitalize;
+}
+
+#tehtava-taulukko td
+{
+	background:#e8edff;
+	border-right:1px solid #aabcfe;
+	border-left:1px solid #aabcfe;
+	color:#669;
+	padding:3px;
+	text-align:left;
+	vertical-align:top;
+}
+
+#tehtava-taulukko a
+{
+	text-decoration:none;
+	color:#669;
+	cursor:pointer;
+}
+
+#tehtava-taulukko a:hover
+{
+	text-decoration:underline;
+}
+
+.tehtavan_tila
+{
+	background-color:#b9c9fe;
+	width:400px;
+}
+
+.etusivuloota
+{
+	background-color:#EEE;
+	border-left-color:#ccc;
+	border-left-style:solid;
+	border-left-width:1px;
+	border-right-color:#ccc;
+	border-right-style:solid;
+	border-right-width:1px;
+	margin-bottom:5px;
+	margin-left:0;
+	margin-right:0;
+	margin-top:0;
+	padding-bottom:9px;
+	padding-left:9px;
+	padding-right:9px;
+	padding-top:9px;
+	border:1px solid #ccc;
+}
+
+.takaisinlinkki,.takaisinlinkki:visited
+{
+	padding-top:1px;
+	padding-right:10px;
+	padding-bottom:2px;
+	padding-left:10px;
+	border-right-style:solid;
+	border-left-style:solid;
+	border-left-width:1px;
+	border-right-width:1px;
+	border-left-color:#d9dfea;
+	border-right-color:#0e1f5b;
+	color:#F60;
+	font-size:10px;
+	font-family:"lucida grande", tahoma, verdana, arial, sans-serif;
+	margin-bottom:20px;
+	vertical-align:middle;
+	font-weight:bold;
+/*    font-variant: small-caps;*/
+	text-decoration:none;
+}
+
+#header
+{
+	height:20px;
+	background:#ff0;
+	padding:8px;
+	background:url(/kipamedia/header.png) repeat-x;
+}
+
+#pagetitle
+{
+	text-transform:uppercase;
+	color:#9fa8a9;
+	float:left;
+	padding-top:8px;
+	text-shadow:#333 1px -1px 2px;
+	font-family:Verdana,"Lucida Grande",Lucida,sans-serif;
+	font-size:1.33em;
+	line-height:normal;
+}
+
+#breadcrumbs
+{
+	background:url(/kipamedia/green-bar.png);
+	height:15px;
+	margin-bottom:-1px;
+	padding:3px 0 3px 8px;
+	position:relative;
+	z-index:2;
+	color:#5D5D5D;
+	font-size:11px;
+	font-family:Tahoma,Verdana,Arial,Helvetica,sans-serif;
+	overflow:hidden;
+}
+
+#breadcrumbs a
+{
+	text-decoration:none;
+	color:#5D5D5D;
+}
+
+#breadcrumbs a:hover
+{
+	text-decoration:none;
+	color:#fff;
+}
+
+a.sitetoolbarnav img
+{
+	border:none;
+}
+
+div.sitetoolbarrow
+{
+	padding:2px;
+	font-weight:bold;
+}
+
+a.sitetoolbarnav
+{
+	color:#0d3b65;
+	padding:3px;
+	margin:2px;
+	font-family:Arial, Helvetica,Geneva,Swiss,SunSans-Regular, Verdana;
+	width:35px;
+	float:left;
+	font-weight:bold;
+	font-size:10px;
+	text-decoration:none;
+	border:1px solid #EDEDED;
+}
+
+a.sitetoolbarnav:hover
+{
+	color:#0d3b65;
+	border:1px solid #486B8A;
+	padding:3px;
+	width:35px;
+	float:left;
+	background:#D8E0E7;
+}
 
 a.sitetoolbarnavactive {color:#0d3b65;  border: 1px solid #486B8A;  padding: 3px; width: 35px;  float: left; font-size: 10px; background: #fff; font-weight: bold; text-decoration: none;}
 
