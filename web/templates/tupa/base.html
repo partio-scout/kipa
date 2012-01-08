@@ -5,10 +5,6 @@
 <link rel="stylesheet" type="text/css" href="/kipamedia/kipa.css" />
 <link rel="stylesheet" type="text/css" href="/kipamedia/tabcontent.css" />
 <link rel="stylesheet" type="text/css" href="/kipamedia/jquery.jgrowl.css" />
-{% block header %}  {% endblock %}
-<!--[if IE 6]>
-	<link rel="stylesheet" type="text/css" href="/kipamedia/IE-6-SPECIFIC.css" />
-<![endif]-->
 <!--[if IE 7]>
 	<link rel="stylesheet" type="text/css" href="/kipamedia/IE-7-SPECIFIC.css" >
 <![endif]-->
@@ -20,8 +16,7 @@
 <![endif]-->
 <link rel="icon" type="image/x-icon" href="/kipamedia/favicon.ico" />
 
-
-
+<script type="text/javascript" language="javascript" src="/kipamedia/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" language="javascript" src="/kipamedia/jquery.jgrowl_minimized.js"></script>
 <script type="text/javascript" language="javascript" src="/kipamedia/tooltip.js"></script>
 <script type="text/javascript" src="/kipamedia/tabcontent.js">
@@ -32,16 +27,20 @@
 ***********************************************/
 </script>
 
+{% block header %}  {% endblock %}
+
 <script language="JavaScript">
 function setVisibility(id, visibility) {
 document.getElementById(id).style.display = visibility;
 }
 </script>
 {% if talletettu %}
+<script type="text/javascript">
+   $.jGrowl.defaults.position = 'center';
+</script>
 	<script type="text/javascript">
         $(document).ready(function() {
-            $('#infofield').jGrowl('{{talletettu}}', {
-                position: top-left, 
+            $.jGrowl('{{talletettu}}', {
                 life: 3000
                 });
         });
@@ -56,7 +55,7 @@ document.getElementById(id).style.display = visibility;
 
 <div id="wrap">
 
-    <div id="header"><div id="pageTitle">{{kisa_nimi}}</div><div id="infofield"></div>  
+    <div id="header"><div id="pageTitle">{{kisa_nimi}}</div>  
 		<div style="float:right; margin-top:-4px; margin-bottom:0; padding-bottom:0; height:18px;">		
 			{% include "tupa/login.html" %}
 		</div>
@@ -72,11 +71,7 @@ document.getElementById(id).style.display = visibility;
 	<div id="version">{% include "version.html" %}</div>
     </div>
 
-    
-
     <div id="main" class="clearfix">
-
-    
 
         <div id="container">
 
@@ -95,49 +90,24 @@ document.getElementById(id).style.display = visibility;
 
             <div id="right" class="column">
 
-
-
                 {% block content %}{% endblock %}
-
-                
-
                 {% if tabs %}
-
                         {% for tab in tabs %}
-
                                 <script type="text/javascript">
-
                                         var sarjat=new ddtabcontent("{{tab}}")
-
                                         sarjat.setpersist(true)
-
                                         sarjat.setselectedClassTarget("link") //"link" or "linkparent"
-
                                         sarjat.init()
-
                                 </script>
-
-                
-
                         {% endfor %}
-
                 {% else %}
-
                         <script type="text/javascript">
-
                                 var sarjat=new ddtabcontent("sarjatabs")
-
                                 sarjat.setpersist(true)
-
                                 sarjat.setselectedClassTarget("link") //"link" or "linkparent"
-
                                 sarjat.init()
-
                         </script>
-
                 {% endif %}
-
-                
 
             </div><!-- /right -->
 
@@ -146,8 +116,6 @@ document.getElementById(id).style.display = visibility;
     </div><!-- /main -->
 
 </div><!-- /wrap -->
-
-
 
 </body>
 

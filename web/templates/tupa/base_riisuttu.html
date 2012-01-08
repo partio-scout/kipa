@@ -19,13 +19,25 @@ function setVisibility(id, visibility) {
 document.getElementById(id).style.display = visibility;
 }
 </script>
+{% if talletettu %}
+<script type="text/javascript">
+   $.jGrowl.defaults.position = 'center';
+</script>
+	<script type="text/javascript">
+        $(document).ready(function() {
+            $.jGrowl('{{talletettu}}', {
+                life: 3000
+                });
+        });
+    </script>
+{% endif %}
 
 </head>
 
 <body>
 
 <div id="wrap">
-    <div id="header"><div id="pageTitle">Uusi kisa</div><div id="infofield">{{talletettu}}</div>
+    <div id="header"><div id="pageTitle">Uusi kisa</div>
         <div style="float:right; margin-top:-4px; margin-bottom:0; padding-bottom:0; height:18px;">     
             {% include "tupa/login.html" %}
         </div>
@@ -62,7 +74,5 @@ document.getElementById(id).style.display = visibility;
     </div><!-- /main -->
 </div><!-- /wrap -->
     
-<div id="footer">Kipa 1002 &nbsp;</div>
-
 </body>
 </html>
