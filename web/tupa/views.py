@@ -370,7 +370,6 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
         for v in vartiot :
                 rivi = []
                 colnum = 0
-                colnum = 0
                 for m in maaritteet :
                         maaritteen_syotteet = tehtavan_syotteet.filter(vartio = v ).filter(maarite=m)
                         m.syotteita= len(maaritteen_syotteet)
@@ -395,7 +394,6 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                                 syottovirhe="virhe"
                                 tehtava.svirhe=1
 
-                        colnum += 1
                         rivi.append( formi )
                         colnum += 1 
                 syoteFormit.append( (v,rivi))
