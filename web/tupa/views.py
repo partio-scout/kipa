@@ -299,7 +299,7 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
         
         sarja.taustaTulokset() # Taustalaskenta
 
-	otsikko = 'Uusi tehtävä'
+	otsikko = 'Uusi tehtävä' + ' (' + str(sarja.nimi) + ')'
 
 	if tehtava and not tehtava.nimi == '' : otsikko = tehtava.nimi + ' (' + sarja.nimi + ')'
         
