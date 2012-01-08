@@ -301,7 +301,7 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
 
 	otsikko = 'Uusi tehtävä'
 
-	if tehtava and not tehtava.nimi == '' : otsikko = tehtava.nimi
+	if tehtava and not tehtava.nimi == '' : otsikko = tehtava.nimi + ' (' + sarja.nimi + ')'
         
         # Talletetaanko ja siirrytäänkö talletettu sivuun?
         if posti and not 'lisaa_maaritteita' in posti.keys() and daatta['valid'] : 
