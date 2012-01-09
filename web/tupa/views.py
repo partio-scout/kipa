@@ -327,6 +327,8 @@ def syotaKisa(request, kisa_nimi,tarkistus=None):
         """
         Valitsee kisan tehtävän jonka tuloksia ruvetaan syöttämään.
         """
+        if tarkistus: otsikko="Syötä tuloksia - tarkistussyötteet"
+        else: otsikko="Syötä tuloksia"
         sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
         taulukko = []
         for s in sarjat :
@@ -339,7 +341,7 @@ def syotaKisa(request, kisa_nimi,tarkistus=None):
                 taulukko.append( tehtavat )
         return render_to_response('tupa/valitse_linkki.html', 
                                 { 'taulukko' : taulukko,
-                                'heading' : "Syötä tuloksia",
+                                'heading' : otsikko,
                                 'kisa_nimi': kisa_nimi },
                                 context_instance=RequestContext(request),)
 
