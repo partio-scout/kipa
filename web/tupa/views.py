@@ -299,9 +299,9 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
         
         sarja.taustaTulokset() # Taustalaskenta
 
-	otsikko = 'Uusi tehtävä' + ' (' + str(sarja.nimi) + ')'
+	otsikko = 'Uusi tehtävä' # Tähän perään olisi kiva saada sarja näkyviin, tyyliin + ' (' + sarja.nimi + ')'
 
-	if tehtava and not tehtava.nimi == '' : otsikko = tehtava.nimi + ' (' + sarja.nimi + ')'
+	if tehtava and not tehtava.nimi == '' : otsikko = tehtava.nimi # Tähän perään olisi kiva saada sarja näkyviin, tyyliin + ' (' + sarja.nimi + ')'
         
         # Talletetaanko ja siirrytäänkö talletettu sivuun?
         if posti and not 'lisaa_maaritteita' in posti.keys() and daatta['valid'] : 
