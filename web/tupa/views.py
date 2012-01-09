@@ -120,7 +120,7 @@ def tulosta(request,kisa_nimi,tulostyyppi=""):
         return render_to_response('tupa/tulosta.html', {'sarja_list': sarjat,
                                                         'kisa_nimi': kisa_nimi, 
                                                         'tulostyyppi': tulostyyppi,
-                                                        'heading': 'Tulokset sarjoittain' },
+                                                        'heading': 'Tulokset sarjoittain' } ,
                                                         context_instance=RequestContext(request) ,)
 
 def maaritaKisa(request, kisa_nimi=None,talletettu=None):
@@ -525,6 +525,14 @@ def tuomarineuvos(request, kisa_nimi,talletettu=None):
 			'kisa_nimi': kisa_nimi,
                         'talletettu': tal })
 
+def listaa(request, kisa_nimi,tarkistus=None):
+        """
+        Listaa sarjat
+        """
+       
+        sarjat=sarja.objects.all()
+
+													
 def tulostaSarja(request, kisa_nimi, sarja_id, tulostus=0,vaihtoaika=None,vaihto_id=None) :
         """
         Sarjan tulokset.
@@ -994,4 +1002,8 @@ def tehtavanVaiheet(request,kisa_nimi,tehtava_id,vartio_id=None):
         responssi += palautaLoki() 
         responssi += "</body></html>"
         return HttpResponse( responssi )
+		
+	
+
+ 
 

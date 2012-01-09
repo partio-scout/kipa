@@ -16,19 +16,24 @@
 
 	<p class="etusivunLinkit"><a href="./syota/"><span onmouseover="tooltip.show('Syötä vartioiden suorituksia');" onmouseout="tooltip.hide();">syötä suorituksia</span></a></p>
 
-    <p class="etusivunLinkit"><a href="./syota/tarkistus/"><span onmouseover="tooltip.show('Jos kisan suoritukset syötetään tarkistuksen vuoksi kahteen kertaan, syötä tarkistustulokset tästä');" onmouseout="tooltip.hide();">syötä suorituksia - tarkistus</span></a></p></td>
+    <p class="etusivunLinkit"><a href="./syota/tarkistus/"><span onmouseover="tooltip.show('Jos kisan suoritukset syötetään tarkistuksen vuoksi kahteen kertaan, syötä tarkistustulokset tästä');" onmouseout="tooltip.hide();">syötä suorituksia - tarkistus</span></a></p>
     
+	<p class="etusivunLinkit"><a href="maarita/tuomarineuvos/"><span onmouseover="tooltip.show('Korvaa laskettu tulos määrätyllä tuloksella');" onmouseout="tooltip.hide();">tuomarineuvoston työkalu</span></a></p></td>
+
     <td valign="top" width="350" class="etusivuloota">
 
 	<p class="etusivunOtsikko"><img src="/kipamedia/wizard.png" width="64" height="64" />Tulokset</p>
 
 	<p class="etusivunLinkit"><a href="./tulosta/"><span onmouseover="tooltip.show('Tarkastele tuloksia sarjoittain');" onmouseout="tooltip.hide();">sarjan tulokset</span></a></p>
+	
+	<p class="etusivunLinkit"><a href="./tulosta/sarja/tuloste/{{tulos_taulukko.0.0.id}}/"><span onmouseover="tooltip.show('Tulosta tuloksia paperille');" onmouseout="tooltip.hide();">tulosta tuloksia</span></a></p>
+	
+	<p class="etusivunLinkit"><a href="./tulosta/sarja/csv/{{tulos_taulukko.0.0.id}}/"><span onmouseover="tooltip.show('Tallenna tulokset CSV-tiedostoon');" onmouseout="tooltip.hide();">tulokset CSV-tiedostoon</span></a></p>
+	
+	<p class="etusivunLinkit"><a href="/kipa/{{kisa_nimi}}/heijasta/sarja/"><span onmouseover="tooltip.show('Näytä tulokset videotykkimuodossa');" onmouseout="tooltip.hide();">heijasta tuloksia</span></a></p>
 
-	<p class="etusivunLinkit"><a href="maarita/tuomarineuvos/"><span onmouseover="tooltip.show('Korvaa laskettu tulos määrätyllä tuloksella');" onmouseout="tooltip.hide();">tuomarineuvoston työkalu</span></a></p>
+	<p class="etusivunLinkit"><a href="tulosta/tilanne/"><span onmouseover="tooltip.show('Näytä laskennan tila tällä hetkellä');" onmouseout="tooltip.hide();">laskennan tilanne</span></a></p><br></td>
 
-	<p class="etusivunLinkit"><a href="tulosta/tilanne/"><span onmouseover="tooltip.show('Näytä laskennan tila tällä hetkellä');" onmouseout="tooltip.hide();">laskennan tilanne</span></a></p>
-
-    <p class="etusivunLinkit"><a href="/kipa/{{kisa_nimi}}/heijasta/sarja/"><span onmouseover="tooltip.show('Näytä tulokset videotykkimuodossa');" onmouseout="tooltip.hide();">heijasta tuloksia</span></a></p><br></td>
 
     <td align="center" width="250" valign="middle">
 
@@ -67,9 +72,9 @@
     <td valign="top" class="etusivuloota">
 
 	<p class="etusivunOtsikko"><img src="/kipamedia/question.png" alt="" width="64" height="64" />Apua</p>
-
+    
 	<p class="etusivunLinkit"><a href="/kipamedia/manual_v02.pdf" target="help"><span onmouseover="tooltip.show('Apua kisan pystytykseen');" onmouseout="tooltip.hide();">näin pääset alkuun (PDF)</span></a></p>
-
+    
     </td>
 
   </tr>

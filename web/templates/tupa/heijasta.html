@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 {% block header %}
 {% if vaihtoaika %}
-<meta http-equiv="refresh" content="{{vaihtoaika}};url=/kipa/{{kisa_nimi}}/heijasta/sarja/{{vaihto_id}}/">
+<meta http-equiv="refresh" content="{{vaihtoaika}};url=/kipa/{{kisa_nimi}}/tulosta/sarja/heijasta/{{vaihto_id}}/">
 {% endif %}
 {% endblock header %}
 <title>Sarjakohtaiset tulokset</title>
@@ -205,13 +205,13 @@ TD {
     <p>Ei tuloksia.</p>
 {% endif %}
 
-<p>
+<p><h10>
  S = syöttämättä<br>
  H = vartion suoritus hylätty<br>
- K = vartio keskeyttänytt<br>
+ K = vartio keskeyttänyt<br>
  E = vartio ei ole tehnyt tehtävää<br>
  ! = vartion sijaluku laskettu tasapisteissä määräävien tehtävien perusteella<br>
- 
+ <h10>
 </p>
 <p><a href="/kipa/{{kisa_nimi}}/tulosta/sarja/{{tulos_taulukko.0.0.id}}/">Takaisin perusnäkymään</a></p>
 </form>

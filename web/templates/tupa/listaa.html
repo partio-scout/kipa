@@ -1,0 +1,22 @@
+{% extends "tupa/base.html" %}
+{% block title %}Tulokset sarjoittain{% endblock %}
+{% block content %} 
+
+<h1>Tulokset sarjoittain</h1>
+
+<blockquote>
+{%for sarja in sarja_list %}
+      <A href='./sarja/{{tulostyyppi}}/{{sarja.id}}/' > {{sarja.nimi}} </A> <br>
+{% endfor %}
+</blockquote>
+
+<br>
+<br>
+<br>
+<br>
+<a href="/kipa/{{kisa_nimi}}/tulosta/sarja/heijasta/" />Heijasta tuloksia</a> <br>
+
+{% endblock %}m
+
+
+#testiä, testiä -Petrus
