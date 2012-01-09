@@ -13,7 +13,7 @@ KIPA_URL = u'http://127.0.0.1:8000/kipa'
 TULOSTEN_SYOTTO_OTSIKKO = u'Kipa - Syötä tuloksia'
 TULOSTEN_SYOTTO_URL = u'syota'
 
-TULOSTEN_SYOTTO_TARKISTUS_OTSIKKO = u'Kipa - Syötä tuloksia'
+TULOSTEN_SYOTTO_TARKISTUS_OTSIKKO = u'Kipa - Syötä tuloksia - tarkistussyötteet'
 TULOSTEN_SYOTTO_TARKISTUS_URL = u'syota/tarkistus'
 
 #Tulokset
