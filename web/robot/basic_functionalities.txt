@@ -53,11 +53,13 @@ Tarkista sarjan tulokset
     Page Should Contain Link  Heijasta tuloksia
 
 Lisätään sarjoja kisaan
+    [Documentation]  sininen, harmaa ja valkoinen
     Click Link  määrittele kisan perustiedot
     Location Should Be  ${KIPA_URL}/${TESTIKISA}/${KISAN_MAARITYS_URL}/
     Title Should Be  Kipa - Määritä kisa
     Input Text  id_sarja_set-0-nimi  sininen
     Input Text  id_sarja_set-1-nimi  harmaa
+    Input Text  id_sarja_set-2-nimi  valkoinen
     Click Button  tallenna
     Close Browser
     Open Competition
@@ -65,7 +67,27 @@ Lisätään sarjoja kisaan
     Page Should Contain Link  sininen
     Page Should Contain Link  harmaa
 
-Poistetaan sarja kisasta
+Lisätään kaksi vartiota sarjaan
+    [Documentation]  harmaa
+    Open Sub Page Verify Location And Title  määrittele vartiot  ${VARTIOIDEN_MAARITYS_URL}  ${VARTIOIDEN_MAARITYS_OTSIKKO}
+    comment  varmistetaan että käpistellään oikeaa sarjaa
+    Run Keyword And Ignore Error  click link  harmaa
+    Input Text  id_harmaa-0-nimi  testivartio1
+    Input Text  id_harmaa-0-nro  100
+    Input Text  id_harmaa-1-nimi  testivartio2
+    Input Text  id_harmaa-1-nro  101
+    click button  tallenna
+    Close Browser
+    Open Competition
+    Open Sub Page Verify Location And Title  määrittele vartiot  ${VARTIOIDEN_MAARITYS_URL}  ${VARTIOIDEN_MAARITYS_OTSIKKO}
+    Run Keyword And Ignore Error  click link  harmaa
+    ${first_group}=  get value  id_harmaa-0-nimi
+    Should Contain  ${first_group}  testivartio1
+    ${second_group}=  get value  id_harmaa-1-nimi
+    Should Contain  ${second_group}  testivartio2
+
+Poistetaan tyhjä sarja kisasta
+    [Documentation]  sininen
     Click Link  määrittele kisan perustiedot
     Location Should Be  ${KIPA_URL}/${TESTIKISA}/${KISAN_MAARITYS_URL}/
     comment  Valitaan eka chekboxi, sininen
@@ -74,8 +96,24 @@ Poistetaan sarja kisasta
     Close Browser
     Open Competition
     Open Sub Page Verify Location And Title  määrittele vartiot  ${VARTIOIDEN_MAARITYS_URL}  ${VARTIOIDEN_MAARITYS_OTSIKKO}
-    Page Should Contain Link  harmaa
     Page Should Not Contain Link  sininen
+
+Poistetaan vartioita sisältävä sarja kisasta
+    [Documentation]  harmaa
+    Click Link  määrittele kisan perustiedot
+    Location Should Be  ${KIPA_URL}/${TESTIKISA}/${KISAN_MAARITYS_URL}/
+    comment  Valitaan eka chekboxi, harmaa
+    Select Checkbox  id_sarja_set-0-DELETE
+    Click Button  tallenna
+    Close Browser
+    Open Competition
+    Open Sub Page Verify Location And Title  määrittele vartiot  ${VARTIOIDEN_MAARITYS_URL}  ${VARTIOIDEN_MAARITYS_OTSIKKO}
+    Page Should Not Contain Link  harmaa
+    ${first_group}=  Run Keyword And Ignore Error  get value  id_harmaa-0-nimi
+    Should not Contain  ${first_group}  testivartio1
+    ${second_group}=  Run Keyword And Ignore Error  get value  id_harmaa-1-nimi
+    Should not Contain  ${second_group}  testivartio2
+    Page Should Contain Link  valkoinen
 
 Poista Luotu Kisa
     Remove Competition  ${TESTIKISA}
