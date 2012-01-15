@@ -1,7 +1,7 @@
 # encoding: utf-8
 # coding: UTF-8
 # KiPa(KisaPalvelu), tuloslaskentajärjestelmä partiotaitokilpailuihin
-#    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
+#    Copyright (C) 2011  Espoon Partiotuki ry. ept@partio.fi
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
