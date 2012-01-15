@@ -24,7 +24,7 @@ TULOSTEN_TARKISTUS_URL = u'tulosta'
 TUOMARINEUVOSTO_OTSIKKO = u'Kipa - Tuomarineuvoston antamien tulosten määritys'
 TUOMARINEUVOSTO_URL = u'maarita/tuomarineuvos'
 
-LASKENNAN_TILANNE_OTSIKKO = u'Kipa - Tupa - laskennan tilanne'
+LASKENNAN_TILANNE_OTSIKKO = u'Kipa - Tulokset sarjoittain'
 LASKENNAN_TILANNE_URL = u'tulosta/tilanne'
 
 SARJAKOHTAISET_TULOKSET_OTSIKKO = u'Sarjakohtaiset tulokset'
