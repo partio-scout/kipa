@@ -66,6 +66,7 @@ Lisätään sarjoja kisaan
     Open Sub Page Verify Location And Title  määrittele vartiot  ${VARTIOIDEN_MAARITYS_URL}  ${VARTIOIDEN_MAARITYS_OTSIKKO}
     Page Should Contain Link  sininen
     Page Should Contain Link  harmaa
+    Page Should Contain Link  valkoinen
 
 Lisätään kaksi vartiota sarjaan
     [Documentation]  harmaa
@@ -97,6 +98,8 @@ Poistetaan tyhjä sarja kisasta
     Open Competition
     Open Sub Page Verify Location And Title  määrittele vartiot  ${VARTIOIDEN_MAARITYS_URL}  ${VARTIOIDEN_MAARITYS_OTSIKKO}
     Page Should Not Contain Link  sininen
+    Page Should Contain Link  harmaa
+    Page Should Contain Link  valkoinen
 
 Poistetaan vartioita sisältävä sarja kisasta
     [Documentation]  harmaa
@@ -109,11 +112,11 @@ Poistetaan vartioita sisältävä sarja kisasta
     Open Competition
     Open Sub Page Verify Location And Title  määrittele vartiot  ${VARTIOIDEN_MAARITYS_URL}  ${VARTIOIDEN_MAARITYS_OTSIKKO}
     Page Should Not Contain Link  harmaa
+    Page Should Contain Link  valkoinen
     ${first_group}=  Run Keyword And Ignore Error  get value  id_harmaa-0-nimi
     Should not Contain  ${first_group}  testivartio1
     ${second_group}=  Run Keyword And Ignore Error  get value  id_harmaa-1-nimi
     Should not Contain  ${second_group}  testivartio2
-    Page Should Contain Link  valkoinen
 
 Poista Luotu Kisa
     Remove Competition  ${TESTIKISA}
