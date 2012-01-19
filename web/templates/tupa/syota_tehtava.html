@@ -2,7 +2,7 @@
 {% block title %}{{tehtava.nimi}}{% endblock %}
 {% block header %}
 {{ block.super }}
-<script type="text/javascript" language="javascript" src="/kipamedia/jquery.form-changed-warning.js"></script>
+<!--<script type="text/javascript" language="javascript" src="/kipamedia/jquery.form-changed-warning.js"></script>-->
 <script type="text/javascript" language="javascript" src="/kipamedia/jquery.maskedinput-1.3.js"></script>
 <script type="text/javascript" language="javascript" src="/kipamedia/jquery.stickytableheaders.js"></script>
 <script type="text/javascript" language="javascript" src="/kipamedia/keyhandler.js"></script>
@@ -25,6 +25,20 @@ $(document).ready(function(){
 	jQuery(function($){
 	   $(".time").mask("99:99:99");
 	});
+	
+/*    jQuery("input#kopioi_sarake1").click(function(){ 
+        if ($("input#kopioi_sarake1").is(':checked')) 
+        { 
+            // Checked, copy values 
+            $("input.col0").val($("input#copy_from1").val()); 
+        } 
+        else 
+        { 
+            // Clear on uncheck 
+            $("input.col0").val(""); 
+        } 
+    }); 
+*/
 </script>
 {% endblock header%}
 
@@ -120,6 +134,16 @@ $(document).ready(function(){
                </th>
             {% endfor %}
         </tr>
+<!--        <tr>
+            <th colspan="2">Käytä oletusarvoa:</th>
+            {% for maarite in maaritteet %}
+               <th>
+                   <input type="checkbox" id="kopioi_sarake{{forloop.counter}}" />
+                   <input type="text" id="copy_from{{forloop.counter}}" size="8" />
+               </th>
+            {% endfor %}
+        </tr>
+-->
     </thead>
 
     <tbody>
