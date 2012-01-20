@@ -309,18 +309,35 @@ def run_one_fixture(test_labels, verbosity=1, interactive=True, extra_tests=[]):
     testit=[aritmeettinen_laskin_test]
 
     if test_labels:
-	# Ajetaan vain yksi, annettu fixtuuri
-	test_fixtures = []       
-	test_fixtures.extend(test_labels)
-	for item in range(len(test_fixtures)):
-		test_fixtures[item] = ('%s/fixtures/tests/%s' %(os.curdir, test_fixtures[item]))   
+	print test_labels[0]
+	# Jos testilabeliksi asetettu 'kisat', käytetään kisat-kansiota
+	if test_labels[0] == 'kisat':
+		print '\n***Ajetaan kisat***\n'
+		test_fixtures = []
+		test_labels = ''
+		for f in os.listdir(os.curdir+"/fixtures/tests/kisat/"):
+        		if not f.find(".xml") == -1 :
+				print ('Löytyi: %s\n' %f)
+                		test_fixtures.append("fixtures/tests/kisat/"+f)
+		#print ('Testataan fixtuurit: %s\n' %test_fixtures)
+	
+	else:		
+		# Ajetaan vain yksi, annettu fixtuuri
+		print '\n***Ajetaan yksi fixtuuri***\n'    
+		print test_labels[0]		
+		test_fixtures = []	
+		test_fixtures.extend(test_labels)
+		for item in range(len(test_fixtures)):
+			test_fixtures[item] = ('%s/fixtures/tests/%s' %(os.curdir, test_fixtures[item]))   
     else:
         # Testeissä käytettävät fixturet:
         # haetaan kaikki xml fixtuurien nimet.
-        test_fixtures=[]
+	print '\n***Ajetaan kaikki fixtuurit***\n'        
+	test_fixtures=[]
 
         for f in os.listdir(os.curdir+"/fixtures/tests/"):
         	if not f.find(".xml") == -1 :
+			print ('Löytyi: %s\n' %f)
                 	test_fixtures.append("fixtures/tests/"+f)	
 
     # Tasapisteissä määräävät tehtävät testi
