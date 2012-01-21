@@ -207,7 +207,8 @@ def TulosTestFactory(fixture_name):
                         for v in virheet:
                                 virhe=virhe + "\n--------------------------------\n" + v 
                         self.failUnless( len(virheet) == 0 , unicode(virhe).encode('ascii', 'replace'))
-                
+                	sys.stdout.flush()
+
                 def testTehtavanUudelleenTallennus(self) :
                         """
                         Tallettaa jokaisen tehtävän uudestaan.
