@@ -320,6 +320,7 @@ def run_one_fixture(test_labels, verbosity=1, interactive=True, extra_tests=[]):
         		if not f.find(".xml") == -1 :
 				print ('Löytyi: %s\n' %f)
                 		test_fixtures.append("fixtures/tests/kisat/"+f)
+				sys.stdout.flush()
 		#print ('Testataan fixtuurit: %s\n' %test_fixtures)
 	
 	else:		
@@ -339,7 +340,8 @@ def run_one_fixture(test_labels, verbosity=1, interactive=True, extra_tests=[]):
         for f in os.listdir(os.curdir+"/fixtures/tests/"):
         	if not f.find(".xml") == -1 :
 			print ('Löytyi: %s\n' %f)
-                	test_fixtures.append("fixtures/tests/"+f)	
+                	test_fixtures.append("fixtures/tests/"+f)
+			sys.stdout.flush()	
 
     # Tasapisteissä määräävät tehtävät testi
     testit.append( TasapisteTesti )
