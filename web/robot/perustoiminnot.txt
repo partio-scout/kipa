@@ -50,7 +50,6 @@ Tarkista palauta kisa
 
 Tarkista sarjan tulokset
     Open Sub Page Verify Location And Title  sarjan tulokset  ${TULOSTEN_TARKISTUS_URL}  ${TULOSTEN_TARKISTUS_OTSIKKO}
-    Page Should Contain Link  Heijasta tuloksia
 
 Lisätään sarjoja kisaan
     [Documentation]  sininen, harmaa ja valkoinen
