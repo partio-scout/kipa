@@ -525,12 +525,6 @@ def tuomarineuvos(request, kisa_nimi,talletettu=None):
 			'kisa_nimi': kisa_nimi,
                         'talletettu': tal })
 
-def listaa(request, kisa_nimi,tarkistus=None):
-        """
-        Listaa sarjat
-        """
-       
-        sarjat=sarja.objects.all()
 
 													
 def tulostaSarja(request, kisa_nimi, sarja_id, tulostus=0,vaihtoaika=None,vaihto_id=None) :
