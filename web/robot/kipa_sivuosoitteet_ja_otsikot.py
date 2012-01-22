@@ -19,7 +19,7 @@ TULOSTEN_SYOTTO_TARKISTUS_URL = u'syota/tarkistus'
 #Tulokset
 
 TULOSTEN_TARKISTUS_OTSIKKO = u'Kipa - Tulokset sarjoittain'
-TULOSTEN_TARKISTUS_URL = u'tulosta'
+TULOSTEN_TARKISTUS_URL = u'tulosta/normaali/'
 
 TUOMARINEUVOSTO_OTSIKKO = u'Kipa - Tuomarineuvoston antamien tulosten määritys'
 TUOMARINEUVOSTO_URL = u'maarita/tuomarineuvos'
@@ -27,8 +27,6 @@ TUOMARINEUVOSTO_URL = u'maarita/tuomarineuvos'
 LASKENNAN_TILANNE_OTSIKKO = u'Kipa - Tulokset sarjoittain'
 LASKENNAN_TILANNE_URL = u'tulosta/tilanne'
 
-SARJAKOHTAISET_TULOKSET_OTSIKKO = u'Sarjakohtaiset tulokset'
-SARJAKOHTAISET_TULOKSET_URL = u'heijasta/sarja'
 
 #Kisan Määritykset
 
