@@ -19,7 +19,7 @@ TULOSTEN_SYOTTO_TARKISTUS_URL = u'syota/tarkistus'
 #Tulokset
 
 TULOSTEN_TARKISTUS_OTSIKKO = u'Kipa - Tulokset sarjoittain'
-TULOSTEN_TARKISTUS_URL = u'tulosta/normaali/'
+TULOSTEN_TARKISTUS_URL = u'tulosta/normaali'
 
 TUOMARINEUVOSTO_OTSIKKO = u'Kipa - Tuomarineuvoston antamien tulosten määritys'
 TUOMARINEUVOSTO_URL = u'maarita/tuomarineuvos'
