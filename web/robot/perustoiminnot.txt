@@ -66,6 +66,7 @@ Lisätään sarjoja kisaan
     Page Should Contain Link  sininen
     Page Should Contain Link  harmaa
     Page Should Contain Link  valkoinen
+    Capture Page Screenshot
 
 Lisätään kaksi vartiota sarjaan
     [Documentation]  harmaa
@@ -85,6 +86,7 @@ Lisätään kaksi vartiota sarjaan
     Should Contain  ${first_group}  testivartio1
     ${second_group}=  get value  id_harmaa-1-nimi
     Should Contain  ${second_group}  testivartio2
+    Capture Page Screenshot
 
 Poistetaan tyhjä sarja kisasta
     [Documentation]  sininen
@@ -99,6 +101,7 @@ Poistetaan tyhjä sarja kisasta
     Page Should Not Contain Link  sininen
     Page Should Contain Link  harmaa
     Page Should Contain Link  valkoinen
+    Capture Page Screenshot
 
 Poistetaan vartioita sisältävä sarja kisasta
     [Documentation]  harmaa
@@ -116,6 +119,7 @@ Poistetaan vartioita sisältävä sarja kisasta
     Should not Contain  ${first_group}  testivartio1
     ${second_group}=  Run Keyword And Ignore Error  get value  id_harmaa-1-nimi
     Should not Contain  ${second_group}  testivartio2
+    Capture Page Screenshot
 
 Poista Luotu Kisa
     Remove Competition  ${TESTIKISA}
