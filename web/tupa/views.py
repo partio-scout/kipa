@@ -116,6 +116,7 @@ def tulosta(request,kisa_nimi,tulostyyppi=""):
         """
         Valintalista kisan sarjojen tuloksista.
         """
+        if len(tulostyyppi) : tulostyyppi+="/"
         sarjat = Sarja.objects.select_related().filter(kisa__nimi=kisa_nimi)
         return render_to_response('tupa/tulosta.html', {'sarja_list': sarjat,
                                                         'kisa_nimi': kisa_nimi, 
