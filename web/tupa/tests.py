@@ -143,6 +143,7 @@ def ViewSanityCheck(fixture_name):
                                 kisa_nimi=t.sarja.kisa.nimi
                                 maaritaTehtava(request,kisa_nimi=kisa_nimi,tehtava_id=tehtava_id)
                                 syotaTehtava(request,kisa_nimi=kisa_nimi,tehtava_id=tehtava_id)
+                                tehtavanVaiheet(request,kisa_nimi=kisa_nimi,tehtava_id=tehtava_id)
         return testi
 
 def TulosTestFactory(fixture_name):

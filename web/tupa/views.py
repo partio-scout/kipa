@@ -448,6 +448,7 @@ def testiTulos(request, kisa_nimi,talletettu=None):
         for s in sarjat :
                 taulut=s
                 taulut.tiedot=Vartio.objects.filter(sarja=s)
+                taulut.sarja=s 
                 tehtavat=Tehtava.objects.filter(sarja = s )
 
                 for v in taulut.tiedot:
