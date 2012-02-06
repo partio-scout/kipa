@@ -41,6 +41,10 @@ Tarkista Testituloksien määritys
     Open Sub Page Verify Location And Title  määrittele testituloksia  ${TESTITULOKSIEN_MAARITYS_URL}  ${TESTITULOKSIEN_MAARITYS_OTSIKKO}
     Page Should Contain Button  Peruuta
     Page Should Contain Button  tallenna
+    comment  Linkin, luo testitulokset sarjalle, pitäisi viedä samalle sivulle.
+    Open Sub Page Verify Location And Title  luo testitulokset sarjalle  ${TESTITULOKSIEN_MAARITYS_URL}  ${TESTITULOKSIEN_MAARITYS_OTSIKKO}
+    Page Should Contain Button  Peruuta
+    Page Should Contain Button  tallenna
 
 Tarkista palauta kisa
     Open Sub Page Verify Location And Title  palauta kisa  ${KISAN_TUONTI_URL}  ${KISAN_TUONTI_OTSIKKO}
@@ -136,6 +140,7 @@ Create New Competition
     Click Link  Luo uusi kisa
     Location Should Be  ${KIPA_URL}/uusiKisa/${KISAN_MAARITYS_URL}/
     Input Text  id_nimi  ${competition}
+    Input Text  id_sarja_set-0-nimi  testisarja
     Click Button  tallenna
     Close Browser
     Open Browser And Maximize  ${KIPA_URL}/
