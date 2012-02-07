@@ -92,6 +92,14 @@ Lisätään kaksi vartiota sarjaan
     Should Contain  ${second_group}  testivartio2
     Capture Screenshot
 
+Lisätään tehtäviä tyhjään sarjaan
+    Comment  TBD
+    Comment  Tee yleisKW eri tehtävätyyppien luontiin
+
+Lisätään tehtäviä vartioita sisältävään sarjaan
+    Comment  TBD
+    Comment  Tee yleisKW eri tehtävätyyppien luontiin
+
 Poistetaan tyhjä sarja kisasta
     [Documentation]  sininen
     Click Link  määrittele kisan perustiedot
