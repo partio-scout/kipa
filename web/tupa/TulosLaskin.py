@@ -268,15 +268,15 @@ def laskeSarja(sarja,syotteet,vartiot=None,tehtavat=None):
                 # Merkataan tuloksiin H hylättyihin tehtäviin:
                 for t in range(len(tulokset[i])) :
                         hylatty=True
-                        tekematta=True
+                        tekematta=False
                         tehtSyotteet=syotteet.filter(maarite__osa_tehtava__tehtava=tehtavat[t]).filter(vartio=vartiot[i])
                         #syotteet= vartiot[i].syote_set.filter(maarite__osa_tehtava__tehtava=tehtavat[t])
                         for s in tehtSyotteet :
+                                if s.arvo=="e" : tekematta=True
                                 if not s.arvo=="h":  hylatty=False
-                                if not s.arvo=="e":  tekematta=False
                         
-                        if tekematta and len(tehtSyotteet): tulokset[i][t]= "E"
                         if hylatty and len(tehtSyotteet): tulokset[i][t]= "H"
+                        if tekematta: tulokset[i][t]= "E"
 
                 #Merkataan siirrettäviksi ulkopuolella olevat:
                 if not vartiot[i].keskeyttanyt == None or not vartiot[i].ulkopuolella == None : 
