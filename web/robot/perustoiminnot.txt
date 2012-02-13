@@ -170,7 +170,7 @@ Kipa Suite Setup
 Open Sub Page Verify Location And Title
     [Arguments]  ${link_name}  ${link}  ${page_title}
     Click Link  ${link_name}
-    Wait Until Keyword Succeeds  3 second  1 second  Location Should Be  ${KIPA_URL}/${TESTIKISA}/${link}/
+    Wait Until Keyword Succeeds  5 second  1 second  Location Should Be  ${KIPA_URL}/${TESTIKISA}/${link}/
     Title Should Be  ${page_title}
 
 Open Competition
