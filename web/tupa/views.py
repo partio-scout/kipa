@@ -616,7 +616,7 @@ def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
                 otsikkorivi.append(unicode(teht.jarjestysnro))
         writer.writerow(otsikkorivi)
         
-        nimirivi = ['','','','']
+        nimirivi = ['','','','','']
         for teht in mukana[0][2:] :
                 teht_nimi=teht.nimi
                 if teht.lyhenne : teht_nimi=teht.lyhenne
