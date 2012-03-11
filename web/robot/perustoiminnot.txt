@@ -92,11 +92,11 @@ Lisätään kaksi vartiota sarjaan
     Should Contain  ${second_group}  testivartio2
     Capture Screenshot
 
-Lisätään tehtäviä tyhjään sarjaan
+Lisätään tehtäviä tyhjään sarjaan (TBD ->toteutus vielä tekemättä)
     Comment  TBD
     Comment  Tee yleisKW eri tehtävätyyppien luontiin
 
-Lisätään tehtäviä vartioita sisältävään sarjaan
+Lisätään tehtäviä vartioita sisältävään sarjaan (TBD ->toteutus vielä tekemättä)
     Comment  TBD
     Comment  Tee yleisKW eri tehtävätyyppien luontiin
 
