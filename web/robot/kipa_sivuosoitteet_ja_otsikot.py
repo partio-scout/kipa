@@ -1,4 +1,4 @@
-# encoding=UTF8
+# -*- coding: utf-8 -*-
 
 # Testikisan nimimääritys, oletusarvona: testikisa
 TESTIKISA = u'testikisa'
