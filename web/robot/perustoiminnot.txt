@@ -151,7 +151,8 @@ Create New Competition
     Input Text  id_sarja_set-0-nimi  testisarja
     Click Button  tallenna
     Close Browser
-    Open Browser And Maximize  ${KIPA_URL}/
+    comment  kaikissa ympäristöissä ei näköjään ehditä avamaan selainta aikarajan puitteissa, yritetään 5 sekunnin välein 15 sekunnin ajan ennenkuin luovutetaan
+    Wait Until Keyword Succeeds  15 seconds  5seconds  Open Browser And Maximize  ${KIPA_URL}/
     Click Link  ${competition}
     Location Should Be  ${KIPA_URL}/${competition}/
     Title Should Be  Kipa - ${competition}
