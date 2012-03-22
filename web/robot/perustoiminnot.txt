@@ -138,7 +138,7 @@ Poista Luotu Kisa
 
 *** Keywords ***
 Open KiPa Main Page
-    Open Browser And Maximize  ${KIPA_URL}/
+    Wait Until Keyword Succeeds  10 seconds  2 seconds  Open Browser And Maximize  ${KIPA_URL}/
     Comment  Set Selenium Speed  2 sec
     Title Should Be  ${KIPA_OTSIKKO}
 
@@ -171,7 +171,7 @@ Kipa Suite Setup
 Open Sub Page Verify Location And Title
     [Arguments]  ${link_name}  ${link}  ${page_title}
     Click Link  ${link_name}
-    Wait Until Keyword Succeeds  5 second  1 second  Location Should Be  ${KIPA_URL}/${TESTIKISA}/${link}/
+    Wait Until Keyword Succeeds  10 second  2 second  Location Should Be  ${KIPA_URL}/${TESTIKISA}/${link}/
     Title Should Be  ${page_title}
 
 Open Competition
