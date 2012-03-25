@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation   Testataan perustoiminnallisuudet
 Suite Setup     Kipa Suite Setup
-Suite Teardown  Stop Selenium Server
+Suite Teardown  Close All Browsers And Stop Selenium Server
 Test Setup      Open Competition
 Test Teardown   Close Browser
 Force Tags      regression  smoke
@@ -135,6 +135,7 @@ Poistetaan vartioita sisältävä sarja kisasta
 
 Poista Luotu Kisa
     Remove Competition  ${TESTIKISA}
+    [Teardown]  close all browsers
 
 *** Keywords ***
 Open KiPa Main Page
@@ -166,7 +167,7 @@ Kipa Suite Setup
     Start Selenium Server
     comment  Uudelleenyritys testiserverin mahdollisen kuormituksen vuoksi.
     Wait Until Keyword Succeeds  3 min  1 min  Open Kipa Main Page
-    Close Browser
+    Comment  Close Browser
 
 Open Sub Page Verify Location And Title
     [Arguments]  ${link_name}  ${link}  ${page_title}
@@ -193,4 +194,8 @@ Remove Competition
     Location Should Be  ${KIPA_URL}/
     Page Should Not Contain Link  ${competition}
     Page Should Not Contain  ${competition}
+
+Close All Browsers And Stop Selenium Server
+    Close All Browsers
+    Stop Selenium Server
 
