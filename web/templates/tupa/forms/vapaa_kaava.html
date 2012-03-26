@@ -27,15 +27,16 @@
 <button name="lisaa_maaritteita" type="submit" class="small blue awesome" value='{{maaritteita.name}}' title="Lisää 5 tyhjää kenttää">Lisää 5 kenttää</button><br><br>
 
 <font color=red><b>{{kaava.errors}}</b></font> Vartion suorituksen kaava:
-<span onmouseover="tooltip.show('Tähän tulee kaava, jolla lasketaan yksittäisen vartion suoritus osatehtävässä. Syötteisiin viitataan niiden kirjaimilla. Aikaa käsitellään laskennallisesti sekunteina.' );" 
-onmouseout="tooltip.hide();">
-	<img src="/kipamedia/help_small.png" />
+<span onmouseover="tooltip.show('Tähän tulee kaava, jolla lasketaan yksittäisen vartion suoritus osatehtävässä. Syötteisiin viitataan niiden kirjaimilla. Aikaa käsitellään laskennallisesti sekunteina.' );" onmouseout="tooltip.hide();"><img src="/kipamedia/help_small.png" />
+    
+Funktiot: {% include "tupa/forms/funktiot_apu.html" %} Operaattorit: {% include "tupa/forms/operaattorit_apu.html" %}
 </span>
 
 <input type="text" 
                         name="{{kaava.name}}" 
                         id="{{kaava.id}}" 
-                        value="{{kaava.value}}" size=70 /> funktiot: {% include "tupa/forms/funktiot_apu.html" %} operaattorit: {% include "tupa/forms/operaattorit_apu.html" %}<br><br>
+                        value="{{kaava.value}}" style="width:100%;" /><br />
+<br><br>
 
 {% include "tupa/forms/maksimi_suoritus.html" %}
 {% include "tupa/forms/nolla_suoritus.html" %}
