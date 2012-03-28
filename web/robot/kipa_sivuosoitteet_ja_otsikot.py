@@ -14,7 +14,8 @@ KIPA_URL = u'http://127.0.0.1:8000/kipa'
 TULOSTEN_SYOTTO_OTSIKKO = u'Kipa - Syötä tuloksia'
 TULOSTEN_SYOTTO_URL = u'syota'
 
-TULOSTEN_SYOTTO_TARKISTUS_OTSIKKO = u'Kipa - Syötä tuloksia - tarkistussyötteet'
+TULOSTEN_SYOTTO_TARKISTUS_OTSIKKO = u'Kipa - Syötä\
+ tuloksia - tarkistussyötteet'
 TULOSTEN_SYOTTO_TARKISTUS_URL = u'syota/tarkistus'
 
 #Tulokset
@@ -22,7 +23,8 @@ TULOSTEN_SYOTTO_TARKISTUS_URL = u'syota/tarkistus'
 TULOSTEN_TARKISTUS_OTSIKKO = u'Kipa - Tulokset sarjoittain'
 TULOSTEN_TARKISTUS_URL = u'tulosta/normaali'
 
-TUOMARINEUVOSTO_OTSIKKO = u'Kipa - Tuomarineuvoston antamien tulosten määritys'
+TUOMARINEUVOSTO_OTSIKKO = u'Kipa - Tuomarineuvoston antamien\
+ tulosten määritys'
 TUOMARINEUVOSTO_URL = u'maarita/tuomarineuvos'
 
 LASKENNAN_TILANNE_OTSIKKO = u'Kipa - Tulokset sarjoittain'
