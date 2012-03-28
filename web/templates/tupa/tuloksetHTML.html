@@ -86,7 +86,11 @@ TD {
                                 {% else %}
                                         {% comment %} ylarivi {% endcomment %}
                                         {%if sarake.lyhenne %}
-                                        <td align="right" style="padding-right:10px;"><b>{{sarake.lyhenne}}</b></td>
+					        {%if sarake.rastikasky %}
+                                                        <td align="right" style="padding-right:10px;"><b><a href=" {{sarake.rastikasky}} " target="_blank">{{sarake.lyhenne}}</a></b></td>
+                                                {% else %}         
+                                                        <td align="right" style="padding-right:10px;"><b>{{sarake.lyhenne}}</b></td>
+                                                {% endif %}
                                         {% else %}
                                         <td align="right" width="60" style="padding-right:10px;"><b>
                                             {{sarake.nimi|slice:":6"}}<br />

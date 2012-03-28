@@ -729,12 +729,16 @@ def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehta
                                         if value and not is_unicode_string(value):
                                                 errors="Anna merkkijono!"
                                                 data['valid']=False
-                                                
+                                if fk=='rastikasky' :                        #Estetään muiden kuin validien osotteiden syöttö
+                                        if value and not value.startswith('http://'):
+                                                errors="Osoitteen alettava 'http://' !"
+                                                data['valid']=False
+                
                                 # Kaavan validiointi:
                                 if  fk=='kaava' :
                                         if not is_kaava(value):
                                                 errors="Kaava ei toimi!"
-                                                data['valid']=False
+                                                data['valid']=False                                
 
                         if not fk== 'osa_tehtavat' :  formidata.append( (fk,{'id' : id,
                                                         'name' : id , 
