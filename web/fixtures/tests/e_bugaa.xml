@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object pk="3" model="tupa.kisa">
+        <field type="CharField" name="nimi">ee</field>
+        <field type="CharField" name="aika"></field>
+        <field type="CharField" name="paikka"></field>
+        <field type="BooleanField" name="tunnistus">False</field>
+    </object>
+    <object pk="15" model="tupa.sarja">
+        <field type="CharField" name="nimi">e</field>
+        <field type="IntegerField" name="vartion_maksimikoko"><None></None></field>
+        <field type="IntegerField" name="vartion_minimikoko"><None></None></field>
+        <field to="tupa.kisa" name="kisa" rel="ManyToOneRel">3</field>
+        <field type="IntegerField" name="tasapiste_teht1">1</field>
+        <field type="IntegerField" name="tasapiste_teht2">2</field>
+        <field type="IntegerField" name="tasapiste_teht3">3</field>
+    </object>
+    <object pk="63" model="tupa.vartio">
+        <field type="IntegerField" name="nro">1</field>
+        <field type="CharField" name="nimi">a</field>
+        <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">15</field>
+        <field type="CharField" name="piiri"></field>
+        <field type="CharField" name="lippukunta"></field>
+        <field type="CharField" name="puhelinnro"></field>
+        <field type="CharField" name="sahkoposti"></field>
+        <field type="CharField" name="osoite"></field>
+        <field type="IntegerField" name="keskeyttanyt"><None></None></field>
+        <field type="IntegerField" name="ulkopuolella"><None></None></field>
+    </object>
+    <object pk="64" model="tupa.vartio">
+        <field type="IntegerField" name="nro">2</field>
+        <field type="CharField" name="nimi">b</field>
+        <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">15</field>
+        <field type="CharField" name="piiri"></field>
+        <field type="CharField" name="lippukunta"></field>
+        <field type="CharField" name="puhelinnro"></field>
+        <field type="CharField" name="sahkoposti"></field>
+        <field type="CharField" name="osoite"></field>
+        <field type="IntegerField" name="keskeyttanyt"><None></None></field>
+        <field type="IntegerField" name="ulkopuolella"><None></None></field>
+    </object>
+    <object pk="65" model="tupa.vartio">
+        <field type="IntegerField" name="nro">3</field>
+        <field type="CharField" name="nimi">c</field>
+        <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">15</field>
+        <field type="CharField" name="piiri"></field>
+        <field type="CharField" name="lippukunta"></field>
+        <field type="CharField" name="puhelinnro"></field>
+        <field type="CharField" name="sahkoposti"></field>
+        <field type="CharField" name="osoite"></field>
+        <field type="IntegerField" name="keskeyttanyt"><None></None></field>
+        <field type="IntegerField" name="ulkopuolella"><None></None></field>
+    </object>
+    <object pk="66" model="tupa.vartio">
+        <field type="IntegerField" name="nro">4</field>
+        <field type="CharField" name="nimi">d</field>
+        <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">15</field>
+        <field type="CharField" name="piiri"></field>
+        <field type="CharField" name="lippukunta"></field>
+        <field type="CharField" name="puhelinnro"></field>
+        <field type="CharField" name="sahkoposti"></field>
+        <field type="CharField" name="osoite"></field>
+        <field type="IntegerField" name="keskeyttanyt"><None></None></field>
+        <field type="IntegerField" name="ulkopuolella"><None></None></field>
+    </object>
+    <object pk="67" model="tupa.vartio">
+        <field type="IntegerField" name="nro">5</field>
+        <field type="CharField" name="nimi">e</field>
+        <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">15</field>
+        <field type="CharField" name="piiri"></field>
+        <field type="CharField" name="lippukunta"></field>
+        <field type="CharField" name="puhelinnro"></field>
+        <field type="CharField" name="sahkoposti"></field>
+        <field type="CharField" name="osoite"></field>
+        <field type="IntegerField" name="keskeyttanyt"><None></None></field>
+        <field type="IntegerField" name="ulkopuolella"><None></None></field>
+    </object>
+    <object pk="245" model="tupa.tehtava">
+        <field type="CharField" name="nimi">e_toisessa</field>
+        <field type="CharField" name="lyhenne">e</field>
+        <field type="CharField" name="tehtavaryhma"></field>
+        <field type="CharField" name="tehtavaluokka"></field>
+        <field type="TextField" name="rastikasky"></field>
+        <field type="IntegerField" name="jarjestysnro">1</field>
+        <field type="CharField" name="kaava">ss</field>
+        <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">15</field>
+        <field type="BooleanField" name="tarkistettu">False</field>
+        <field type="CharField" name="maksimipisteet">4</field>
+        <field type="BooleanField" name="svirhe">False</field>
+    </object>
+    <object pk="622" model="tupa.syotemaarite">
+        <field type="CharField" name="nimi">a</field>
+        <field type="CharField" name="tyyppi">piste</field>
+        <field type="CharField" name="kali_vihje">piiste</field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">515</field>
+    </object>
+    <object pk="2120" model="tupa.syote">
+        <field type="CharField" name="arvo">e</field>
+        <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">63</field>
+        <field to="tupa.syotemaarite" name="maarite" rel="ManyToOneRel">622</field>
+        <field type="CharField" name="tarkistus"></field>
+    </object>
+    <object pk="2121" model="tupa.syote">
+        <field type="CharField" name="arvo">e</field>
+        <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">64</field>
+        <field to="tupa.syotemaarite" name="maarite" rel="ManyToOneRel">622</field>
+        <field type="CharField" name="tarkistus"></field>
+    </object>
+    <object pk="2122" model="tupa.syote">
+        <field type="CharField" name="arvo">1.0</field>
+        <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">65</field>
+        <field to="tupa.syotemaarite" name="maarite" rel="ManyToOneRel">622</field>
+        <field type="CharField" name="tarkistus"></field>
+    </object>
+    <object pk="2124" model="tupa.syote">
+        <field type="CharField" name="arvo">2.0</field>
+        <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">66</field>
+        <field to="tupa.syotemaarite" name="maarite" rel="ManyToOneRel">622</field>
+        <field type="CharField" name="tarkistus"></field>
+    </object>
+    <object pk="2126" model="tupa.syote">
+        <field type="CharField" name="arvo">3.0</field>
+        <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">67</field>
+        <field to="tupa.syotemaarite" name="maarite" rel="ManyToOneRel">622</field>
+        <field type="CharField" name="tarkistus"></field>
+    </object>
+    <object pk="621" model="tupa.syotemaarite">
+        <field type="CharField" name="nimi">b</field>
+        <field type="CharField" name="tyyppi">aika</field>
+        <field type="CharField" name="kali_vihje">aaika</field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">515</field>
+    </object>
+    <object pk="2123" model="tupa.syote">
+        <field type="CharField" name="arvo">1</field>
+        <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">65</field>
+        <field to="tupa.syotemaarite" name="maarite" rel="ManyToOneRel">621</field>
+        <field type="CharField" name="tarkistus"></field>
+    </object>
+    <object pk="2125" model="tupa.syote">
+        <field type="CharField" name="arvo">2</field>
+        <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">66</field>
+        <field to="tupa.syotemaarite" name="maarite" rel="ManyToOneRel">621</field>
+        <field type="CharField" name="tarkistus"></field>
+    </object>
+    <object pk="2127" model="tupa.syote">
+        <field type="CharField" name="arvo">3</field>
+        <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">67</field>
+        <field to="tupa.syotemaarite" name="maarite" rel="ManyToOneRel">621</field>
+        <field type="CharField" name="tarkistus"></field>
+    </object>
+    <object pk="2128" model="tupa.syote">
+        <field type="CharField" name="arvo">80542</field>
+        <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">63</field>
+        <field to="tupa.syotemaarite" name="maarite" rel="ManyToOneRel">621</field>
+        <field type="CharField" name="tarkistus"></field>
+    </object>
+    <object pk="2129" model="tupa.syote">
+        <field type="CharField" name="arvo">84791</field>
+        <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">64</field>
+        <field to="tupa.syotemaarite" name="maarite" rel="ManyToOneRel">621</field>
+        <field type="CharField" name="tarkistus"></field>
+    </object>
+    <object pk="1990" model="tupa.parametri">
+        <field type="CharField" name="nimi">parhaan_kaava</field>
+        <field type="CharField" name="arvo">suor*muk</field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">515</field>
+    </object>
+    <object pk="1991" model="tupa.parametri">
+        <field type="CharField" name="nimi">oikea</field>
+        <field type="CharField" name="arvo">0</field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">515</field>
+    </object>
+    <object pk="1992" model="tupa.parametri">
+        <field type="CharField" name="nimi">jaettavat</field>
+        <field type="CharField" name="arvo">4</field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">515</field>
+    </object>
+    <object pk="1993" model="tupa.parametri">
+        <field type="CharField" name="nimi">nollan_kaava</field>
+        <field type="CharField" name="arvo">suor*muk</field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">515</field>
+    </object>
+    <object pk="1994" model="tupa.parametri">
+        <field type="CharField" name="nimi">parhaan_haku</field>
+        <field type="CharField" name="arvo">min</field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">515</field>
+    </object>
+    <object pk="1995" model="tupa.parametri">
+        <field type="CharField" name="nimi">vartion_kaava</field>
+        <field type="CharField" name="arvo">a+b</field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">515</field>
+    </object>
+    <object pk="1996" model="tupa.parametri">
+        <field type="CharField" name="nimi">tapa</field>
+        <field type="CharField" name="arvo">med</field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">515</field>
+    </object>
+    <object pk="1997" model="tupa.parametri">
+        <field type="CharField" name="nimi">arvio</field>
+        <field type="CharField" name="arvo"></field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">515</field>
+    </object>
+    <object pk="1998" model="tupa.parametri">
+        <field type="CharField" name="nimi">nollan_kerroin</field>
+        <field type="CharField" name="arvo">1.5</field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">515</field>
+    </object>
+    <object pk="515" model="tupa.osatehtava">
+        <field type="CharField" name="nimi">a</field>
+        <field type="CharField" name="tyyppi">vk</field>
+        <field type="CharField" name="kaava">max(interpoloi(parhaan_haku([arvio(vartion_kaava-oikea),nollan_kerroin*tapa(arvio(nollan_kaava-oikea))]),parhaan_haku(arvio(parhaan_kaava-oikea)),jaettavat,nollan_kerroin*tapa(arvio(nollan_kaava-oikea))))</field>
+        <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">245</field>
+    </object>
+</django-objects>
