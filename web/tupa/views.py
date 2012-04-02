@@ -952,7 +952,7 @@ def laskennanTilanne(request,kisa_nimi) :
                 syotteita=0
                 for t in s.tehtava_set.all() :
                         taulukko[t.jarjestysnro][sarake]= tehtavanTilanne(t)
-                        syotteita=Syote.objects.filter(maarite__osa_tehtava__tehtava=t).count()
+                        syotteita+=Syote.objects.filter(maarite__osa_tehtava__tehtava=t).count()
                         if(t.svirhe) : taulukko[t.jarjestysnro][sarake]=('v',t.nimi)
 
                 maaritteita=SyoteMaarite.objects.filter(osa_tehtava__tehtava__sarja=s).count()
