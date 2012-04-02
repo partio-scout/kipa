@@ -203,6 +203,15 @@ def TulosTestFactory(fixture_name):
                                                 ilmoitus=ilmoitus + "\nVartio: "  + t.vartio.nimi  
                                                 ilmoitus=ilmoitus + "\nTulos: "   + str(tulos)+' != '+str(vaadittava)
                                                 virheet.append(ilmoitus) 
+                                for t in s.tehtava_set.all() :
+                                    for v in s.vartio_set.all() :
+                                        tulos=haeTulos(tulokset,v,t)
+                                        if tulos==None or tulos=='None':
+                                            ilmoitus= virheilmoitus
+                                            ilmoitus=ilmoitus + "\nTehtava: " + t.nimi
+                                            ilmoitus=ilmoitus + "\nTulos: "   + str(tulos)
+                                            virheet.append(ilmoitus) 
+
                         virhe= str(len(virheet)) + " errors"
                         for v in virheet:
                                 virhe=virhe + "\n--------------------------------\n" + v 
@@ -290,7 +299,7 @@ class TasapisteTesti(TestCase) :
         def testJarjestys(self):
                 sarja=Sarja.objects.get(nimi="tiukka")
                 tulokset=sarja.laskeTulokset()
-		assert tulokset[0][1][0].nro==1
+                assert tulokset[0][1][0].nro==1
                 assert tulokset[0][2][0].nro==2
                 assert tulokset[0][3][0].nro==3
                 assert tulokset[0][4][0].nro==4
