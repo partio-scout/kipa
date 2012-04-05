@@ -1,5 +1,5 @@
 # encoding: utf-8
-# KiPa(KisaPalvelu), tuloslaskentajärjestelmä partiotaitokilpailuihin
+# KiPa(KisaPalvelu), tuloslaskentajï¿½rjestelmï¿½ partiotaitokilpailuihin
 #    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
 
 import unittest
@@ -71,7 +71,7 @@ class aritmeettinen_laskin_test(unittest.TestCase):
         assert laske('med(a)', {'a': Decimal("4") } ) == Decimal("4")
     #def testMedFunktio2(self):
     #    assert laske('med(a)', {'a': {'a' : Decimal("4"),'b' : Decimal("5"),'c' : Decimal("6")} }) == Decimal("5") 
-    #Poistettu, koska nykyinen toteutsu ei toimi näin, muutetaan vastaavaksi joskus...
+    #Poistettu, koska nykyinen toteutsu ei toimi nï¿½in, muutetaan vastaavaksi joskus...
     def testListaFunktio(self):
         assert laske('min([a,3,1])', {'a': Decimal("100") } ) == Decimal("1")
     def testAbsMiinusparametri(self):
@@ -100,7 +100,7 @@ def haeTulos(tuloksetSarjalle, vartio, tehtava) :
 
 def ViewSanityCheck(fixture_name):
         """
-        Luo testcasen tarkistamaan sen, että kaikki näkymät toimivat kaatumatta.
+        Luo testcasen tarkistamaan sen, ettï¿½ kaikki nï¿½kymï¿½t toimivat kaatumatta.
         fixture name = tietokantafixtuurin nimi jolle testi luodaan.
         palauttaa TestCase:n
         """
@@ -108,8 +108,8 @@ def ViewSanityCheck(fixture_name):
                 fixtures = [fixture_name]
                 def testSanity(self):
                         """
-                        Ajaa jokaisen näkymän testidatalla
-                        Testi antaa virheen jos jokin näkuma kaatuu.
+                        Ajaa jokaisen nï¿½kymï¿½n testidatalla
+                        Testi antaa virheen jos jokin nï¿½kuma kaatuu.
                         """
                         kisat=Kisa.objects.all()
                         sarjat=Sarja.objects.all()
@@ -118,7 +118,7 @@ def ViewSanityCheck(fixture_name):
                         request =HttpRequest()
                         maaritaKisa(request)
                         korvaaKisa(request)
-                        for k in kisat : # Kisakohtaiset näkymät
+                        for k in kisat : # Kisakohtaiset nï¿½kymï¿½t
                                 kisa_nimi=k.nimi
                                 kisa(request,kisa_nimi=kisa_nimi)
                                 maaritaKisa(request,kisa_nimi=kisa_nimi)
@@ -130,7 +130,7 @@ def ViewSanityCheck(fixture_name):
                                 tulosta(request,kisa_nimi=kisa_nimi)
                                 tallennaKisa(request, kisa_nimi=kisa_nimi)
                                 poistaKisa(request, kisa_nimi=kisa_nimi)
-                        for s in sarjat: # Sarjakohtaiset näkymät
+                        for s in sarjat: # Sarjakohtaiset nï¿½kymï¿½t
                                 sarja_id=s.id
                                 kisa_nimi=s.kisa.nimi
                                 maaritaTehtava(request,kisa_nimi=kisa_nimi,sarja_id=sarja_id)
@@ -138,7 +138,7 @@ def ViewSanityCheck(fixture_name):
                                 tulostaSarja(request,kisa_nimi=kisa_nimi, sarja_id=sarja_id)
                                 sarjanTuloksetCSV(request, kisa_nimi=kisa_nimi, sarja_id=sarja_id) 
                                 tulostaSarjaHTML(request, kisa_nimi=kisa_nimi, sarja_id=sarja_id)
-                        for t in tehtavat: # tehtäväkohtaiset näkymät
+                        for t in tehtavat: # tehtï¿½vï¿½kohtaiset nï¿½kymï¿½t
                                 tehtava_id=t.id
                                 kisa_nimi=t.sarja.kisa.nimi
                                 maaritaTehtava(request,kisa_nimi=kisa_nimi,tehtava_id=tehtava_id)
@@ -149,7 +149,7 @@ def ViewSanityCheck(fixture_name):
 def TulosTestFactory(fixture_name):
         """
         Tekee tulostestin halutulle tietokanta fixtuurille.
-        fixture_name = fixtuurin nimi jolle testi tehdään.
+        fixture_name = fixtuurin nimi jolle testi tehdï¿½ï¿½n.
         palauttaa TestCase:n
         """
         class testi(TestCase) :
@@ -159,7 +159,7 @@ def TulosTestFactory(fixture_name):
                         Iteroi jokaisen sarjan ja tehtavan.
                         Laskee tulokset ja vertaa tuloksia maariteltyihin testituloksiin.
                         Tunnistaa laskennan kaatavia virheita.
-                        Tunnistaa väärat tulokset.
+                        Tunnistaa vï¿½ï¿½rat tulokset.
                         Vaarien tulosten kohdalla tulostaa yhteenvedon.
                         """
                         settings.DEBUG=False
@@ -221,10 +221,10 @@ def TulosTestFactory(fixture_name):
 
                 def testTehtavanUudelleenTallennus(self) :
                         """
-                        Tallettaa jokaisen tehtävän uudestaan.
-                        Tarkistaa että tulokset lasketaan tämänkin jälkeen oikein.
+                        Tallettaa jokaisen tehtï¿½vï¿½n uudestaan.
+                        Tarkistaa ettï¿½ tulokset lasketaan tï¿½mï¿½nkin jï¿½lkeen oikein.
                         """
-                        #Kytketään taustalaskenta pois päältä testin ajaki
+                        #Kytketï¿½ï¿½n taustalaskenta pois pï¿½ï¿½ltï¿½ testin ajaki
                         settings.DEBUG=False
                         self.TAUSTALASKENTA=settings.TAUSTALASKENTA                        
                         settings.TAUSTALASKENTA=None
@@ -267,7 +267,7 @@ def TulosTestFactory(fixture_name):
 
 def PostTestFactory(fixture_name):
         """
-        Testi joka ajaa näkymiä ennalta määritellyillä testdatoilla.
+        Testi joka ajaa nï¿½kymiï¿½ ennalta mï¿½ï¿½ritellyillï¿½ testdatoilla.
         """
         from xml.dom.minidom import parse
         class testi(TestCase) :
@@ -294,7 +294,7 @@ def PostTestFactory(fixture_name):
 
 class TasapisteTesti(TestCase) :
         """
-        Testaa tasapisteissä määräävien tehtävien toimintaa.
+        Testaa tasapisteissÃ¤ mÃ¤Ã¤rÃ¤Ã¤vien tehtÃ¤vien toimintaa.
         """
         fixtures = ["fixtures/tests/tasapisteet.xml"]
         def testJarjestys(self):
@@ -321,14 +321,14 @@ def run_one_fixture(test_labels, verbosity=1, interactive=True, extra_tests=[]):
 
     if test_labels:
 	print test_labels[0]
-	# Jos testilabeliksi asetettu 'kisat', käytetään kisat-kansiota
+	# Jos testilabeliksi asetettu 'kisat', kï¿½ytetï¿½ï¿½n kisat-kansiota
 	if test_labels[0] == 'kisat':
-		print '\n***Ajetaan kisat***\n'
+		print '\n***Ajetaan kisa fixtuurit***\n'
 		test_fixtures = []
 		test_labels = ''
 		for f in os.listdir(os.curdir+"/fixtures/tests/kisat/"):
         		if not f.find(".xml") == -1 :
-				print ('Löytyi: %s\n' %f)
+				print ('LÃ¶ytyi: %s\n' %f)
                 		test_fixtures.append("fixtures/tests/kisat/"+f)
 				sys.stdout.flush()
 		#print ('Testataan fixtuurit: %s\n' %test_fixtures)
@@ -342,18 +342,19 @@ def run_one_fixture(test_labels, verbosity=1, interactive=True, extra_tests=[]):
 		for item in range(len(test_fixtures)):
 			test_fixtures[item] = ('%s/fixtures/tests/%s' %(os.curdir, test_fixtures[item]))   
     else:
-        # Testeissä käytettävät fixturet:
+        # TesteissÃ¤ kÃ¤ytettÃ¤vÃ¤t fixturet:
         # haetaan kaikki xml fixtuurien nimet.
-	print '\n***Ajetaan kaikki fixtuurit***\n'        
-	test_fixtures=[]
+        print '\n***Ajetaan kaikki testifixtuurit***\nHuom. Kisafixtuureja ei ajeta tÃ¤llÃ¤ komennolla, kÃ¤ytÃ¤ komentoa:\n'        
+        print 'python manage.py test kisat \n ajaaksesi kisafixtuurit.'
+        test_fixtures=[]
 
         for f in os.listdir(os.curdir+"/fixtures/tests/"):
         	if not f.find(".xml") == -1 :
-			print ('Löytyi: %s\n' %f)
+			print ('LÃ¶ytyi: %s\n' %f)
                 	test_fixtures.append("fixtures/tests/"+f)
 			sys.stdout.flush()	
 
-    # Tasapisteissä määräävät tehtävät testi
+    # Tasapisteissï¿½ mï¿½ï¿½rï¿½ï¿½vï¿½t tehtï¿½vï¿½t testi
     testit.append( TasapisteTesti )
 
     #luodaan Post testit tekstitiedostoista
