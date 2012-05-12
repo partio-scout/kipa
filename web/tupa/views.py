@@ -373,7 +373,9 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
         for v in vartiot :
                 rivi = []
                 colnum = 0
-                for m in maaritteet :
+                for ot in osatehtavat :
+                    osatehtavan_formit=[]
+                    for m in ot.syotemaarite_set.all() :
                         maaritteen_syotteet = tehtavan_syotteet.filter(vartio = v ).filter(maarite=m)
                         m.syotteita= len(maaritteen_syotteet)
                         syote=None
@@ -382,9 +384,9 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                                 syote=maaritteen_syotteet[0]
                         
                         if tarkistus : # Syötetäänkö tarkistus syötteitä?
-                                formi =  TarkistusSyoteForm(m,v,posti,instance=syote,prefix=v.nimi+str(m.pk),)
+                            formi =  TarkistusSyoteForm(m,v,posti,instance=syote,prefix=str(v.nro)+"_"+str(m.pk),)
                         else : # Syötetään normi syötteitä.
-                                formi = SyoteForm(m,v,posti,instance=syote,prefix=v.nimi+str(m.pk),)
+                                formi = SyoteForm(m,v,posti,instance=syote,prefix=str(v.nro)+"_"+str(m.pk),)
                         if not "class" in formi.fields['arvo'].widget.attrs.keys() : 
                             formi.fields['arvo'].widget.attrs["class"]="col"+str(colnum)
                         else: formi.fields['arvo'].widget.attrs["class"] += " col" + str(colnum)
@@ -399,8 +401,9 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                                 syottovirhe="virhe"
                                 tehtava.svirhe=1
 
-                        rivi.append( formi )
+                        osatehtavan_formit.append( formi )
                         colnum += 1 
+                    rivi.append(osatehtavan_formit)
                 syoteFormit.append( (v,rivi))
         
         if posti and validi  : # Sivu oikein
@@ -992,7 +995,7 @@ def tehtavanVaiheet(request,kisa_nimi,tehtava_id,vartio_id=None):
         if tehtavan_syotteet : hot=69 # Viettelee syotteet kannasta.
         
         laskeSarja(tehtava.sarja,tehtavan_syotteet,Vartio.objects.filter(id=vartio_id),[tehtava])
-        responssi += '<a href="javascript:javascript:history.go(-1)">'+ u'Takaisin määrittelyyn </a> <br><br>'
+        responssi += '<a href="/kipa/lista/maarita/tehtava/'+ tehtava_id + '/">'+ u'Takaisin määrittelyyn </a> <br><br>'
         for v in vartiot :
                 responssi += '<a href="/kipa/'+kisa_nimi+'/maarita/vaiheet/'+str(tehtava_id)+'/'+str(v.id) +'/">'+ str(v.nro) +' '+ v.nimi+ '</a> &nbsp; &nbsp;  '
         responssi += palautaLoki() 
