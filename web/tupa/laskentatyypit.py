@@ -187,12 +187,14 @@ def karsi(lista,lfunktio):
                 if hasattr(l, 'keys') :  # on sanakirja
                         pakotus=1 # Tähän täytyisi tehdä rekursiivinen sanakirjojen operointi
                 elif hasattr(l, '__contains__') : # on lista
+                    if len(l)>index and not type(l)==str and not type(l)==unicode :
+                        tavaraa=1
                         varvi.append( l[index] )
                 else: 
                         varvi.append(l)
             if tavaraa==0 and index>0 : break;
             index+=1 ;
-            karsittu.append( lfunktio(*varvi) )
+            if len(varvi) : karsittu.append( lfunktio(*varvi) )
         if len(karsittu)==1:
                 return karsittu[0]
         else :

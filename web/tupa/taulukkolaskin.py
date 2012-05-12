@@ -71,7 +71,7 @@ def laske(lauseke,m={},funktiot={}):
                 try: 
                         tulos = eval(lause)
                 except KeyError : tulos = "S" # Syottämättomiä muuttujia
-                #except TypeError :  tulos= None 
+                except TypeError :  tulos= None 
         else :
                 try: 
                         tulos = eval(lause)
