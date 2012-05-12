@@ -20,8 +20,7 @@ $(document).ready(function(){
 	} else {
 		$("input").keydown(checkForEnter);
 	}
-});
-
+	
 	jQuery(function($){
 	   $.mask.definitions['~']='[he0123456789]'; /* hylätty, ei syötetty, numeroarvot*/
 	   $(".time").mask("~?9:99:99");
@@ -37,16 +36,17 @@ $(document).ready(function(){
         { 
             // Clear on uncheck 
             $("input.col0").val(""); 
-        } 
+        }
+*/ 
     }); 
-*/
+
 </script>
 {% endblock header%}
 
 {% block content %} 
 <body id="body_syota_tehtava">
 
-<h1>{{tehtava.nimi}}</h1>
+<h1 id="h1otsikko">{{tehtava.nimi}}</h1>
 
 <form action="." name="form1" id="form1" method="post">     
 
@@ -58,7 +58,7 @@ $(document).ready(function(){
     <td colspan="2" bgcolor="#E8EDFF">{{tehtava.jarjestysnro}} &nbsp; &nbsp; {{tehtava.nimi}}</td>
   </tr>
   <tr>
-    <td class="tauluOtsikko">Sarja:</td>
+    <td class="tauluOtsikko">Sarja: </td>
     <td colspan="2" bgcolor="#E8EDFF">{{tehtava.sarja.nimi}}</td>
   </tr>
 <!--  <tr>
@@ -67,20 +67,20 @@ $(document).ready(function(){
     <td bgcolor="#E8EDFF">&nbsp;</td>
   </tr>-->
   <tr valign="middle">
-    <td valign="middle" class="tauluOtsikko">Tehtävän tila:</td>
-    {%ifequal tilanne "a"%}
+    <td valign="middle" class="tauluOtsikko">Tehtävän tila: {{tilanne.0}}</td>
+    {%ifequal tilanne.0 "a"%}
     <td width="150" valign="middle" class='aloittamatta'><label>aloittamatta</label></td>
     {% endifequal %}
-    {%ifequal tilanne "o"%}
+    {%ifequal tilanne.0 "o"%}
     <td width="150" valign="middle" class='osittain'><label>syötetty osittain</label></td>
     {% endifequal %}
-    {%ifequal tilanne "s"%}
+    {%ifequal tilanne.0 "s"%}
     <td width="150" valign="middle" class='syotetty'><label>syötetty</label></td>
     {% endifequal %}
-    {%ifequal tilanne "t"%}
+    {%ifequal tilanne.0 "t"%}
     <td width="150" valign="middle" class='tarkistettu'><label>tarkistettu</label></td>
     {% endifequal %}
-    {%ifequal tilanne "v"%}
+    {%ifequal tilanne.0 "v"%}
     <td width="150" valign="middle" class='virhe'><label>syöttövirhe</label></td>
     {% endifequal %}
 
