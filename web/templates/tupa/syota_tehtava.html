@@ -23,7 +23,8 @@ $(document).ready(function(){
 });
 
 	jQuery(function($){
-	   $(".time").mask("99:99:99");
+	   $.mask.definitions['~']='[he0123456789]'; /* hylätty, ei syötetty, numeroarvot*/
+	   $(".time").mask("~~:~~:~~");
 	});
 	
 /*    jQuery("input#kopioi_sarake1").click(function(){ 
