@@ -13,8 +13,7 @@
 {% block content %} 
 <body>
 
-<h1>Laskennan tilanne</h1>
-
+<h1>Laskennan tilanne {% now "j.n.Y G:i"%} </h1>
   <table width="500" border="0" id="taulukko">
     {% for rivi in taulukko %}
         <tr valign="top">
