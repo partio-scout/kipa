@@ -990,7 +990,7 @@ def tehtavanVaiheet(request,kisa_nimi,tehtava_id,vartio_id=None):
         if tehtavan_syotteet : hot=69 # Viettelee syotteet kannasta.
         
         laskeSarja(tehtava.sarja,tehtavan_syotteet,Vartio.objects.filter(id=vartio_id),[tehtava])
-        responssi += '<a href="javascript:javascript:history.go(-1)">'+ u'Takaisin määrittelyyn </a> <br><br>'
+        responssi += '<a href="/kipa/lista/maarita/tehtava/'+ tehtava_id + '/">' + u'Takaisin määrittelyyn </a> <br><br>'
         for v in vartiot :
                 responssi += '<a href="/kipa/'+kisa_nimi+'/maarita/vaiheet/'+str(tehtava_id)+'/'+str(v.id) +'/">'+ str(v.nro) +' '+ v.nimi+ '</a> &nbsp; &nbsp;  '
         responssi += palautaLoki() 
