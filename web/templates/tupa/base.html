@@ -55,13 +55,13 @@ document.getElementById(id).style.display = visibility;
 
 <div id="wrap">
 
-    <div id="header"><div id="pageTitle"><a href="/kipa/{{kisa_nimi}}/">{{kisa_nimi}}</a></div>  
+    <div id="header"><div id="pageTitle" class="capitalize"><a href="/kipa/{{kisa_nimi}}/">{{kisa_nimi}}</a></div>  
 		<div style="float:right; margin-top:-4px; margin-bottom:0; padding-bottom:0; height:18px;">		
 			{% include "tupa/login.html" %}
 		</div>
 
 	</div><!-- /header -->
-    <div id="breadcrumbs">
+    <div id="breadcrumbs" class="capitalize">
 	{% if tarkistus %}
 	<a href="/kipa/{{kisa_nimi}}/">{{kisa_nimi}}</a> {%if taakse.url and taakse.title%}&raquo; <a href="{{taakse.url}}tarkistus/">{{taakse.title}} (tarkistus)</a> {% endif %}&raquo; {{heading}}
 	{% else %}
