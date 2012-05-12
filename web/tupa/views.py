@@ -299,10 +299,9 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
         
         sarja.taustaTulokset() # Taustalaskenta
 
-	otsikko = 'Uusi tehtävä' # Tähän perään olisi kiva saada sarja näkyviin, tyyliin + ' (' + sarja.nimi + ')'
+	otsikko = u'Uusi tehtävä ('+ sarja.nimi +')' 
 
-	if tehtava and not tehtava.nimi == '' : otsikko = tehtava.nimi # Tähän perään olisi kiva saada sarja näkyviin, tyyliin + ' (' + sarja.nimi + ')'
-        
+	if tehtava and not tehtava.nimi == '' : otsikko = unicode(tehtava.nimi)+u' ('+sarja.nimi+')'  
         # Talletetaanko ja siirrytäänkö talletettu sivuun?
         if posti and not 'lisaa_maaritteita' in posti.keys() and daatta['valid'] : 
                 if "nappi" in posti.keys() and posti["nappi"]=="ohjaus": # Talleta ja luo uusi.
