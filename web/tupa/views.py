@@ -64,7 +64,7 @@ def tarkistaVirhe(syote):
 
 def tehtavanTilanne(tehtava):
         vartioita=tehtava.sarja.vartio_set.all().count() 
-        syotteita=Syote.objects.filter(maarite__osa_tehtava__tehtava=tehtava).count
+        syotteita=Syote.objects.filter(maarite__osa_tehtava__tehtava=tehtava).exclude(arvo='kesk').count()
         maaritteita=SyoteMaarite.objects.filter(osa_tehtava__tehtava=tehtava).count()
         tila=("a",tehtava.nimi)
         if syotteita: tila=("o",tehtava.nimi)
@@ -955,14 +955,17 @@ def laskennanTilanne(request,kisa_nimi) :
         for s in kisa.sarja_set.all() :
                 vartioita=s.vartio_set.all().count()
                 syotteita=0
+                kesk_syotteita=0
                 for t in s.tehtava_set.all() :
                         taulukko[t.jarjestysnro][sarake]= tehtavanTilanne(t)
-                        syotteita+=Syote.objects.filter(maarite__osa_tehtava__tehtava=t).count()
+                        syotteita+=Syote.objects.filter(maarite__osa_tehtava__tehtava=t).exclude(arvo='kesk').count()
+                        kesk_syotteita+=Syote.objects.filter(maarite__osa_tehtava__tehtava=t).filter(arvo='kesk').count()
+                        
                         if(t.svirhe) : taulukko[t.jarjestysnro][sarake]=('v',t.nimi)
 
                 maaritteita=SyoteMaarite.objects.filter(osa_tehtava__tehtava__sarja=s).count()
                 if syotteita>0  and maaritteita>0: 
-                        prosentit=Decimal(syotteita*100)/(maaritteita*vartioita)
+                        prosentit=Decimal(syotteita*100)/(maaritteita*vartioita-kesk_syotteita)
                         prosentit=prosentit.quantize(Decimal('1.'), rounding=ROUND_UP)
                         taulukko[suurin+1][sarake]= (None,str(prosentit)+" %")
                 else: 
