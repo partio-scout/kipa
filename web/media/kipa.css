@@ -474,3 +474,13 @@ a.sitetoolbarnavactive:hover { color: #0d3b65; border: 1px solid #486B8A; paddin
 }
 
 #taulukko th.osatehtava_otsikko {color:#000; background-color:#fff; border:1px solid #222; text-align:center; padding-left:10px; padding-right:10px;}
+
+#body_syota_tehtava table#taulukko {
+	/*border:1px solid #000;*/
+}
+
+th.th_erotin,
+td.th_erotin {
+	background:#000!important;
+	padding:0!important;
+}
