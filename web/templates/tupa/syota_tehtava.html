@@ -67,19 +67,19 @@ $(document).ready(function(){
   </tr>-->
   <tr valign="middle">
     <td valign="middle" class="tauluOtsikko">Tehtävän tila:</td>
-    {%ifequal tilanne "a"%}
+    {%ifequal tilanne.0 "a"%}
     <td width="150" valign="middle" class='aloittamatta'><label>aloittamatta</label></td>
     {% endifequal %}
-    {%ifequal tilanne "o"%}
+    {%ifequal tilanne.0 "o"%}
     <td width="150" valign="middle" class='osittain'><label>syötetty osittain</label></td>
     {% endifequal %}
-    {%ifequal tilanne "s"%}
+    {%ifequal tilanne.0 "s"%}
     <td width="150" valign="middle" class='syotetty'><label>syötetty</label></td>
     {% endifequal %}
-    {%ifequal tilanne "t"%}
+    {%ifequal tilanne.0 "t"%}
     <td width="150" valign="middle" class='tarkistettu'><label>tarkistettu</label></td>
     {% endifequal %}
-    {%ifequal tilanne "v"%}
+    {%ifequal tilanne.0 "v"%}
     <td width="150" valign="middle" class='virhe'><label>syöttövirhe</label></td>
     {% endifequal %}
 
