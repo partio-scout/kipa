@@ -77,7 +77,7 @@ Lisätään kaksi vartiota sarjaan
     [Documentation]    harmaa
     Open Sub Page Verify Location And Title    määrittele vartiot    ${VARTIOIDEN_MAARITYS_URL}    ${VARTIOIDEN_MAARITYS_OTSIKKO}
     comment    varmistetaan että käpistellään oikeaa sarjaa
-    Run Keyword And Ignore Error    click link    harmaa
+    Run Keyword And Ignore Error    Click Link    harmaa
     Input Text    id_harmaa-0-nimi    testivartio1
     Input Text    id_harmaa-0-nro    100
     Input Text    id_harmaa-1-nimi    testivartio2
@@ -92,6 +92,13 @@ Lisätään kaksi vartiota sarjaan
     ${second_group}=    get value    id_harmaa-1-nimi
     Should Contain    ${second_group}    testivartio2
     Capture Screenshot
+    comment     Varmistetaan ettei harmaan vartiot näy muissa sarjoissa
+    Run Keyword And Ignore Error    Click Link    sininen
+    Element Should not Be Visible    id_harmaa-0-nimi
+    Element Should not Be Visible    id_harmaa-1-nimi
+    Run Keyword And Ignore Error    Click Link    valkoinen
+    Element Should not Be Visible    id_harmaa-0-nimi
+    Element Should not Be Visible    id_harmaa-1-nimi
 
 Lisätään tehtäviä tyhjään sarjaan
     Comment    luo kisapistetehtävä    valkoinen
