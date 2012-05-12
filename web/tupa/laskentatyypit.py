@@ -46,11 +46,18 @@ class MathDict(SequenceOperations,dict):
                 elif type(other) == MathList :
                         oper=MathListDict({})
                         for k in self.keys() : 
-                                oper[k]= [(function2(self[k],l,*args) for l in other)]
+                                try:
+                                    oper[k]= [(function2(self[k],l,*args) for l in other)]
+                                except KeyError: pass
+                                except TypeError : pass
                 else: 
                         oper = MathDict({})
                         for k in self.keys() : 
+                            try:
                                 oper[k]=function2(self[k],other)
+
+                            except KeyError: pass
+                            except TypeError : pass
                 return oper
 
         def listaksi(self) :
@@ -82,7 +89,12 @@ class MathList(SequenceOperations,list):
                         oper = MathListDict({})
                         for k,v in other.items() :
                                 oper[k]=[]
-                                for l in self :oper[k].append( function2(l,v,*args) )
+                                for l in self :
+                                    try:
+                                        oper[k].append( function2(l,v,*args) )
+
+                                    except KeyError: pass
+                                    except TypeError : pass
                 else :
                         oper = MathList([function2( v ,other,*args) for v in self])
                 return oper 
@@ -118,19 +130,29 @@ class MathListDict(SequenceOperations,dict) :
                                         except TypeError : pass
                 elif type(other) == MathList :
                         for k,v in self.items() :
+                            try: 
                                 oper[k] = MathList([function2(self[k][i],other[i],*args) for i in range(len(self[k]))])
+                            except KeyError: pass
+                            except TypeError : pass
+
                 elif type(other) == MathDict :
                         for k,v in other.items() :
                                 if k in self.keys(): # ainoastaan alkiot jotka löytyvät
                                         oper[k]=[]
-                                        for l in self[k] : oper[k].append( function2(l,v,*args) )
+                                        for l in self[k] : 
+                                            try:
+                                                oper[k].append( function2(l,v,*args) )
+                                            except KeyError: pass
+                                            except TypeError : pass
 
                 else : # muu (oletetaan skalaariksi)
                         for k,v in self.items(): 
                                 oper[k]=[]
                                 for l in v :
+                                    try:
                                         oper[k].append( function2(l,other,*args) )
-
+                                    except KeyError: pass
+                                    except TypeError : pass
                 return oper
         
         def listaksi(self) : 
@@ -158,7 +180,10 @@ class DictDecimal(SequenceOperations,Decimal) :
                 elif type(other) == MathList :
                         oper = MathList([])
                         for v in other : 
-                                oper.append(function2(self,v))
+                                try:
+                                    oper.append(function2(self,v))
+                                except KeyError: pass
+                                except TypeError : pass
                 else:  
                         oper = DictDecimal( function2(Decimal(self), other) )
                 return oper
@@ -191,7 +216,7 @@ def karsi(lista,lfunktio):
                 #        varvi.pop(-1)
             if tavaraa==0 and index>0 : break;
             index+=1 ;
-            karsittu.append( lfunktio(*varvi) )
+            if len(varvi) : karsittu.append( lfunktio(*varvi) )
         if len(karsittu)==1:
                 return karsittu[0]
         else :
