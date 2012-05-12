@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object pk="5" model="tupa.kisa">
+        <field type="CharField" name="nimi">valivaihe</field>
+        <field type="CharField" name="aika"></field>
+        <field type="CharField" name="paikka"></field>
+        <field type="BooleanField" name="tunnistus">False</field>
+    </object>
+    <object pk="11" model="tupa.sarja">
+        <field type="CharField" name="nimi">a</field>
+        <field type="IntegerField" name="vartion_maksimikoko"><None></None></field>
+        <field type="IntegerField" name="vartion_minimikoko"><None></None></field>
+        <field to="tupa.kisa" name="kisa" rel="ManyToOneRel">5</field>
+        <field type="IntegerField" name="tasapiste_teht1">1</field>
+        <field type="IntegerField" name="tasapiste_teht2">2</field>
+        <field type="IntegerField" name="tasapiste_teht3">3</field>
+    </object>
+    <object pk="138" model="tupa.tehtava">
+        <field type="CharField" name="nimi">a</field>
+        <field type="CharField" name="lyhenne">jee</field>
+        <field type="CharField" name="tehtavaryhma"></field>
+        <field type="CharField" name="tehtavaluokka"></field>
+        <field type="TextField" name="rastikasky">http://www.google.com</field>
+        <field type="IntegerField" name="jarjestysnro">1</field>
+        <field type="CharField" name="kaava">ss</field>
+        <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">11</field>
+        <field type="BooleanField" name="tarkistettu">False</field>
+        <field type="CharField" name="maksimipisteet">1</field>
+        <field type="BooleanField" name="svirhe">False</field>
+    </object>
+    <object pk="448" model="tupa.syotemaarite">
+        <field type="CharField" name="nimi">a</field>
+        <field type="CharField" name="tyyppi">piste</field>
+        <field type="CharField" name="kali_vihje">a</field>
+        <field to="tupa.osatehtava" name="osa_tehtava" rel="ManyToOneRel">292</field>
+    </object>
+    <object pk="292" model="tupa.osatehtava">
+        <field type="CharField" name="nimi">a</field>
+        <field type="CharField" name="tyyppi">kp</field>
+        <field type="CharField" name="kaava">a</field>
+        <field to="tupa.tehtava" name="tehtava" rel="ManyToOneRel">138</field>
+    </object>
+</django-objects>

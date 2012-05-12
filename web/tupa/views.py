@@ -982,6 +982,12 @@ def tehtavanVaiheet(request,kisa_nimi,tehtava_id,vartio_id=None):
         kisa= get_object_or_404(Kisa , nimi=kisa_nimi )
         tehtava = get_object_or_404(Tehtava , id=tehtava_id )
         vartiot = Vartio.objects.filter(sarja=tehtava.sarja)
+        if not len(vartiot) : 
+            responssi=  "<html><body><h1>Ei vartioita</h1><br></body></html>"
+            responssi += '<a href="/kipa/lista/maarita/tehtava/'+ tehtava_id + '/">'+ u'Takaisin määrittelyyn </a> <br><br>'
+            responssi+= "</body></html>"
+            return HttpResponse( responssi )
+
         vartio = vartiot[0]
         if vartio_id=="": 
                 vartio_id=str(tehtava.sarja.vartio_set.all()[0].id)
