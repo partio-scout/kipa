@@ -62,3 +62,6 @@ KISAN_TUONTI_OTSIKKO = u'Kipa - Korvaa kisa tiedostosta'
 KISAN_POISTO_OTSIKKO = u'Kipa - Poista kisa'
 KISAN_POISTO_URL = u'poista'
 
+# Autentikointi
+admin_tunnus = u'admin'
+admin_salasana = u'admin'

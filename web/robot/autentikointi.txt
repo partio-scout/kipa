@@ -19,25 +19,32 @@ Syötetään oikeat käyttäjätunnukset
     click button    Kirjaudu »
     Capture Screenshot
 
-autentikoitu login toimii
+Kaikille alasivuille pääsee
     comment    Tarkista syötä suorituksia
     Open Sub Page Verify Location And Title    syötä suorituksia    ${TULOSTEN_SYOTTO_URL}    ${TULOSTEN_SYOTTO_OTSIKKO}
+    Open Competition
     comment    Tarkista syötä suorituksia - tarkistus
     Open Sub Page Verify Location And Title    syötä suorituksia - tarkistus    ${TULOSTEN_SYOTTO_TARKISTUS_URL}    ${TULOSTEN_SYOTTO_TARKISTUS_OTSIKKO}
+    Open Competition
     comment    Tarkista tulossivu
     Open Sub Page Verify Location And Title    sarjan tulokset    ${TULOSTEN_TARKISTUS_URL}    ${TULOSTEN_TARKISTUS_OTSIKKO}
+    Open Competition
     comment    Tarkista Tuomarineuvosto
     Open Sub Page Verify Location And Title    tuomarineuvoston työkalu    ${TUOMARINEUVOSTO_URL}    ${TUOMARINEUVOSTO_OTSIKKO}
     Page Should Contain Button    Peruuta
     Page Should Contain Button    tallenna
+    Open Competition
     comment    Tarkista laskennan tilanne
     Open Sub Page Verify Location And Title    laskennan tilanne    ${LASKENNAN_TILANNE_URL}    ${LASKENNAN_TILANNE_OTSIKKO}
+    Open Competition
     comment    Tarkista vartioiden määritys
     Open Sub Page Verify Location And Title    määrittele vartiot    ${VARTIOIDEN_MAARITYS_URL}    ${VARTIOIDEN_MAARITYS_OTSIKKO}
     Page Should Contain Button    Peruuta
     Page Should Contain Button    tallenna
+    Open Competition
     comment    Tarkista tehtävien määritys
     Open Sub Page Verify Location And Title    määrittele tehtävät    ${TEHTAVAN_MAARITYS_URL}    ${TEHTAVAN_MAARITYS_OTSIKKO}
+    Open Competition
     comment    Tarkista Testituloksien määritys
     Open Sub Page Verify Location And Title    määrittele testituloksia    ${TESTITULOKSIEN_MAARITYS_URL}    ${TESTITULOKSIEN_MAARITYS_OTSIKKO}
     Page Should Contain Button    Peruuta
@@ -46,11 +53,13 @@ autentikoitu login toimii
     Open Sub Page Verify Location And Title    luo testitulokset sarjalle    ${TESTITULOKSIEN_MAARITYS_URL}    ${TESTITULOKSIEN_MAARITYS_OTSIKKO}
     Page Should Contain Button    Peruuta
     Page Should Contain Button    tallenna
+    Open Competition
     comment    Tarkista palauta kisa
     Open Sub Page Verify Location And Title    palauta kisa    ${KISAN_TUONTI_URL}    ${KISAN_TUONTI_OTSIKKO}
     Page Should Contain Button    Peruuta
     Page Should Contain Button    tallenna
     Page Should Contain Element    file
+    Open Competition
     comment    Tarkista sarjan tulokset
     Open Sub Page Verify Location And Title    sarjan tulokset    ${TULOSTEN_TARKISTUS_URL}    ${TULOSTEN_TARKISTUS_OTSIKKO}
 
