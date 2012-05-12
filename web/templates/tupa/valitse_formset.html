@@ -1,6 +1,12 @@
 {% extends "tupa/valitse.html" %}
 
+{% block alku %}
+<form method="POST" action=""> 
+{% include "tupa/tallenna.html" %}<br><br>
+{% endblock %}
+
 {% block sarake %} 
+
     {{ sarake.management_form }}
 <script type="text/javascript" language="javascript" src="/kipamedia/jquery.form-changed-warning.js"></script>
 
@@ -13,7 +19,6 @@ Sarjan ulkopuolelle siirtyneet vartiot saavat tulokset normaalisti, mutta niiden
     {% endfor %}
 {% endblock%}
 {% block content %}
-<form method="POST" action="">
 {{ block.super }}
 {% include "tupa/tallenna.html" %}
 </form>

@@ -352,9 +352,9 @@ tr .odd:hover
 	background:url(/kipamedia/header.png) repeat-x;
 }
 
-#pagetitle
-{
+#pagetitle {
 	text-transform:uppercase;
+	text-decoration:none;
 	color:#9fa8a9;
 	float:left;
 	padding-top:8px;
@@ -362,6 +362,12 @@ tr .odd:hover
 	font-family:Verdana,"Lucida Grande",Lucida,sans-serif;
 	font-size:1.33em;
 	line-height:normal;
+}
+
+#pagetitle a, #pagetitle a:visited {
+	text-decoration:none;
+	color:#9fa8a9;
+	font-family:Verdana,"Lucida Grande",Lucida,sans-serif;
 }
 
 #breadcrumbs
