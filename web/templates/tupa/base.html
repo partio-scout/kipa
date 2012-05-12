@@ -27,6 +27,7 @@
 ***********************************************/
 </script>
 
+{% load kipatags %}
 {% block header %}  {% endblock %}
 
 <script language="JavaScript">
@@ -55,6 +56,7 @@ document.getElementById(id).style.display = visibility;
 
 <div id="wrap">
 
+    <div id="header"><div id="pageTitle" class="capitalize"><a href="/kipa/{{kisa_nimi}}/">{{kisa_nimi|alaviiva_pois}}</a></div>  
     <div id="header"><div id="pageTitle" class="capitalize"><a href="/kipa/{{kisa_nimi}}/">{{kisa_nimi}}</a></div>  
 		<div style="float:right; margin-top:-4px; margin-bottom:0; padding-bottom:0; height:18px;">		
 			{% include "tupa/login.html" %}
@@ -63,9 +65,9 @@ document.getElementById(id).style.display = visibility;
 	</div><!-- /header -->
     <div id="breadcrumbs" class="capitalize">
 	{% if tarkistus %}
-	<a href="/kipa/{{kisa_nimi}}/">{{kisa_nimi}}</a> {%if taakse.url and taakse.title%}&raquo; <a href="{{taakse.url}}tarkistus/">{{taakse.title}} (tarkistus)</a> {% endif %}&raquo; {{heading}}
+	<a href="/kipa/{{kisa_nimi}}/">{{kisa_nimi|alaviiva_pois}}</a> {%if taakse.url and taakse.title%}&raquo; <a href="{{taakse.url}}tarkistus/">{{taakse.title}} (tarkistus)</a> {% endif %}&raquo; {{heading}}
 	{% else %}
-	<a href="/kipa/{{kisa_nimi}}/">{{kisa_nimi}}</a> {%if taakse.url and taakse.title%}&raquo; <a href="{{taakse.url}}">{{taakse.title}}</a> {% endif %}&raquo; {{heading}}   
+	<a href="/kipa/{{kisa_nimi}}/">{{kisa_nimi|alaviiva_pois}}</a> {%if taakse.url and taakse.title%}&raquo; <a href="{{taakse.url}}">{{taakse.title}}</a> {% endif %}&raquo; {{heading}}   
     {% endif %}
     
 	<div id="version">{% include "version.html" %}</div>

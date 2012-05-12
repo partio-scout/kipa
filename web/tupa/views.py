@@ -52,6 +52,13 @@ def logoutSivu(request):
 	logout(request)
         return kipaResponseRedirect("/kipa/")
 
+from django import template
+register = template.Library()
+@register.filter(name='alaviiva')
+def cut(value):
+    return value.replace("_", " " )
+
+
 def tarkistaVirhe(syote):
         syottovirhe=None
         if syote and syote.arvo and syote.tarkistus or syote and syote.tarkistus :

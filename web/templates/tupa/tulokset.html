@@ -7,9 +7,11 @@
 {% endblock header %}
 {% block content %} 
 
+{% load kipatags %}
+
 <table width="100%" border="0" id="tulostaulukko_otsikko">
 <tr valign="top">
-	<td width="33%"><h1 style:"margin:0; padding:0;">{{kisa_nimi}}</h1></td>
+	<td width="33%"><h1 style:"margin:0; padding:0;">{{kisa_nimi|alaviiva_pois }}</h1></td>
 	<td width="33%" align="center"><h1>{{heading}}</h1></td>
 	<td width="33%" align="right">&nbsp;</td>
 </tr>

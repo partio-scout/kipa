@@ -2,7 +2,9 @@
 {% block title %}{{ heading }}{% endblock %}
 {% block content %} 
 
-<h1>{{ heading }}</h1>
+{% load kipatags %}
+
+<h1>{{heading|alaviiva_pois}}</h1>
 
 <form method="POST" action="">
 <p>{% include "tupa/tallenna.html" %}</p>
