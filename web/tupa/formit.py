@@ -165,7 +165,8 @@ def initPisteSyote(self,fieldName):
         kesk= self.vartio.keskeyttanyt
         nro = self.maarite.osa_tehtava.tehtava.jarjestysnro
         if not kesk==None and not nro==None :
-                if kesk <= nro :
+                if kesk <= nro :# Keskeyttänyt
+                        self.fields[fieldName].widget.attrs["class"]="kesk"
                         self.fields[fieldName].widget.attrs['readonly'] = True
                         self.initial[fieldName]= "kesk"
 
