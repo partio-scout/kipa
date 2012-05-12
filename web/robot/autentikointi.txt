@@ -14,8 +14,8 @@ Luodaan uusi kisa
     Create new Competition    ${TESTIKISA}
 
 Syötetään oikeat käyttäjätunnukset
-    Input Text    uname    admini
-    Input Text    pword    salasana
+    Input Text    uname    ${admin_tunnus}
+    Input Text    pword    ${admin_salasana}
     click button    Kirjaudu »
     Capture Screenshot
 
@@ -64,41 +64,6 @@ Kaikille alasivuille pääsee
     Open Sub Page Verify Location And Title    sarjan tulokset    ${TULOSTEN_TARKISTUS_URL}    ${TULOSTEN_TARKISTUS_OTSIKKO}
 
 Syötetään väärä käyttäjätunnus
-
-autentikoimaton login toimii
-    comment    Tarkista syötä suorituksia
-    Open Sub Page Verify Location And Title    syötä suorituksia    ${TULOSTEN_SYOTTO_URL}    ${TULOSTEN_SYOTTO_OTSIKKO}
-    comment    Tarkista syötä suorituksia - tarkistus
-    Open Sub Page Verify Location And Title    syötä suorituksia - tarkistus    ${TULOSTEN_SYOTTO_TARKISTUS_URL}    ${TULOSTEN_SYOTTO_TARKISTUS_OTSIKKO}
-    comment    Tarkista tulossivu
-    Open Sub Page Verify Location And Title    sarjan tulokset    ${TULOSTEN_TARKISTUS_URL}    ${TULOSTEN_TARKISTUS_OTSIKKO}
-    comment    Tarkista Tuomarineuvosto
-    Open Sub Page Verify Location And Title    tuomarineuvoston työkalu    ${TUOMARINEUVOSTO_URL}    ${TUOMARINEUVOSTO_OTSIKKO}
-    Page Should Contain Button    Peruuta
-    Page Should Contain Button    tallenna
-    comment    Tarkista laskennan tilanne
-    Open Sub Page Verify Location And Title    laskennan tilanne    ${LASKENNAN_TILANNE_URL}    ${LASKENNAN_TILANNE_OTSIKKO}
-    comment    Tarkista vartioiden määritys
-    Open Sub Page Verify Location And Title    määrittele vartiot    ${VARTIOIDEN_MAARITYS_URL}    ${VARTIOIDEN_MAARITYS_OTSIKKO}
-    Page Should Contain Button    Peruuta
-    Page Should Contain Button    tallenna
-    comment    Tarkista tehtävien määritys
-    Open Sub Page Verify Location And Title    määrittele tehtävät    ${TEHTAVAN_MAARITYS_URL}    ${TEHTAVAN_MAARITYS_OTSIKKO}
-    comment    Tarkista Testituloksien määritys
-    Open Sub Page Verify Location And Title    määrittele testituloksia    ${TESTITULOKSIEN_MAARITYS_URL}    ${TESTITULOKSIEN_MAARITYS_OTSIKKO}
-    Page Should Contain Button    Peruuta
-    Page Should Contain Button    tallenna
-    comment    Linkin, luo testitulokset sarjalle, pitäisi viedä samalle sivulle.
-    Open Sub Page Verify Location And Title    luo testitulokset sarjalle    ${TESTITULOKSIEN_MAARITYS_URL}    ${TESTITULOKSIEN_MAARITYS_OTSIKKO}
-    Page Should Contain Button    Peruuta
-    Page Should Contain Button    tallenna
-    comment    Tarkista palauta kisa
-    Open Sub Page Verify Location And Title    palauta kisa    ${KISAN_TUONTI_URL}    ${KISAN_TUONTI_OTSIKKO}
-    Page Should Contain Button    Peruuta
-    Page Should Contain Button    tallenna
-    Page Should Contain Element    file
-    comment    Tarkista sarjan tulokset
-    Open Sub Page Verify Location And Title    sarjan tulokset    ${TULOSTEN_TARKISTUS_URL}    ${TULOSTEN_TARKISTUS_OTSIKKO}
 
 Poista Luotu Kisa
     Remove Competition    ${TESTIKISA}
