@@ -185,7 +185,10 @@ class DictDecimal(SequenceOperations,Decimal) :
                                 except KeyError: pass
                                 except TypeError : pass
                 else:  
-                        oper = DictDecimal( function2(Decimal(self), other) )
+                        try:
+                            oper = DictDecimal( function2(Decimal(self), other) )
+                        except KeyError: pass
+                        except TypeError : pass
                 return oper
         __repr__=decimal_repr
 
