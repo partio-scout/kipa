@@ -44,17 +44,17 @@ Kaava:*
 <span onmouseover="tooltip.show('Anna tässä kaava, jolla osatehtävien pisteistä lasketaan tehtävästä jaettavat pisteet. Esim. \'ss\' (suora summa, eli osatehtävistä saatavat pisteet lasketaan yhteen) tai \'a+b(c*d)\'');" onmouseout="tooltip.hide();">
 	<img src="/kipamedia/help_small.png" />
 </span> <input type="text" size="100" id="{{kaava.id}}" name="{{kaava.name}}" value="{{kaava.value}}" />
+<a href="/kipa/{{kisa_nimi}}/maarita/vaiheet/{{tehtava_id}}/"> Laskennan välivaiheet </a>
 
+
+<br>
 <font color=red><b>
 {{rastikasky.errors}}
 </b></font>
-Rastikäsky:
-<span onmouseover="tooltip.show('Anna www-linkki rastikäskytiedostoon tai rastikäskytiedoston polku paikallisella levyllä. Linkki näkyy tulostettavan tulosliuskan tehtävien nimissä. Toimintoa voidaan käyttää esim laiteaaessa tulkokset nettiin ja haluttaessa linkittää Kiskan rastikäskyt suoraan tulosliuskoihin.');" onmouseout="tooltip.hide();">
+Rastikäskylinkki:
+<span onmouseover="tooltip.show('Anna www-linkki rastikäskytiedostoon tai rastikäskytiedoston polku paikallisella levyllä. Linkki muodostuu tulostettavan tulosliuskan tehtävien nimiin. Toimintoa voidaan käyttää esim. laitettaessa tulokset nettiin ja haluttaessa linkittää Kiskan rastikäskyt suoraan tulosliuskoihin.');" onmouseout="tooltip.hide();">
         <img src="/kipamedia/help_small.png" />
 </span><input type="text" size="50" id="{{rastikasky.id}}"  name="{{rastikasky.name}}" value="{{rastikasky.value}}" maxlength="255" />
-
-
-<a href="/kipa/{{kisa_nimi}}/maarita/vaiheet/{{tehtava_id}}/"> Laskennan välivaiheet </a>
 
 {% for form in osa_tehtavat %}
         {{ form }}
