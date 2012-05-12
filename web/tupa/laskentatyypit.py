@@ -50,7 +50,10 @@ class MathDict(SequenceOperations,dict):
                 else: 
                         oper = MathDict({})
                         for k in self.keys() : 
+                            try:
                                 oper[k]=function2(self[k],other)
+                            except KeyError: pass
+                            except TypeError : pass
                 return oper
 
         def listaksi(self) :
@@ -160,7 +163,10 @@ class DictDecimal(SequenceOperations,Decimal) :
                         for v in other : 
                                 oper.append(function2(self,v))
                 else:  
-                        oper = DictDecimal( function2(Decimal(self), other) )
+                        try:
+                            oper = DictDecimal( function2(Decimal(self), other) )
+                        except KeyError: pass
+                        except TypeError : pass
                 return oper
         __repr__=decimal_repr
 
@@ -180,15 +186,10 @@ def karsi(lista,lfunktio):
             for l in lista :
                 if hasattr(l, 'keys') :  # on sanakirja
                         pakotus=1 # Tähän täytyisi tehdä rekursiivinen sanakirjojen operointi
-                
                 elif hasattr(l, '__contains__') : # on lista
-                        if len(l)>index and not type(l)==str and not type(l)==unicode :
-                                        tavaraa=1
-                                        varvi.append( l[index] )
+                        varvi.append( l[index] )
                 else: 
                         varvi.append(l)
-                #if type(varvi[-1])==unicode : 
-                #        varvi.pop(-1)
             if tavaraa==0 and index>0 : break;
             index+=1 ;
             karsittu.append( lfunktio(*varvi) )
