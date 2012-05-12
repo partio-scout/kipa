@@ -14,6 +14,10 @@ Luodaan uusi kisa
     Create new Competition    ${TESTIKISA}
 
 Syötetään oikeat käyttäjätunnukset
+    Input Text    uname    admini
+    Input Text    pword    salasana
+    click button    Kirjaudu »
+    Capture Screenshot
 
 autentikoitu login toimii
     comment    Tarkista syötä suorituksia
@@ -49,6 +53,8 @@ autentikoitu login toimii
     Page Should Contain Element    file
     comment    Tarkista sarjan tulokset
     Open Sub Page Verify Location And Title    sarjan tulokset    ${TULOSTEN_TARKISTUS_URL}    ${TULOSTEN_TARKISTUS_OTSIKKO}
+
+Syötetään väärä käyttäjätunnus
 
 autentikoimaton login toimii
     comment    Tarkista syötä suorituksia
@@ -88,6 +94,4 @@ autentikoimaton login toimii
 Poista Luotu Kisa
     Remove Competition    ${TESTIKISA}
     [Teardown]    close all browsers
-
-Syötetään väärä käyttäjätunnus
 
