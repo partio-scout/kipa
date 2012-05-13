@@ -143,6 +143,7 @@ class Vartio(models.Model) :
                 return self.sarja.kisa.nimi+"."+self.sarja.nimi+"."+str(self.nro)
 
         class Meta:
+                ordering=("nro",)
                 verbose_name_plural = "Vartiot"
                 db_table = u"kipa_vartio"
 
