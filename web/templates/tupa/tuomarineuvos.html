@@ -1,12 +1,14 @@
 {% extends "tupa/valitse.html" %}
 
+{% load kipatags %}
+
 {% block sarake %} 
 	<table width="600" border="1">
         <tr>
         <td></td>
                 {% for kentta in sarake.tiedot.0.tehtavat %}
                         <td>
-                                {{ kentta.nimi }}
+                                {{ kentta.nimi|alaviiva_pois }}
                         </td>
                 {% endfor %}
         </tr>
