@@ -12,9 +12,10 @@
 
 {% block content %} 
 <body>
+{% load kipatags %}
 
 <h1>Laskennan tilanne {% now " j.n.Y G:i"%} </h1>
-  <table width="500" border="0" id="taulukko">
+  <table border="0" id="taulukko" cellpadding="2">
     {% for rivi in taulukko %}
         <tr valign="top">
         {%for sarake in rivi %}
@@ -24,15 +25,15 @@
                 {%else%}
 
                 {% ifequal sarake.0 "a" %}
-                        <td width="100" class='aloittamatta'>{{sarake.1}}</td>
+                        <td width="100" class='aloittamatta'>{{sarake.1|alaviiva_pois}}</td>
                 {%else%}{% ifequal sarake.0 "o" %}
                         <td width="100" class='osittain'>{{sarake.1}}</td>
                 {%else%}{% ifequal sarake.0 "s" %}
                         <td width="62" class='syotetty'>{{sarake.1}}</td>
                 {%else%}{% ifequal sarake.0 "t" %}
-                        <td width="100" class='tarkistettu'> {{sarake.1}}</td>
+                        <td width="100" class='tarkistettu'> {{sarake.1|alaviiva_pois}}</td>
                 {%else%}{% ifequal sarake.0 "v" %}
-                        <td width="62" class='virhe'> {{sarake.1}}</td>
+                        <td width="62" class='virhe'> {{sarake.1|alaviiva_pois}}</td>
                 {%else%}
                         <td width="62" >{{sarake.1}}</td>
                 {% endifequal %}
