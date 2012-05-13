@@ -5,8 +5,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-from django.shortcuts import render_to_response
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 import operator
 from decimal import *
@@ -15,6 +14,7 @@ import django.template
 from django.template import RequestContext
 from django.utils.safestring import SafeUnicode
 
+from django.contrib import messages
 from django.contrib.auth import authenticate,login, logout
 from django.contrib.auth.decorators import permission_required
 from duplicate import kopioiTehtava
@@ -40,13 +40,13 @@ def loginSivu(request):
     if request.method == 'POST':
         posti=request.POST
         user = authenticate(username=posti['uname'], password=posti['pword'])
-        if user is not None:
-            if user.is_active:
-                login(request, user)
+        if user and user.is_active:
+            login(request, user)
+            messages.success( request, "Heippa " + user.first_name + "!" )
         else:
-            return redirect('/kipa/', context_instance=RequestContext(request))
+            messages.error(request, 'Kirjautuminen epäonnistui')
 
-    return redirect('/kipa/', context_instance=RequestContext(request))
+    return redirect('/kipa/')
 
 def logoutSivu(request):
 	logout(request)
@@ -83,7 +83,7 @@ def testaa_tietokanta() :
         except django.db.DatabaseError: 
             return True 
 
-def etusivu(request,paska=0) :
+def etusivu(request) :
         """
         Kipan päävalikko.
 
