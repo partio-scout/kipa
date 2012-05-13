@@ -144,6 +144,7 @@ class Vartio(models.Model) :
 
         class Meta:
                 verbose_name_plural = "Vartiot"
+                ordering = ["nro"]
                 db_table = u"kipa_vartio"
 
 class Henkilo(models.Model) :
