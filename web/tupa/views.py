@@ -34,7 +34,7 @@ from TulosLaskin import *
 from log import *
 
 def kipaResponseRedirect(url) : return HttpResponse('<html><head><meta http-equiv="REFRESH" content="0;url='+url+'"></HEAD><BODY></BODY></HTML>')
-"""
+
 def loginSivu(request):
     Posti=None
     if request.method == 'POST':
@@ -47,7 +47,7 @@ def loginSivu(request):
             return redirect('/kipa/', context_instance=RequestContext(request))
 
     return redirect('/kipa/', context_instance=RequestContext(request))
-"""
+
 def logoutSivu(request):
 	logout(request)
         return kipaResponseRedirect("/kipa/")

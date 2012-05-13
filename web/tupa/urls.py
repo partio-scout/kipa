@@ -5,8 +5,6 @@
 
 from django.conf.urls.defaults import *
 from models import *
-from django.contrib import admin
-admin.autodiscover()
 from django.views.generic.simple import direct_to_template
 from django.views.generic.simple import redirect_to
 from django.conf import settings
@@ -15,7 +13,6 @@ from django.conf import settings
 tal=r"(?P<talletettu>(talletettu)?)/?$"
 
 urlpatterns = patterns('tupa.views',
-        #(r'^admin/', include(admin.site.urls) ),	
         (r'^apua/', 'apua'),
         (r'^$', 'etusivu'),
         (r'^post_txt/(?P<parametrit>[^/]+)/$', 'post_txt'), 
