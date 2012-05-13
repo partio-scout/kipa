@@ -1,4 +1,7 @@
 {% extends "tupa/base.html" %}
+
+{% load kipatags %}
+
 {% block title %}{{tehtava.nimi}}{% endblock %}
 {% block header %}
 {{ block.super }}
@@ -46,7 +49,7 @@ $(document).ready(function(){
 {% block content %} 
 <body id="body_syota_tehtava">
 
-<h1>{{tehtava.nimi}}</h1>
+<h1>{{tehtava.nimi|alaviiva_pois}}</h1>
 
 <form action="." name="form1" id="form1" method="post">     
 
@@ -55,7 +58,7 @@ $(document).ready(function(){
 <table width="600" border="0" cellpadding="2" cellspacing="0">
   <tr>
     <td width="100" class="tauluOtsikko">Tehtävä:</td>
-    <td colspan="2" bgcolor="#E8EDFF">{{tehtava.jarjestysnro}} &nbsp; &nbsp; {{tehtava.nimi}}</td>
+    <td colspan="2" bgcolor="#E8EDFF">{{tehtava.jarjestysnro}} &nbsp; &nbsp; {{tehtava.nimi|alaviiva_pois}}</td>
   </tr>
   <tr>
     <td class="tauluOtsikko">Sarja: </td>

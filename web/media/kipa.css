@@ -471,6 +471,11 @@ a.sitetoolbarnavactive:hover { color: #0d3b65; border: 1px solid #486B8A; paddin
 	padding:0;
 }
 
+#sarjakohtaiset_tulokset td
+{
+	vertical-align: top;
+}
+
 #version {
 	width:200px;
 	display:inline;

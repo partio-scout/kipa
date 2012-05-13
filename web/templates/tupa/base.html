@@ -62,11 +62,11 @@ document.getElementById(id).style.display = visibility;
 		</div>
 
 	</div><!-- /header -->
-    <div id="breadcrumbs" class="capitalize">
+    <div id="breadcrumbs">
 	{% if tarkistus %}
-	<a href="/kipa/{{kisa_nimi}}/">{{kisa_nimi|alaviiva_pois}}</a> {%if taakse.url and taakse.title%}&raquo; <a href="{{taakse.url}}tarkistus/">{{taakse.title}} (tarkistus)</a> {% endif %}&raquo; {{heading}}
+	<a href="/kipa/{{kisa_nimi}}/" class="capitalize">{{kisa_nimi|alaviiva_pois}}</a> {%if taakse.url and taakse.title%}&raquo; <a href="{{taakse.url}}tarkistus/">{{taakse.title|alaviiva_pois}} (tarkistus)</a> {% endif %}&raquo; {{heading|alaviiva_pois}}
 	{% else %}
-	<a href="/kipa/{{kisa_nimi}}/">{{kisa_nimi|alaviiva_pois}}</a> {%if taakse.url and taakse.title%}&raquo; <a href="{{taakse.url}}">{{taakse.title}}</a> {% endif %}&raquo; {{heading}}   
+	<a href="/kipa/{{kisa_nimi}}/" class="capitalize">{{kisa_nimi|alaviiva_pois}}</a> {%if taakse.url and taakse.title%}&raquo; <a href="{{taakse.url}}">{{taakse.title|alaviiva_pois}}</a> {% endif %}&raquo; {{heading|alaviiva_pois}}   
     {% endif %}
     
 	<div id="version">{% include "version.html" %}</div>
