@@ -620,14 +620,14 @@ def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
                 nimirivi.append( teht_nimi )
         writer.writerow(nimirivi)
 
-        pisterivi = ['','','Maxpisteet',''] 
+        pisterivi = ['','','Maxpisteet','',''] 
         pisteet_yht = 0
         for teht in mukana[0][2:] : 
                 try : 
                         if int( teht.maksimipisteet ) : pisteet_yht += int( teht.maksimipisteet )
                 except: pass
                 pisterivi.append( teht.maksimipisteet )
-        pisterivi[3]=str(pisteet_yht)
+        pisterivi[4]=str(pisteet_yht)
         writer.writerow(pisterivi)
         writer.writerow(['',''])
         
