@@ -13,13 +13,29 @@ Luodaan uusi kisa
     [Setup]    Open Kipa Main Page
     Create new Competition    ${TESTIKISA}
 
-Syötetään oikeat käyttäjätunnukset
-    Input Text    uname    ${admin_tunnus}
-    Input Text    pword    ${admin_salasana}
+Syötetään oikeat käyttäjätunnukset ja tarkistetaan pääsy kaikille alasivuille
+    Kirjaudu KiPaan    ${admin_tunnus}    ${admin_salasana}
+    Open Competition
+    Tarkista pääsy kaikille alasivuille
+
+Syötetään väärä käyttäjätunnus ja tarkistetaan että pääsy alasivuille feilaa
+    Kirjaudu KiPaan    olematon_tunnus    ${admin_salasana}
+    Open Competition
+    Run Keyword And Expect Error    *    Tarkista pääsy kaikille alasivuille
+
+Poista Luotu Kisa
+    Remove Competition    ${TESTIKISA}
+    [Teardown]    close all browsers
+
+*** Keywords ***
+Kirjaudu KiPaan
+    [Arguments]    ${tunnus}    ${salasana}
+    Input Text    uname    ${tunnus}
+    Input Text    pword    ${salasana}
     click button    Kirjaudu »
     Capture Screenshot
 
-Kaikille alasivuille pääsee
+Tarkista pääsy kaikille alasivuille
     comment    Tarkista syötä suorituksia
     Open Sub Page Verify Location And Title    syötä suorituksia    ${TULOSTEN_SYOTTO_URL}    ${TULOSTEN_SYOTTO_OTSIKKO}
     Open Competition
@@ -62,10 +78,4 @@ Kaikille alasivuille pääsee
     Open Competition
     comment    Tarkista sarjan tulokset
     Open Sub Page Verify Location And Title    sarjan tulokset    ${TULOSTEN_TARKISTUS_URL}    ${TULOSTEN_TARKISTUS_OTSIKKO}
-
-Syötetään väärä käyttäjätunnus
-
-Poista Luotu Kisa
-    Remove Competition    ${TESTIKISA}
-    [Teardown]    close all browsers
 
