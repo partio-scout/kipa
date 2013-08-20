@@ -41,7 +41,7 @@ Open Competition
     ${original timeout}=    Set Selenium Timeout    15 sec
     Click Link    ${TESTIKISA}
     Title Should Be    Kipa - ${TESTIKISA}
-    Capture Screenshot
+    Capture Page Screenshot
 
 Remove Competition
     [Arguments]    ${competition}
