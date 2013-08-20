@@ -25,7 +25,7 @@ Open Browser and Maximize
     Maximize Browser Window
 
 Kipa Suite Setup
-    Start Selenium Server
+    comment    Start Selenium Server
     comment    Uudelleenyritys testiserverin mahdollisen kuormituksen vuoksi.
     Wait Until Keyword Succeeds    3 min    1 min    Open Kipa Main Page
     Comment    Close Browser
