@@ -59,7 +59,7 @@ Remove Competition
 
 Close All Browsers And Stop Selenium Server
     Close All Browsers
-    Stop Selenium Server
+    comment    Stop Selenium Server
 
 luo kisapistetehtävä
     [Arguments]    ${sarja}
