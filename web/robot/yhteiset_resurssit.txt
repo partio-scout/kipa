@@ -40,7 +40,7 @@ Open Competition
     Open KiPa Main Page
     comment       ${original timeout}=    Set Selenium Timeout    15 sec
     Click Link    ${TESTIKISA}
-    Title Should Be    Kipa - ${TESTIKISA}
+    Wait Until Keyword Succeeds    10 sec    2 sec    Title Should Be    Kipa - ${TESTIKISA}
     Capture Page Screenshot
 
 Remove Competition
