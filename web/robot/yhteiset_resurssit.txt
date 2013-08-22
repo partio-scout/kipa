@@ -34,7 +34,7 @@ Open Sub Page Verify Location And Title
     [Arguments]    ${link_name}    ${link}    ${page_title}
     Click Link    ${link_name}
     Wait Until Keyword Succeeds    10 second    2 second    Location Should Be    ${KIPA_URL}/${TESTIKISA}/${link}/
-    Title Should Be    ${page_title}
+    Wait Until Keyword Succeeds    10 second    2 second    Title Should Be       ${page_title}
 
 Open Competition
     Open KiPa Main Page
