@@ -2,7 +2,7 @@
 Open KiPa Main Page
     Open Browser And Maximize    ${KIPA_URL}/
     Comment    Set Selenium Speed    2 sec
-    Wait Until Keyword Succeeds    10 seconds    2 seconds    Title Should Be    ${KIPA_OTSIKKO}
+    Wait Until Keyword Succeeds    10 sec    2 sec    Title Should Be    ${KIPA_OTSIKKO}
 
 Create New Competition
     [Arguments]    ${competition}
@@ -14,7 +14,7 @@ Create New Competition
     Click Button    tallenna
     Close Browser
     comment    kaikissa ympäristöissä ei näköjään ehditä avamaan selainta aikarajan puitteissa, yritetään 5 sekunnin välein 15 sekunnin ajan ennenkuin luovutetaan
-    Wait Until Keyword Succeeds    15 seconds    5seconds    Open Browser And Maximize    ${KIPA_URL}/
+    Wait Until Keyword Succeeds    15 sec    5sec    Open Browser And Maximize    ${KIPA_URL}/
     Click Link    ${competition}
     Location Should Be    ${KIPA_URL}/${competition}/
     Title Should Be    Kipa - ${competition}
@@ -33,8 +33,8 @@ Kipa Suite Setup
 Open Sub Page Verify Location And Title
     [Arguments]    ${link_name}    ${link}    ${page_title}
     Click Link    ${link_name}
-    Wait Until Keyword Succeeds    10 second    2 second    Location Should Be    ${KIPA_URL}/${TESTIKISA}/${link}/
-    Wait Until Keyword Succeeds    10 second    2 second    Title Should Be       ${page_title}
+    Wait Until Keyword Succeeds    10 sec    2 sec    Location Should Be    ${KIPA_URL}/${TESTIKISA}/${link}/
+    Wait Until Keyword Succeeds    10 sec    2 sec    Title Should Be       ${page_title}
 
 Open Competition
     Open KiPa Main Page
