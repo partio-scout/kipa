@@ -21,8 +21,8 @@ Create New Competition
 
 Open Browser and Maximize
     [Arguments]    ${page}
-    Open Browser    ${page}    ${BROWSER}
-    Maximize Browser Window
+    Open Browser   ${page}    ${BROWSER}
+    comment        Maximize Browser Window
 
 Kipa Suite Setup
     comment    Start Selenium Server
