@@ -1,9 +1,9 @@
-kipa
+Kipa
 ====
 
-Fork Kipa- / Tupa2-ohjelmistosta, jota käytetään partiotaitokilpailujen tuloslaskentaan. 
+Kipa- / Tupa2-ohjelmisto, jota käytetään partiotaitokilpailujen tuloslaskentaan. 
 
-Alkuperäinen ohjelmisto:
+Vanhat sivustot:
 
-https://sites.google.com/site/kisapalvelukipa/
-http://sourceforge.net/projects/tupa2/
+* https://sites.google.com/site/kisapalvelukipa/
+* http://sourceforge.net/projects/tupa2/
