@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 import sys
 from tupa.dia2django import luoMallienRungot
 from django.core.management import execute_manager
