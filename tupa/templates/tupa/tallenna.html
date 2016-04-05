@@ -1,0 +1,7 @@
+<br>
+<button type="button" class="small awesome" onClick="history.back();" title="Palaa edelliselle sivulle tallentamatta muutoksia">Peruuta</button>&nbsp;&nbsp;&nbsp;
+<button name="tallenna" type="submit" class="small blue awesome" title="Tallenna sivulla näkyvät tiedot">Tallenna &raquo;</button>
+{% if ohjaus_nappi %}
+&nbsp;&nbsp;&nbsp;
+<button name="nappi" type="submit" value="ohjaus" class="small blue awesome" title="Tallenna sivulla näkyvät tiedot">Tallenna ja {{ohjaus_nappi}}</button>
+{% endif %}

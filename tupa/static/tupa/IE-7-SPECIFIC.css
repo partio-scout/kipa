@@ -1,0 +1,28 @@
+/* IE7-specific CSS */
+
+html {
+	width:900px;
+}
+
+#breadcrumbs {
+	height:22px;
+}
+
+#left {
+	display:none;
+	width:0;
+}
+
+#right {
+	margin:0;
+	width:900px;
+}
+
+#footer {
+	display:none;
+	height:0;
+}
+
+h1 {
+	font-size:18px;
+}
