@@ -1,6 +1,12 @@
 """
-Development settings
+File: development.py
+Author: Leo Lahti
+Email: leo@niinu.com
+Github: https://github.com/TileHalo
+Description: Development settings
 """
+
+# flake8: noqa
 
 
 import os

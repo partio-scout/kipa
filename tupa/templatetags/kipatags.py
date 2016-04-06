@@ -1,9 +1,15 @@
+"""
+Templatetags file
+"""
+# flake8: noqa
 from django import template
-register = template.Library()
+REGISTER = template.Library()
+
 
 def alaviiva_pois(value):
-    return value.replace("_", " " )
+    """
+    Ottaa alaviivan pois
+    """
+    return value.replace("_", " ")
 
-register.filter('alaviiva_pois', alaviiva_pois)
-
-
+REGISTER.filter('alaviiva_pois', alaviiva_pois)

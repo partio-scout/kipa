@@ -1,3 +1,4 @@
+# encoding: utf-8
 # KiPa(KisaPalvelu), tuloslaskentajärjestelmä partiotaitokilpailuihin
 #    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
 
@@ -232,9 +233,7 @@ def syotteen_kuvaus_field(posti, data, prefix, syote_id, tyyppi):
     if posti and id in posti.keys():
         value = posti[id]
 
-    if (posti and prefix in posti.keys() and posti[prefix] == tyyppi or
-        not posti and (data['tyyppi'] == tyyppi or
-                       tyyppi == 'pk' or tyyppi == 'vk')):
+    if posti and prefix in posti.keys() and posti[prefix] == tyyppi or not posti and (data['tyyppi'] == tyyppi or tyyppi == 'pk' or tyyppi == 'vk'):
         # Formin data:
         if 'maaritteet' not in data.keys():
             data['maaritteet'] = {}
@@ -299,49 +298,29 @@ def poistaYlimaaraisetMaaritteet(posti, data, prefix, tyyppi,
             index += 1
 
 
-def lataa_parametrit(state, daita, prefix, ot_tyyppi, muunnos=None):
-    if ("tyyppi" in data.keys() and
-       (data['tyyppi'] == ot_tyyppi[1:] or
-       (ot_tyyppi[1:] == "vk" and data['tyyppi'] != "pk") or
-       ot_tyyppi[1:] == "pk")):
-        loadField(state, data, "kiintea", ['parametrit'],
-                  'parhaan_kaava', 'arvo', prefix + ot_tyyppi)
-        loadField(state, data, "jaettavat", ['parametrit'],
-                  'jaettavat', 'arvo', prefix + ot_tyyppi)
-        loadField(state, data, "parhaan_haku", ['parametrit'],
-                  'parhaan_haku', 'arvo', prefix + ot_tyyppi)
-        loadField(state, data, "nollan_kerroin", ['parametrit'],
-                  'nollan_kerroin', 'arvo', prefix + ot_tyyppi)
-        loadField(state, data, "nollan_kaava", ['parametrit'],
-                  'nollan_kaava', 'arvo', prefix + ot_tyyppi)
-        loadField(state, data, "oikea", ['parametrit'],
-                  'oikea', 'arvo', prefix + ot_tyyppi)
-        loadField(state, data, "kaava", ['parametrit'],
-                  'vartion_kaava', 'arvo', prefix + ot_tyyppi)
-        loadField(state, data, "arvio", ['parametrit'],
-                  'arvio', 'arvo', prefix + ot_tyyppi)
+def lataa_parametrit(state, data, prefix, ot_tyyppi, muunnos=None):
+    if "tyyppi" in data.keys() and (data['tyyppi'] == ot_tyyppi[1:] or (ot_tyyppi[1:] == "vk" and data['tyyppi'] != "pk") or ot_tyyppi[1:] == "pk"):
+        loadField(state, data, "kiintea", ['parametrit'], 'parhaan_kaava', 'arvo', prefix + ot_tyyppi)
+        loadField(state, data, "jaettavat", ['parametrit'], 'jaettavat', 'arvo', prefix + ot_tyyppi)
+        loadField(state, data, "parhaan_haku", ['parametrit'], 'parhaan_haku', 'arvo', prefix + ot_tyyppi)
+        loadField(state, data, "nollan_kerroin", ['parametrit'], 'nollan_kerroin', 'arvo', prefix + ot_tyyppi)
+        loadField(state, data, "nollan_kaava", ['parametrit'], 'nollan_kaava', 'arvo', prefix + ot_tyyppi)
+        loadField(state, data, "oikea", ['parametrit'], 'oikea', 'arvo', prefix + ot_tyyppi)
+        loadField(state, data, "kaava", ['parametrit'], 'vartion_kaava', 'arvo', prefix + ot_tyyppi)
+        loadField(state, data, "arvio", ['parametrit'], 'arvio', 'arvo', prefix + ot_tyyppi)
 
         # Puhdaskaavan generointi muista tyypeistä
         if ot_tyyppi[1:] == "pk" and data['tyyppi'] != "pk":
             parametrit = {}
-            loadField(parametrit, data, "parhaan_kaava", ['parametrit'],
-                      'parhaan_kaava', 'arvo')
-            loadField(parametrit, data, "jaettavat", ['parametrit'],
-                      'jaettavat', 'arvo')
-            loadField(parametrit, data, "parhaan_haku", ['parametrit'],
-                      'parhaan_haku', 'arvo')
-            loadField(parametrit, data, "nollan_kerroin", ['parametrit'],
-                      'nollan_kerroin', 'arvo')
-            loadField(parametrit, data, "nollan_kaava", ['parametrit'],
-                      'nollan_kaava', 'arvo')
-            loadField(parametrit, data, "oikea", ['parametrit'],
-                      'oikea', 'arvo')
-            loadField(parametrit, data, "vartion_kaava", ['parametrit'],
-                      'vartion_kaava', 'arvo')
-            loadField(parametrit, data, "arvio", ['parametrit'],
-                      'arvio', 'arvo')
-            loadField(parametrit, data, "tapa", ['parametrit'],
-                      'tapa', 'arvo')
+            loadField(parametrit, data, "parhaan_kaava", ['parametrit'], 'parhaan_kaava', 'arvo')
+            loadField(parametrit, data, "jaettavat", ['parametrit'], 'jaettavat', 'arvo')
+            loadField(parametrit, data, "parhaan_haku", ['parametrit'], 'parhaan_haku', 'arvo')
+            loadField(parametrit, data, "nollan_kerroin", ['parametrit'], 'nollan_kerroin', 'arvo')
+            loadField(parametrit, data, "nollan_kaava", ['parametrit'], 'nollan_kaava', 'arvo')
+            loadField(parametrit, data, "oikea", ['parametrit'], 'oikea', 'arvo')
+            loadField(parametrit, data, "vartion_kaava", ['parametrit'], 'vartion_kaava', 'arvo')
+            loadField(parametrit, data, "arvio", ['parametrit'], 'arvio', 'arvo')
+            loadField(parametrit, data, "tapa", ['parametrit'], 'tapa', 'arvo')
             kaava = prefix + ot_tyyppi + '_kaava'
             state[kaava] = luoOsatehtavanKaava(peruskaava, parametrit)
         try:
@@ -411,236 +390,195 @@ def maksimisuoritus(state, data, prefix, ot_tyyppi, formi,
                       'arvo', "suor*muk")
     except Exception:
         pass
-    formi.update(field(state, "kiintea", prefix + ot_tyyppi, errors))
+    formi.update( field(state,"kiintea",prefix+ot_tyyppi,errors) )
     # Jaettavat pisteet:
-    errors = ""
-    if state and prefix in state.keys() and state[prefix] == ot_tyyppi[1:]:
-        if not validate(state, "jaettavat", [is_number], prefix + ot_tyyppi):
-            errors = "Syötä numeroita!"
-            data['valid'] = False
-        else:
-            saveField(state, data, "jaettavat", ['parametrit'],
-                      'jaettavat', 'arvo', prefix + ot_tyyppi)
-    formi.update(field(state, "jaettavat", prefix + ot_tyyppi, errors))
+    errors=""
+    if state and prefix in state.keys() and state[prefix]==ot_tyyppi[1:] :
+            if not validate(state,"jaettavat",[is_number],prefix+ot_tyyppi ) :
+                    errors= "Syötä numeroita!"
+                    data['valid']=False
+            else: saveField(state,data,"jaettavat",['parametrit'],'jaettavat','arvo',prefix+ot_tyyppi)
+    formi.update( field(state,"jaettavat",prefix+ot_tyyppi,errors) )
 
-
-def nollasuoritus(state, data, prefix, ot_tyyppi, formi,
-                  validiointi=[[is_number], "Syötä numeroita!"], muunnos=None):
+def nollasuoritus(state,data,prefix,ot_tyyppi,formi,validiointi=[[is_number],"Syötä numeroita!"],muunnos=None) :
     # Kiintea nolla
-    errors = ""
-    if state and prefix in state.keys() and state[prefix] == ot_tyyppi[1:]:
-        if state[prefix + ot_tyyppi + "_nollan_kerroin"] == "1":
-            if not validate(state, "nollan_kaava",
-                            validiointi[0], prefix + ot_tyyppi):
-                data['valid'] = False
-                errors = validiointi[1]
-            else:
-                saveField(state, data, "nollan_kaava",
-                          ['parametrit'], 'nollan_kaava', 'arvo',
-                          prefix + ot_tyyppi, muunnos)
-    formi.update(field(state, "nollan_kaava", prefix + ot_tyyppi, errors))
+    errors=""
+    if state and prefix in state.keys() and state[prefix]==ot_tyyppi[1:] and state[prefix+ot_tyyppi+"_nollan_kerroin"]=="1":
+            if not validate(state,"nollan_kaava",validiointi[0],prefix+ot_tyyppi):
+                    data['valid']=False
+                    errors= validiointi[1]
+            else : saveField(state,data,"nollan_kaava",
+                    ['parametrit'],'nollan_kaava','arvo',
+                    prefix+ot_tyyppi,muunnos)
+    formi.update( field(state,"nollan_kaava",prefix+ot_tyyppi,errors) )
     # Kerroin valinnat:
-    if state and prefix in state.keys() and state[prefix] == ot_tyyppi[1:]:
-        kerroin = state[prefix + ot_tyyppi + "_nollan_kerroin"]
-        save_data(data, ['parametrit'], 'tapa', 'arvo', "")
-        if kerroin == "1.5" or kerroin == "0.5"or kerroin == "1":
-            saveField(state, data, "nollan_kerroin", ['parametrit'],
-                      'nollan_kerroin', 'arvo', prefix + ot_tyyppi)
-        if kerroin == "1.5" or kerroin == "0.5" or kerroin == "m":
-            save_data(data, ['parametrit'], 'tapa', 'arvo', "med")
-            save_data(data, ['parametrit'], 'nollan_kaava', 'arvo', "suor*muk")
+    if state and prefix in state.keys() and state[prefix]==ot_tyyppi[1:] :
+            kerroin=state[prefix+ot_tyyppi+"_nollan_kerroin"]
+            save_data(data,['parametrit'],'tapa','arvo',"")
+            if kerroin=="1.5" or kerroin=="0.5"or kerroin == "1":
+                    saveField(state,data,"nollan_kerroin",['parametrit'],'nollan_kerroin','arvo',prefix+ot_tyyppi)
+            if kerroin=="1.5" or kerroin=="0.5" or kerroin=="m":
+                    save_data(data,['parametrit'],'tapa','arvo',"med")
+                    save_data(data,['parametrit'],'nollan_kaava','arvo',"suor*muk")
 
-    formi.update(field(state, "nollan_kerroin", prefix + ot_tyyppi))
+    formi.update( field(state,"nollan_kerroin",prefix+ot_tyyppi) )
     # Muu kerroin
-    errors = ""
-    if state and prefix in state.keys() and state[prefix] == ot_tyyppi[1:]:
-        if state[prefix + ot_tyyppi + "_nollan_kerroin"] == "m":
-            if not validate(state, "muu_kerroin", [is_number],
-                            prefix + ot_tyyppi):
-                data['valid'] = False
-                errors = "Syötä numeroita!"
-            else:
-                saveField(state, data, "muu_kerroin", ['parametrit'],
-                          'nollan_kerroin', 'arvo', prefix + ot_tyyppi)
-    formi.update(field(state, "muu_kerroin", prefix + ot_tyyppi, errors))
+    errors=""
+    if state and prefix in state.keys() and state[prefix]==ot_tyyppi[1:] and state[prefix+ot_tyyppi+"_nollan_kerroin"]=="m":
+            if not validate(state,"muu_kerroin",[is_number],prefix+ot_tyyppi):
+                    data['valid']=False
+                    errors= "Syötä numeroita!"
+            else: saveField(state,data,"muu_kerroin",['parametrit'],'nollan_kerroin','arvo',prefix+ot_tyyppi)
+    formi.update( field(state,"muu_kerroin",prefix+ot_tyyppi,errors) )
 
-
-def arviointi(state, data, prefix, ot_tyyppi, formi,
-              validiointi=[[is_number], "Syötä numeroita!"], muunnos=None):
+def arviointi(state,data,prefix,ot_tyyppi,formi,validiointi=[[is_number],"Syötä numeroita!"],muunnos=None):
     # Arviointi
-    errors = ""
-    if state and prefix in state.keys() and state[prefix] == ot_tyyppi[1:]:
-        saveField(state, data, "arvio", ['parametrit'],
-                  'arvio', 'arvo', prefix + ot_tyyppi)
-        if prefix + ot_tyyppi + "_arvio" in state.keys():
-            if state[prefix + ot_tyyppi + "_arvio"] == "abs":
-                if not validate(state, "oikea", validiointi[0],
-                                prefix + ot_tyyppi):
-                    errors = validiointi[1]
-                    data['valid'] = False
-                else:
-                    saveField(state, data, "oikea", ['parametrit'],
-                              'oikea', 'arvo', prefix + ot_tyyppi, muunnos)
-        else:
-            save_data(data, ['parametrit'], 'arvio', 'arvo', "")
-            save_data(data, ['parametrit'], 'oikea', 'arvo', "0")
-    formi.update(field(state, "oikea", prefix + ot_tyyppi, errors))
-    formi.update(field(state, "arvio", prefix + ot_tyyppi))
-
+    errors=""
+    if state and prefix in state.keys() and state[prefix]==ot_tyyppi[1:] :
+            saveField(state,data,"arvio",['parametrit'],'arvio','arvo',prefix+ot_tyyppi)
+            if prefix+ot_tyyppi+"_arvio" in state.keys() and state[prefix+ot_tyyppi+"_arvio"]=="abs":
+                    if not validate(state,"oikea",validiointi[0],prefix+ot_tyyppi ) :
+                            errors= validiointi[1]
+                            data['valid']=False
+                    else : saveField(state,data,"oikea",['parametrit'],'oikea','arvo',prefix+ot_tyyppi,muunnos)
+            else :
+                    save_data(data,['parametrit'],'arvio','arvo',"")
+                    save_data(data,['parametrit'],'oikea','arvo',"0")
+    formi.update( field(state,"oikea",prefix+ot_tyyppi,errors) )
+    formi.update( field(state,"arvio",prefix+ot_tyyppi) )
 
 ###################################
 # Osatehtäväkohtaiset kokoonpanot #
 ###################################
-def kisaPisteForm(posti, data, prefix):
-    formi = syotteen_kuvaus_field(posti, data, prefix, 0, "kp")
-    poistaYlimaaraisetMaaritteet(posti, data, prefix, "kp", 1)
-    if posti and prefix in posti.keys() and posti[prefix] == "kp":
-        for k, v in data['maaritteet'].items():
-            v['tyyppi'] = 'piste'
-        data['kaava'] = "a"
-    return render_to_string("tupa/forms/kisa_piste.html", formi)
+def kisaPisteForm(posti,data,prefix) :
+    formi=syotteen_kuvaus_field(posti,data,prefix,0,"kp")
+    poistaYlimaaraisetMaaritteet(posti,data,prefix,"kp",1)
+    if posti and prefix in posti.keys() and posti[prefix]=="kp":
+            for k,v in data['maaritteet'].items(): v['tyyppi']='piste'
+            data['kaava']="a"
+    return render_to_string("tupa/forms/kisa_piste.html", formi )
 
+def raakaPisteForm(posti,data,prefix) :
+    formi=syotteen_kuvaus_field(posti,data,prefix,0,"rp")
+    poistaYlimaaraisetMaaritteet(posti,data,prefix,"rp",1)
+    if posti and prefix in posti.keys() and posti[prefix]=="rp":
+            for k,v in data['maaritteet'].items(): v['tyyppi']='piste'
+            save_data(data,['parametrit'],'vartion_kaava','arvo',"a")
+            data["kaava"]=peruskaava
 
-def raakaPisteForm(posti, data, prefix):
-    formi = syotteen_kuvaus_field(posti, data, prefix, 0, "rp")
-    poistaYlimaaraisetMaaritteet(posti, data, prefix, "rp", 1)
-    if posti and prefix in posti.keys() and posti[prefix] == "rp":
-        for k, v in data['maaritteet'].items():
-            v['tyyppi'] = 'piste'
-        save_data(data, ['parametrit'], 'vartion_kaava', 'arvo', "a")
-        data["kaava"] = peruskaava
-
-    state = None
+    state=None
     # Aloitusarvot kannasta
-    if not posti:
-        state = {}
-        lataa_parametrit(state, data, prefix, "_rp")
-    else:
-        state = posti.copy()
-    formi.update(field(state, "parhaan_haku", prefix + "_rp"))
+    if not posti :
+            state={}
+            lataa_parametrit(state,data,prefix,"_rp")
+    else : state=posti.copy()
+    formi.update( field(state,"parhaan_haku",prefix+"_rp")  )
 
-    maksimisuoritus(state, data, prefix, "_rp", formi)
-    nollasuoritus(state, data, prefix, "_rp", formi)
-    arviointi(state, data, prefix, "_rp", formi)
-    return render_to_string("tupa/forms/raaka_piste.html", formi)
+    maksimisuoritus(state,data,prefix,"_rp",formi)
+    nollasuoritus(state,data,prefix,"_rp",formi)
+    arviointi(state,data,prefix,"_rp",formi)
 
+    return render_to_string("tupa/forms/raaka_piste.html",  formi)
 
-def kokonaisAikaForm(posti, data, prefix):
-    formi = syotteen_kuvaus_field(posti, data, prefix, 0, "ka")
-    poistaYlimaaraisetMaaritteet(posti, data, prefix, "ka", 1)
-    if posti and prefix in posti.keys() and posti[prefix] == "ka":
-        for k, v in data['maaritteet'].items():
-            v['tyyppi'] = 'aika'
-        save_data(data, ['parametrit'], 'vartion_kaava', 'arvo', "a")
-        data["kaava"] = peruskaava
+def kokonaisAikaForm(posti,data,prefix) :
+    formi=syotteen_kuvaus_field(posti,data,prefix,0,"ka")
+    poistaYlimaaraisetMaaritteet(posti,data,prefix,"ka",1)
+    if posti and prefix in posti.keys() and posti[prefix]=="ka":
+            for k,v in data['maaritteet'].items(): v['tyyppi']='aika'
+            save_data(data,['parametrit'],'vartion_kaava','arvo',"a")
+            data["kaava"]=peruskaava
     # Aloitusarvot kannasta
-    if not posti:
-        state = {}
-        lataa_parametrit(state, data, prefix, "_ka", muunnos=numero_ajaksi)
-    else:
-        state = posti.copy()
-    formi.update(field(state, "parhaan_haku", prefix + "_ka"))
+    if not posti :
+            state={}
+            lataa_parametrit(state,data,prefix,"_ka",muunnos=numero_ajaksi)
+    else : state=posti.copy()
+    formi.update( field(state,"parhaan_haku",prefix+"_ka")  )
 
-    maksimisuoritus(state, data, prefix, "_ka",
-                    formi,
-                    validiointi=[[is_time], "Syötä hh:mm:ss!"],
+    maksimisuoritus(state,data,prefix,"_ka",
+                            formi,
+                            validiointi=[[is_time],"Syötä hh:mm:ss!"],
+                            muunnos=aika_numeroksi)
+    nollasuoritus(state,data,prefix,"_ka",
+                    formi,validiointi=[[is_time],"Syötä hh:mm:ss!"],
                     muunnos=aika_numeroksi)
-    nollasuoritus(state, data, prefix, "_ka",
-                  formi, validiointi=[[is_time], "Syötä hh:mm:ss!"],
-                  muunnos=aika_numeroksi)
-    arviointi(state, data, prefix, "_ka",
-              formi, validiointi=[[is_time], "Syötä hh:mm:ss!"],
-              muunnos=aika_numeroksi)
-    return render_to_string("tupa/forms/kokonais_aika.html", formi)
+    arviointi(state,data,prefix,"_ka",
+                    formi,validiointi=[[is_time],"Syötä hh:mm:ss!"],
+                    muunnos=aika_numeroksi )
+    return render_to_string("tupa/forms/kokonais_aika.html",  formi)
 
-
-def aikaValiForm(posti, data, prefix):
-    formi = syotteen_kuvaus_field(posti, data, prefix, 0, "ala")
-    formi.update(syotteen_kuvaus_field(posti, data, prefix, 1, "ala"))
-    poistaYlimaaraisetMaaritteet(posti, data, prefix, "ala", 2)
-    if posti and prefix in posti.keys() and posti[prefix] == "ala":
-        save_data(data, ['parametrit'], 'arvio', 'arvo', "")
-        save_data(data, ['parametrit'], 'oikea', 'arvo', "0")
-        for k, v in data['maaritteet'].items():
-            v['tyyppi'] = 'aika'
-        save_data(data, ['parametrit'], 'vartion_kaava',
-                  'arvo', "aikavali(a,b)")
-        data["kaava"] = peruskaava
+def aikaValiForm(posti,data,prefix) :
+    formi=syotteen_kuvaus_field(posti,data,prefix,0,"ala")
+    formi.update(syotteen_kuvaus_field(posti,data,prefix,1,"ala"))
+    poistaYlimaaraisetMaaritteet(posti,data,prefix,"ala",2)
+    if posti and prefix in posti.keys() and posti[prefix]=="ala":
+            save_data(data,['parametrit'],'arvio','arvo',"")
+            save_data(data,['parametrit'],'oikea','arvo',"0")
+            for k,v in data['maaritteet'].items(): v['tyyppi']='aika'
+            save_data(data,['parametrit'],'vartion_kaava','arvo',"aikavali(a,b)")
+            data["kaava"]=peruskaava
     # Aloitusarvot kannasta
-    state = None
-    if not posti:
-        state = {}
-        lataa_parametrit(state, data, prefix, "_ala", muunnos=numero_ajaksi)
-    else:
-        state = posti.copy()
-    maksimisuoritus(state, data, prefix, "_ala", formi,
-                    validiointi=[[is_time], "Syötä hh:mm:ss!"],
+    state=None
+    if not posti :
+            state={}
+            lataa_parametrit(state,data,prefix,"_ala",muunnos=numero_ajaksi)
+    else : state=posti.copy()
+    maksimisuoritus(state,data,prefix,"_ala",formi,
+                    validiointi=[[is_time],"Syötä hh:mm:ss!"],
                     muunnos=aika_numeroksi)
-    nollasuoritus(state, data, prefix, "_ala", formi,
-                  validiointi=[[is_time], "Syötä hh:mm:ss!"],
-                  muunnos=aika_numeroksi)
-    return render_to_string("tupa/forms/aika_vali.html", formi)
+    nollasuoritus(state,data,prefix,"_ala",formi,
+                    validiointi=[[is_time],"Syötä hh:mm:ss!"],
+                    muunnos=aika_numeroksi)
+    return render_to_string("tupa/forms/aika_vali.html",  formi)
 
-
-def vapaaKaavaForm(posti, data, prefix):
-    maara = 5
-    if 'maaritteet' in data.keys():  # Määritteet:
-        maara = int(len(data['maaritteet']))
-        if posti and prefix + '_maaritteita' in posti.keys():
-            maara = int(posti[prefix + '_maaritteita'])
-        if maara > int(maara / 5) * 5:
-            maara = int(maara / 5) * 5 + 5
-        else:
-            maara = int(maara / 5) * 5
-    if posti and 'lisaa_maaritteita' in posti.keys():
-            maara = int(posti[prefix + '_maaritteita']) + 5
-    formit = []
+def vapaaKaavaForm(posti,data,prefix) :
+    maara=5
+    if 'maaritteet' in data.keys() :  # Määritteet:
+            maara=int(len(data['maaritteet']))
+            if posti and prefix+'_maaritteita' in posti.keys() : maara= int(posti[prefix+'_maaritteita'])
+            if maara > int(maara/5)*5 : maara= int(maara/5)*5+5
+            else : maara= int(maara/5)*5
+    if posti and 'lisaa_maaritteita' in posti.keys()  :
+            maara=int(posti[prefix+'_maaritteita'])+5
+    formit=[]
     for i in range(maara):
-        validi = True
-        if 'valid' in data.keys() and data['valid'] is False:
-            validi = False
-        formia = (syotteen_kuvaus_field(posti, data, prefix, i, "vk")
-                  .items()[0])
-        formib = syotteen_tyyppi_field(posti, data, prefix, i, "vk").items()[0]
-        if validi and 'valid' in data.keys() and data['valid'] is False:
-            del data['valid']
-        formit.append({'kali_vihje': formia[1], 'nimi': string.letters[i],
-                       'tyyppi': formib[1]})
+            validi=True
+            if 'valid' in data.keys() and data['valid'] == False: validi=False
+            formia=syotteen_kuvaus_field(posti,data,prefix,i,"vk").items()[0]
+            formib=syotteen_tyyppi_field(posti,data,prefix,i,"vk").items()[0]
+            if validi and 'valid' in data.keys() and data['valid'] == False: del data['valid']
+            formit.append({'kali_vihje': formia[1], 'nimi': string.letters[i] ,
+                            'tyyppi': formib[1]  })
 
-    if posti and prefix in posti.keys() and posti[prefix] == "vk":
-        if 'maaritteet' in data.keys():
+    if posti and prefix in posti.keys() and posti[prefix]=="vk":
+         if 'maaritteet' in data.keys():
             maaritteet = data['maaritteet'].copy().items()
             for i in range(maara):
-                if maaritteet[i][1]['kali_vihje'] == "":
-                    if type(maaritteet[i][0]) == str:
-                        if maaritteet[i][0][:1] == "#":
-                            del data['maaritteet'][maaritteet[i][0]]
-                        else:
-                            maarite = maaritteet[i][1]
-                            data['maaritteet'][-maaritteet[i][0]] = maarite
-                            del data['maaritteet'][maaritteet[i][0]]
-        data["kaava"] = peruskaava
+                    if maaritteet[i][1]['kali_vihje']=="":
+                            if type(maaritteet[i][0]) == str and maaritteet[i][0][:1]=="#" :
+                                    del data['maaritteet'][maaritteet[i][0]]
+                            else :
+                                    data['maaritteet'][-maaritteet[i][0]] = maaritteet[i][1]
+                                    del data['maaritteet'][maaritteet[i][0]]
+         data["kaava"]=peruskaava
 
-    poistaYlimaaraisetMaaritteet(posti, data, prefix, "vk", maara)
+    poistaYlimaaraisetMaaritteet(posti,data,prefix,"vk",maara)
 
-    formi = {"vapaa": True,
-             'maaritteet': formit,
-             'maaritteita': {'value': maara, 'name': prefix + '_maaritteita'}}
+    formi={"vapaa": True,
+            'maaritteet' : formit,
+            'maaritteita' : { 'value' : maara, 'name' : prefix+'_maaritteita'}}
     # Aloitusarvot kannasta
-    if not posti:
-        state = {}
-        lataa_parametrit(state, data, prefix, "_vk")
-    else:
-        state = posti.copy()
-    formi.update(field(state, "parhaan_haku", prefix + "_vk"))
+    if not posti :
+            state={}
+            lataa_parametrit(state,data,prefix,"_vk")
+    else : state=posti.copy()
+    formi.update( field(state,"parhaan_haku",prefix+"_vk")  )
 
-    errors = ""
-    if state and prefix in state.keys() and state[prefix] == "vk":
-        if not validate(state, "kaava", [is_kaava], prefix + "_vk"):
-            errors = "Kaava ei toimi!"
-            data['valid'] = False
-        saveField(state, data, "kaava", ['parametrit'],
-                  'vartion_kaava', 'arvo', prefix + "_vk")
+    errors=""
+    if state and prefix in state.keys() and state[prefix]=="vk":
+            if not validate(state,"kaava",[is_kaava],prefix+"_vk" ) :
+                    errors= "Kaava ei toimi!"
+                    data['valid']=False
+            saveField(state,data,"kaava",['parametrit'],'vartion_kaava','arvo',prefix+"_vk")
     formi.update(field(state, "kaava", prefix + "_vk", errors=errors))
 
     maksimisuoritus(state, data, prefix, "_vk",
@@ -736,7 +674,7 @@ def osaTehtavaForm(posti, data, prefix=""):
         data['valid'] = False
         otForm['errors'] = "valitse tyyppi"
 
-    # tabit:
+    # tabit :
     taulukko = [{'id': data['nimi'] + '_kp',
                  'otsikko': 'Kisapiste',
                  'tyyppi': 'kp',
