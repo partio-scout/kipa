@@ -1,15 +1,22 @@
-# KiPa(KisaPalvelu), tuloslaskentajärjestelmä partiotaitokilpailuihin
-#    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
-
+# !/usr/bin/env python
+# -*- coding: utf-8 -*-
+# KiPa(KisaPalvelu), tuloslaskentajarjestelma partiotaitokilpailuihin
+#    Copyright (C) 2016  Espoon Partiotuki ry. ept@partio.fi
+"""
+Täällä tapahtuu tehtävän määritys.
+"""
 # from django.utils.safestring import SafeText
 from django.template.loader import render_to_string
 import re
 import string
 import operator
-# from decimal import *
+from decimal import Decimal
+
+from .taulukkolaskin import laskeTaulukko
+from .tuloslaskin import luoOsatehtavanKaava
 
 # Lataamista varten:
-from .models import *
+from . import models
 from django.core import serializers
 
 # Tehtävätyyppien kaavapohja:
@@ -126,7 +133,7 @@ def numero_ajaksi(n):
 #  Pitäs kirjoittaa uudelleen  #
 ################################
 def syotteen_tyyppi_field(posti, data, prefix, syote_id, tyyppi):
-    nimi = string.letters[syote_id]
+    nimi = string.ascii_letters[syote_id]
     id = prefix + "_" + tyyppi + "_" + nimi + "_tyyppi"
     field_name = "tyyppi_" + nimi
     value = "piste"
@@ -225,7 +232,7 @@ def loadField(state, data, field_name,
 def syotteen_kuvaus_field(posti, data, prefix, syote_id, tyyppi):
     formi = None
     errors = ""
-    nimi = string.letters[syote_id]
+    nimi = string.ascii_letters[syote_id]
     id = prefix + "_" + tyyppi + "_" + nimi
     value = ""
     field_name = "kali_vihje_" + nimi
@@ -299,7 +306,7 @@ def poistaYlimaaraisetMaaritteet(posti, data, prefix, tyyppi,
             index += 1
 
 
-def lataa_parametrit(state, daita, prefix, ot_tyyppi, muunnos=None):
+def lataa_parametrit(state, data, prefix, ot_tyyppi, muunnos=None):
     if ("tyyppi" in data.keys() and
        (data['tyyppi'] == ot_tyyppi[1:] or
        (ot_tyyppi[1:] == "vk" and data['tyyppi'] != "pk") or
@@ -599,12 +606,14 @@ def vapaaKaavaForm(posti, data, prefix):
         validi = True
         if 'valid' in data.keys() and data['valid'] is False:
             validi = False
-        formia = (syotteen_kuvaus_field(posti, data, prefix, i, "vk")
-                  .items()[0])
-        formib = syotteen_tyyppi_field(posti, data, prefix, i, "vk").items()[0]
+        formia = (list(syotteen_kuvaus_field(posti, data, prefix, i, "vk")
+                       .items())[0])
+        formib = (list(syotteen_tyyppi_field(posti, data, prefix, i, "vk")
+                       .items())[0])
         if validi and 'valid' in data.keys() and data['valid'] is False:
             del data['valid']
-        formit.append({'kali_vihje': formia[1], 'nimi': string.letters[i],
+        formit.append({'kali_vihje': formia[1],
+                       'nimi': string.ascii_letters[i],
                        'tyyppi': formib[1]})
 
     if posti and prefix in posti.keys() and posti[prefix] == "vk":
@@ -673,13 +682,14 @@ def puhdasKaavaForm(posti, data, prefix):
         validi = True
         if 'valid' in data.keys() and data['valid'] is False:
             validi = False
-        formia = (syotteen_kuvaus_field(posti, data, prefix, i, "pk")
-                  .items()[0])
-        formib = (syotteen_tyyppi_field(posti, data, prefix, i, "pk")
-                  .items()[0])
+        formia = (list(syotteen_kuvaus_field(posti, data, prefix, i, "pk")
+                       .items())[0])
+        formib = (list(syotteen_tyyppi_field(posti, data, prefix, i, "pk")
+                       .items())[0])
         if validi and 'valid' in data.keys() and data['valid'] is False:
             del data['valid']
-        formit.append({'kali_vihje': formia[1], 'nimi': string.letters[i],
+        formit.append({'kali_vihje': formia[1],
+                       'nimi': string.ascii_letters[i],
                        'tyyppi': formib[1]})
 
     if posti and prefix in posti.keys() and posti[prefix] == "pk":
@@ -846,7 +856,7 @@ def tehtavanMaaritysForm(posti, data, sarja_id,
                 tId = k
                 if k == "#1":
                     tId = None
-                letters = string.letters[osatehtava_id]
+                letters = string.ascii_letters[osatehtava_id]
                 v['osa_tehtavat'][uusi_id] = {'nimi': letters,
                                               'tyyppi': "",
                                               'kaava': "",

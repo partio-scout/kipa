@@ -1,8 +1,12 @@
+# !/usr/bin/env python
+# -*- coding: utf-8 -*-
 # KiPa(KisaPalvelu), tuloslaskentajarjestelma partiotaitokilpailuihin
-#    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
+#    Copyright (C) 2016  Espoon Partiotuki ry. ept@partio.fi
+"""
+Tallennetaan kaikki mallit tänne. Tulevaisuudessa luodaan JSON-tiedostosta.
+XML poistetaan tältä osin käytöstä.
+"""
 
-
-# !/usr/bin/python
 
 # import time
 # import sys
@@ -10,7 +14,7 @@
 from django.db import models
 # from random import uniform
 
-from binascii import *
+# from binascii import *
 
 
 class Kipa(models.Model):
@@ -26,13 +30,13 @@ class Kipa(models.Model):
 class Kisa(models.Model):
     # gen_dia_class Kisa
 
-    nimi = models.CharField(max_length=255)
+    nimi = models.CharField(max_length=255, unique=True)
     aika = models.CharField(max_length=255, blank=True, null=True)
     paikka = models.CharField(max_length=255, blank=True)
     tunnistus = models.BooleanField()
 
     # end_dia_class
-    def __unicode__(self):
+    def __str__(self):
         return self.nimi
 
     class Meta:
@@ -44,32 +48,26 @@ class Sarja(models.Model):
     # gen_dia_class Sarja
 
     nimi = models.CharField(max_length=255)
-    vartion_maksimikoko = models.IntegerField(blank=True, null=True, default=0)
-    vartion_minimikoko = models.IntegerField(blank=True, null=True,
-                                             default=0)
     kisa = models.ForeignKey(Kisa)
-    tasapiste_teht1 = models.IntegerField(blank=True, null=True)
-    tasapiste_teht2 = models.IntegerField(blank=True, null=True)
-    tasapiste_teht3 = models.IntegerField(blank=True, null=True)
+    teht1 = models.IntegerField(blank=True, null=True)
+    teht2 = models.IntegerField(blank=True, null=True)
+    teht3 = models.IntegerField(blank=True, null=True)
 
     # end_dia_class
-    def __unicode__(self):
+    def __str__(self):
         return self.kisa.nimi + "." + self.nimi
 
     # Tulokset uusiksi tallennuksen yhteydessä
     def save(self, *args, **kwargs):
-        self.tuloksetUusiksi()
+        self.laskeTulokset()
         super(Sarja, self).save(*args, **kwargs)
 
     # Tulokset uusiksi tallennuksen yhteydessä
     def delete(self, *args, **kwargs):
-        self.tuloksetUusiksi()
+        self.laskeTulokset()
         super(Sarja, self).delete(*args, **kwargs)
 
     def laskeTulokset(self):
-        pass
-
-    def tuloksetUusiksi(self):
         pass
 
     class Meta:
@@ -93,7 +91,7 @@ class Vartio(models.Model):
 
     # end_dia_class
 
-    def __unicode__(self):
+    def __str__(self):
         return (self.sarja.kisa.nimi + "." +
                 self.sarja.nimi + "." + str(self.nro))
 
@@ -139,7 +137,7 @@ class Tehtava(models.Model):
                     mukana.append(v)
         return mukana
 
-    def __unicode__(self):
+    def __str__(self):
         sarja = self.sarja
         kisa = sarja.kisa
         return kisa.nimi + "." + sarja.nimi + "." + self.nimi
@@ -164,7 +162,7 @@ class OsaTehtava(models.Model):
         tehtava = models.ForeignKey(Tehtava)
 
         # end_dia_class
-        def __unicode__(self):
+        def __str__(self):
                 tehtava = self.tehtava
                 sarja = tehtava.sarja
                 kisa = sarja.kisa
@@ -197,7 +195,7 @@ class SyoteMaarite(models.Model):
         self.osa_tehtava.tehtava.sarja.tuloksetUusiksi()
         super(SyoteMaarite, self).delete(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         ot = self.osa_tehtava
         tehtava = ot.tehtava
         sarja = tehtava.sarja
@@ -230,7 +228,7 @@ class Syote(models.Model):
         self.vartio.sarja.tuloksetUusiksi()
         super(Syote, self).delete(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         vartio = self.vartio
         maarite = self.maarite
         ot = maarite.osa_tehtava
@@ -263,7 +261,7 @@ class TulosTaulu(models.Model):
         self.vartio.sarja.tuloksetUusiksi()
         super(TulosTaulu, self).delete(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         tehtava = self.tehtava
         sarja = tehtava.sarja
         kisa = sarja.kisa
@@ -299,7 +297,7 @@ class Parametri(models.Model):
         verbose_name_plural = "OsaTehtavan paramentrit"
         db_table = u'kipa_parametri'
 
-    def __unicode__(self):
+    def __str__(self):
         ot = self.osa_tehtava
         tehtava = ot.tehtava
         sarja = tehtava.sarja

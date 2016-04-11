@@ -69,10 +69,19 @@ WSGI_APPLICATION = 'kipa.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
+# DATABASES = {
+    # 'default': {
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': os.path.join(BASE_DIR, 'tupa.db'),
+    # }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'tupa.db'),
+        'ENGINE':   'django.db.backends.postgresql',
+        'NAME':     'neokipa',
+        'USER':     'kipa',
+        'PASSWORD': 'kipa',
+        'HOST':     'localhost'
     }
 }
 
