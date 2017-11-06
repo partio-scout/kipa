@@ -487,6 +487,27 @@ a.sitetoolbarnavactive:hover { color: #0d3b65; border: 1px solid #486B8A; paddin
 
 #tulostaulukko_screen td {
 	vertical-align:top;
+	padding-right:10px;
+}
+
+#tulostaulukko_screen .odd {
+	background: #faffda;
+}
+
+#tulostaulukko_screen .even {
+	
+}
+
+#vartiot td:first-child {
+	font-weight: bold;
+}
+
+.right {
+	text-align: right;
+}
+
+.left {
+	text-align: left;
 }
 
 #sarjakohtaiset_tulokset td
@@ -511,4 +532,3 @@ td.th_erotin {
 }
 
 .capitalize {text-transform:capitalize;}
-

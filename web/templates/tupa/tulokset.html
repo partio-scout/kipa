@@ -1,172 +1,135 @@
 {% extends "tupa/base.html" %}
 {% block title %}Sarjakohtaiset tulokset{% endblock title %} 
 {% block header %}
-{% if vaihtoaika %}
-<meta http-equiv="REFRESH" content="{{vaihtoaika}};url=/kipa/{{kisa_nimi}}/heijasta/sarja/{{vaihto_id}}/">
-{% endif %}
+    {% if vaihtoaika %}
+        <meta http-equiv="REFRESH" content="{{vaihtoaika}};url=/kipa/{{kisa_nimi}}/heijasta/sarja/{{vaihto_id}}/">
+    {% endif %}
 {% endblock header %}
-{% block content %} 
+
+
+{% block content %}
 
 {% load kipatags %}
 
-<table width="100%" border="0" id="tulostaulukko_otsikko">
+<table width="100%" border="0" id="tulostaulukko_otsikko" style:"position:absolute; top: 0px; left: 0px;">
 <tr valign="top">
-	<td width="33%"><h1 style:"margin:0; padding:0;">{{kisa_nimi|alaviiva_pois }}</h1></td>
-	<td width="33%" align="center"><h1>{{heading}}</h1></td>
-	<td width="33%" align="right">&nbsp;</td>
+    <td width="33%"><h1 style:"margin:0; padding:0;">{{kisa_nimi|alaviiva_pois }}</h1></td>
+    <td width="33%" align="center"><h1>{{heading}}</h1></td>
+    <td width="33%" align="right"></td>
 </tr>
 <tr>
-	<td>{%if kisa_aika %}
-    		{{kisa_aika}}<br> 
+    <td>{%if kisa_aika %}
+            {{kisa_aika}}<br> 
         {% endif %}
         {{kisa_paikka}}
     </td>
-	<td align="center"><br>{% now "j.n.Y G:i"%}</td>
-	<td align="right">&nbsp;</td>
+    <td align="center"><br>{% now "j.n.Y G:i"%}</td>
+    <td align="right"></td>
 </tr>
 </table>
 <br />
 
 {% if tulos_taulukko %}
-	<table id="tulostaulukko_screen" border=0 >
-		{% for rivi in tulos_taulukko%}
-                {%if forloop.counter|add:"3"|divisibleby:"5" %}      
-                        <tr height="10" valign="top"><td></td></tr>
-                {% endif %}
-                {% if forloop.first %}
-                      <tr valign="top">
-                {% for sarake in rivi %}
-                     {% comment %} ylarivi {% endcomment %}
-                                {% if forloop.first  %}
-                                        {% comment %} ylarivin eka {% endcomment %}
-                                        <td width="30" align="right"></td>
-                                        <td width="30" align="right" style="padding-right:10px;"><b></b></td>
-                                        <td style="min-width:100px;"></td> 
-                                        <td align="right" width=30 style="padding-right:10px;"></td>
-                                {% else %}
-                                        {% comment %} ylarivi {% endcomment %}
+    <table id="tulostaulukko_screen" border="0" >
+        {% for rivi in tulos_taulukko %}
+            {% if forloop.first %}
 
-                                        {% if sarake.jarjestysnro %}
-                                        <td align="right" width=30 style="padding-right:10px;"><b>
-                                                {{ sarake.jarjestysnro }}.
-                                        </b></td>
-                                        {% endif %}
-                                {% endif %}
-			    {% endfor %}    
-
-                      </tr>
-                      <tr valign="top">
-                
-                        <td></td>
-			            {% for sarake in rivi %}
-                     {% comment %} ylarivi {% endcomment %}
-                                {% if forloop.first  %}
-                                        {% comment %} ylarivin eka {% endcomment %}
-                                        <td></td><td></td>
-                                {% else %}
-                                        {% comment %} ylarivi {% endcomment %}
-                                        {%if sarake.lyhenne %}
-                                        <td align="right" style="padding-right:10px;"><b>{{sarake.lyhenne}}</b></td>
-                                        {% else %}
-                                        <td align="right" width="60" style="padding-right:10px;"><b>
-                                            {{sarake.nimi|slice:":6"}}<br />
-                                            {{sarake.nimi|slice:"6:13"}}<br />
-                                            {{sarake.nimi|slice:"13:19"}}<br />
-                                            {{sarake.nimi|slice:"19:25"}}</b>
-                                        </td>
-                                        {% endif %}
-                                {% endif %}
-                        {%endfor %}
-
-                      </tr>
-                      <tr valign="top"> 
-                      <td></td><td></td><td align="right"><em>Maxpisteet</em></td>
-                        {% for sarake in rivi %}
-                                {% if forloop.first  %}
-                               <td align="right" style="padding-right:10px;"><em> {{ sarake.maksimipisteet }} </em></td>
-                                {% else %}
-
-                                {% ifnotequal forloop.counter 0 %}
-                                {% ifnotequal forloop.counter 1 %}
-                                {% ifnotequal forloop.counter 2 %}
-                                        <td align="right" style="padding-right:10px;"><em> {{ sarake.maksimipisteet }} </em></td>
-                                {% endifnotequal %}
-                                {% endifnotequal %}
-                                {% endifnotequal %}
-                                {% endif %}
-
-                        {%endfor %}
-                      </tr>
-                      <tr>
-                            <td width="30" align="right"><b>SIJ.</b></td>
-                            <td width="30" align="right" style="padding-right:10px;"><b></b></td>
-                            <td style="min-width:100px;"><b>VARTIO</b></td> 
-                            <td align="right" width=30 style="padding-right:10px;"><b>YHT</b></td>
-                      </tr>
-
-                      <tr valign='top'>
-                      
-                {% else %}
-			    {% for sarake in rivi %}
-                     {% comment %} ylarivi {% endcomment %}
-                     {% ifequal forloop.counter 2 %}
-                     {% comment %} ekasarake {% endcomment %}
-                        <td align="right" style="padding-right:10px;"> {{ sarake.nro }}</td> <td>{{sarake.nimi}}
-                                                {%if sarake.lippukunta %}<br>{%endif%}
-                                                {{sarake.lippukunta}}
-                                                {%if sarake.piiri %}<br>{%endif%}
-                                                {{sarake.piiri}}</td>
-                     {% else %}
-                     {% ifequal forloop.counter 3 %}
-                        <td align="right" style="padding-right:10px;">{{sarake}}</td>
-                     {% comment %} muut sarakkeet {% endcomment %}
-                     {% else %}
-                        <td align="right" style="padding-right:10px;">
-                                {% if forloop.first %} <b> {%endif%}     
-                                        {{ sarake }}
-                                {% if forloop.first %} </b> {%endif%}     
-                        </td>
-                     {% endifequal %}
-                     {% endifequal %}
-                     
-			    {% endfor %} 
-                     {% endif %}
-		      </tr>
-               {% comment %} ULKONA OLEVAT: {% endcomment %}
-                {% if forloop.last %}
-                        <tr><td>&nbsp;  </td></tr>
-                        <tr><td> </td> <td></td><td><b>Ulkopuolella:</b> </td></tr>
-                        {% for rivi in ulkona_taulukko%}
-                        <tr valign='top'>
-			            {% for sarake in rivi %}
-                                
-
-                                {% ifequal forloop.counter 2 %}
-                                        {% comment %} ekasarake {% endcomment %}
-                                        <td align="right" style="padding-right:10px;">{{ sarake.nro }}</td> <td>{{ sarake.nimi }} 
-                                                {%if sarake.lippukunta %}<br>{%endif%}
-                                                {{sarake.lippukunta}}
-                                                {%if sarake.piiri %}<br> {%endif%} 
-                                                {{sarake.piiri}} </td>
-                                        
-                                {% else %}
-                                        {% comment %} muut sarakkeet {% endcomment %}
-                                <td align="right" style="padding-right:10px;">
-                                        {% if forloop.first %} <b> {%endif%}     
-                                        {{ sarake }}
-                                        {% if forloop.first %} </b> {%endif%}     
-                                </td>
-                                {% endifequal %}
-                        {% endfor %}
-                        </tr>
-                        {%if forloop.counter|divisibleby:"5" %}      
-                                        <tr height=10><td></td></tr>
+                <tr id="teht_num">
+                    <td></td> <td></td> <td></td> <td></td>
+                    {% for sarake in rivi %}
+                        {% if sarake.jarjestysnro %}
+                            <td class="left"><b> {{ sarake.jarjestysnro }}. </b></td>
                         {% endif %}
-                        {% endfor %}
-                {% endif %}
+                    {% endfor %}
+                </tr>
+
+                <tr id="teht_nimi">
+                    <td></td> <td></td> <td></td> <td></td> 
+                    {% for sarake in rivi %}
+                        {% if forloop.counter > 2 %}
+                            <td class="left" style="min-width:20px;"> <b>
+                            {%if sarake.lyhenne %}
+                                {{sarake.lyhenne}}
+                            {% else %}
+                                {{sarake.nimi|slice:":6"}}<br />
+                                {{sarake.nimi|slice:"6:13"}}<br />
+                                {{sarake.nimi|slice:"13:19"}}<br />
+                                {{sarake.nimi|slice:"19:25"}}
+                            {% endif %}
+                            </b> </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+
+                <tr id="max_pisteet"> 
+                    <td></td> <td></td> <td class="right"> <em>Maxpisteet</em> </td>
+                    {% for sarake in rivi %}
+                        {% if sarake.maksimipisteet  %}
+                            <td class="right"><em> {{ sarake.maksimipisteet }} </em></td>
+                        {% endif %}
+                    {%endfor %}
+                </tr>
+
+                <tr id="otsikko">
+                    <td class="right"><b>SIJ.</b></td>
+                    <td class="right"><b></b></td>
+                    <td style="min-width:100px;"><b>VARTIO</b></td> 
+                    <td class="right"><b>YHT</b></td>
+                </tr>
+
+                
+            {% else %}
+                <tr id="vartiot" class="{% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
+                {% for sarake in rivi %}
+
+                    {% ifequal forloop.counter 2 %}
+                        {% comment %} ekasarake {% endcomment %}
+                        <td class="right"> {{ sarake.nro }}</td> 
+                        <td class="left">{{sarake.nimi}}
+                            {%if sarake.lippukunta %} <br> {{sarake.lippukunta}} {%endif%}
+                            {%if sarake.piiri %} <br> {{sarake.piiri}} {%endif%}
+                        </td>
+                    {% else %}
+                        {% comment %} muut sarakkeet {% endcomment %}
+                        <td class="right"> {{ sarake }} </td>
+                    {% endifequal %}
+                     
+                {% endfor %}
+                </tr>
+
+            {% endif %}
         {% endfor %}
+
+
+        {% if ulkona_taulukko %}
+        {% comment %} ULKONA OLEVAT: {% endcomment %}
+            <tr id="erotin"><td>&nbsp;  </td></tr>
+            <tr id="otsikko"><td> </td> <td></td><td><b>Ulkopuolella:</b> </td></tr>
+
+            {% for rivi in ulkona_taulukko%}
+                <tr id="vartiot" class="{% if forloop.counter|add:"1"|divisibleby:2 %}even{% else %}odd{% endif %}">
+
+                {% for sarake in rivi %}
+                    {% ifequal forloop.counter 2 %}
+                        {% comment %} ekasarake {% endcomment %}
+                        <td class="right">{{ sarake.nro }}</td> 
+                        <td class="left">{{ sarake.nimi }} 
+                            {%if sarake.lippukunta %} <br> {{sarake.lippukunta}} {%endif%}
+                            {%if sarake.piiri %} <br> {{sarake.piiri}} {%endif%} 
+                        </td>
+                            
+                    {% else %}
+                        {% comment %} muut sarakkeet {% endcomment %}
+                        <td class="right"> {{ sarake }} </td>
+                    {% endifequal %}
+                {% endfor %}
+
+                </tr>
+            {% endfor %}
+
+        {% endif %}
         
-	</table>
+    </table>
        
 {% else %}
     <p>Ei tuloksia.</p>
