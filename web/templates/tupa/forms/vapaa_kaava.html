@@ -1,26 +1,30 @@
 
-<b>Syötteet:</b><br>
+<b>Syötteet:</b>
+<span onmouseover="tooltip.show('Kuvaus näytetään otsikkona tehtävää syötettäessä. Tyyppi kertoo syötteen tyypin: piste vai aika.');" onmouseout="tooltip.hide();">
+    <img src="/kipamedia/help_small.png" />
+</span>
+<br>
 <table>
 {% for maarite in maaritteet %}
-	<tr>
-		<td>Syötteen {{maarite.nimi}} kuvaus:</td>
-		<td>
-			<input type="text" 
-			        name="{{maarite.kali_vihje.name}}" 
-			        id="{{maarite.kali_vihje.id}}" 
-			        value="{{maarite.kali_vihje.value}}" />
-			         Tyyppi: 
+    <tr>
+        <td>Syötteen {{maarite.nimi}} kuvaus:</td>
+        <td>
+            <input type="text" 
+                    name="{{maarite.kali_vihje.name}}" 
+                    id="{{maarite.kali_vihje.id}}" 
+                    value="{{maarite.kali_vihje.value}}" />
+                     Tyyppi: 
 
-		        <select name="{{maarite.tyyppi.name}}">
-		                <option value="piste" 
-		                {% ifequal maarite.tyyppi.value "piste" %}selected="selected"{% endifequal %}
-		                 >piste</option>
-		                <option value="aika"
-		                {% ifequal maarite.tyyppi.value "aika" %}selected="selected"{% endifequal %}
-		                >aika</option>
-		        </select>
-		</td>
-	</tr>
+                <select name="{{maarite.tyyppi.name}}">
+                        <option value="piste" 
+                        {% ifequal maarite.tyyppi.value "piste" %}selected="selected"{% endifequal %}
+                         >piste</option>
+                        <option value="aika"
+                        {% ifequal maarite.tyyppi.value "aika" %}selected="selected"{% endifequal %}
+                        >aika</option>
+                </select>
+        </td>
+    </tr>
 {% endfor %}
 </table>
 
@@ -28,9 +32,9 @@
 
 <font color=red><b>{{kaava.errors}}</b></font> Vartion suorituksen kaava:
 <span onmouseover="tooltip.show('Tähän tulee kaava, jolla lasketaan yksittäisen vartion suoritus osatehtävässä. Syötteisiin viitataan niiden kirjaimilla. Aikaa käsitellään laskennallisesti sekunteina.' );" onmouseout="tooltip.hide();"><img src="/kipamedia/help_small.png" />
+</span>
     
 Funktiot: {% include "tupa/forms/funktiot_apu.html" %} Operaattorit: {% include "tupa/forms/operaattorit_apu.html" %}
-</span>
 
 <input type="text" 
                         name="{{kaava.name}}" 

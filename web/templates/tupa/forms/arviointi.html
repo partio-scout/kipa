@@ -1,26 +1,24 @@
 
+
 <fieldset>
-<legend> <b>Arviointi</b> </legend>
+    <legend> <b>Arviointi</b> </legend>
 
-<table>
+    <table>
 
-<tr>
-<td width=300>
-<p>Käytössa: <input type="checkbox" name="{{arvio.name}}" id="{{arvio.id}}" value="abs"
-{% ifequal arvio.value "abs" %}checked="checked" {% endifequal %}/></p>
-<p><font color=red><b>
-                        {{oikea.errors}}
-</b></font>
-Oikea vastaus: <input type="text" name="{{oikea.name}}" id="{{oikea.id}}" value="{{oikea.value}}" /> <br>
-</td>
-<td>
-
-Jos kyseessä on tavallinen tehtävä, tätä ei valita. 
-Mikäli kyseessä on arviointitehtävä, tulee tässä ilmoittaa tehtävän oikea vastaus. 
-Tällöin vartioiden suoritukset täman arvon molemmin puolin ovat samanarvoisia.</p>
-</td>
-</tr>
-</table>
+        <tr valign="top">
+            <td width="350">
+                Käytössa: <input type="checkbox" name="{{arvio.name}}" id="{{arvio.id}}" value="abs"
+                {% ifequal arvio.value "abs" %}checked="checked" {% endifequal %}/> <br>
+                Oikea vastaus: <input type="text" name="{{oikea.name}}" id="{{oikea.id}}" value="{{oikea.value}}" />
+                <font color=red><b> {{oikea.errors}} </b></font>
+            </td>
+            <td>
+                <p>Mikäli kyseessä on arviointitehtävä, tulee tässä ilmoittaa tehtävän oikea vastaus.
+                Tällöin vartioiden suoritukset täman arvon molemmin puolin ovat samanarvoisia. <br> 
+                Jos kyseessä on tavallinen tehtävä, tätä ei valita. </p>
+            </td>
+        </tr>
+    </table>
 </fieldset>
 
 
