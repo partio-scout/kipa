@@ -26,16 +26,20 @@
 		<h1>Kisat</h1>
 		<blockquote>
 			{% if object_list %}
-			    {% for kisa in object_list %}
-				<A href='{{kisa.nimi}}/' > {{kisa.nimi}} </A> <br>
-			    {% endfor %}
+				<table id="kisataulukko" cellspacing="0">
+					{% for kisa in object_list %}
+						<tr><td><A href='{{kisa.nimi}}/' > {{kisa.nimi}}</A></td> <td>{{kisa.aika}}</td> <td>{{kisa.paikka}}</td></tr>
+					{% endfor %}
+				</table>
 
 			{% else %}
 			    <p>Ei määriteltyjä kisoja.</p>
 			{% endif %}
 
-			<p><A href='uusiKisa/maarita/'>Luo uusi kisa</A><br></p>
-			<p><A href='lisaaKisa/'> Lisää kisa tiedostosta</A><br></p>
+			</br>
+			<input type="button" class="small blue awesome" onclick="location.href='uusiKisa/maarita/';" value="Luo uusi kisa" />
+			</br></br>
+			<input type="button" class="small blue awesome" onclick="location.href='lisaaKisa/';" value="Lisää kisa tiedostosta" />
 		</blockquote>
                 
             </div><!-- /right -->

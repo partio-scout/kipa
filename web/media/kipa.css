@@ -194,6 +194,20 @@ tr .odd:hover
 	background:#FF9;
 }
 
+#kisataulukko tr td {
+    padding: 7px;
+    padding-right: 15px;
+}
+
+#kisataulukko a {
+	background: transparent url("/kipamedia/arrow_blue.gif") no-repeat scroll 0px 1px;
+	padding-left: 15px;
+}
+
+#kisataulukko tr:nth-child(even) {
+    background-color: #faffda;
+}
+
 #taulukko th
 {
 	font-size:11px;
