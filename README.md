@@ -10,3 +10,9 @@ Vanhat sivustot:
 * https://sites.google.com/site/kisapalvelukipa/
 * http://sourceforge.net/projects/tupa2/
 * 
+
+**Ohjelmaa kokeiltu:**
+
+* Django v.1.3
+* Python v.2.7
+* Chrome / Firefox
