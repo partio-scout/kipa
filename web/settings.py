@@ -11,7 +11,8 @@ try :
         fout.close()
 except: pass
 
-hakemisto=os.path.normpath(os.path.dirname(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+hakemisto = BASE_DIR + '/web'
 tarkistus= os.getcwd()
 
 DEBUG = True
@@ -112,7 +113,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     #'django.contrib.formtools',
     'django.template',
-    'django.contrib.databrowse'     
+    #'django.contrib.databrowse'     
 
 ]
 
