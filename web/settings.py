@@ -16,12 +16,10 @@ hakemisto = BASE_DIR + '/web'
 tarkistus= os.getcwd()
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 RECORDING=False
 if not hakemisto == tarkistus :
         #Viittaisi siihen etta kyseessa on apachen alta toimiva, joten pakotetaan debugit pois
         DEBUG=False
-        TEMPLATE_DEBUG = False
 
 ADMINS = (
      #('frans korhonen', 'frans.korhonen@gmail.com'),
@@ -89,12 +87,14 @@ ADMIN_MEDIA_PREFIX = '/media/'
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'shbtq($_^om(xep=5f97k2+ntb3!cqn+)%8r#s6udzqnhj$5p6'
 
+'''
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.load_template_source',
     'django.template.loaders.app_directories.load_template_source',
 #     'django.template.loaders.eggs.load_template_source',
 )
+'''
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -105,12 +105,14 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'urls'
 
+'''
 TEMPLATE_DIRS = (
     hakemisto + '/templates',
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 )
+'''
 
 INSTALLED_APPS = [
     'django.contrib.auth',
@@ -124,6 +126,23 @@ INSTALLED_APPS = [
     'django.template',
     #'django.contrib.databrowse'     
 
+]
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [hakemisto + '/templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'debug': DEBUG,
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
 ]
 
 LOGIN_URL = ('/kipa/')
