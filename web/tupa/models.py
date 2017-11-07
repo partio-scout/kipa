@@ -38,7 +38,7 @@ class Kisa(models.Model) :
         nimi = models.CharField(max_length=255)
         aika = models.CharField(max_length=255, blank=True, null=True )
         paikka = models.CharField(max_length=255, blank=True )
-        tunnistus = models.BooleanField()
+        tunnistus = models.BooleanField(default=False)
 
         #end_dia_class
         def __unicode__(self) :
@@ -177,9 +177,9 @@ class Tehtava(models.Model) :
         jarjestysnro = models.IntegerField()
         kaava = models.CharField(max_length=255)
         sarja = models.ForeignKey(Sarja)
-        tarkistettu = models.BooleanField()
+        tarkistettu = models.BooleanField(default=False)
         maksimipisteet = models.CharField(max_length=255)
-        svirhe = models.BooleanField()
+        svirhe = models.BooleanField(default=False)
 
         #end_dia_class
         def mukanaOlevatVartiot(self):
