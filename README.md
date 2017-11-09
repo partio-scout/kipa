@@ -13,6 +13,6 @@ Vanhat sivustot:
 
 **Ohjelmaa kokeiltu:**
 
-* Django v.1.3
+* Django v.1.3 (tarkoitus päivittää 1.11)
 * Python v.2.7
 * Chrome / Firefox
