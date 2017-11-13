@@ -13,6 +13,20 @@ Vanhat sivustot:
 
 **Ohjelmaa kokeiltu:**
 
-* Django v.1.3 (tarkoitus päivittää 1.11)
+* Django v.1.11
 * Python v.2.7
 * Chrome / Firefox
+
+**Tilanne: toimivat**
+
+* Kipa -sivusto (pl. tallenna kisa)
+* Admin -sivusto
+* static files
+
+**Ei toimi tai ei testattu:**
+
+* tallenna kisa
+* testit
+* migrate
+* production serveri
+* i18n
