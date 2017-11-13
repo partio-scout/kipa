@@ -65,7 +65,7 @@ SITE_ID = 1
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True
-
+'''
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
 MEDIA_ROOT = hakemisto + "/media/"
@@ -75,7 +75,7 @@ STATIC_DOC_ROOT = hakemisto + "/media/"
 # URL that handles the media served from MEDIA_ROOT.
 # Example: "http://media.lawrence.com"
 MEDIA_URL = ''
-
+'''
 FILE_UPLOAD_HANDLERS= ("django.core.files.uploadhandler.MemoryFileUploadHandler",
  "django.core.files.uploadhandler.TemporaryFileUploadHandler",)
 
@@ -125,6 +125,7 @@ INSTALLED_APPS = [
     #'django.contrib.formtools',
     'django.template',
     #'django.contrib.databrowse'
+    'django.contrib.staticfiles',
 ]
 
 MIDDLEWARE = [
@@ -159,3 +160,10 @@ LOGIN_REDIRECT_URL = ('/kipa/')
 
 TEST_RUNNER = ('tupa.tests.run_one_fixture')
 
+
+STATIC_URL = '/kipamedia/'
+#STATIC_ROOT = os.path.join(BASE_DIR, "web/media")
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "web/media"),
+]
