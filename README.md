@@ -19,14 +19,13 @@ Vanhat sivustot:
 
 **Tilanne: toimivat**
 
-* Kipa -sivusto (test server) (pl. tallenna kisa)
+* Kipa -sivusto (test server)
 * Admin -sivusto
 * static files
 * testit (parametrit ei välity)
 
 **Ei toimi tai ei testattu:**
 
-* tallenna kisa
 * migrate
 * production serveri
 * i18n
