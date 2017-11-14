@@ -23,10 +23,10 @@ Vanhat sivustot:
 * Admin -sivusto
 * static files
 * testit (parametrit ei välity)
+* migrate
 
 **Ei toimi tai ei testattu:**
 
-* migrate
 * production serveri
 * i18n
 * dia2django
