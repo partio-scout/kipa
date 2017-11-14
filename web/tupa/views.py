@@ -590,7 +590,7 @@ def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
         ulkona=tulokset[1]
         numero=1
         # Luodaan HttpResponse-objekti CSV-headerillä.
-        response = HttpResponse(mimetype='text/csv')
+        response = HttpResponse(content_type='text/csv')
 
         disposition='attachment; filename='+kisa_nimi+"_"+sarja.nimi+'.csv'
         response['Content-Disposition'] = disposition.encode('utf-8')
@@ -706,7 +706,7 @@ def tallennaKisa(request, kisa_nimi):
         """
         kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
 
-        response = HttpResponse( kisa_xml(kisa) , mimetype='application/xml')
+        response = HttpResponse( kisa_xml(kisa) , content_type='application/xml')
         response['Content-Disposition'] = 'attachment; filename=tietokanta.xml'
         return response
 
@@ -860,7 +860,7 @@ def post_txt(request,parametrit):
                 post_test.appendChild(elem)
         doc.childNodes[0].appendChild(post_test)
 
-        response = HttpResponse(doc.toprettyxml(indent="  "), mimetype='application/xml',)
+        response = HttpResponse(doc.toprettyxml(indent="  "), content_type='application/xml',)
         response['Content-Disposition'] = 'attachment; filename=tietokanta.xml'
         return response
 

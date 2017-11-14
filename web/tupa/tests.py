@@ -216,8 +216,8 @@ def TulosTestFactory(fixture_name):
                         virhe= str(len(virheet)) + " errors"
                         for v in virheet:
                                 virhe=virhe + "\n--------------------------------\n" + v 
-                        self.failUnless( len(virheet) == 0 , unicode(virhe).encode('ascii', 'replace'))
-                	sys.stdout.flush()
+                        self.assertTrue( len(virheet) == 0 , unicode(virhe).encode('ascii', 'replace'))
+                        sys.stdout.flush()
 
                 def testTehtavanUudelleenTallennus(self) :
                         """
@@ -300,16 +300,18 @@ class TasapisteTesti(TestCase) :
         def testJarjestys(self):
                 sarja=Sarja.objects.get(nimi="tiukka")
                 tulokset=sarja.laskeTulokset()
-		assert tulokset[0][1][0].nro==1
+                assert tulokset[0][1][0].nro==1
                 assert tulokset[0][2][0].nro==2
                 assert tulokset[0][3][0].nro==3
                 assert tulokset[0][4][0].nro==4
                 assert tulokset[0][5][0].nro==5
                 assert tulokset[0][6][0].nro==6
-
-def run_one_fixture(test_labels, verbosity=1, interactive=True, extra_tests=[]):
+def run_one_fixture(**options):
+#def run_one_fixture(test_labels, verbosity=1, interactive=True, extra_tests=[]):
 #ajetaan vain haluttu fixtuuri
 # Nollataan fixturet
+
+    test_labels = '' #En tiedä miten uudessa test suitessa tämä argumentti tulee läpi
 
     from django.test.utils import setup_test_environment, teardown_test_environment
 
@@ -321,7 +323,7 @@ def run_one_fixture(test_labels, verbosity=1, interactive=True, extra_tests=[]):
 
     if test_labels:
         #print test_labels[0]
-	# Jos testilabeliksi asetettu 'kisat', käytetään kisat-kansiota
+        # Jos testilabeliksi asetettu 'kisat', käytetään kisat-kansiota
         if test_labels[0] == 'kisat':
             print '\n***Ajetaan kisa fixtuurit***\n'
             test_fixtures = []
@@ -346,18 +348,18 @@ def run_one_fixture(test_labels, verbosity=1, interactive=True, extra_tests=[]):
                     sys.stdout.flush()
 
         #Jos label on määritelty, muttei ole perus tai kisat, oletetaan sen olevan
-	#ajettavaksi haluttu yksittäinen fixtuuri            
+        #ajettavaksi haluttu yksittäinen fixtuuri            
         else:
             # Ajetaan vain yksi, annettu fixtuuri
             print '\n***Ajetaan yksi fixtuuri***\n'    
             print ( '%s.xml\n' %test_labels[0] )
-            test_fixtures = []	
+            test_fixtures = []
             test_fixtures.extend(test_labels)
             for item in range(len(test_fixtures)):
-		if test_fixtures[item].endswith('.xml'):
-			test_fixtures[item] = ('%s/fixtures/tests/%s' %(os.curdir, test_fixtures[item]))
-		else:
-			test_fixtures[item] = ('%s/fixtures/tests/%s.xml' %(os.curdir, test_fixtures[item]))
+                if test_fixtures[item].endswith('.xml'):
+                    test_fixtures[item] = ('%s/fixtures/tests/%s' %(os.curdir, test_fixtures[item]))
+                else:
+                    test_fixtures[item] = ('%s/fixtures/tests/%s.xml' %(os.curdir, test_fixtures[item]))
 
     # Jos testilabelia ei ole määritelty ajetaan kaikki mahdolliset testit             
     else:
@@ -367,10 +369,10 @@ def run_one_fixture(test_labels, verbosity=1, interactive=True, extra_tests=[]):
         test_fixtures=[]
         print '\n***Ajetaan perusfixtuurit***\n'
         for f in os.listdir(os.curdir+"/fixtures/tests/"):
-        	if not f.find(".xml") == -1 :
-			print ('Löytyi: %s\n' %f)
-                	test_fixtures.append("fixtures/tests/"+f)
-			sys.stdout.flush()
+            if not f.find(".xml") == -1 :
+                print ('Löytyi: %s\n' %f)
+                test_fixtures.append("fixtures/tests/"+f)
+                sys.stdout.flush()
             
         print '\n***Ajetaan kisa fixtuurit***\n'    
         test_labels = ''
@@ -378,22 +380,22 @@ def run_one_fixture(test_labels, verbosity=1, interactive=True, extra_tests=[]):
             if not f.find(".xml") == -1 :
                 print ('Löytyi: %s\n' %f)
                 test_fixtures.append("fixtures/tests/kisat/"+f)
-                sys.stdout.flush()	
+                sys.stdout.flush()
 
     # Tasapisteiss� m��r��v�t teht�v�t testi
     testit.append( TasapisteTesti )
 
     #luodaan Post testit tekstitiedostoista
     for t in test_fixtures:
-       	testit.append( PostTestFactory(t) )
+        testit.append( PostTestFactory(t) )
 
     #luodaan tulostestit fixtuureista.
     for t in test_fixtures:
-       	testit.append( TulosTestFactory(t) )
+        testit.append( TulosTestFactory(t) )
 
     # luodaan viewtestit fixtuureista.
     for t in test_fixtures:
-       	testit.append( ViewSanityCheck(t) )
+        testit.append( ViewSanityCheck(t) )
           
     #suite = reorder_suite(suite, (TestCase,))
     suites = [] 
@@ -401,13 +403,15 @@ def run_one_fixture(test_labels, verbosity=1, interactive=True, extra_tests=[]):
         suites.append(unittest.TestLoader().loadTestsFromTestCase(t))
     suite=unittest.TestSuite(suites)
 
-    old_name = settings.DATABASE_NAME
+    old_name = settings.DATABASES['default']['NAME'] #Tämä pitäisi muuttaa niin, että jos joskuson käytössä joku muu tietokanta, niin se otettaisiin käyttöön defaultin
     from django.db import connection
-    connection.creation.create_test_db(verbosity, autoclobber=not interactive)
-    result = unittest.TextTestRunner(verbosity=verbosity).run(suite)
-    connection.creation.destroy_test_db(old_name, verbosity)
+    connection.creation.create_test_db(options['verbosity'], autoclobber=not options['interactive'])
+    result = unittest.TextTestRunner(verbosity=options['verbosity']).run(suite)
+    connection.creation.destroy_test_db(old_name, options['verbosity'])
 
     teardown_test_environment()
 
-    return len(result.failures) + len(result.errors)
+    #return len(result.failures) + len(result.errors)
+    print (len(result.failures), len(result.errors))
+    sys.exit(len(result.failures) + len(result.errors))
 

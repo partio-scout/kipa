@@ -30,3 +30,5 @@ Vanhat sivustot:
 * migrate
 * production serveri
 * i18n
+* dia2django
+* muut turhat härpäkkeet, joita en osaa käyttää
