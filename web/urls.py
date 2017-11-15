@@ -5,6 +5,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import RedirectView
+import debug_toolbar
 
 admin.autodiscover()
 
@@ -12,6 +13,7 @@ urlpatterns = [
         url(r'^kipa/',  include('tupa.urls')),
         url(r'^admin/', admin.site.urls),
         url(r'^$', RedirectView.as_view(url='/kipa/', permanent=True)),
+        url(r'^__debug__/', include(debug_toolbar.urls)),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) #toimii vain kehityskäytössä
 
 if settings.DEBUG :

@@ -58,7 +58,7 @@ if not CACHE_TULOKSET :
 TIME_ZONE = 'Europe/Helsinki'
 
 # Language code for this installation. 
-LANGUAGE_CODE = 'fi-FI'
+LANGUAGE_CODE = 'en-US'
 
 SITE_ID = 1
 
@@ -126,6 +126,7 @@ INSTALLED_APPS = [
     'django.template',
     #'django.contrib.databrowse'
     'django.contrib.staticfiles',
+    'debug_toolbar', #https://django-debug-toolbar.readthedocs.io/en/stable/installation.html
 ]
 
 MIDDLEWARE = [
@@ -136,6 +137,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware', #https://django-debug-toolbar.readthedocs.io/en/stable/installation.html
 ]
 
 TEMPLATES = [
@@ -166,4 +168,23 @@ STATIC_URL = '/kipamedia/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "web/media"),
+]
+
+DEBUG_TOOLBAR_PANELS = [
+    'debug_toolbar.panels.versions.VersionsPanel',
+    'debug_toolbar.panels.timer.TimerPanel',
+    'debug_toolbar.panels.settings.SettingsPanel',
+    'debug_toolbar.panels.headers.HeadersPanel',
+    'debug_toolbar.panels.request.RequestPanel',
+    'debug_toolbar.panels.sql.SQLPanel',
+    'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+    'debug_toolbar.panels.templates.TemplatesPanel',
+    'debug_toolbar.panels.cache.CachePanel',
+    'debug_toolbar.panels.signals.SignalsPanel',
+    'debug_toolbar.panels.logging.LoggingPanel',
+    'debug_toolbar.panels.redirects.RedirectsPanel',
+]
+
+INTERNAL_IPS = [
+    '127.0.0.1'
 ]
