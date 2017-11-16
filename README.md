@@ -24,13 +24,21 @@ Vanhat sivustot:
 * static files
 * testit (parametrit ei välity)
 * migrate
+* dia2django
 
 **Ei toimi tai ei testattu:**
 
 * production serveri
 * i18n
-* dia2django
 * muut turhat härpäkkeet, joita en osaa käyttää
+
+**Muita ohjeita:**
+* Tietokantatiedostojen (.dia) katselemiseen ja muokkaamiseen voit käyttää ilmaista 'Dia Diagram Editor' -ohjelmaa. https://sourceforge.net/projects/dia-installer/ (asennus debian/ubuntu ympäristössä: sudo apt-get install dia )
+
+* Dia2django -skriptin käyttö:
+** Mene omaan kipa kansioon ...kipa/web/tupa/
+** Aja komento: python dia2django.py tietokanta.dia models.py
+** Skripti päivittää ohjelman models.py tiedoston tietokantakentät annetun .dia tiedoston mukaiseksi.
 
 
 Lisenssi
