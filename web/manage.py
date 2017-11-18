@@ -11,7 +11,7 @@ if __name__ == "__main__":
         del sys.argv[1]
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "legacySettings")
     else:
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings_dev")
 
     from django.core.management import execute_from_command_line
     execute_from_command_line(sys.argv)

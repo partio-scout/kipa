@@ -1,3 +1,4 @@
+# encoding: utf-8
 import os
 
 import time
@@ -15,7 +16,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 hakemisto = BASE_DIR + '/web'
 tarkistus= os.getcwd()
 
-DEBUG = True
+DEBUG = False
 RECORDING=False
 if not hakemisto == tarkistus :
         #Viittaisi siihen etta kyseessa on apachen alta toimiva, joten pakotetaan debugit pois
@@ -119,14 +120,14 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.sessions',
-    'django.contrib.sites',
+    #'django.contrib.sites',
     'tupa',
     'django.contrib.admin',
     #'django.contrib.formtools',
     'django.template',
     #'django.contrib.databrowse'
     'django.contrib.staticfiles',
-    'debug_toolbar', #https://django-debug-toolbar.readthedocs.io/en/stable/installation.html
+    #'debug_toolbar', #https://django-debug-toolbar.readthedocs.io/en/stable/installation.html
 ]
 
 MIDDLEWARE = [
@@ -137,7 +138,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware', #https://django-debug-toolbar.readthedocs.io/en/stable/installation.html
+    #'debug_toolbar.middleware.DebugToolbarMiddleware', #https://django-debug-toolbar.readthedocs.io/en/stable/installation.html
 ]
 
 TEMPLATES = [
@@ -164,27 +165,13 @@ TEST_RUNNER = ('tupa.tests.run_one_fixture')
 
 
 STATIC_URL = '/kipamedia/'
-#STATIC_ROOT = os.path.join(BASE_DIR, "web/media")
-
+STATIC_ROOT = os.path.join(BASE_DIR, "web/media")
+'''
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "web/media"),
 ]
+'''
+ALLOWED_HOSTS = ['127.0.0.1']
 
-DEBUG_TOOLBAR_PANELS = [
-    'debug_toolbar.panels.versions.VersionsPanel',
-    'debug_toolbar.panels.timer.TimerPanel',
-    'debug_toolbar.panels.settings.SettingsPanel',
-    'debug_toolbar.panels.headers.HeadersPanel',
-    'debug_toolbar.panels.request.RequestPanel',
-    'debug_toolbar.panels.sql.SQLPanel',
-    'debug_toolbar.panels.staticfiles.StaticFilesPanel',
-    'debug_toolbar.panels.templates.TemplatesPanel',
-    'debug_toolbar.panels.cache.CachePanel',
-    'debug_toolbar.panels.signals.SignalsPanel',
-    'debug_toolbar.panels.logging.LoggingPanel',
-    'debug_toolbar.panels.redirects.RedirectsPanel',
-]
+WSGI_APPLICATION = 'wsgi.application'
 
-INTERNAL_IPS = [
-    '127.0.0.1'
-]

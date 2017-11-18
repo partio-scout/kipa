@@ -46,8 +46,3 @@ urlpatterns = [
         url(r'^(?P<kisa_nimi>[^/]+)/tulosta/piirit/$', views.piirit, name='piirit'),
         ]
 
-if settings.DEBUG :
-        urlpatterns += [
-                #url(r'^kipamedia/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_DOC_ROOT}),
-                ]
-
