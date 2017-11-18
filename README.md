@@ -25,10 +25,10 @@ Vanhat sivustot:
 * testit (parametrit ei välity)
 * migrate
 * dia2django
+* production serveri (nginx ja uwsgi) (ei admin sivut)
 
 **Ei toimi tai ei testattu:**
 
-* production serveri
 * i18n
 * muut turhat härpäkkeet, joita en osaa käyttää
 
