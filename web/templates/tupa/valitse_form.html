@@ -8,7 +8,7 @@
     {{ sarake }}
 {% endblock%}
 {% block content %}
-<form method="POST" action="">
+<form method="POST" action="">{% csrf_token %}
 {{ block.super }}
 {%ifequal napin_tyyppi "kopioi" %}
 {% include "tupa/kopioi.html" %}

@@ -716,7 +716,7 @@ def poistaKisa(request, kisa_nimi) :
         if request.method=='POST' :
                 posti=request.POST
                 kisa.delete()
-                return kipaResponseRedirect("/kipa/")
+                return redirect("/kipa/")
         otsikko = 'Poista kisa'
         return render(request, 'tupa/poista_kisa.html',
                                     { 'heading' : otsikko , 'kisa_nimi' : kisa_nimi},)
@@ -789,7 +789,7 @@ def korvaaKisa(request,kisa_nimi=None):
                                         'syotteet': {},
                                         'parametrit' : {} }
 
-                        if not len(kisat)==1 : return kipaResponseRedirect('/kipa/'+kisa_nimi+'/korvaa/')
+                        if not len(kisat)==1 : return redirect('/kipa/'+kisa_nimi+'/korvaa/')
                         elif kisa : kisa.delete()
                         kisat[0].nimi=kisa_nimi
                         saveNewId(kisat[0],translations,"kisat")
@@ -824,7 +824,7 @@ def korvaaKisa(request,kisa_nimi=None):
                                 p.osa_tehtava_id = translations["osatehtavat"][p.osa_tehtava_id]
                                 saveNewId(p,translations,"parametrit")
 
-                        return kipaResponseRedirect('/kipa/'+kisa_nimi+'/')
+                        return redirect('/kipa/'+kisa_nimi+'/')
         else:
                 if not kisa_nimi :
                         form = UploadFileNameForm()
