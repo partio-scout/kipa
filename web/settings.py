@@ -175,3 +175,4 @@ ALLOWED_HOSTS = ['127.0.0.1']
 
 WSGI_APPLICATION = 'wsgi.application'
 
+DATA_UPLOAD_MAX_NUMBER_FIELDS = None # maaritaVartiot floodaa GET/POST:in
