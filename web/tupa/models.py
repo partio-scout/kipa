@@ -38,7 +38,7 @@ class Kisa(models.Model) :
         nimi = models.CharField(max_length=255)
         aika = models.CharField(max_length=255, blank=True, null=True )
         paikka = models.CharField(max_length=255, blank=True )
-        tunnistus = models.BooleanField()
+        tunnistus = models.BooleanField(default=False )
 
         #end_dia_class
         def __unicode__(self) :
@@ -56,7 +56,7 @@ class Sarja(models.Model) :
         nimi = models.CharField(max_length=255)
         vartion_maksimikoko = models.IntegerField(blank=True, null=True, default=0 )
         vartion_minimikoko = models.IntegerField(blank=True, null=True,default=0 )
-        kisa = models.ForeignKey(Kisa)
+        kisa = models.ForeignKey(Kisa, on_delete=models.CASCADE )
         tasapiste_teht1 = models.IntegerField(blank=True, null=True )
         tasapiste_teht2 = models.IntegerField(blank=True, null=True )
         tasapiste_teht3 = models.IntegerField(blank=True, null=True )
@@ -118,7 +118,7 @@ class Vartio(models.Model) :
 
         nro = models.IntegerField()
         nimi = models.CharField(max_length=255)
-        sarja = models.ForeignKey(Sarja)
+        sarja = models.ForeignKey(Sarja, on_delete=models.CASCADE )
         piiri = models.CharField(max_length=255, blank=True )
         lippukunta = models.CharField(max_length=255, blank=True )
         puhelinnro = models.CharField(max_length=255, blank=True )
@@ -176,10 +176,10 @@ class Tehtava(models.Model) :
         rastikasky = models.TextField(blank=True )
         jarjestysnro = models.IntegerField()
         kaava = models.CharField(max_length=255)
-        sarja = models.ForeignKey(Sarja)
-        tarkistettu = models.BooleanField()
+        sarja = models.ForeignKey(Sarja, on_delete=models.CASCADE )
+        tarkistettu = models.BooleanField(default=False )
         maksimipisteet = models.CharField(max_length=255)
-        svirhe = models.BooleanField()
+        svirhe = models.BooleanField(default=False )
 
         #end_dia_class
         def mukanaOlevatVartiot(self):
@@ -244,7 +244,7 @@ class OsaTehtava(models.Model) :
         nimi = models.CharField(max_length=255)
         tyyppi = models.CharField(max_length=255, choices = OSA_TYYPIT )
         kaava = models.CharField(max_length=255)
-        tehtava = models.ForeignKey(Tehtava)
+        tehtava = models.ForeignKey(Tehtava, on_delete=models.CASCADE )
 
         #end_dia_class
         def save(self,*args,**kwargs) : # Tulokset uusiksi tallennuksen yhteydessä
@@ -277,7 +277,7 @@ class SyoteMaarite(models.Model) :
         nimi = models.CharField(max_length=255)
         tyyppi = models.CharField(max_length=255, choices=TYYPPI_VAIHTOEHDOT )
         kali_vihje = models.CharField(max_length=255, blank=True , null=True )
-        osa_tehtava = models.ForeignKey(OsaTehtava)
+        osa_tehtava = models.ForeignKey(OsaTehtava, on_delete=models.CASCADE )
 
         #end_dia_class
         def save(self,*args,**kwargs) : # Tulokset uusiksi tallennuksen yhteydessä
@@ -305,8 +305,8 @@ class Syote(models.Model) :
         #gen_dia_class Syote
 
         arvo = models.CharField(max_length=255, blank = True, null=True )
-        vartio = models.ForeignKey(Vartio, blank=True, null=True )
-        maarite = models.ForeignKey(SyoteMaarite)
+        vartio = models.ForeignKey(Vartio, blank=True, null=True, on_delete=models.CASCADE )
+        maarite = models.ForeignKey(SyoteMaarite, on_delete=models.CASCADE )
         tarkistus = models.CharField(max_length=255, blank=True,null=True )
 
         #end_dia_class
@@ -336,8 +336,8 @@ class TulosTaulu(models.Model) :
         # for these parts only make changes to data table definitions in tietokanta.dia!
         #gen_dia_class TulosTaulu
 
-        vartio = models.ForeignKey(Vartio)
-        tehtava = models.ForeignKey(Tehtava)
+        vartio = models.ForeignKey(Vartio, on_delete=models.CASCADE )
+        tehtava = models.ForeignKey(Tehtava, on_delete=models.CASCADE )
         pisteet = models.CharField(max_length=255)
 
         #end_dia_class
@@ -375,7 +375,7 @@ class Parametri(models.Model) :
 
         nimi = models.CharField(max_length=255)
         arvo = models.CharField(max_length=255)
-        osa_tehtava = models.ForeignKey(OsaTehtava)
+        osa_tehtava = models.ForeignKey(OsaTehtava, on_delete=models.CASCADE )
 
         #end_dia_class
         class Meta:

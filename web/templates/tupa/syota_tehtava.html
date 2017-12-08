@@ -51,7 +51,7 @@ $(document).ready(function(){
 
 <h1>{{tehtava.nimi|alaviiva_pois}}</h1>
 
-<form action="." name="form1" id="form1" method="post">     
+<form action="." name="form1" id="form1" method="post">{% csrf_token %}
 
 <p>{% include "tupa/tallenna.html" %}</p>
 

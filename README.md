@@ -13,9 +13,33 @@ Vanhat sivustot:
 
 **Ohjelmaa kokeiltu:**
 
-* Django v.1.3
+* Django v.1.11
 * Python v.2.7
 * Chrome / Firefox
+
+**Tilanne: toimivat**
+
+* Kipa -sivusto (test server)
+* Admin -sivusto
+* static files
+* testit (parametrit ei välity)
+* migrate
+* dia2django
+* production serveri (nginx ja uwsgi) (ei admin sivut)
+
+**Ei toimi tai ei testattu:**
+
+* i18n
+* käyttäjäautentikointi
+* muut turhat härpäkkeet, joita en osaa käyttää
+
+**Muita ohjeita:**
+* Tietokantatiedostojen (.dia) katselemiseen ja muokkaamiseen voit käyttää ilmaista 'Dia Diagram Editor' -ohjelmaa. https://sourceforge.net/projects/dia-installer/ (asennus debian/ubuntu ympäristössä: sudo apt-get install dia )
+
+* Dia2django -skriptin käyttö:
+  * Mene omaan kipa kansioon ...kipa/web/tupa/
+  * Aja komento: python dia2django.py tietokanta.dia models.py
+  * Skripti päivittää ohjelman models.py tiedoston tietokantakentät annetun .dia tiedoston mukaiseksi.
 
 Lisenssi
 ========

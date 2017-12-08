@@ -1,0 +1,106 @@
+######################
+# Kipa kisapalveluohjelmiston asentaminen ubuntun kaltaisiin järjestelmiin.
+# 
+# Kaikki risuaita-alkuiset rivit ovat kommentteja ja niitä ei tarvitse kirjoittaa komentoriville
+# 
+# Asennusta kokeiltu:
+# Ubuntu 17.10, Linux mint 18.3 ja Ubuntu Gnome 16.04 käyttöjärjestelmillä
+# Muiden pakettien versiot:
+# python 2.7
+# django 1.11
+# uwsgi 2.0
+# nginx 1.10
+# 
+# Alla on ohjeet Kipan asetamiseksi sekä yhdelle koneelle django testipalvelinta käyttäen, että lähiverkkopalvelimena toimivalle koneelle nginx -nettipalvelinohjelmistoa käyttäen.
+# Kaikkia laitteita, ohjelmien asennusta ja toimintaa kannattaa kokeilla jo ennen kisapaikalle siirtymistä, kiireisten ongelmatapausten välttämiseksi
+# 
+# Huomautus: Minä en ole tietoturva-alan ammattilainen ja en vastaa sinun tiedostoistasi tai koneistasi näitä tai muita ohjeita noudattaessasi. Joitain ohjeita Django projektin tietoturvaan liittyen löydät esimerkiksi: https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/web_application_security
+# 
+######################
+# Yhden tietokoneen asennus ilman verkkokäyttöä:
+
+# järjestelmän päivittäminen
+sudo apt-get update
+sudo apt-get upgrade
+
+# Käynnistä järjestelmä uudelleen
+
+# tarvittavien pakettien asentaminen / päivittäminen
+sudo apt-get install git python2.7-dev python-pip
+sudo -H python -m pip install --upgrade pip
+sudo -H pip install setuptools 
+sudo -H pip install django==1.11
+
+# Käynnistä järjestelmä uudelleen
+
+# kipa -ohjelman haku github -sivulta (aja tämä komento siinä kansiossa johon haluat tiedostot ladattavan ja sinulla on oikeudet käyttää)
+git clone https://github.com/Pena86/kipa.git
+
+# siirrytään ohjelmakansioon ja käynnistetään testipalvelin
+cd kipa/web/
+python manage.py runserver
+
+# mene selaimella osoitteeseen http://127.0.0.1:8000/ ja kipa-ohjelman pitäisi olla käytössä
+# ohjelman voi sulkea komentorivillä painamalla CONTROL-C
+# 
+######################
+# Kipan asentaminen palvelinkoneelle usean koneen verkkokäyttöä varten
+# 
+
+# järjestelmän päivittäminen
+sudo apt-get update
+sudo apt-get upgrade
+
+# Käynnistä järjestelmä uudelleen
+
+# tarvittavien pakettien asentaminen / päivittäminen
+sudo apt-get install git python2.7-dev python-pip nginx
+sudo -H python -m pip install --upgrade pip
+sudo -H pip install setuptools 
+sudo -H pip install uwsgi django==1.11
+
+# lisätään käyttäjä www-data ryhmään dialout
+sudo adduser www-data dialout
+
+# Käynnistä järjestelmä uudelleen
+
+# siirrytään hakemistoon (jos aiot ajaa kipa-ohjelmaa muusta hakemistosta, sinun pitää muokata uusi hakemistopolku ainakin kipa_nginx.conf -tiedostoon)
+cd /var/www/
+# ladataan kipa -ohjelmisto githubista
+sudo git clone https://github.com/Pena86/kipa.git
+# muutetaan kansion kipa ja sen alikansioiden ja tiedostojen omistajaksi ja ryhmäksi www-data
+sudo chown -R www-data:www-data kipa/
+
+# linkitetään kipa_nginx.conf -tiedosto nginx -ohjelman käytettäväksi
+sudo ln -s /var/www/kipa/web/kipa_nginx.conf /etc/nginx/sites-enabled/kipa_nginx.conf
+# käynnistetään nginx -ohjelma uudestaan
+sudo /etc/init.d/nginx restart
+
+# siirrytään kansioon ja ajetaan uwsgi -ohjelma (käyttäjänä www-data), joka suorittaa django -projektin tiedostoja nettipalvelinohjelmiston niitä pyytäessä
+cd /var/www/kipa/web/
+sudo -H -u www-data uwsgi --ini kipa_uwsgi.ini
+
+# mene selaimella osoitteeseen http://127.0.0.1/ ja kipa-ohjelman pitäisi olla käytössä (jos muutat asetustiedostoihin palvelinkoneen ip-osoitten, käytä sitä myös paikallisella koneella)
+# ohjelman voi sulkea komentorivillä painamalla CONTROL-C
+
+# Että voisit käyttää kipa -ohjelmaa muilla lähiverkon koneilla, tulee sinun vielä tehdä pari asiaa:
+# - Selvitä palvelinkoneen ip -osoite esim. koneen tai lähiverkkoreitittimesi asetuksista
+# - Muuta palvelinkoneen ip -osoite /var/www/kipa/web/kipa_nginx.conf -tiedoston server_name -kohtaan ja käynnistämään nginx -palvelinohjelman uudestaan komennolla sudo /etc/init.d/nginx restart
+# - Lisää palvelinkoneen ip -osoite /var/www/kipa/web/settings.py -tiedoston ALLOWED_HOSTS -kohtaan ja käynnistä uwsgi -komento (yltä) uudestaan
+# - Saatat tarvita asettaa lähiverkkoreitittimeesi portin- tai ip -osoitteen reitityksen palvelinkoneen osoitteeseen
+# nyt myös lähiverkon koneilta pitäisi päästä kipa -ohjelmaan kirjoittamalla selainohjelman osoiteriville palvelinkoneen ip-osoite.
+
+
+
+# seuraavilla komennoilla saat lisää tietoa ja voit hallita nginx -ohjelman toimintaa
+sudo /etc/init.d/nginx status
+sudo /etc/init.d/nginx stop
+sudo /etc/init.d/nginx start
+nano /var/log/nginx/error.log
+nano /var/log/nginx/access.log
+
+# Django testipalvelimen käynnistäminen 
+cd /var/www/kipa/web/
+sudo -H -u www-data python manage.py runserver
+# mene selaimella osoitteeseen http://127.0.0.1:8000/ ja kipa-ohjelman pitäisi olla käytössä
+# ohjelman voi sulkea komentorivillä painamalla CONTROL-C

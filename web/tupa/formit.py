@@ -24,6 +24,7 @@ class VartioForm(ModelForm):
         nro = forms.IntegerField(label = "Nro", widget=forms.TextInput(attrs={'size':'4'} ) )
         class Meta:
                 model = Vartio
+                fields = "__all__"
 
 VartioFormSet = inlineformset_factory(Sarja,
                                 Vartio,
@@ -31,7 +32,7 @@ VartioFormSet = inlineformset_factory(Sarja,
                                 fields=('nro','nimi','lippukunta','piiri',"ulkopuolella", "keskeyttanyt",),
                                 form=VartioForm )
 
-MaariteFormSet = inlineformset_factory(OsaTehtava,SyoteMaarite,extra=3 )
+MaariteFormSet = inlineformset_factory(OsaTehtava, SyoteMaarite, form=VartioForm, extra=3 )
 
 class SarjaForm(ModelForm):
         nimi = forms.CharField(label = "Nimi")
@@ -40,6 +41,9 @@ class SarjaForm(ModelForm):
         tasapiste_teht3 = forms.IntegerField(label = "3:", widget=forms.TextInput(attrs={'size':'3'} ),initial=3 )
         vartion_maksimikoko = forms.IntegerField(widget=forms.HiddenInput,required=False )
         vartion_minimikoko = forms.IntegerField(widget=forms.HiddenInput,required=False)
+
+        class Meta:
+                fields = "__all__"
 
 SarjaFormSet = inlineformset_factory(Kisa,Sarja,extra=8 , form=SarjaForm)
 SarjaFormSet.helppiteksti=SafeUnicode('<span onmouseover="tooltip.show(\'Sarjan <strong>nimet</strong> voivat sis&auml;lt&auml;&auml; &auml;&auml;kk&ouml;si&auml; ja v&auml;lily&ouml;ntej&auml;.<br><strong>Tasapisteiss&auml; m&auml;&auml;r&auml;&auml;v&auml;t teht&auml;v&auml;t</strong> -kohdat kertovat tasapisteiss&auml; m&auml;&auml;r&auml;&auml;vien teht&auml;vien numerot. Palaa t&auml;ytt&auml;m&auml;&auml;n ne m&auml;&auml;ritelty&auml;si kyseiset teht&auml;v&auml;t.\');" onmouseout="tooltip.hide();"><img src="/kipamedia/help_small.png" /></span>')
@@ -60,6 +64,7 @@ class TuhoaTehtavaForm(ModelForm):
         svirhe = forms.BooleanField(widget=forms.HiddenInput,required=False)
         class Meta :
                 model=Tehtava
+                fields = "__all__"
 
 tuhoaTehtaviaFormset = modelformset_factory(Tehtava,can_delete=True,extra=0,form=TuhoaTehtavaForm)
 
@@ -84,8 +89,8 @@ class HelpWidget(forms.TextInput):
                 super(HelpWidget, self).__init__(*argcv)
                 self.helptext=helptext
 
-        def render(self, name , value=None, attrs=None):
-                return SafeUnicode(super(HelpWidget, self).render(name, value, attrs) ) + '<span onmouseover="tooltip.show(\''+ self.helptext +'\');" onmouseout="tooltip.hide();"><img src="/kipamedia/help_small.png" /></span>' 
+        def render(self, name , value=None, attrs=None, renderer=None):
+                return SafeUnicode(super(HelpWidget, self).render(name, value, attrs, renderer) ) + '<span onmouseover="tooltip.show(\''+ self.helptext +'\');" onmouseout="tooltip.hide();"><img src="/kipamedia/help_small.png" /></span>' 
 
 
 
@@ -93,7 +98,7 @@ class AikaWidget(forms.TextInput):
         """
         Text input widget, exept for value formatting field values are converted from total seconds to "hh:mm:ss"
         """
-        def render(self, name, value,attrs=None):
+        def render(self, name, value,attrs=None, renderer=None):
                 newValue=value
                 if newValue :
                         try:
@@ -108,7 +113,7 @@ class AikaWidget(forms.TextInput):
                                 newValue = str(h) +":"+str(min) +":"+str(sec)
                         except ValueError:
                                 pass
-                return super(AikaWidget,self).render(name,newValue,attrs) 
+                return super(AikaWidget,self).render(name, newValue, attrs, renderer) 
 
 class PisteField(forms.CharField) :
         """
@@ -285,10 +290,12 @@ class KisaForm(ModelForm):
                 return nimi
         class Meta:
                 model = Kisa
+                fields = "__all__"
 
 class PoistaTehtavaForm(ModelForm):
         class Meta:
                 model = Tehtava
+                fields = "__all__"
 
 class UploadFileForm(forms.Form):
         file  = forms.FileField()
