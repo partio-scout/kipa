@@ -30,6 +30,7 @@ Vanhat sivustot:
 **Ei toimi tai ei testattu:**
 
 * i18n
+* käyttäjäautentikointi
 * muut turhat härpäkkeet, joita en osaa käyttää
 
 **Muita ohjeita:**
