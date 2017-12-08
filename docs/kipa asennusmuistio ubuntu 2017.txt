@@ -80,14 +80,15 @@ sudo /etc/init.d/nginx restart
 cd /var/www/kipa/web/
 sudo -H -u www-data uwsgi --ini kipa_uwsgi.ini
 
-# mene selaimella osoitteeseen http://127.0.0.1/ ja kipa-ohjelman pitäisi olla käytössä
+# mene selaimella osoitteeseen http://127.0.0.1/ ja kipa-ohjelman pitäisi olla käytössä (jos muutat asetustiedostoihin palvelinkoneen ip-osoitten, käytä sitä myös paikallisella koneella)
 # ohjelman voi sulkea komentorivillä painamalla CONTROL-C
 
 # Että voisit käyttää kipa -ohjelmaa muilla lähiverkon koneilla, tulee sinun vielä tehdä pari asiaa:
-# - Selvitä palvelinkoneen IP -osoite esim. koneen tai lähiverkkoreitittimesi asetuksista
+# - Selvitä palvelinkoneen ip -osoite esim. koneen tai lähiverkkoreitittimesi asetuksista
+# - Muuta palvelinkoneen ip -osoite /var/www/kipa/web/kipa_nginx.conf -tiedoston server_name -kohtaan ja käynnistämään nginx -palvelinohjelman uudestaan komennolla sudo /etc/init.d/nginx restart
+# - Lisää palvelinkoneen ip -osoite /var/www/kipa/web/settings.py -tiedoston ALLOWED_HOSTS -kohtaan ja käynnistä uwsgi -komento (yltä) uudestaan
 # - Saatat tarvita asettaa lähiverkkoreitittimeesi portin- tai ip -osoitteen reitityksen palvelinkoneen osoitteeseen
-# - Saatat tarvia lisätä palvelinkoneen ip -osoitteen /var/www/kipa/web/kipa_nginx.conf -tiedoston server_name -kohtaan ja käynnistämään nginx -palvelinohjelman uudestaan komennolla sudo /etc/init.d/nginx restart
-# nyt muilta lähiverkon koneilta pitäisi päästä kipa -ohjelmaan kirjoittamalla selainohjelman osoiteriville palvelinkoneen ip-osoite.
+# nyt myös lähiverkon koneilta pitäisi päästä kipa -ohjelmaan kirjoittamalla selainohjelman osoiteriville palvelinkoneen ip-osoite.
 
 
 
