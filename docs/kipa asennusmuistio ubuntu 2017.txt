@@ -16,6 +16,9 @@
 # 
 # Huomautus: Minä en ole tietoturva-alan ammattilainen ja en vastaa sinun tiedostoistasi tai koneistasi näitä tai muita ohjeita noudattaessasi. Joitain ohjeita Django projektin tietoturvaan liittyen löydät esimerkiksi: https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/web_application_security
 # 
+# Asennettuasi kipa -ohjelman, voit luoda järjestelmän pääkäyttäjän komennolla: python manage.py createsuperuser
+# pääkäyttäjän tunnuksilla voit kirjautua admin -sivulle http://127.0.0.1:8000/admin/ (jos käytät palvelinta verkossa muuta ip osoite) josta voit luoda muita käyttäjiä.
+# 
 ######################
 # Yhden tietokoneen asennus ilman verkkokäyttöä:
 
