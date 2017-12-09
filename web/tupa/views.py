@@ -126,6 +126,7 @@ def kisa(request,kisa_nimi) :
                                         'heading' : 'Etusivu',
                                         'vanha_tietokanta' : vanha_tietokanta},)
 
+@login_required
 def tulosta(request,kisa_nimi,tulostyyppi=""):
         """
         Valintalista kisan sarjojen tuloksista.
@@ -195,6 +196,7 @@ def maaritaKisa(request, kisa_nimi=None,talletettu=None):
                                         'talletettu': tal,
                                         'ohjaus_nappi' : "siirry vartioiden määrittelyyn"},)
 
+@permission_required('tupa.change_tehtava')
 def maaritaValitseTehtava(request,kisa_nimi):
         """
         Valitsee tehtävän määritettäväksi.
@@ -225,6 +227,7 @@ def maaritaValitseTehtava(request,kisa_nimi):
                                         { 'taulukko' : taulukko,
                                         'heading' : u'Muokkaa tehtävää', 'kisa_nimi' : kisa_nimi },)
 
+@permission_required('tupa.change_vartio')
 def maaritaVartiot(request,kisa_nimi,talletettu=None):
         """
         Määrittää kisan vartiot sarjoittain.
@@ -266,6 +269,7 @@ def maaritaVartiot(request,kisa_nimi,talletettu=None):
                                         'talletettu': tal,
                                         'ohjaus_nappi' : ohjaus_nappi},)
 
+@permission_required('tupa.change_tehtava')
 def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu=""):
         """
         Määritää tehtävän.
@@ -333,6 +337,7 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
                                 'talletettu': tal,
                                 'ohjaus_nappi': "lisää uusi tehtävä" },)
 
+@permission_required('tupa.change_syote')
 def syotaKisa(request, kisa_nimi,tarkistus=None):
         """
         Valitsee kisan tehtävän jonka tuloksia ruvetaan syöttämään.
@@ -354,6 +359,7 @@ def syotaKisa(request, kisa_nimi,tarkistus=None):
                                 'heading' : otsikko,
                                 'kisa_nimi': kisa_nimi },)
 
+@permission_required('tupa.change_syote')
 def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None) :
         """
         Määrittää tehtävän syötteet.
@@ -442,6 +448,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                         'tulokset_url' : "/kipa/"+kisa_nimi+"/tulosta/normaali/sarja/"+str(tehtava.sarja.id)+"/",
 			            'taakse' : {'url' : '/kipa/' + kisa_nimi + '/syota/', 'title' : u'Syötä tuloksia' } } ,)
 
+@permission_required('tupa.change_kisa')
 def testiTulos(request, kisa_nimi,talletettu=None):
         """
         Määrittää kisalle testitulokset. Eli ns "oikeat" tulokset,
@@ -489,6 +496,7 @@ def testiTulos(request, kisa_nimi,talletettu=None):
                         'taakse' : "/kipa/"+kisa_nimi+"/",
                         'talletettu': tal },)
 
+@permission_required('tupa.change_tuomarineuvostulos')
 def tuomarineuvos(request, kisa_nimi,talletettu=None):
         """
         Määrittää kisalle tuomarineuvoston tulokset. Eli tulokset joilla voidaan ylimäärittää laskimen laskemat tulokset.
@@ -535,6 +543,7 @@ def tuomarineuvos(request, kisa_nimi,talletettu=None):
 			'kisa_nimi': kisa_nimi,
                         'talletettu': tal })
 
+@login_required
 def tulostaSarja(request, kisa_nimi, sarja_id, tulostus=0,vaihtoaika=None,vaihto_id=None) :
         """
         Sarjan tulokset.
@@ -567,6 +576,7 @@ def tulostaSarja(request, kisa_nimi, sarja_id, tulostus=0,vaihtoaika=None,vaihto
 			'vaihto_id' : vaihto_id,
 			'taakse' : {'url' : '../../', 'title' : 'Tulokset sarjoittain'} },)
 
+@login_required
 def heijasta(request, kisa_nimi, sarja_id=None,tulostus=0) :
      kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
      sarjat=kisa.sarja_set.all()
@@ -584,12 +594,14 @@ def heijasta(request, kisa_nimi, sarja_id=None,tulostus=0) :
 
      return tulostaSarja(request,kisa_nimi,sarja_id,vaihtoaika=15,vaihto_id=seuraava_id)
 
+@login_required
 def tulostaSarjaHTML(request, kisa_nimi, sarja_id) :
         """
         Sarjan tulokset, sivu muotoiltuna tulostusta varten ilman turhia grafiikoita.
         """
         return tulostaSarja(request, kisa_nimi, sarja_id,tulostus=1)
 
+@login_required
 def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
         """
         Sarjan tulokset CSV-tiedostoon esim. Excel-muokkausta varten.
@@ -660,12 +672,14 @@ def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
         writer.writerow([u"! = vartion sijaluku laskettu tasapisteissä määräävien tehtävien perusteella"])
         return response
 
+@login_required
 def piirit(request,kisa_nimi) :
         """
         Piirikohtaiset tulokset.
         """
         return HttpResponse(kisa_nimi + " PIIRIN TULOSTUS",)
 
+@permission_required('tupa.change_tehtava')
 def kopioiTehtavia(request,kisa_nimi,sarja_id ):
         """
         Valitsee ja kopioi valitut saman kisan tehtävät määriteltyyn sarjaan.
@@ -721,6 +735,7 @@ def tallennaKisa(request, kisa_nimi):
         response['Content-Disposition'] = 'attachment; filename=tietokanta.xml'
         return response
 
+@permission_required('tupa.change_kisa')
 def poistaKisa(request, kisa_nimi) :
         kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
         posti=None
@@ -732,7 +747,6 @@ def poistaKisa(request, kisa_nimi) :
         return render(request, 'tupa/poista_kisa.html',
                                     { 'heading' : otsikko , 'kisa_nimi' : kisa_nimi},)
 
-
 def saveNewId(object,changeDict,keyName):
         id=object.id
         object.id=None
@@ -740,6 +754,7 @@ def saveNewId(object,changeDict,keyName):
         changeDict[keyName][id]=object.id
         return object
 
+@permission_required('tupa.change_kisa')
 def korvaaKisa(request,kisa_nimi=None):
         try :
                 kisa=Kisa.objects.get(nimi=kisa_nimi)
@@ -904,6 +919,8 @@ def haeTulos(tuloksetSarjalle, vartio, tehtava) :
                                 va= tuloksetSarjalle[1][vart_nro][0]
                                 if va ==vartio and tuloksetSarjalle[0][0][teht_nro] ==tehtava:
                                         return tul
+
+@login_required
 def luoTestiTulokset(request,kisa_nimi,sarja_id):
         """
         Luo testitulokset valitulle sarjalle ja tallentaa ne kantaan
@@ -919,6 +936,7 @@ def luoTestiTulokset(request,kisa_nimi,sarja_id):
                         tt.save()
         return kipaResponseRedirect("/kipa/"+kisa_nimi+"/maarita/testitulos/" )
 
+@login_required
 def laskennanTilanne(request,kisa_nimi) :
         kisa= get_object_or_404(Kisa , nimi=kisa_nimi )
         taulukko=[[]]
