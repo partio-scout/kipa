@@ -16,7 +16,7 @@ from django.utils.safestring import SafeUnicode
 
 from django.contrib import messages
 from django.contrib.auth import authenticate,login, logout
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import permission_required, login_required
 from duplicate import kopioiTehtava
 from duplicate import kisa_xml
 import random
@@ -94,6 +94,15 @@ def etusivu(request) :
         Kipan päävalikko.
 
         """
+        if request.user.is_authenticated:
+            messages.add_message(request, messages.INFO, u'Käyttäjä: ' + request.user.username)
+        else:
+            messages.add_message(request, messages.INFO, u'Kirjaudu sisään käyttääksesi KiPaa.')
+        '''
+        storage = messages.get_messages(request)
+        for message in storage:
+            print(u"{0}, {1}, {2}".format(message.level, message.message, message.tags))
+        '''
         kisat=Kisa.objects.all()
 
         vanha_tietokanta=testaa_tietokanta()
@@ -102,6 +111,7 @@ def etusivu(request) :
                                                     'object_list': kisat },)
 
 #@permission_required('tupa.change_kisa')
+@login_required #mikä tahansa kirjautuminen riittää
 def kisa(request,kisa_nimi) :
         """
         Kisakohtainen päävalikko.
@@ -127,6 +137,7 @@ def tulosta(request,kisa_nimi,tulostyyppi=""):
                                                         'tulostyyppi': tulostyyppi,
                                                         'heading': 'Tulokset sarjoittain' } ,)
 
+@permission_required('tupa.change_kisa')
 def maaritaKisa(request, kisa_nimi=None,talletettu=None):
         """
         Kisan ja sarjojen määritys.

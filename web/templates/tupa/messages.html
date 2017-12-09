@@ -1,0 +1,11 @@
+<!-- Käydään viestit läpi -->
+{% if messages %}
+    <div id="messages">
+    	<p>Viestit järjestelmästä:</p>
+    {% for message in messages %}
+        <p>
+        {{ message }}
+        </p>
+    {% endfor %}
+    </div>&nbsp;
+{% endif %}
