@@ -49,8 +49,8 @@ def loginSivu(request):
     return redirect('/kipa/')
 
 def logoutSivu(request):
-	logout(request)
-        return kipaResponseRedirect("/kipa/")
+    logout(request)
+    return redirect("/kipa/")
 
 from django import template
 register = template.Library()
@@ -448,7 +448,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                         'tulokset_url' : "/kipa/"+kisa_nimi+"/tulosta/normaali/sarja/"+str(tehtava.sarja.id)+"/",
 			            'taakse' : {'url' : '/kipa/' + kisa_nimi + '/syota/', 'title' : u'Syötä tuloksia' } } ,)
 
-@permission_required('tupa.change_kisa')
+@permission_required('tupa.change_testaustulos')
 def testiTulos(request, kisa_nimi,talletettu=None):
         """
         Määrittää kisalle testitulokset. Eli ns "oikeat" tulokset,
