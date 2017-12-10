@@ -1,0 +1,41 @@
+{% extends "tupa/base.html" %}
+
+{% block title %}{{ heading }}{% endblock %}
+
+{% block content %} 
+
+
+<h1>{{ heading }}</h1>
+<p> käyttäjien hallinta </p>
+<p> kirjautunut käyttäjä: {{ user.id }} {{ user }} {{ user.first_name }} {{ user.last_name }}</p>
+
+{% if kayttajat %}
+    <div id="kayttajat"><table>
+        <th>kayttaja taulukko</th>
+    {% for k in kayttajat %}
+        <tr>
+        <td>{{ k.id }}</td><td>{{ k }}</td><td>{{ k.first_name }}</td><td>{{ k.last_name }}</td>
+        <td>
+        {% for r in k.groups.all %}
+            {{ r.name }}
+        {% endfor %}
+        </td>
+        </rt>
+    {% endfor %}
+    </table></div>
+{% endif %}
+
+{% if kayttajat %}
+    <div id="k_ryhmat"><table>
+        <th>ryhmä taulukko</th>
+    {% for r in ryhmat %}
+        <tr>
+        <td>{{ r }}</td>
+        </tr>
+    {% endfor %}
+    </table></div>
+{% endif %}
+
+
+{% endblock %}
+

@@ -17,6 +17,7 @@ from django.utils.safestring import SafeUnicode
 from django.contrib import messages
 from django.contrib.auth import authenticate,login, logout
 from django.contrib.auth.decorators import permission_required, login_required
+from django.contrib.auth.models import User, Group
 from duplicate import kopioiTehtava
 from duplicate import kisa_xml
 import random
@@ -1018,3 +1019,31 @@ def tehtavanVaiheet(request,kisa_nimi,tehtava_id,vartio_id=None):
         responssi += palautaLoki()
         responssi += "</body></html>"
         return HttpResponse( responssi )
+
+@permission_required('auth.change_user')
+def kayttajat(request, kisa_nimi=None) :
+        """
+        Käyttäjien hallintasivu.
+
+        """
+        if request.user.is_authenticated:
+            messages.add_message(request, messages.INFO, u'Käyttäjä: ' + request.user.username)
+        else:
+            messages.add_message(request, messages.INFO, u'Kirjaudu sisään käyttääksesi KiPaa.')
+
+        kayttajat = User.objects.all().exclude(is_staff = True)
+        ryhmat = Group.objects.all()
+        '''
+        for k in kayttajat:
+            print(type(k))
+            print(dir(k))
+            for r in k.groups.all():
+                print(type(r))
+                print(dir(r))
+        '''
+        return render(request, 'tupa/kayttajat.html',{
+                'kayttajat' : kayttajat, 
+                'ryhmat' : ryhmat, 
+                'kisa_nimi': kisa_nimi, 
+                'heading' : 'Käyttäjät',},)
+

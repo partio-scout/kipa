@@ -17,7 +17,7 @@
 
         <p class="etusivunLinkit"><a href="./syota/tarkistus/"><span onmouseover="tooltip.show('Jos kisan suoritukset syötetään tarkistuksen vuoksi kahteen kertaan, syötä tarkistustulokset tästä');" onmouseout="tooltip.hide();">syötä suorituksia - tarkistus</span></a></p>
         {% else %}
-        <p class="etusivunLinkit">Käyttöoikeutesi eivät riitä toiminnon käyttöön</p>
+        <p class="etusivunLinkit">Käyttöoikeutesi eivät riitä toiminnon käyttöön</p><br />
         {% endif %}
 
         {% if perms.tupa.change_tuomarineuvostulos %}
@@ -40,7 +40,7 @@
 
         <p class="etusivunLinkit"><a href="./tulosta/tilanne/"><span onmouseover="tooltip.show('Näytä laskennan tila tällä hetkellä');" onmouseout="tooltip.hide();">laskennan tilanne</span></a></p><br>
         {% else %}
-        <p class="etusivunLinkit">Käyttöoikeutesi eivät riitä toiminnon käyttöön</p>
+        <p class="etusivunLinkit">Käyttöoikeutesi eivät riitä toiminnon käyttöön</p><br />
         {% endif %}
 
     </td>
@@ -70,11 +70,15 @@
         {% endif %}
 
         {% if perms.tupa.change_testaustulos %}
-        <p class="etusivunLinkit"><a href="./maarita/testitulos/">määrittele testituloksia</a></p><br />
+        <p class="etusivunLinkit"><a href="./maarita/testitulos/">määrittele testituloksia</a></p>
+        {% endif %}
+
+        {% if perms.auth.change_user %}
+        <p class="etusivunLinkit"><a href="./kayttajat/">määrittele käyttäjät</a></p><br />
         {% endif %}
 
         {% if not perms.tupa.change_tehtava or not perms.tupa.change_vartio %}
-        <p class="etusivunLinkit">Käyttöoikeutesi eivät riitä toiminnon käyttöön</p>
+        <p class="etusivunLinkit">Käyttöoikeutesi eivät riitä toiminnon käyttöön</p><br />
         {% endif %}
 
     </td>
