@@ -1041,9 +1041,23 @@ def kayttajat(request, kisa_nimi=None) :
                 print(type(r))
                 print(dir(r))
         '''
-        return render(request, 'tupa/kayttajat.html',{
+
+        if request.method == 'POST':
+            '''Käsittele tallennus'''
+            print (request.POST)
+            # tallennus: https://docs.djangoproject.com/en/2.0/topics/forms/modelforms/#saving-objects-in-the-formset
+
+        else:
+            '''lataa sivu'''
+
+            form = KayttajaForm(instance = request.user)
+            formset = KayttajaFormSet(queryset = User.objects.all().exclude(is_staff = True))
+
+            return render(request, 'tupa/kayttajat.html',{
                 'kayttajat' : kayttajat, 
                 'ryhmat' : ryhmat, 
                 'kisa_nimi': kisa_nimi, 
-                'heading' : 'Käyttäjät',},)
+                'heading' : 'Käyttäjät',
+                'form' : form,
+                'formset' : formset, },)
 

@@ -36,6 +36,36 @@
     </table></div>
 {% endif %}
 
+    {% if form.errors %}
+        <p style="color: red;">
+            Please correct the error{{ form.errors|pluralize }} below.
+        </p>
+    {% endif %}
+
+    {% if form %}
+    <form action="" method="post">
+        <table>
+            {{ form.as_table }}
+        </table>
+        {% csrf_token %}
+        <input type="submit" value="Submit">
+    </form>
+    {{ form.initial.id }}
+    {% endif %}
+
+    {% if formset %}
+    <form action="" method="post">
+        <table>
+        {% for form in formset %}
+            {{ form.as_table }}
+            {{ form.initial.id }}
+        {% endfor %}
+        </table>
+        {% csrf_token %}
+        <input type="submit" value="Submit">
+    </form>
+    {% endif %}
+
 
 {% endblock %}
 
