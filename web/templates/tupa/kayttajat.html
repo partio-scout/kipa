@@ -6,35 +6,24 @@
 
 
 <h1>{{ heading }}</h1>
-<p> käyttäjien hallinta </p>
-<p> kirjautunut käyttäjä: {{ user.id }} {{ user }} {{ user.first_name }} {{ user.last_name }}</p>
 
-{% if kayttajat %}
-    <div id="kayttajat"><table>
-        <th>kayttaja taulukko</th>
-    {% for k in kayttajat %}
-        <tr>
-        <td>{{ k.id }}</td><td>{{ k }}</td><td>{{ k.first_name }}</td><td>{{ k.last_name }}</td>
-        <td>
-        {% for r in k.groups.all %}
-            {{ r.name }}
+    {% if formset %}
+    <form action="" method="post">
+        <table>
+            <th>Tunnus</th><th>Etunimi</th><th>Sukunimi</th><th>Sähköposti</th><th>Ryhmät</th><th>Poista</th>
+        {% for form in formset %}
+            <tr>
+                {{ form.id }}<td>{{ form.instance.username }}</td><td>{{ form.first_name }}</td><td>{{ form.last_name }}</td><td>{{ form.email }}</td><td>{{ form.groups }}</td><td>{{ form.DELETE }}</td>
+            </tr>
         {% endfor %}
-        </td>
-        </rt>
-    {% endfor %}
-    </table></div>
-{% endif %}
+        </table>
+        {% csrf_token %}
+        {% include "tupa/tallenna.html" %}
+    </form>
+    {% endif %}
 
-{% if kayttajat %}
-    <div id="k_ryhmat"><table>
-        <th>ryhmä taulukko</th>
-    {% for r in ryhmat %}
-        <tr>
-        <td>{{ r }}</td>
-        </tr>
-    {% endfor %}
-    </table></div>
-{% endif %}
+<br>
+<h1>Lisää uusi käyttäjä</h1>
 
     {% if form.errors %}
         <p style="color: red;">
@@ -48,24 +37,9 @@
             {{ form.as_table }}
         </table>
         {% csrf_token %}
-        <input type="submit" value="Submit">
-    </form>
-    {{ form.initial.id }}
-    {% endif %}
-
-    {% if formset %}
-    <form action="" method="post">
-        <table>
-        {% for form in formset %}
-            {{ form.as_table }}
-            {{ form.initial.id }}
-        {% endfor %}
-        </table>
-        {% csrf_token %}
-        <input type="submit" value="Submit">
+        {% include "tupa/tallenna.html" %}
     </form>
     {% endif %}
-
 
 {% endblock %}
 

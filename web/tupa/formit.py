@@ -333,5 +333,5 @@ KayttajaFormSet = modelformset_factory(User,
             form = KayttajaForm, 
             #fields = ('id', 'username', 'password', 'first_name', 'last_name', 'email', 'groups',), 
             can_delete = True, 
-            extra=2)
+            extra=0)
 

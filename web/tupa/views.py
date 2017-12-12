@@ -1031,8 +1031,10 @@ def kayttajat(request, kisa_nimi=None) :
         else:
             messages.add_message(request, messages.INFO, u'Kirjaudu sisään käyttääksesi KiPaa.')
 
+        '''
         kayttajat = User.objects.all().exclude(is_staff = True)
         ryhmat = Group.objects.all()
+        '''
         '''
         for k in kayttajat:
             print(type(k))
@@ -1047,17 +1049,17 @@ def kayttajat(request, kisa_nimi=None) :
             print (request.POST)
             # tallennus: https://docs.djangoproject.com/en/2.0/topics/forms/modelforms/#saving-objects-in-the-formset
 
-        else:
-            '''lataa sivu'''
+        #else:
+        '''lataa sivu, ladataan aina uudestaan'''
 
-            form = KayttajaForm(instance = request.user)
-            formset = KayttajaFormSet(queryset = User.objects.all().exclude(is_staff = True))
+        #form = KayttajaForm(instance = request.user)
+        form = KayttajaForm()
+        formset = KayttajaFormSet(queryset = User.objects.all().exclude(is_staff = True))
 
-            return render(request, 'tupa/kayttajat.html',{
-                'kayttajat' : kayttajat, 
-                'ryhmat' : ryhmat, 
-                'kisa_nimi': kisa_nimi, 
-                'heading' : 'Käyttäjät',
-                'form' : form,
-                'formset' : formset, },)
+        return render(request, 'tupa/kayttajat.html',{
+            'kisa_nimi': kisa_nimi, 
+            'heading' : 'Käyttäjät',
+            'form' : form,
+            'formset' : formset, 
+            },)
 
