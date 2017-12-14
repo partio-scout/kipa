@@ -13,6 +13,7 @@ from django import forms
 import django.template
 from django.shortcuts import render
 from django.utils.safestring import SafeUnicode
+from django.forms import modelform_factory, modelformset_factory
 
 from django.contrib import messages
 from django.contrib.auth import authenticate,login, logout
@@ -1021,9 +1022,10 @@ def tehtavanVaiheet(request,kisa_nimi,tehtava_id,vartio_id=None):
         return HttpResponse( responssi )
 
 @permission_required('auth.change_user')
-def kayttajat(request, kisa_nimi=None) :
+def kayttajat(request, kisa_nimi=None, user_name=None):
         """
         Käyttäjien hallintasivu.
+        Ylläpitäjä muokkaa kisan käyttäjien oikeuksia
 
         """
         if request.user.is_authenticated:
@@ -1046,13 +1048,13 @@ def kayttajat(request, kisa_nimi=None) :
 
         if request.method == 'POST':
             '''Käsittele tallennus'''
-            print (request.POST)
+            #print (request.POST)
+            for attribute, value in request.POST.items():
+                print(u'{} : {}'.format(attribute, value))
             # tallennus: https://docs.djangoproject.com/en/2.0/topics/forms/modelforms/#saving-objects-in-the-formset
 
         #else:
         '''lataa sivu, ladataan aina uudestaan'''
-
-        #form = KayttajaForm(instance = request.user)
         form = KayttajaForm()
         formset = KayttajaFormSet(queryset = User.objects.all().exclude(is_staff = True))
 
@@ -1063,3 +1065,18 @@ def kayttajat(request, kisa_nimi=None) :
             'formset' : formset, 
             },)
 
+@login_required
+def kayttajan_tiedot(request, user_name = None):
+    """
+    Käyttäjä muokkaa omia tietojaan
+    """
+    #form = KayttajaForm(instance = request.user)
+    #form = KayttajaForm(instance = User.objects.get(id = request.user.id))
+    modelform = modelform_factory(User, 
+            fields=('id', 'username', 'password', 'first_name', 'last_name', 'email'),
+            )
+    form = modelform(instance = User.objects.get(id = request.user.id))
+    return render(request, 'tupa/kayttajat.html',{
+        'heading' : 'Käyttäjän tiedot',
+        'form' : form,
+        },)

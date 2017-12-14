@@ -45,5 +45,6 @@ urlpatterns = [
         url(r'^(?P<kisa_nimi>[^/]+)/tulosta/csv/$', views.tulosta, name='tulosta'),
         url(r'^(?P<kisa_nimi>[^/]+)/tulosta/piirit/$', views.piirit, name='piirit'),
         url(r'^(?P<kisa_nimi>[^/]+)/kayttajat/$', views.kayttajat, name='kayttajat'),
+        url(r'^kayttaja/(?P<user_name>[^/]+)/$', views.kayttajan_tiedot, name='kayttaja'),
         ]
 
