@@ -19,6 +19,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate,login, logout
 from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib.auth.models import User, Group
+from django.contrib.auth.hashers import make_password
 from duplicate import kopioiTehtava
 from duplicate import kisa_xml
 import random
@@ -1028,35 +1029,36 @@ def kayttajat(request, kisa_nimi=None, user_name=None):
         Ylläpitäjä muokkaa kisan käyttäjien oikeuksia
 
         """
-        if request.user.is_authenticated:
-            messages.add_message(request, messages.INFO, u'Käyttäjä: ' + request.user.username)
-        else:
-            messages.add_message(request, messages.INFO, u'Kirjaudu sisään käyttääksesi KiPaa.')
+        modelform = modelform_factory(User, 
+            fields=('username', 'password', 'first_name', 'last_name', 'email', 'groups'),
+            )
+        modelformset = modelformset_factory(User, 
+            fields=('id', 'username', 'first_name', 'last_name', 'email', 'groups'),
+            can_delete = True, 
+            extra=0)
 
-        '''
-        kayttajat = User.objects.all().exclude(is_staff = True)
-        ryhmat = Group.objects.all()
-        '''
-        '''
-        for k in kayttajat:
-            print(type(k))
-            print(dir(k))
-            for r in k.groups.all():
-                print(type(r))
-                print(dir(r))
-        '''
+        form = modelform()
+        formset = modelformset(queryset = User.objects.all().exclude(is_staff = True), auto_id = False)
 
         if request.method == 'POST':
             '''Käsittele tallennus'''
-            #print (request.POST)
-            for attribute, value in request.POST.items():
-                print(u'{} : {}'.format(attribute, value))
-            # tallennus: https://docs.djangoproject.com/en/2.0/topics/forms/modelforms/#saving-objects-in-the-formset
+            if 'username' in request.POST:
+                #jos POSTissa uuden käyttäjän tallennus
+                form = modelform(request.POST)
+                if form.is_valid():
+                    user = form.save(commit=False)
+                    user.password = make_password(form.cleaned_data['password'])
+                    user.save()
+                    form.save_m2m()
 
-        #else:
-        '''lataa sivu, ladataan aina uudestaan'''
-        form = KayttajaForm()
-        formset = KayttajaFormSet(queryset = User.objects.all().exclude(is_staff = True))
+            else:
+                #jos POSTissa käyttäjälistan muokkaus
+                formset = modelformset(request.POST)
+                if formset.is_valid():
+                    formset.save()
+                    formset = modelformset(queryset = User.objects.all().exclude(is_staff = True), auto_id = False)
+                else:
+                    print (formset.errors)
 
         return render(request, 'tupa/kayttajat.html',{
             'kisa_nimi': kisa_nimi, 

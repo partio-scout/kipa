@@ -9,14 +9,22 @@
 
     {% if formset %}
     <form action="" method="post">
+        {{ formset.non_field_errors }}
         <table>
             <th>Tunnus</th><th>Etunimi</th><th>Sukunimi</th><th>Sähköposti</th><th>Ryhmät</th><th>Poista</th>
         {% for form in formset %}
             <tr>
-                {{ form.id }}<td>{{ form.instance.username }}</td><td>{{ form.first_name }}</td><td>{{ form.last_name }}</td><td>{{ form.email }}</td><td>{{ form.groups }}</td><td>{{ form.DELETE }}</td>
+                {{ form.id }}
+                <td>{{ form.username }}{{ form.username.errors }}</td>
+                <td>{{ form.first_name }}{{ form.first_name.errors }}</td>
+                <td>{{ form.last_name }}{{ form.last_name.errors }}</td>
+                <td>{{ form.email }}{{ form.email.errors }}</td>
+                <td>{{ form.groups }}{{ form.groups.errors }}</td>
+                <td>{{ form.DELETE }}{{ form.DELETE.errors }}</td>
             </tr>
         {% endfor %}
         </table>
+        {{ formset.management_form }}
         {% csrf_token %}
         {% include "tupa/tallenna.html" %}
     </form>

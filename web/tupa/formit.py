@@ -313,25 +313,3 @@ class UploadFileNameForm(forms.Form):
                                 raise forms.ValidationError("Nimi on jo käytössä")
                 return nimi
 
-class KayttajaForm(ModelForm): #forms.Form):
-    '''
-    pk = forms.IntegerField()
-    username = forms.CharField()
-    first_name = forms.CharField()
-    last_name = forms.CharField()
-    email = forms.EmailField(required=False)
-    groups = forms.ModelMultipleChoiceField(
-        required=False,
-        widget=forms.CheckboxSelectMultiple,
-        queryset=Group.objects.all(),
-    )'''
-    class Meta:
-        model = User
-        fields = ('id', 'username', 'password', 'first_name', 'last_name', 'email', 'groups',)
-
-KayttajaFormSet = modelformset_factory(User, 
-            form = KayttajaForm, 
-            #fields = ('id', 'username', 'password', 'first_name', 'last_name', 'email', 'groups',), 
-            can_delete = True, 
-            extra=0)
-
