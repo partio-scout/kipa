@@ -122,6 +122,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     #'django.contrib.sites',
     'tupa',
+    'user_management',
     'django.contrib.admin',
     #'django.contrib.formtools',
     'django.template',
