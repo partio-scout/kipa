@@ -95,9 +95,9 @@ def etusivu(request) :
 
         """
         if request.user.is_authenticated:
-            messages.add_message(request, messages.INFO, u'Käyttäjä: ' + request.user.username)
+            messages.info(request, u'Käyttäjä: ' + request.user.username)
         else:
-            messages.add_message(request, messages.INFO, u'Kirjaudu sisään käyttääksesi KiPaa.')
+            messages.info(request, u'Kirjaudu sisään käyttääksesi KiPaa.')
         '''
         storage = messages.get_messages(request)
         for message in storage:

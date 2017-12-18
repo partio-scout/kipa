@@ -33,12 +33,6 @@
 <br>
 <h1>Lisää uusi käyttäjä</h1>
 
-    {% if form.errors %}
-        <p style="color: red;">
-            Please correct the error{{ form.errors|pluralize }} below.
-        </p>
-    {% endif %}
-
     {% if form %}
     <form action="" method="post">
         <table>

@@ -551,3 +551,14 @@ td.th_erotin {
 }
 
 .capitalize {text-transform:capitalize;}
+
+.jgrowl-{}
+.jgrowl-debug{}
+.jgrowl-info{}
+.jgrowl-success{}
+.jgrowl-warning{
+	background: #300!important;
+}
+.jgrowl-error{
+	background: #300!important;
+}

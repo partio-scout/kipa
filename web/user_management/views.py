@@ -7,6 +7,7 @@ from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import permission_required, login_required
+from django.contrib import messages
 
 # Create your views here.
 
@@ -38,6 +39,9 @@ def kayttajat(request, kisa_nimi=None):
                     user.password = make_password(form.cleaned_data['password'])
                     user.save()
                     form.save_m2m()
+                    messages.success(request, u'Käyttäjä lisätty' )
+                else:
+                    messages.error(request, u'Ei onnistu, korjaa merkityt kentät' )
 
             else:
                 #jos POSTissa käyttäjälistan muokkaus
@@ -45,8 +49,9 @@ def kayttajat(request, kisa_nimi=None):
                 if formset.is_valid():
                     formset.save()
                     formset = modelformset(queryset = User.objects.all().exclude(is_staff = True), auto_id = False)
+                    messages.success(request, u'Tiedot päivitetty' )
                 else:
-                    print (formset.errors)
+                    messages.error(request, u'Ei onnistu, korjaa merkityt kentät' )
 
         return render(request, 'user_management/kayttajat.html',{
             'kisa_nimi': kisa_nimi, 
@@ -74,6 +79,9 @@ def kayttajan_tiedot(request, user_name = None):
                 form = userform(request.POST, instance = User.objects.get(id = request.user.id))
                 if form.is_valid():
                     form.save()
+                    messages.success(request, u'Tiedot päivitetty' )
+                else:
+                    messages.error(request, u'Ei onnistu, korjaa merkityt kentät' )
 
             else:
                 #jos POSTissa käyttäjän salasanan päivitys
@@ -82,6 +90,9 @@ def kayttajan_tiedot(request, user_name = None):
                     user = pwform.save()
                     update_session_auth_hash(request, user)  # Important!
                     pwform = PasswordChangeForm(request.user)
+                    messages.success(request, u'Salasana päivitetty' )
+                else:
+                    messages.error(request, u'Ei onnistu, korjaa merkityt kentät' )
 
     else:
         from django.contrib.auth import authenticate, login
@@ -97,6 +108,8 @@ def kayttajan_tiedot(request, user_name = None):
                                         )
                 login(request, new_user)
                 return redirect("/kipa/kayttaja/{}".format(form.cleaned_data['username']))
+            else:
+                messages.error(request, u'Ei onnistu, korjaa merkityt kentät' )
 
     return render(request, 'user_management/kayttajan_tiedot.html',{
         'heading' : 'Käyttäjän tiedot',

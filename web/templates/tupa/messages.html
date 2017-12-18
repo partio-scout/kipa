@@ -1,11 +1,20 @@
 <!-- Käydään viestit läpi -->
 {% if messages %}
-    <div id="messages">
-        <p>Viestit järjestelmästä:</p>
-    {% for message in messages %}
-        <p>
-        {{ message }}
-        </p>
-    {% endfor %}
-    </div>&nbsp;
+<link rel="stylesheet" type="text/css" href="/kipamedia/jquery.jgrowl.css" />
+<script type="text/javascript" language="javascript" src="/kipamedia/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="/kipamedia/jquery.jgrowl_minimized.js"></script>
+
+<script type="text/javascript">
+    $.jGrowl.defaults.position = 'center';
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        {% for message in messages %}
+        $.jGrowl('{{ message }}', {
+            life: 3000,
+            group: 'jgrowl-{{ message.tags }}'
+            });
+        {% endfor %}
+    });
+</script>
 {% endif %}
