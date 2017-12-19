@@ -615,7 +615,7 @@ def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
         # Luodaan HttpResponse-objekti CSV-headerillä.
         response = HttpResponse(content_type='text/csv')
 
-        disposition='attachment; filename='+kisa_nimi+"_"+sarja.nimi+'.csv'
+        disposition='attachment; filename='+kisa_nimi+"_"+sarja.nimi+"_"+time.strftime('%Y-%m-%d_%H-%M')+'.csv'
         response['Content-Disposition'] = disposition.encode('utf-8')
 
         writer = UnicodeWriter(response, delimiter=';')
@@ -732,7 +732,7 @@ def tallennaKisa(request, kisa_nimi):
         kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
 
         response = HttpResponse( kisa_xml(kisa) , content_type='application/xml')
-        response['Content-Disposition'] = 'attachment; filename=tietokanta.xml'
+        response['Content-Disposition'] = 'attachment; filename=' + kisa_nimi + '_' + time.strftime('%Y-%m-%d_%H-%M') + '_tietokanta.xml'
         return response
 
 @permission_required('tupa.change_kisa')
