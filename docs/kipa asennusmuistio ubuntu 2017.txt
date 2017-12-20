@@ -99,8 +99,8 @@ sudo -H -u www-data uwsgi --ini kipa_uwsgi.ini
 sudo /etc/init.d/nginx status
 sudo /etc/init.d/nginx stop
 sudo /etc/init.d/nginx start
-nano /var/log/nginx/error.log
-nano /var/log/nginx/access.log
+nano /var/log/nginx/error.log (painamalla CONTROL-X suljet editorin)
+nano /var/log/nginx/access.log (painamalla CONTROL-X suljet editorin)
 
 # Django testipalvelimen käynnistäminen 
 cd /var/www/kipa/web/

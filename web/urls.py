@@ -16,9 +16,9 @@ urlpatterns = [
 ]
 
 if settings.DEBUG :
-    import debug_toolbar
+    #import debug_toolbar
     urlpatterns += [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
+        #url(r'^__debug__/', include(debug_toolbar.urls)),
         ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 handler500 = 'tupa.views.raportti_500'

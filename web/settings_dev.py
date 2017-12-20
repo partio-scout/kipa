@@ -21,11 +21,11 @@ if not CACHE_TULOKSET :
         TAUSTALASENTA = False
 '''
 INSTALLED_APPS += [
-    'debug_toolbar', #https://django-debug-toolbar.readthedocs.io/en/stable/installation.html
+    #'debug_toolbar', #https://django-debug-toolbar.readthedocs.io/en/stable/installation.html
 ]
 
 MIDDLEWARE += [
-    'debug_toolbar.middleware.DebugToolbarMiddleware', #https://django-debug-toolbar.readthedocs.io/en/stable/installation.html
+    #'debug_toolbar.middleware.DebugToolbarMiddleware', #https://django-debug-toolbar.readthedocs.io/en/stable/installation.html
 ]
 
 STATIC_ROOT = None
