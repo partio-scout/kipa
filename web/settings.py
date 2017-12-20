@@ -195,6 +195,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 '''
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SECURE_SSL_REDIRECT = True
+#HTTPS is not availible on devserver
+#HTTPS would need sertificates to the web server program
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
+#SECURE_SSL_REDIRECT = True

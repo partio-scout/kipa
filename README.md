@@ -19,18 +19,19 @@ Vanhat sivustot:
 
 **Tilanne: toimivat**
 
-* Kipa -sivusto (test server)
+* Kipa -sivusto
 * Admin -sivusto
 * static files
 * testit (parametrit ei välity)
 * migrate
+* käyttäjäautentikointi (serverilaajuinen)
 * dia2django
-* production serveri (nginx ja uwsgi) (ei admin sivut)
+* production serveri (nginx ja uwsgi)
 
 **Ei toimi tai ei testattu:**
 
+* HTTPS tarvii sertifikaatit web-serverille
 * i18n
-* käyttäjäautentikointi
 * muut turhat härpäkkeet, joita en osaa käyttää
 
 **Muita ohjeita:**
