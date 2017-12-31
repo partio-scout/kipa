@@ -43,6 +43,11 @@ git clone https://github.com/Pena86/kipa.git
 cd kipa/web/
 python manage.py runserver
 
+
+#Luo itsellesi palvelimen pääkäyttäjätili komennolla: (sähköpostiosoitteen ei tarvi olla toimiva, mutta pitää olla oikeaa muotoa) Luomallasi tunnuksella voit kirjautua Kipa -järjestelmään, tuoda tai luoda kisan ja luoda muita käyttäjiä.
+python manage.py createsuperuser
+
+
 # mene selaimella osoitteeseen http://127.0.0.1:8000/ ja kipa-ohjelman pitäisi olla käytössä
 # ohjelman voi sulkea komentorivillä painamalla CONTROL-C
 # 
@@ -94,13 +99,16 @@ sudo -H -u www-data uwsgi --ini kipa_uwsgi.ini
 # nyt myös lähiverkon koneilta pitäisi päästä kipa -ohjelmaan kirjoittamalla selainohjelman osoiteriville palvelinkoneen ip-osoite.
 
 
+#Luo itsellesi palvelimen pääkäyttäjätili komennolla: (sähköpostiosoitteen ei tarvi olla toimiva, mutta pitää olla oikeaa muotoa) Luomallasi tunnuksella voit kirjautua Kipa -järjestelmään, tuoda tai luoda kisan ja luoda muita käyttäjiä.
+python manage.py createsuperuser
+
 
 # seuraavilla komennoilla saat lisää tietoa ja voit hallita nginx -ohjelman toimintaa
 sudo /etc/init.d/nginx status
 sudo /etc/init.d/nginx stop
 sudo /etc/init.d/nginx start
-nano /var/log/nginx/error.log
-nano /var/log/nginx/access.log
+nano /var/log/nginx/error.log (painamalla CONTROL-X suljet editorin)
+nano /var/log/nginx/access.log (painamalla CONTROL-X suljet editorin)
 
 # Django testipalvelimen käynnistäminen 
 cd /var/www/kipa/web/
