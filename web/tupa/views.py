@@ -160,10 +160,11 @@ def maaritaKisa(request, kisa_nimi=None,talletettu=None):
         sarjaFormit=SarjaFormSet(posti,instance=kisa)
 
         if kisaForm.is_valid():
-                if sarjaFormit.is_valid():
-                        kisa=kisaForm.save()
-                	sarjaFormit=SarjaFormSet(posti,instance=kisa)
-			sarjaFormit.save()
+            if sarjaFormit.is_valid():
+                kisa=kisaForm.save()
+                sarjaFormit=SarjaFormSet(posti,instance=kisa)
+                sarjaFormit.is_valid()
+                sarjaFormit.save()
 
         if kisa :
                 for s in kisa.sarja_set.all() : s.taustaTulokset() # tulosten taustalaskenta
