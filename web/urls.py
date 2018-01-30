@@ -11,7 +11,7 @@ admin.autodiscover()
 urlpatterns = [
         url(r'^kipa/',  include('tupa.urls')),
         url(r'^admin/', admin.site.urls),
-        url(r'^$', RedirectView.as_view(url='/kipa/', permanent=True)),
+        url(r'^$', RedirectView.as_view(url='/kipa/', permanent=True)), # Jos et halua uudelleenohjausta, poista tämä käytöstä
         url(r'^kipa/', include('user_management.urls')),
 ]
 
