@@ -681,9 +681,10 @@ def piirit(request,kisa_nimi) :
         kisa = get_object_or_404(Kisa, nimi=kisa_nimi )
         sarjat = kisa.sarja_set.all()
         tulostaulu = []
-        piiriTulos = {}
+        #piiriTulos = {}
         lpkTulos = {}
-        piirit = set()
+        pt = {}
+        #piirit = set()
         lpkt = set()
         for sarjaItem in sarjat:
             sarja = Sarja.objects.get(id=sarjaItem.id)
@@ -695,9 +696,15 @@ def piirit(request,kisa_nimi) :
                     # Määritetään vartiorivi
                     #print (a[0].nimi, a[0].piiri, a[0].lippukunta, a[1], piiriPisteet)
                     sarjanTulokset.append([a[0].nimi, a[0].piiri, a[0].lippukunta, a[1], piiriPisteet])
-                    piirit.add(a[0].piiri)
+                    #piirit.add(a[0].piiri)
                     lpkt.add(a[0].lippukunta)
-                    piiriPisteet -= 1
+                    if a[0].piiri in pt:
+                        pt[a[0].piiri]['sijoitukset'].append(piiriPisteet)
+                    else:
+                        pt[a[0].piiri] = {'sijoitukset': [piiriPisteet]}
+
+                    if piiriPisteet > 0:
+                        piiriPisteet -= 1
                 else:
                     # Määritetään otsikkorivi
                     #print (a[0].nimi + u', vartio', 'piiri', 'lippukunta', u'kisapist.', u'piiripist.')
@@ -705,12 +712,17 @@ def piirit(request,kisa_nimi) :
                     pass
             tulostaulu.append([tulokset[0][0][0].nimi, sarjanTulokset])
 
+        for l in pt:
+            pt[l]['pisteet'] = sum(pt[l]['sijoitukset'])
+            pt[l]['sijoitukset'].sort(reverse = True)
+            #print (l, pt[l])
+        '''
         for p in piirit:
             piiriTulos[p] = 0
         for s in tulostaulu:
             for v in s[1]:
                 piiriTulos[v[1]] += v[4]
-
+        '''
         for p in lpkt:
             lpkTulos[p] = 0
         for s in tulostaulu:
@@ -721,10 +733,12 @@ def piirit(request,kisa_nimi) :
 
         return render(request,  'tupa/piiri_tulokset.html',
             {'tulos_taulukko' : tulostaulu,
-            'piiritulos' : piiriTulos,
+            'piiritulos' : pt, # piiriTulos,
             'lpk' : lpkTulos,
             'kisa' : kisa,
-            'kisa_nimi' : kisa.nimi,},)
+            'kisa_nimi' : kisa.nimi,
+            'heading' : 'Piirien tuolokset',
+            },)
 
 @permission_required('tupa.change_tehtava')
 def kopioiTehtavia(request,kisa_nimi,sarja_id ):

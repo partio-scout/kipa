@@ -44,11 +44,11 @@ function hideFunction() {
 {% if piiritulos %}
     <div id='item'><table id="tulostaulukko_screen" border="0" >
         <tr id="otsikko">
-            <td><b>Piiri</b></td><td><b>Pisteet</b></td>
+            <td><b>Sij.</b></td><td><b>Piiri</b></td><td><b>Pisteet</b></td>
         </tr>
         {% for nimi, pisteet in piiritulos.items|dictsortreversed:1 %}
             <tr id="vartiot" class="{% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
-                <td>{{ nimi }}</td><td>{{ pisteet }}</td>
+                <td>{{ forloop.counter }}</td><td>{{ nimi }}</td><td>{{ pisteet.pisteet }}</td>
             </tr>
         {% endfor %}
     </table></div>
