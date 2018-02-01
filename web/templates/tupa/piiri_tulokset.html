@@ -1,0 +1,110 @@
+{% extends "tupa/base.html" %}
+{% block title %}Piirikohtaiset tulokset{% endblock title %} 
+
+{% block content %}
+
+{% load kipatags %}
+
+<style>
+    div #item{
+        margin-top: 25px;
+        margin-bottom: 25px;
+        margin-right: 10px;
+        float: left;
+    }
+</style>
+
+<script>
+function hideFunction() {
+    var x = document.getElementById("tarkastus");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+
+<div style="clear: both;">
+<div id='item'><table width="100%" border="0" id="tulostaulukko_otsikko" style:"position:absolute; top: 0px; left: 0px;">
+    <tr valign="top">
+        <td width="33%"><h1 style:"margin:0; padding:0;">{{kisa.nimi|alaviiva_pois }}</h1></td>
+        <td width="33%" align="center"><h1>Piirien tulokset</h1></td>
+        <td width="33%" align="right"></td>
+    </tr>
+    <tr>
+        <td>{{kisa.aika}}<br>{{kisa.paikka}}</td>
+        <td align="center"><br>{% now "j.n.Y G:i"%}</td>
+        <td align="right"></td>
+    </tr>
+</table></div>
+</div>
+
+<div style="clear: both;">
+{% if piiritulos %}
+    <div id='item'><table id="tulostaulukko_screen" border="0" >
+        <tr id="otsikko">
+            <td><b>Piiri</b></td><td><b>Pisteet</b></td>
+        </tr>
+        {% for nimi, pisteet in piiritulos.items|dictsortreversed:1 %}
+            <tr id="vartiot" class="{% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
+                <td>{{ nimi }}</td><td>{{ pisteet }}</td>
+            </tr>
+        {% endfor %}
+    </table></div>
+{% else %}
+    <p>Ei piirituloksia.</p>
+{% endif %}
+{% if lpk %}
+    <div id='item'><table id="tulostaulukko_screen" border="0" >
+        <tr id="otsikko">
+            <td><b>Lippukunta</b></td><td><b>Pisteet</b></td>
+        </tr>
+        {% for nimi, pisteet in lpk.items|dictsortreversed:1 %}
+            <tr id="vartiot" class="{% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
+                <td>{{ nimi }}</td><td>{{ pisteet }}</td>
+            </tr>
+        {% endfor %}
+    </table></div>
+{% else %}
+    <p>Ei lippukuntatuloksia.</p>
+{% endif %}
+</div>
+
+<div style="clear: both;">
+    <button onclick="hideFunction()">Näytä / piilota laskentatiedot</button>
+</div>
+<div id=tarkastus style="clear: both; display: none;">
+{% if tulos_taulukko %}
+    {% for sarja in tulos_taulukko %}
+        <div id='item'>
+            <h2>Sarja: {{ sarja.0 }}</h2>
+            <table id="tulostaulukko_screen" border="0" >
+            <tr id="otsikko">
+                <td><b>Vartio</b></td><td><b>Piiri</b></td><td><b>Lippukunta</b></td><td><b>Kisap.</b></td><td><b>Piirip.</b></td>
+            </tr>
+            {% for vartio in sarja.1 %}
+                <tr id="vartiot" class="{% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
+                    {% for sarake in vartio %}
+                        <td class="right"> {{ sarake }} </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table></div>
+    {% endfor %}
+
+{% else %}
+    <p>Ei tuloksia.</p>
+{% endif %}
+
+<div style="clear: both;">
+ S = syöttämättä<br>
+ H = vartion suoritus hylätty<br>
+ K = vartio keskeyttänyt<br>
+ E = vartio ei ole tehnyt tehtävää<br>
+ ! = vartion sijaluku laskettu tasapisteissä määräävien tehtävien perusteella
+</div>
+</div>
+
+
+{% endblock %}

@@ -678,7 +678,53 @@ def piirit(request,kisa_nimi) :
         """
         Piirikohtaiset tulokset.
         """
-        return HttpResponse(kisa_nimi + " PIIRIN TULOSTUS",)
+        kisa = get_object_or_404(Kisa, nimi=kisa_nimi )
+        sarjat = kisa.sarja_set.all()
+        tulostaulu = []
+        piiriTulos = {}
+        lpkTulos = {}
+        piirit = set()
+        lpkt = set()
+        for sarjaItem in sarjat:
+            sarja = Sarja.objects.get(id=sarjaItem.id)
+            tulokset = sarja.laskeTulokset()
+            piiriPisteet = 15
+            sarjanTulokset = []
+            for a in tulokset[0]:
+                if hasattr(a[0], 'piiri') and hasattr(a[0], 'lippukunta'):
+                    # Määritetään vartiorivi
+                    #print (a[0].nimi, a[0].piiri, a[0].lippukunta, a[1], piiriPisteet)
+                    sarjanTulokset.append([a[0].nimi, a[0].piiri, a[0].lippukunta, a[1], piiriPisteet])
+                    piirit.add(a[0].piiri)
+                    lpkt.add(a[0].lippukunta)
+                    piiriPisteet -= 1
+                else:
+                    # Määritetään otsikkorivi
+                    #print (a[0].nimi + u', vartio', 'piiri', 'lippukunta', u'kisapist.', u'piiripist.')
+                    #sarjanTulokset.append([u'sarja: ' + a[0].nimi, 'piiri', 'lippukunta', u'kisapist.', u'piiripist.'])
+                    pass
+            tulostaulu.append([tulokset[0][0][0].nimi, sarjanTulokset])
+
+        for p in piirit:
+            piiriTulos[p] = 0
+        for s in tulostaulu:
+            for v in s[1]:
+                piiriTulos[v[1]] += v[4]
+
+        for p in lpkt:
+            lpkTulos[p] = 0
+        for s in tulostaulu:
+            for v in s[1]:
+                lpkTulos[v[2]] += v[4]
+
+        #jarj_tulokset = sorted(piiriTulos.items(), key=lambda piiriTulos: piiriTulos[1], reverse = True)
+
+        return render(request,  'tupa/piiri_tulokset.html',
+            {'tulos_taulukko' : tulostaulu,
+            'piiritulos' : piiriTulos,
+            'lpk' : lpkTulos,
+            'kisa' : kisa,
+            'kisa_nimi' : kisa.nimi,},)
 
 @permission_required('tupa.change_tehtava')
 def kopioiTehtavia(request,kisa_nimi,sarja_id ):
