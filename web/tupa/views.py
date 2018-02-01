@@ -681,11 +681,8 @@ def piirit(request,kisa_nimi) :
         kisa = get_object_or_404(Kisa, nimi=kisa_nimi )
         sarjat = kisa.sarja_set.all()
         tulostaulu = []
-        #piiriTulos = {}
+        piiriTulos = {}
         lpkTulos = {}
-        pt = {}
-        #piirit = set()
-        lpkt = set()
         for sarjaItem in sarjat:
             sarja = Sarja.objects.get(id=sarjaItem.id)
             tulokset = sarja.laskeTulokset()
@@ -696,44 +693,35 @@ def piirit(request,kisa_nimi) :
                     # Määritetään vartiorivi
                     #print (a[0].nimi, a[0].piiri, a[0].lippukunta, a[1], piiriPisteet)
                     sarjanTulokset.append([a[0].nimi, a[0].piiri, a[0].lippukunta, a[1], piiriPisteet])
-                    #piirit.add(a[0].piiri)
-                    lpkt.add(a[0].lippukunta)
-                    if a[0].piiri in pt:
-                        pt[a[0].piiri]['sijoitukset'].append(piiriPisteet)
+
+                    if a[0].piiri in piiriTulos:
+                        piiriTulos[a[0].piiri]['sijoitukset'].append(piiriPisteet)
                     else:
-                        pt[a[0].piiri] = {'sijoitukset': [piiriPisteet]}
+                        piiriTulos[a[0].piiri] = {'sijoitukset': [piiriPisteet]}
+
+                    if a[0].lippukunta in lpkTulos:
+                        lpkTulos[a[0].lippukunta]['sijoitukset'].append(piiriPisteet)
+                    else:
+                        lpkTulos[a[0].lippukunta] = {'sijoitukset': [piiriPisteet]}
 
                     if piiriPisteet > 0:
                         piiriPisteet -= 1
-                else:
-                    # Määritetään otsikkorivi
-                    #print (a[0].nimi + u', vartio', 'piiri', 'lippukunta', u'kisapist.', u'piiripist.')
-                    #sarjanTulokset.append([u'sarja: ' + a[0].nimi, 'piiri', 'lippukunta', u'kisapist.', u'piiripist.'])
-                    pass
+
             tulostaulu.append([tulokset[0][0][0].nimi, sarjanTulokset])
 
-        for l in pt:
-            pt[l]['pisteet'] = sum(pt[l]['sijoitukset'])
-            pt[l]['sijoitukset'].sort(reverse = True)
-            #print (l, pt[l])
-        '''
-        for p in piirit:
-            piiriTulos[p] = 0
-        for s in tulostaulu:
-            for v in s[1]:
-                piiriTulos[v[1]] += v[4]
-        '''
-        for p in lpkt:
-            lpkTulos[p] = 0
-        for s in tulostaulu:
-            for v in s[1]:
-                lpkTulos[v[2]] += v[4]
+        for l in piiriTulos:
+            piiriTulos[l]['pisteet'] = sum(piiriTulos[l]['sijoitukset'])
+            piiriTulos[l]['sijoitukset'].sort(reverse = True)
+            #print (l, piiriTulos[l])
 
-        #jarj_tulokset = sorted(piiriTulos.items(), key=lambda piiriTulos: piiriTulos[1], reverse = True)
+        for l in lpkTulos:
+            lpkTulos[l]['pisteet'] = sum(lpkTulos[l]['sijoitukset'])
+            lpkTulos[l]['sijoitukset'].sort(reverse = True)
+            #print (l, lpkTulos[l])
 
         return render(request,  'tupa/piiri_tulokset.html',
             {'tulos_taulukko' : tulostaulu,
-            'piiritulos' : pt, # piiriTulos,
+            'piiritulos' : piiriTulos,
             'lpk' : lpkTulos,
             'kisa' : kisa,
             'kisa_nimi' : kisa.nimi,
