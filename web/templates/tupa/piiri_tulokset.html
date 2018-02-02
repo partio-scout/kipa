@@ -1,29 +1,31 @@
-{% extends "tupa/base.html" %}
+{% extends template_selector %}
+{% load kipatags %}
 {% block title %}Piirikohtaiset tulokset{% endblock title %} 
+
 
 {% block content %}
 
-{% load kipatags %}
+{% if template_selector  != "tupa/paperituloste_head.html" %}
+    <style>
+        div #item{
+            margin-top: 25px;
+            margin-bottom: 25px;
+            margin-right: 10px;
+            float: left;
+        }
+    </style>
 
-<style>
-    div #item{
-        margin-top: 25px;
-        margin-bottom: 25px;
-        margin-right: 10px;
-        float: left;
+    <script>
+    function hideFunction() {
+        var x = document.getElementById("tarkastus");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
     }
-</style>
-
-<script>
-function hideFunction() {
-    var x = document.getElementById("tarkastus");
-    if (x.style.display === "none") {
-        x.style.display = "block";
-    } else {
-        x.style.display = "none";
-    }
-}
-</script>
+    </script>
+{% endif %}
 
 <div style="clear: both;">
 <div id='item'><table width="100%" border="0" id="tulostaulukko_otsikko" style:"position:absolute; top: 0px; left: 0px;">
@@ -42,6 +44,7 @@ function hideFunction() {
 
 <div style="clear: both;">
 {% if piiritulos %}
+    {% if template_selector  == "tupa/paperituloste_head.html" %}<br><br>{% endif %}
     <div id='item'><table id="tulostaulukko_screen" border="0" >
         <tr id="otsikko">
             <td><b>Sij.</b></td><td><b>Piiri</b></td><td><b>Pisteet</b></td>
@@ -56,6 +59,7 @@ function hideFunction() {
     <p>Ei piirituloksia.</p>
 {% endif %}
 {% if lpk %}
+    {% if template_selector  == "tupa/paperituloste_head.html" %}<br><br>{% endif %}
     <div id='item'><table id="tulostaulukko_screen" border="0" >
         <tr id="otsikko">
             <td><b>Sij.</b></td><td><b>Lippukunta</b></td><td><b>Pisteet</b></td>
@@ -71,40 +75,42 @@ function hideFunction() {
 {% endif %}
 </div>
 
-<div style="clear: both;">
-    <button onclick="hideFunction()">Näytä / piilota laskentatiedot</button>
-</div>
-<div id=tarkastus style="clear: both; display: none;">
-{% if tulos_taulukko %}
-    {% for sarja in tulos_taulukko %}
-        <div id='item'>
-            <h2>Sarja: {{ sarja.0 }}</h2>
-            <table id="tulostaulukko_screen" border="0" >
-            <tr id="otsikko">
-                <td><b>Vartio</b></td><td><b>Piiri</b></td><td><b>Lippukunta</b></td><td><b>Kisap.</b></td><td><b>Piirip.</b></td>
-            </tr>
-            {% for vartio in sarja.1 %}
-                <tr id="vartiot" class="{% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
-                    {% for sarake in vartio %}
-                        <td class="right"> {{ sarake }} </td>
-                    {% endfor %}
+{% if template_selector  != "tupa/paperituloste_head.html" %}
+
+    <div style="clear: both;">
+        <button onclick="hideFunction()">Näytä / piilota laskentatiedot</button>
+    </div>
+    <div id=tarkastus style="clear: both; display: none;">
+    {% if tulos_taulukko %}
+        {% for sarja in tulos_taulukko %}
+            <div id='item'>
+                <h2>Sarja: {{ sarja.0 }}</h2>
+                <table id="tulostaulukko_screen" border="0" >
+                <tr id="otsikko">
+                    <td><b>Vartio</b></td><td><b>Piiri</b></td><td><b>Lippukunta</b></td><td><b>Kisap.</b></td><td><b>Piirip.</b></td>
                 </tr>
-            {% endfor %}
-        </table></div>
-    {% endfor %}
+                {% for vartio in sarja.1 %}
+                    <tr id="vartiot" class="{% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
+                        {% for sarake in vartio %}
+                            <td class="right"> {{ sarake }} </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table></div>
+        {% endfor %}
 
-{% else %}
-    <p>Ei tuloksia.</p>
+    {% else %}
+        <p>Ei tuloksia.</p>
+    {% endif %}
+
+    <div style="clear: both;">
+     S = syöttämättä<br>
+     H = vartion suoritus hylätty<br>
+     K = vartio keskeyttänyt<br>
+     E = vartio ei ole tehnyt tehtävää<br>
+     ! = vartion sijaluku laskettu tasapisteissä määräävien tehtävien perusteella
+    </div>
+    </div>
+
 {% endif %}
-
-<div style="clear: both;">
- S = syöttämättä<br>
- H = vartion suoritus hylätty<br>
- K = vartio keskeyttänyt<br>
- E = vartio ei ole tehnyt tehtävää<br>
- ! = vartion sijaluku laskettu tasapisteissä määräävien tehtävien perusteella
-</div>
-</div>
-
-
 {% endblock %}

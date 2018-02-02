@@ -674,7 +674,7 @@ def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
         return response
 
 @login_required
-def piirit(request,kisa_nimi) :
+def piirinTulokset(request, kisa_nimi, muotoilu):
         """
         Piirikohtaiset tulokset.
         """
@@ -719,12 +719,18 @@ def piirit(request,kisa_nimi) :
             lpkTulos[l]['sijoitukset'].sort(reverse = True)
             #print (l, lpkTulos[l])
 
+        if muotoilu == 'tulosta':
+            template_selector = "tupa/paperituloste_head.html"
+        else:
+            template_selector = "tupa/base.html"
+
         return render(request,  'tupa/piiri_tulokset.html',
             {'tulos_taulukko' : tulostaulu,
             'piiritulos' : piiriTulos,
             'lpk' : lpkTulos,
             'kisa' : kisa,
             'kisa_nimi' : kisa.nimi,
+            'template_selector' : template_selector,
             'heading' : 'Piirien tuolokset',
             },)
 
