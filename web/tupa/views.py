@@ -126,18 +126,6 @@ def kisa(request,kisa_nimi) :
                                         'heading' : 'Etusivu',
                                         'vanha_tietokanta' : vanha_tietokanta},)
 
-@login_required
-def tulosta(request,kisa_nimi,tulostyyppi=""):
-        """
-        Valintalista kisan sarjojen tuloksista.
-        """
-        if len(tulostyyppi) : tulostyyppi+="/"
-        sarjat = Sarja.objects.select_related().filter(kisa__nimi=kisa_nimi)
-        return render(request, 'tupa/tulosta.html', {'sarja_list': sarjat,
-                                                        'kisa_nimi': kisa_nimi,
-                                                        'tulostyyppi': tulostyyppi,
-                                                        'heading': 'Tulokset sarjoittain' } ,)
-
 @permission_required('tupa.change_kisa')
 def maaritaKisa(request, kisa_nimi=None,talletettu=None):
         """
@@ -543,6 +531,24 @@ def tuomarineuvos(request, kisa_nimi,talletettu=None):
                         'heading' : "Tuomarineuvoston antamien tulosten määritys" ,
 			'kisa_nimi': kisa_nimi,
                         'talletettu': tal })
+
+
+"""
+Näkymät tulosten näyttämiseen
+"""
+
+@login_required
+def tulosta(request,kisa_nimi,tulostyyppi=""):
+    """
+    Valintalista kisan sarjojen tuloksista.
+    """
+    if len(tulostyyppi) : tulostyyppi+="/"
+    sarjat = Sarja.objects.select_related().filter(kisa__nimi=kisa_nimi)
+    return render(request, 'tupa/tulosta.html',
+                            {'sarja_list': sarjat,
+                            'kisa_nimi': kisa_nimi,
+                            'tulostyyppi': tulostyyppi,
+                            'heading': 'Tulokset sarjoittain' } ,)
 
 @login_required
 def tulostaSarja(request, kisa_nimi, sarja_id, tulostus=0,vaihtoaika=None,vaihto_id=None) :
