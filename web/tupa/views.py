@@ -538,75 +538,64 @@ Näkymät tulosten näyttämiseen
 """
 
 @login_required
-def tulosta(request,kisa_nimi,tulostyyppi=""):
+def naytaValitse(request, kisa_nimi, muotoilu):
     """
     Valintalista kisan sarjojen tuloksista.
     """
-    if len(tulostyyppi) : tulostyyppi+="/"
     sarjat = Sarja.objects.select_related().filter(kisa__nimi=kisa_nimi)
-    return render(request, 'tupa/tulosta.html',
+    if muotoilu == 'heijasta':
+        return naytaSarja(request, kisa_nimi, muotoilu)
+    return render(request, 'tupa/nayta_valitse.html',
                             {'sarja_list': sarjat,
                             'kisa_nimi': kisa_nimi,
-                            'tulostyyppi': tulostyyppi,
                             'heading': 'Tulokset sarjoittain' } ,)
 
 @login_required
-def tulostaSarja(request, kisa_nimi, sarja_id, tulostus=0,vaihtoaika=None,vaihto_id=None) :
-        """
-        Sarjan tulokset.
-        """
-        sarja = Sarja.objects.get(id=sarja_id)
-        tulokset= sarja.laskeTulokset()
-        mukana=tulokset[0]
-        ulkona=tulokset[1]
-        numero=1
-        for i in range(len(mukana[1:])) :
-                mukana[i+1].insert(0, mukana[i+1][0].tasa +  str(numero) )
-                numero=numero+1
-        for i in range(len(ulkona)) :
-                ulkona[i].insert(0,ulkona[i][0].tasa + str(numero))
-                numero=numero+1
-        kisa_aika = sarja.kisa.aika
-        kisa_paikka = sarja.kisa.paikka
+def naytaSarja(request, kisa_nimi, muotoilu, sarja_id = None, vaihtoaika = 15, seur_id = None) :
+    """
+    Sarjan tulokset.
+    """
+    if muotoilu == 'csv':
+        return sarjanTuloksetCSV(request, kisa_nimi, sarja_id)
+    elif muotoilu == 'tuloste':
+        template_selector = "tupa/paperituloste_head.html"
+    elif muotoilu == 'heijasta':
+        template_selector = "tupa/paperituloste_head.html"
+        sarjat = Sarja.objects.select_related().filter(kisa__nimi = kisa_nimi).order_by('id')
+        if sarja_id == None and len(sarjat) > 0:
+            sarja_id = sarjat[0].id
+        for index in range(len(sarjat)-1):
+            if sarjat[index].id == int(sarja_id):
+                seur_id = sarjat[index+1].id
+        if seur_id == None:
+            seur_id = sarjat[0].id
+    else:
+        template_selector = "tupa/base.html"
 
-        templaatti='tupa/tulokset.html'
-        if tulostus: templaatti= 'tupa/tuloksetHTML.html'
-        if vaihtoaika: templaatti= 'tupa/heijasta.html'
-        return render(request,  templaatti,
-			{'tulos_taulukko' : mukana,
+    sarja = Sarja.objects.get(id = sarja_id)
+    tulokset = sarja.laskeTulokset()
+    mukana = tulokset[0]
+    ulkona = tulokset[1]
+    sijoitus = 1
+
+    for i in mukana[1:]:
+        i.insert(0, i[0].tasa + str(sijoitus))
+        sijoitus += 1
+    for i in ulkona:
+        i.insert(0, i[0].tasa + str(sijoitus))
+        sijoitus += 1
+
+    return render(request, 'tupa/tulokset.html',
+            {'tulos_taulukko' : mukana,
             'ulkona_taulukko' : ulkona,
-			'kisa_nimi' : kisa_nimi,
-			'kisa_aika' : kisa_aika,
-			'kisa_paikka' : kisa_paikka,
-			'heading' : sarja.nimi,
-			'vaihtoaika' : vaihtoaika,
-			'vaihto_id' : vaihto_id,
-			'taakse' : {'url' : '../../', 'title' : 'Tulokset sarjoittain'} },)
-
-@login_required
-def heijasta(request, kisa_nimi, sarja_id=None,tulostus=0) :
-     kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
-     sarjat=kisa.sarja_set.all()
-     sarjat= sorted(sarjat, key=lambda sarja: sarja.id )
-
-     if sarja_id==None:
-         sarja_id=sarjat[0].id
-
-     sarja_id=int(sarja_id)
-     seuraava_id=None
-     for index in range(len(sarjat)-1):
-         if sarjat[index].id==sarja_id: seuraava_id=sarjat[index+1].id
-
-     if seuraava_id==None : seuraava_id=sarjat[0].id
-
-     return tulostaSarja(request,kisa_nimi,sarja_id,vaihtoaika=15,vaihto_id=seuraava_id)
-
-@login_required
-def tulostaSarjaHTML(request, kisa_nimi, sarja_id) :
-        """
-        Sarjan tulokset, sivu muotoiltuna tulostusta varten ilman turhia grafiikoita.
-        """
-        return tulostaSarja(request, kisa_nimi, sarja_id,tulostus=1)
+            'kisa_nimi' : kisa_nimi,
+            'kisa_aika' : sarja.kisa.aika,
+            'kisa_paikka' : sarja.kisa.paikka,
+            'heading' : sarja.nimi,
+            'vaihtoaika' : vaihtoaika,
+            'seur_id' : seur_id,
+            'template_selector' : template_selector,
+            'taakse' : {'url' : '../../', 'title' : 'Tulokset sarjoittain'} },)
 
 @login_required
 def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
@@ -725,7 +714,7 @@ def piirinTulokset(request, kisa_nimi, muotoilu):
             lpkTulos[l]['sijoitukset'].sort(reverse = True)
             #print (l, lpkTulos[l])
 
-        if muotoilu == 'tulosta':
+        if muotoilu == 'tuloste':
             template_selector = "tupa/paperituloste_head.html"
         else:
             template_selector = "tupa/base.html"

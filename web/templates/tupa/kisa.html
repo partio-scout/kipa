@@ -30,17 +30,17 @@
         <p class="etusivunOtsikko"><img src="/kipamedia/wizard.png" width="64" height="64" />Tulokset</p>
 
         {% if user.is_authenticated %}
-        <p class="etusivunLinkit"><a href="./tulosta/normaali/"><span onmouseover="tooltip.show('Tarkastele tuloksia sarjoittain');" onmouseout="tooltip.hide();">sarjan tulokset</span></a></p>
+        <p class="etusivunLinkit"><a href="./nayta/sivu/"><span onmouseover="tooltip.show('Tarkastele tuloksia sarjoittain');" onmouseout="tooltip.hide();">sarjan tulokset</span></a></p>
 
-        <p class="etusivunLinkit"><a href="./tulosta/tuloste/"><span onmouseover="tooltip.show('Tulosta tuloksia paperille');" onmouseout="tooltip.hide();">tulosta tuloksia</span></a></p>
+        <p class="etusivunLinkit"><a href="./nayta/tuloste/"><span onmouseover="tooltip.show('Tulosta tuloksia paperille');" onmouseout="tooltip.hide();">tulosta tuloksia</span></a></p>
 
-        <p class="etusivunLinkit"><a href="./tulosta/csv/"><span onmouseover="tooltip.show('Tallenna tulokset CSV-tiedostoon');" onmouseout="tooltip.hide();">tulokset CSV-tiedostoon</span></a></p>
+        <p class="etusivunLinkit"><a href="./nayta/csv/"><span onmouseover="tooltip.show('Tallenna tulokset CSV-tiedostoon');" onmouseout="tooltip.hide();">tulokset CSV-tiedostoon</span></a></p>
 
-        <p class="etusivunLinkit"><a href="./tulosta/heijasta/"><span onmouseover="tooltip.show('Näytä tulokset videotykkimuodossa');" onmouseout="tooltip.hide();">heijasta tuloksia</span></a></p>
+        <p class="etusivunLinkit"><a href="./nayta/heijasta/"><span onmouseover="tooltip.show('Näytä tulokset videotykkimuodossa');" onmouseout="tooltip.hide();">heijasta tuloksia</span></a></p>
 
-        <p class="etusivunLinkit"><a href="./tulosta/tilanne/"><span onmouseover="tooltip.show('Näytä laskennan tila tällä hetkellä');" onmouseout="tooltip.hide();">laskennan tilanne</span></a></p>
+        <p class="etusivunLinkit"><a href="./nayta/tilanne/"><span onmouseover="tooltip.show('Näytä laskennan tila tällä hetkellä');" onmouseout="tooltip.hide();">laskennan tilanne</span></a></p>
 
-        <p class="etusivunLinkit"><a href="./tulosta/nayta/piirit/"><span onmouseover="tooltip.show('Tarkastele piirienvälisiä tuloksia');" onmouseout="tooltip.hide();">piirien tulokset</span></a></p><br>
+        <p class="etusivunLinkit"><a href="./nayta/sivu/piirit/"><span onmouseover="tooltip.show('Tarkastele piirienvälisiä tuloksia');" onmouseout="tooltip.hide();">piirien tulokset</span></a></p><br>
         {% else %}
         <p class="etusivunLinkit">Käyttöoikeutesi eivät riitä toiminnon käyttöön</p><br />
         {% endif %}

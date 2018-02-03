@@ -6,9 +6,10 @@
 
 <blockquote>
 {%for sarja in sarja_list %}
-      <A href='./sarja/{{sarja.id}}/' > {{sarja.nimi}} </A> <br>
+    <A href='./{{sarja.id}}/' > {{sarja.nimi}} </A> <br>
 {% endfor %}
+<A href='./piirit/' >piirien tulokset</A> <br>
 </blockquote>
 
-{% endblock %}m
+{% endblock %}
 

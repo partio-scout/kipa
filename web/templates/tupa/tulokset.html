@@ -1,8 +1,10 @@
-{% extends "tupa/base.html" %}
+{% extends template_selector %}
+{% load kipatags %}
 {% block title %}Sarjakohtaiset tulokset{% endblock title %} 
+
 {% block header %}
-    {% if vaihtoaika %}
-        <meta http-equiv="REFRESH" content="{{vaihtoaika}};url=/kipa/{{kisa_nimi}}/heijasta/sarja/{{vaihto_id}}/">
+    {% if seur_id %}
+        <meta http-equiv="REFRESH" content="{{vaihtoaika}};url=/kipa/{{kisa_nimi}}/nayta/heijasta/{{seur_id}}/">
     {% endif %}
 {% endblock header %}
 
