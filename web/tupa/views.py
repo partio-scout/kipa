@@ -688,7 +688,7 @@ def piirinTulokset(request, kisa_nimi, muotoilu):
             tulokset = sarja.laskeTulokset()
             piiriPisteet = 15
             sarjanTulokset = []
-            for a in tulokset[0]:
+            for a in tulokset[0]: #otetaan mukaan vain kisassa mukanaolevien vartioiden tulokset
                 if hasattr(a[0], 'piiri') and hasattr(a[0], 'lippukunta'):
                     # Määritetään vartiorivi
                     #print (a[0].nimi, a[0].piiri, a[0].lippukunta, a[1], piiriPisteet)
@@ -723,6 +723,46 @@ def piirinTulokset(request, kisa_nimi, muotoilu):
             template_selector = "tupa/paperituloste_head.html"
         else:
             template_selector = "tupa/base.html"
+
+        if muotoilu == 'csv':
+            # Luodaan HttpResponse-objekti CSV-headerillä.
+            response = HttpResponse(content_type='text/csv')
+
+            disposition='attachment; filename='+kisa_nimi+"_Piirien_tulokset_"+time.strftime('%Y-%m-%d_%H-%M')+'.csv'
+            response['Content-Disposition'] = disposition.encode('utf-8')
+
+            writer = UnicodeWriter(response, delimiter=';')
+            writer.writerow([kisa.nimi, '', 'Piirikohtaiset tulokset'])
+            writer.writerow(['', '', time.strftime("%e.%m.%Y %H:%M", time.localtime()).replace('.0', '.')]) # aika
+            writer.writerow([]) # tyhjä rivi
+
+            #Piirien otsikkorivi
+            sij_laskuri = 1
+            writer.writerow(['Sij.', 'Piiri', 'Pisteet'])
+            for l, i in sorted(piiriTulos.items(), key=lambda a: a[1], reverse = True):
+                #print (sij_laskuri, l, i)
+                writer.writerow([unicode(sij_laskuri), l, unicode(i['pisteet'])])
+                sij_laskuri += 1
+            writer.writerow([]) # tyhjä rivi
+
+            #Lpk otsikkorivi
+            sij_laskuri = 1
+            writer.writerow(['Sij.', 'Lippukunta', 'Pisteet'])
+            for l, i in sorted(lpkTulos.items(), key=lambda a: a[1], reverse = True):
+                #print (sij_laskuri, l, i)
+                writer.writerow([unicode(sij_laskuri), l, unicode(i['pisteet'])])
+                sij_laskuri += 1
+            writer.writerow([]) # tyhjä rivi
+
+            #Sarjojen otsikkorivi, tarkastuslaskentaa varten
+            for sarja in tulostaulu:
+                writer.writerow(['Sarja: '+ sarja[0]])
+                writer.writerow(['Vartio', 'Piiri', 'Lippukunta', 'Kisap.', 'Piirip.'])
+                for vartio in sarja[1]:
+                    writer.writerow([vartio[0], vartio[1], vartio[2], unicode(vartio[3]), unicode(vartio[4])])
+                writer.writerow([]) # tyhjä rivi
+
+            return response #.csv lataus lähtee tällä, uutta sivua selaimeen ei ladata
 
         return render(request,  'tupa/piiri_tulokset.html',
             {'tulos_taulukko' : tulostaulu,
