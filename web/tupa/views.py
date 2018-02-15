@@ -126,18 +126,6 @@ def kisa(request,kisa_nimi) :
                                         'heading' : 'Etusivu',
                                         'vanha_tietokanta' : vanha_tietokanta},)
 
-@login_required
-def tulosta(request,kisa_nimi,tulostyyppi=""):
-        """
-        Valintalista kisan sarjojen tuloksista.
-        """
-        if len(tulostyyppi) : tulostyyppi+="/"
-        sarjat = Sarja.objects.select_related().filter(kisa__nimi=kisa_nimi)
-        return render(request, 'tupa/tulosta.html', {'sarja_list': sarjat,
-                                                        'kisa_nimi': kisa_nimi,
-                                                        'tulostyyppi': tulostyyppi,
-                                                        'heading': 'Tulokset sarjoittain' } ,)
-
 @permission_required('tupa.change_kisa')
 def maaritaKisa(request, kisa_nimi=None,talletettu=None):
         """
@@ -160,10 +148,11 @@ def maaritaKisa(request, kisa_nimi=None,talletettu=None):
         sarjaFormit=SarjaFormSet(posti,instance=kisa)
 
         if kisaForm.is_valid():
-                if sarjaFormit.is_valid():
-                        kisa=kisaForm.save()
-                	sarjaFormit=SarjaFormSet(posti,instance=kisa)
-			sarjaFormit.save()
+            if sarjaFormit.is_valid():
+                kisa=kisaForm.save()
+                sarjaFormit=SarjaFormSet(posti,instance=kisa)
+                sarjaFormit.is_valid()
+                sarjaFormit.save()
 
         if kisa :
                 for s in kisa.sarja_set.all() : s.taustaTulokset() # tulosten taustalaskenta
@@ -543,63 +532,70 @@ def tuomarineuvos(request, kisa_nimi,talletettu=None):
 			'kisa_nimi': kisa_nimi,
                         'talletettu': tal })
 
-@login_required
-def tulostaSarja(request, kisa_nimi, sarja_id, tulostus=0,vaihtoaika=None,vaihto_id=None) :
-        """
-        Sarjan tulokset.
-        """
-        sarja = Sarja.objects.get(id=sarja_id)
-        tulokset= sarja.laskeTulokset()
-        mukana=tulokset[0]
-        ulkona=tulokset[1]
-        numero=1
-        for i in range(len(mukana[1:])) :
-                mukana[i+1].insert(0, mukana[i+1][0].tasa +  str(numero) )
-                numero=numero+1
-        for i in range(len(ulkona)) :
-                ulkona[i].insert(0,ulkona[i][0].tasa + str(numero))
-                numero=numero+1
-        kisa_aika = sarja.kisa.aika
-        kisa_paikka = sarja.kisa.paikka
 
-        templaatti='tupa/tulokset.html'
-        if tulostus: templaatti= 'tupa/tuloksetHTML.html'
-        if vaihtoaika: templaatti= 'tupa/heijasta.html'
-        return render(request,  templaatti,
-			{'tulos_taulukko' : mukana,
+"""
+Näkymät tulosten näyttämiseen
+"""
+
+@login_required
+def naytaValitse(request, kisa_nimi, muotoilu):
+    """
+    Valintalista kisan sarjojen tuloksista.
+    """
+    sarjat = Sarja.objects.select_related().filter(kisa__nimi=kisa_nimi)
+    if muotoilu == 'heijasta':
+        return naytaSarja(request, kisa_nimi, muotoilu)
+    return render(request, 'tupa/nayta_valitse.html',
+                            {'sarja_list': sarjat,
+                            'kisa_nimi': kisa_nimi,
+                            'heading': 'Tulokset sarjoittain' } ,)
+
+@login_required
+def naytaSarja(request, kisa_nimi, muotoilu, sarja_id = None, vaihtoaika = 15, seur_id = None) :
+    """
+    Sarjan tulokset.
+    """
+    if muotoilu == 'csv':
+        return sarjanTuloksetCSV(request, kisa_nimi, sarja_id)
+    elif muotoilu == 'tuloste':
+        template_selector = "tupa/paperituloste_head.html"
+    elif muotoilu == 'heijasta':
+        template_selector = "tupa/paperituloste_head.html"
+        sarjat = Sarja.objects.select_related().filter(kisa__nimi = kisa_nimi).order_by('id')
+        if sarja_id == None and len(sarjat) > 0:
+            sarja_id = sarjat[0].id
+        for index in range(len(sarjat)-1):
+            if sarjat[index].id == int(sarja_id):
+                seur_id = sarjat[index+1].id
+        if seur_id == None:
+            seur_id = sarjat[0].id
+    else:
+        template_selector = "tupa/base.html"
+
+    sarja = Sarja.objects.get(id = sarja_id)
+    tulokset = sarja.laskeTulokset()
+    mukana = tulokset[0]
+    ulkona = tulokset[1]
+    sijoitus = 1
+
+    for i in mukana[1:]:
+        i.insert(0, i[0].tasa + str(sijoitus))
+        sijoitus += 1
+    for i in ulkona:
+        i.insert(0, i[0].tasa + str(sijoitus))
+        sijoitus += 1
+
+    return render(request, 'tupa/tulokset.html',
+            {'tulos_taulukko' : mukana,
             'ulkona_taulukko' : ulkona,
-			'kisa_nimi' : kisa_nimi,
-			'kisa_aika' : kisa_aika,
-			'kisa_paikka' : kisa_paikka,
-			'heading' : sarja.nimi,
-			'vaihtoaika' : vaihtoaika,
-			'vaihto_id' : vaihto_id,
-			'taakse' : {'url' : '../../', 'title' : 'Tulokset sarjoittain'} },)
-
-@login_required
-def heijasta(request, kisa_nimi, sarja_id=None,tulostus=0) :
-     kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
-     sarjat=kisa.sarja_set.all()
-     sarjat= sorted(sarjat, key=lambda sarja: sarja.id )
-
-     if sarja_id==None:
-         sarja_id=sarjat[0].id
-
-     sarja_id=int(sarja_id)
-     seuraava_id=None
-     for index in range(len(sarjat)-1):
-         if sarjat[index].id==sarja_id: seuraava_id=sarjat[index+1].id
-
-     if seuraava_id==None : seuraava_id=sarjat[0].id
-
-     return tulostaSarja(request,kisa_nimi,sarja_id,vaihtoaika=15,vaihto_id=seuraava_id)
-
-@login_required
-def tulostaSarjaHTML(request, kisa_nimi, sarja_id) :
-        """
-        Sarjan tulokset, sivu muotoiltuna tulostusta varten ilman turhia grafiikoita.
-        """
-        return tulostaSarja(request, kisa_nimi, sarja_id,tulostus=1)
+            'kisa_nimi' : kisa_nimi,
+            'kisa_aika' : sarja.kisa.aika,
+            'kisa_paikka' : sarja.kisa.paikka,
+            'heading' : sarja.nimi,
+            'vaihtoaika' : vaihtoaika,
+            'seur_id' : seur_id,
+            'template_selector' : template_selector,
+            'taakse' : {'url' : '../../', 'title' : 'Tulokset sarjoittain'} },)
 
 @login_required
 def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
@@ -673,11 +669,105 @@ def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
         return response
 
 @login_required
-def piirit(request,kisa_nimi) :
+def piirinTulokset(request, kisa_nimi, muotoilu):
         """
         Piirikohtaiset tulokset.
         """
-        return HttpResponse(kisa_nimi + " PIIRIN TULOSTUS",)
+        kisa = get_object_or_404(Kisa, nimi=kisa_nimi )
+        sarjat = kisa.sarja_set.all()
+        tulostaulu = []
+        piiriTulos = {}
+        lpkTulos = {}
+        for sarjaItem in sarjat:
+            sarja = Sarja.objects.get(id=sarjaItem.id)
+            tulokset = sarja.laskeTulokset()
+            piiriPisteet = 15
+            sarjanTulokset = []
+            for a in tulokset[0]: #otetaan mukaan vain kisassa mukanaolevien vartioiden tulokset
+                if hasattr(a[0], 'piiri') and hasattr(a[0], 'lippukunta'):
+                    # Määritetään vartiorivi
+                    #print (a[0].nimi, a[0].piiri, a[0].lippukunta, a[1], piiriPisteet)
+                    sarjanTulokset.append([a[0].nimi, a[0].piiri, a[0].lippukunta, a[1], piiriPisteet])
+
+                    if a[0].piiri in piiriTulos:
+                        piiriTulos[a[0].piiri]['sijoitukset'].append(piiriPisteet)
+                    else:
+                        piiriTulos[a[0].piiri] = {'sijoitukset': [piiriPisteet]}
+
+                    if a[0].lippukunta in lpkTulos:
+                        lpkTulos[a[0].lippukunta]['sijoitukset'].append(piiriPisteet)
+                    else:
+                        lpkTulos[a[0].lippukunta] = {'sijoitukset': [piiriPisteet]}
+
+                    if piiriPisteet > 0:
+                        piiriPisteet -= 1
+
+            tulostaulu.append([tulokset[0][0][0].nimi, sarjanTulokset])
+
+        for l in piiriTulos:
+            piiriTulos[l]['pisteet'] = sum(piiriTulos[l]['sijoitukset'])
+            piiriTulos[l]['sijoitukset'].sort(reverse = True)
+            #print (l, piiriTulos[l])
+
+        for l in lpkTulos:
+            lpkTulos[l]['pisteet'] = sum(lpkTulos[l]['sijoitukset'])
+            lpkTulos[l]['sijoitukset'].sort(reverse = True)
+            #print (l, lpkTulos[l])
+
+        if muotoilu == 'tuloste':
+            template_selector = "tupa/paperituloste_head.html"
+        else:
+            template_selector = "tupa/base.html"
+
+        if muotoilu == 'csv':
+            # Luodaan HttpResponse-objekti CSV-headerillä.
+            response = HttpResponse(content_type='text/csv')
+
+            disposition='attachment; filename='+kisa_nimi+"_Piirien_tulokset_"+time.strftime('%Y-%m-%d_%H-%M')+'.csv'
+            response['Content-Disposition'] = disposition.encode('utf-8')
+
+            writer = UnicodeWriter(response, delimiter=';')
+            writer.writerow([kisa.nimi, '', 'Piirikohtaiset tulokset'])
+            writer.writerow(['', '', time.strftime("%e.%m.%Y %H:%M", time.localtime()).replace('.0', '.')]) # aika
+            writer.writerow([]) # tyhjä rivi
+
+            #Piirien otsikkorivi
+            sij_laskuri = 1
+            writer.writerow(['Sij.', 'Piiri', 'Pisteet'])
+            for l, i in sorted(piiriTulos.items(), key=lambda a: a[1], reverse = True):
+                #print (sij_laskuri, l, i)
+                writer.writerow([unicode(sij_laskuri), l, unicode(i['pisteet'])])
+                sij_laskuri += 1
+            writer.writerow([]) # tyhjä rivi
+
+            #Lpk otsikkorivi
+            sij_laskuri = 1
+            writer.writerow(['Sij.', 'Lippukunta', 'Pisteet'])
+            for l, i in sorted(lpkTulos.items(), key=lambda a: a[1], reverse = True):
+                #print (sij_laskuri, l, i)
+                writer.writerow([unicode(sij_laskuri), l, unicode(i['pisteet'])])
+                sij_laskuri += 1
+            writer.writerow([]) # tyhjä rivi
+
+            #Sarjojen otsikkorivi, tarkastuslaskentaa varten
+            for sarja in tulostaulu:
+                writer.writerow(['Sarja: '+ sarja[0]])
+                writer.writerow(['Vartio', 'Piiri', 'Lippukunta', 'Kisap.', 'Piirip.'])
+                for vartio in sarja[1]:
+                    writer.writerow([vartio[0], vartio[1], vartio[2], unicode(vartio[3]), unicode(vartio[4])])
+                writer.writerow([]) # tyhjä rivi
+
+            return response #.csv lataus lähtee tällä, uutta sivua selaimeen ei ladata
+
+        return render(request,  'tupa/piiri_tulokset.html',
+            {'tulos_taulukko' : tulostaulu,
+            'piiritulos' : piiriTulos,
+            'lpk' : lpkTulos,
+            'kisa' : kisa,
+            'kisa_nimi' : kisa.nimi,
+            'template_selector' : template_selector,
+            'heading' : 'Piirien tuolokset',
+            },)
 
 @permission_required('tupa.change_tehtava')
 def kopioiTehtavia(request,kisa_nimi,sarja_id ):

@@ -170,7 +170,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "web/media"),
 ]
 '''
-ALLOWED_HOSTS = ['127.0.0.1']
+#ALLOWED_HOSTS = ['127.0.0.1'] # Määritä tähän kaikki palvelimesi IP-osoitteet pilkulla erotettuna
+ALLOWED_HOSTS = ['*'] # Salli kaikki yhteydet
 
 WSGI_APPLICATION = 'wsgi.application'
 
