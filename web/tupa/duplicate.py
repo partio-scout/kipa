@@ -47,6 +47,7 @@ def kopioiTehtava(teht,sarjaan,uusiNimi=None) :
         uusiTehtava.id=None # Luodaan uusi seuraavalla savella.
         uusiTehtava.nimi=tNimi
         uusiTehtava.sarja=sarjaan
+        uusiTehtava.tarkistettu = False
         uusiTehtava.save()
         # Kopioi osatehtavat:
         
