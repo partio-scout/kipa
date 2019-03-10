@@ -65,7 +65,7 @@ SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
-USE_I18N = True
+USE_I18N = False
 '''
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
@@ -122,12 +122,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     #'django.contrib.sites',
     'tupa',
+    'user_management',
     'django.contrib.admin',
     #'django.contrib.formtools',
     'django.template',
     #'django.contrib.databrowse'
     'django.contrib.staticfiles',
-    #'debug_toolbar', #https://django-debug-toolbar.readthedocs.io/en/stable/installation.html
 ]
 
 MIDDLEWARE = [
@@ -138,7 +138,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'debug_toolbar.middleware.DebugToolbarMiddleware', #https://django-debug-toolbar.readthedocs.io/en/stable/installation.html
 ]
 
 TEMPLATES = [
@@ -171,8 +170,34 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "web/media"),
 ]
 '''
-ALLOWED_HOSTS = ['127.0.0.1']
+#ALLOWED_HOSTS = ['127.0.0.1'] # Määritä tähän kaikki palvelimesi IP-osoitteet pilkulla erotettuna
+ALLOWED_HOSTS = ['*'] # Salli kaikki yhteydet
 
 WSGI_APPLICATION = 'wsgi.application'
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None # maaritaVartiot floodaa GET/POST:in
+
+# Password validation
+# https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
+# Ottamalla käyttöön salasanan laatusäännöt, järjestelmä pakottaa käyttäjät käyttämään turvallisempia salasanoja
+'''
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+'''
+#HTTPS is not availible on devserver
+#HTTPS would need sertificates to the web server program
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
+#SECURE_SSL_REDIRECT = True

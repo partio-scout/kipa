@@ -384,13 +384,32 @@ tr .odd:hover
 	font-family:Verdana,"Lucida Grande",Lucida,sans-serif;
 }
 
+#login {
+	float:right;
+	margin-top:-4px;
+	margin-bottom:0;
+	padding-bottom:0;
+	height:18px;
+}
+
+#messages {
+	float:right;
+	position: relative;
+	background-color: #EEE;
+	margin: auto;
+	padding-left: 5px;
+	padding-right: 5px;
+	border: 3px solid #ccc;
+	width: 400;
+}
+
 #breadcrumbs
 {
 	background:url(/kipamedia/green-bar.png);
 	height:15px;
 	margin-bottom:-1px;
 	padding:3px 0 3px 8px;
-	position:relative;
+	/*position:relative;*/
 	z-index:2;
 	color:#5D5D5D;
 	font-size:11px;
@@ -532,3 +551,14 @@ td.th_erotin {
 }
 
 .capitalize {text-transform:capitalize;}
+
+.jgrowl-{}
+.jgrowl-debug{}
+.jgrowl-info{}
+.jgrowl-success{}
+.jgrowl-warning{
+	background: #300!important;
+}
+.jgrowl-error{
+	background: #300!important;
+}

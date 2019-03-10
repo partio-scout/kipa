@@ -1,7 +1,7 @@
 Kipa
 ====
 
-Kipa- / Tupa2-ohjelmisto, jota käytetään partiotaitokilpailujen tuloslaskentaan. 
+Kipa- / Tupa2-ohjelmisto, jota käytetään partiotaitokilpailujen tuloslaskentaan. https://www.facebook.com/Kisapalvelu/
 
 Asennusohjeet: https://sites.google.com/site/kisapalvelukipa/kaeytae-ja-asenna
 
@@ -9,7 +9,6 @@ Vanhat sivustot:
 
 * https://sites.google.com/site/kisapalvelukipa/
 * http://sourceforge.net/projects/tupa2/
-* 
 
 **Ohjelmaa kokeiltu:**
 
@@ -19,18 +18,20 @@ Vanhat sivustot:
 
 **Tilanne: toimivat**
 
-* Kipa -sivusto (test server)
+* Kipa -sivusto
 * Admin -sivusto
 * static files
 * testit (parametrit ei välity)
 * migrate
+* käyttäjäautentikointi (serverilaajuinen)
+* piirienväliset pisteet
 * dia2django
-* production serveri (nginx ja uwsgi) (ei admin sivut)
+* production serveri (nginx ja uwsgi)
 
 **Ei toimi tai ei testattu:**
 
+* HTTPS tarvii sertifikaatit web-serverille
 * i18n
-* käyttäjäautentikointi
 * muut turhat härpäkkeet, joita en osaa käyttää
 
 **Muita ohjeita:**

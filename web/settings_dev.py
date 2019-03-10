@@ -21,9 +21,13 @@ if not CACHE_TULOKSET :
         TAUSTALASENTA = False
 '''
 INSTALLED_APPS += [
+
+    #'debug_toolbar', #https://django-debug-toolbar.readthedocs.io/en/stable/installation.html
 ]
 
 MIDDLEWARE += [
+
+    #'debug_toolbar.middleware.DebugToolbarMiddleware', #https://django-debug-toolbar.readthedocs.io/en/stable/installation.html
 ]
 
 STATIC_ROOT = None
@@ -35,3 +39,7 @@ STATICFILES_DIRS = [
 INTERNAL_IPS = [
     '127.0.0.1'
 ]
+
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+SECURE_SSL_REDIRECT = False
