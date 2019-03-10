@@ -43,6 +43,11 @@ git clone https://github.com/Pena86/kipa.git
 cd kipa/web/
 python manage.py runserver
 
+
+#Luo itsellesi palvelimen pääkäyttäjätili komennolla: (sähköpostiosoitteen ei tarvi olla toimiva, mutta pitää olla oikeaa muotoa) Luomallasi tunnuksella voit kirjautua Kipa -järjestelmään, tuoda tai luoda kisan ja luoda muita käyttäjiä.
+python manage.py createsuperuser
+
+
 # mene selaimella osoitteeseen http://127.0.0.1:8000/ ja kipa-ohjelman pitäisi olla käytössä
 # ohjelman voi sulkea komentorivillä painamalla CONTROL-C
 # 
@@ -93,6 +98,9 @@ sudo -H -u www-data uwsgi --ini kipa_uwsgi.ini
 # - Saatat tarvita asettaa lähiverkkoreitittimeesi portin- tai ip -osoitteen reitityksen palvelinkoneen osoitteeseen
 # nyt myös lähiverkon koneilta pitäisi päästä kipa -ohjelmaan kirjoittamalla selainohjelman osoiteriville palvelinkoneen ip-osoite.
 
+
+#Luo itsellesi palvelimen pääkäyttäjätili komennolla: (sähköpostiosoitteen ei tarvi olla toimiva, mutta pitää olla oikeaa muotoa) Luomallasi tunnuksella voit kirjautua Kipa -järjestelmään, tuoda tai luoda kisan ja luoda muita käyttäjiä.
+python manage.py createsuperuser
 
 
 # seuraavilla komennoilla saat lisää tietoa ja voit hallita nginx -ohjelman toimintaa
