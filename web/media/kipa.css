@@ -214,7 +214,7 @@ tr .odd:hover
 	text-align:left;
 	font-weight:bold;
 	color:#fff;
-	background-color:#222;
+	background-color:#305520; /*#222;*/
 	/* #5169b3;*/
 	padding:3px; /* NOTE: th padding must be set explicitly in order to support sticky table headers in IE */
 }
@@ -250,7 +250,7 @@ tr .odd:hover
 	font-size:x-small;
 	font-weight:bold;
 	color:#fff;
-	background-color:#222;
+	background-color:#305520;/*#222;*/
 	/* #5169b3;  oli #b9c9fe; */
 	vertical-align:top;
 	padding:5px;
@@ -261,6 +261,20 @@ tr .odd:hover
 	font-style:italic;
 	color:#666;
 	background-color:#CCC;
+}
+
+
+#tehtava-tila
+{
+	background-color:#305520;
+	border:0;
+	padding:2;
+	color:#fff;
+}
+
+#tehtava-tila a
+{
+	color:#00a9ff;
 }
 
 #tehtava-taulukko
@@ -472,27 +486,22 @@ a.sitetoolbarnavactive:hover { color: #0d3b65; border: 1px solid #486B8A; paddin
 
 .aloittamatta {
 	background: #ffff88;
-	width:150px;
 }
 
 .osittain {
 	background: #fc3;
-	width:150px;
 }
 
 .syotetty {
 	background: #b9f73e;
-	width:150px;
 }
 
 .tarkistettu {
 	background: #679b00;
-	width:150px;
 }
 
 .virhe {
 	background: #ff4f00;
-	width:150px;
 }
 
 #tulostaulukko_screen {

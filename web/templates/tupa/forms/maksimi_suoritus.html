@@ -1,10 +1,9 @@
 <fieldset>
-
-    <legend> <b>Maksimisuoritus</b> </legend>
-
-    <table>
-        <tr valign="top">
-            <td width="350">
+    <legend> <b>Maksimisuoritus</b>
+        <span onmouseover="tooltip.show('Tässä kerrotaan suoritus, jolla saa maksimipisteet. </br>Tämä voi olla vartioiden suorituksista pienin, suurin tai jokin kiinteä luku. Mikäli kyseessä on arviointi valitse pienin.<br>' );" onmouseout="tooltip.hide();">
+             <img src="/kipamedia/help_small.png" />
+        </span>
+    </legend>
                 Parhaat pisteet saa:<br>
                 <input type="radio" id="{{parhaan_haku.id}}" value="min" name="{{parhaan_haku.name}}" 
                     {% ifequal parhaan_haku.value "min" %}checked="checked" {% endifequal %}
@@ -25,14 +24,5 @@
 
                 Montako kisapistettä jaetaan: 
                 <input type="text" size="6" name="{{jaettavat.name}}" id="{{jaettavat.id}}" value="{{jaettavat.value}}" /> 
-                <font color=red><b> {{jaettavat.errors}} </b></font>              
-            </td>
-            <td>
-                <p>Tässä kerrotaan suoritus, jolla saa maksimipisteet. </br>
-                Tämä voi olla vartioiden suorituksista pienin, suurin tai jokin kiinteä luku. Mikäli kyseessä on arviointi valitse pienin.</p>
-            </td>
-        </tr>
-
-    </table>
-
+                <font color=red><b> {{jaettavat.errors}} </b></font>
 </fieldset>

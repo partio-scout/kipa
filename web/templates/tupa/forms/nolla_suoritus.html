@@ -1,10 +1,13 @@
 <fieldset>
-    <legend> <b>Nollasuoritus</b> </legend>
-    <table border="0">
-        <tr valign="top">
-            <td>
+    <legend> <b>Nollasuoritus</b>
+        <span onmouseover="tooltip.show('Tässä kerrotaan suoritus, jolla saa nolla pistettä. </br>Tämä voi olla jokin kiinteä suoritus tai interpoloinnissa keskimmäisestä tuloksesta laskettu.<br>' );" onmouseout="tooltip.hide();">
+             <img src="/kipamedia/help_small.png" />
+        </span>
+    </legend>
+
                 <fieldset>
                     <legend>{%if vapaa %} Vapaa: {%else%} Kiinteä {% endif %}</legend>
+
                     <input type="radio" id="{{nollan_kerroin.id}}" value="1" name="{{nollan_kerroin.name}}" 
                     {% ifequal nollan_kerroin.value "1" %} checked="checked" {% endifequal %} 
                     {% if not nollan_kerroin.value %} checked="checked" {% endif %} />
@@ -17,9 +20,7 @@
                     <input type="text" name="{{nollan_kaava.name}}" id="{{nollan_kaava.id}}" value="{{nollan_kaava.value}}" size="40"><br>
                     <font color=red><b> {{nollan_kaava.errors}} </b></font>
                 </fieldset>
-            </td>
-                    
-            <td>
+
                 <fieldset>
                     <legend>Kerroin keskimmäisestä tuloksesta</legend>
                             
@@ -45,13 +46,4 @@
                     <input type="text" name="{{muu_kerroin.name}}" id="{{muu_kerroin.id}}" value="{{muu_kerroin.value}}" size="25" />
                     <font color=red><b> {{muu_kerroin.errors}} </b></font>
                 </fieldset>
-            </td>
-            <td>
-                <p>
-                    Tässä kerrotaan suoritus, jolla saa nolla pistettä. </br>
-                    Tämä voi olla jokin kiinteä suoritus tai interpoloinnissa keskimmäisestä tuloksesta laskettu.
-                </p>
-            </td>
-        </tr>
-    </table>
 </fieldset>

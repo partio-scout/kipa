@@ -1,24 +1,15 @@
 
 
 <fieldset>
-    <legend> <b>Arviointi</b> </legend>
-
-    <table>
-
-        <tr valign="top">
-            <td width="350">
+    <legend> <b>Arviointi</b> 
+        <span onmouseover="tooltip.show('Mikäli kyseessä on arviointitehtävä, tulee tässä ilmoittaa tehtävän oikea vastaus. Tällöin vartioiden suoritukset täman arvon molemmin puolin ovat samanarvoisia. <br>Jos kyseessä on tavallinen tehtävä, tätä ei valita.<br>' );" onmouseout="tooltip.hide();">
+             <img src="/kipamedia/help_small.png" />
+        </span>
+    </legend>
                 Käytössa: <input type="checkbox" name="{{arvio.name}}" id="{{arvio.id}}" value="abs"
                 {% ifequal arvio.value "abs" %}checked="checked" {% endifequal %}/> <br>
                 Oikea vastaus: <input type="text" name="{{oikea.name}}" id="{{oikea.id}}" value="{{oikea.value}}" />
                 <font color=red><b> {{oikea.errors}} </b></font>
-            </td>
-            <td>
-                <p>Mikäli kyseessä on arviointitehtävä, tulee tässä ilmoittaa tehtävän oikea vastaus.
-                Tällöin vartioiden suoritukset täman arvon molemmin puolin ovat samanarvoisia. <br> 
-                Jos kyseessä on tavallinen tehtävä, tätä ei valita. </p>
-            </td>
-        </tr>
-    </table>
 </fieldset>
 
 

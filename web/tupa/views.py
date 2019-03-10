@@ -433,8 +433,9 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                         'tarkistus' : tarkistus,
 			            'heading' : tehtava.nimi,
                         'varsinaiset_syotteet_url' : "/kipa/"+kisa_nimi+"/syota/tehtava/"+str(tehtava_id)+"/",
+                        'tarkistus_syotteet_url' : "/kipa/"+kisa_nimi+"/syota/tarkistus/tehtava/"+str(tehtava_id)+"/",
                         'maaritys_url' : "/kipa/"+kisa_nimi+"/maarita/tehtava/"+str(tehtava_id)+"/",
-                        'tulokset_url' : "/kipa/"+kisa_nimi+"/tulosta/normaali/sarja/"+str(tehtava.sarja.id)+"/",
+                        'tulokset_url' : "/kipa/"+kisa_nimi+"/nayta/sivu/"+str(tehtava.sarja.id)+"/",
 			            'taakse' : {'url' : '/kipa/' + kisa_nimi + '/syota/', 'title' : u'Syötä tuloksia' } } ,)
 
 @permission_required('tupa.change_testaustulos')
@@ -595,7 +596,7 @@ def naytaSarja(request, kisa_nimi, muotoilu, sarja_id = None, vaihtoaika = 15, s
             'vaihtoaika' : vaihtoaika,
             'seur_id' : seur_id,
             'template_selector' : template_selector,
-            'taakse' : {'url' : '../../', 'title' : 'Tulokset sarjoittain'} },)
+            'taakse' : {'url' : '../', 'title' : 'Tulokset sarjoittain'} },)
 
 @login_required
 def sarjanTuloksetCSV(request, kisa_nimi, sarja_id) :
