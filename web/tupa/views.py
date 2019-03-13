@@ -204,11 +204,13 @@ def maaritaValitseTehtava(request,kisa_nimi):
                         taulukko.append(formsetti)
 
         if posti :
-                return kipaResponseRedirect("/kipa/"+kisa_nimi+"/maarita/tehtava/")
+                messages.success(request, u'Muutokset tallennettu' )
+                return redirect("/kipa/"+kisa_nimi+"/maarita/tehtava/")
         else:
                 return render(request, 'tupa/maaritaValitseTehtava.html',
                                         { 'taulukko' : taulukko,
-                                        'heading' : u'Muokkaa tehtävää', 'kisa_nimi' : kisa_nimi },)
+                                        'heading' : u'Muokkaa tehtävää',
+                                        'kisa_nimi' : kisa_nimi },)
 
 @permission_required('tupa.change_vartio')
 def maaritaVartiot(request,kisa_nimi,talletettu=None):
