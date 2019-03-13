@@ -345,7 +345,7 @@ def syotaKisa(request, kisa_nimi,tarkistus=None):
                                 'kisa_nimi': kisa_nimi },)
 
 @permission_required('tupa.change_syote')
-def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None) :
+def syotaTehtava(request, kisa_nimi, tehtava_id, tarkistus = None) :
         """
         Määrittää tehtävän syötteet.
         """
@@ -406,33 +406,27 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                 syoteFormit.append( (v,rivi))
 
         if posti and validi  : # Sivu oikein
-                tehtava.save()
-                if tarkistus :
-                        osoite="/kipa/"+kisa_nimi+"/syota/tarkistus/tehtava/"+str(tehtava.id)+'/talletettu/'
-                        return kipaResponseRedirect( osoite )
-                else : return kipaResponseRedirect("/kipa/"+kisa_nimi+"/syota/tehtava/"+str(tehtava.id)+'/talletettu/' )
-        else:
-                tal=""
-                if talletettu=="talletettu" and not posti : tal="Talletettu!"
-                tilanne=tehtavanTilanne(tehtava)
-                if syottovirhe : tilanne="v"
-                return render(request, 'tupa/syota_tehtava.html',
+            tehtava.save()
+            messages.success(request, u'Muutokset tallennettu' )
+
+        tilanne=tehtavanTilanne(tehtava)
+        if syottovirhe : tilanne="v"
+        return render(request, 'tupa/syota_tehtava.html',
                         { 'tehtava' : tehtava ,
-			            'sarja' : tehtava.sarja.id,
+                        'sarja' : tehtava.sarja.id,
                         'maaritteet' : maaritteet ,
                         'osatehtavat' : osatehtavat,
                         'syotteet' : syoteFormit,
-                        'talletettu': tal ,
                         'tilanne' : tilanne,
                         'tarkistettu' : tarkistettu,
-			            'kisa_nimi': kisa_nimi,
+                        'kisa_nimi': kisa_nimi,
                         'tarkistus' : tarkistus,
-			            'heading' : tehtava.nimi,
+                        'heading' : tehtava.nimi,
                         'varsinaiset_syotteet_url' : "/kipa/"+kisa_nimi+"/syota/tehtava/"+str(tehtava_id)+"/",
                         'tarkistus_syotteet_url' : "/kipa/"+kisa_nimi+"/syota/tarkistus/tehtava/"+str(tehtava_id)+"/",
                         'maaritys_url' : "/kipa/"+kisa_nimi+"/maarita/tehtava/"+str(tehtava_id)+"/",
                         'tulokset_url' : "/kipa/"+kisa_nimi+"/nayta/sivu/"+str(tehtava.sarja.id)+"/",
-			            'taakse' : {'url' : '/kipa/' + kisa_nimi + '/syota/', 'title' : u'Syötä tuloksia' } } ,)
+                        'taakse' : {'url' : '/kipa/' + kisa_nimi + '/syota/', 'title' : u'Syötä tuloksia' } } ,)
 
 @permission_required('tupa.change_testaustulos')
 def testiTulos(request, kisa_nimi,talletettu=None):
