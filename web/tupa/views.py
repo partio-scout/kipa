@@ -164,7 +164,7 @@ def maaritaKisa(request, kisa_nimi = None):
                 if "nappi" in request.POST.keys() and request.POST['nappi'] == "ohjaus" :
                         return redirect("/kipa/"+kisa.nimi+"/maarita/vartiot/")
                 else:
-                        return redirect("/kipa/"+kisa.nimi+"/maarita/")
+                        return redirect("/kipa/"+kisa.nimi+"/maarita/") # Uusi kisa saa urlin, joten redirect
             else:
                 messages.error(request, u'Ei onnistu, korjaa merkityt kentät' )
 
@@ -254,7 +254,7 @@ def maaritaVartiot(request, kisa_nimi):
                                         'ohjaus_nappi' : ohjaus_nappi},)
 
 @permission_required('tupa.change_tehtava')
-def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu=""):
+def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None):
         """
         Määritää tehtävän.
         Parametrit:
@@ -299,27 +299,26 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
         sarja.taustaTulokset() # Taustalaskenta
 
 	otsikko = u'Uusi tehtävä' + ' (' + sarja.nimi + ')'
-
 	if tehtava and not tehtava.nimi == '' : otsikko = unicode(tehtava.nimi) + ' (' + sarja.nimi + ')'
         tehtavaForm.label = "Tehtävän tiedot ja osatehtävät"
 
-        # Talletetaanko ja siirrytäänkö talletettu sivuun?
+        # Jos tallennettu onnistuneesti niin siirrytäänkö talletettu sivuun?
         if posti and not 'lisaa_maaritteita' in posti.keys() and daatta['valid'] :
-                if "nappi" in posti.keys() and posti["nappi"]=="ohjaus": # Talleta ja luo uusi.
-                        return kipaResponseRedirect("/kipa/"+ kisa_nimi+ "/maarita/tehtava/uusi/sarja/"+str(sarja.id)+"/")
+            messages.success(request, u'Muutokset tallennettu' )
+            if "nappi" in posti.keys() and posti["nappi"]=="ohjaus": # Talleta ja luo uusi.
+                return redirect("/kipa/"+ kisa_nimi+ "/maarita/tehtava/uusi/sarja/"+str(sarja.id)+"/")
+            # Uudella tehtävällä uusi url, joten redirect
+            return redirect("/kipa/"+kisa_nimi+"/maarita/tehtava/"+str(tehtava_id)+"/" )
 
-                return kipaResponseRedirect("/kipa/"+kisa_nimi+"/maarita/tehtava/"+str(tehtava_id)+'/talletettu/' )
-        else: # Ei talletusta tällä kertaa
-                tal=""
-                if talletettu=="talletettu" and not posti : tal="Talletettu!" # Edellisellä sivulla talletettu
-                return render(request, 'tupa/maarita.html',
+        if posti and daatta['valid'] == False:
+            messages.error(request, u'Ei onnistu, korjaa merkityt kentät' )
+
+        return render(request, 'tupa/maarita.html',
                                 { 'forms': [tehtavaForm],
                                 'heading' : otsikko,
 				                'kisa_nimi': kisa_nimi,
-				                'tehtava_ida': 5,
 				                'taakse' : {'url' : '/kipa/' + kisa_nimi + '/maarita/tehtava/',
                                                 'title' : u'Muokkaa tehtävää' },
-                                'talletettu': tal,
                                 'base_template' : "tupa/base.html",
                                 'ohjaus_nappi': "lisää uusi tehtävä" },)
 

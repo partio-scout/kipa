@@ -689,7 +689,7 @@ def tehtavanMaaritysForm(posti,data,sarja_id,suurin_jarjestysnro=0,prefix="tehta
                         if k=="#1" : tId=None
 
                         v['osa_tehtavat'][uusi_id]={'nimi': string.letters[osatehtava_id],
-                                                        'tyyppi' : "",
+                                                        'tyyppi' : "kp",
                                                         'kaava' : "",
                                                         'tehtava' : tId }
 
