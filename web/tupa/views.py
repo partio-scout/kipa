@@ -213,12 +213,11 @@ def maaritaValitseTehtava(request,kisa_nimi):
                                         'kisa_nimi' : kisa_nimi },)
 
 @permission_required('tupa.change_vartio')
-def maaritaVartiot(request,kisa_nimi,talletettu=None):
+def maaritaVartiot(request, kisa_nimi):
         """
         Määrittää kisan vartiot sarjoittain.
         """
         sarjat = Sarja.objects.filter(kisa__nimi=kisa_nimi)
-        sarjaVartiot=[]
         posti=None
         post_ok=True
         taulukko=[] # 2 ulotteinen taulukko joka tulee sisältämään vartioiden formeja sarjoittain.
@@ -237,21 +236,21 @@ def maaritaVartiot(request,kisa_nimi,talletettu=None):
 
                 s.taustaTulokset() # Taustalaskenta käyntiin.
 
-        if posti and post_ok: # Talletetaanko?
+        if posti:
+            if post_ok: # Jos tallennettu onnistuneesti
+                messages.success(request, u'Muutokset tallennettu' )
                 if "nappi" in posti.keys() and posti["nappi"]=="ohjaus" :
-                        return kipaResponseRedirect("/kipa/"+kisa_nimi+"/maarita/tehtava/")
-                return kipaResponseRedirect("/kipa/"+kisa_nimi+"/maarita/vartiot/talletettu/")
-        else: # Ei tallennusta
-                tal=""
-                if talletettu=="talletettu" and not posti : tal="Talletettu!" # Talletettu info yläpalkkiin.
-                ohjaus_nappi=None
-                if 'HTTP_REFERER' in request.META.keys() and request.META['HTTP_REFERER'][-23:]== "/kipa/uusiKisa/maarita/" :
-                        ohjaus_nappi="siirry tehtävien määritykseen" # Ensimmäisellä talletuksella näkyy siirry nappi.
-                return render(request, 'tupa/valitse_formset.html',
+                        return redirect("/kipa/"+kisa_nimi+"/maarita/tehtava/")
+            else: # Jos tallennus ei onnistunut
+                messages.error(request, u'Ei onnistu, korjaa merkityt kentät' )
+
+        ohjaus_nappi=None
+        if 'HTTP_REFERER' in request.META.keys() and request.META['HTTP_REFERER'][-23:]== "/kipa/uusiKisa/maarita/" :
+            ohjaus_nappi="siirry tehtävien määritykseen" # Ensimmäisellä talletuksella näkyy siirry nappi.
+        return render(request, 'tupa/valitse_formset.html',
                                         { 'taulukko' : taulukko ,
                                         'heading' : "Määritä vartiot",
                                         'kisa_nimi': kisa_nimi,
-                                        'talletettu': tal,
                                         'ohjaus_nappi' : ohjaus_nappi},)
 
 @permission_required('tupa.change_tehtava')
