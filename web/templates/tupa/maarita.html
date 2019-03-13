@@ -1,4 +1,4 @@
-{% extends "tupa/base.html" %}
+{% extends base_template %}
 {% block title %}{{ heading }}{% endblock %}
 {% block content %} 
 
@@ -11,9 +11,8 @@
 {% if forms %}
     {% for form in forms%}
         <fieldset>
-		<legend>{{form.label}}</legend>
-		{{form}} 
-        {{form.helppiteksti}}<br>
+		<legend>Kisan perustiedot {{form.helppiteksti}}</legend>
+		{{form}}
 	</fieldset>
     {% endfor%}
 {% endif %}
@@ -21,7 +20,7 @@
 {% if formsets %}
     {% for formset in formsets %}
         <fieldset>
-		<legend>{{formset.label}} {{formset.helppiteksti}} </legend>
+		<legend>Sarjat {{formset.helppiteksti}}</legend>
 		{{ formset.management_form }}
 		{% for form in formset.forms %}
 		                {{ form }} <br>

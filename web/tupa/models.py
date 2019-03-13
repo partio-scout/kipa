@@ -35,7 +35,7 @@ class Kisa(models.Model) :
         # for these parts only make changes to data table definitions in tietokanta.dia!
         #gen_dia_class Kisa
 
-        nimi = models.CharField(max_length=255)
+        nimi = models.CharField(max_length=255, unique=True)
         aika = models.CharField(max_length=255, blank=True, null=True )
         paikka = models.CharField(max_length=255, blank=True )
         tunnistus = models.BooleanField(default=False )

@@ -127,63 +127,54 @@ def kisa(request,kisa_nimi) :
                                         'vanha_tietokanta' : vanha_tietokanta},)
 
 @permission_required('tupa.change_kisa')
-def maaritaKisa(request, kisa_nimi=None,talletettu=None):
+def maaritaKisa(request, kisa_nimi = None):
         """
         Kisan ja sarjojen määritys.
         """
-        # Tietokantahaku:
-        kisa = None
+
         if kisa_nimi:
-                kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
+            #Jos olemassaoleva kisa
+            kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
+            kisaForm = KisaForm(instance=kisa)
+            sarjaFormit = SarjaFormSet(instance=kisa)
+            taakse = "/kipa/"+kisa_nimi+"/"
+            ohjaus_nappi = None
+            base_template = "tupa/base.html"
+        else:
+            # Tyhjät formit uuden kisan luontiin
+            kisa = None
+            kisaForm = KisaForm()
+            sarjaFormit = SarjaFormSet()
+            taakse = "/kipa/"
+            ohjaus_nappi = "siirry vartioiden määrittelyyn"
+            base_template = "tupa/base_riisuttu.html"
 
-        # Post data
-        posti=None
         if request.method == 'POST':
-                posti=request.POST
-        # Kisa formi
-        kisaForm = KisaForm(posti,instance=kisa)
-        kisaForm.label="Kisan perustiedot"
-
-        # Sarja formset
-        sarjaFormit=SarjaFormSet(posti,instance=kisa)
-
-        if kisaForm.is_valid():
-            if sarjaFormit.is_valid():
-                kisa=kisaForm.save()
-                sarjaFormit=SarjaFormSet(posti,instance=kisa)
+            #Jos POSTissa formien tallennus
+            kisaForm = KisaForm(request.POST, instance = kisa)
+            sarjaFormit = SarjaFormSet(request.POST, instance = kisa)
+            if kisaForm.is_valid() and sarjaFormit.is_valid():
+                kisa = kisaForm.save()
+                sarjaFormit = SarjaFormSet(request.POST, instance = kisa)
                 sarjaFormit.is_valid()
                 sarjaFormit.save()
+                messages.success(request, u'Tallennettu' )
 
-        if kisa :
                 for s in kisa.sarja_set.all() : s.taustaTulokset() # tulosten taustalaskenta
-
-        sarjaFormit.label="Sarjat"
-        # Annetaan tiedot templatelle:
-        if posti and sarjaFormit.is_valid() and kisaForm.is_valid() :
-                if "nappi" in posti.keys() and posti['nappi']=="ohjaus" :
-                        return kipaResponseRedirect("/kipa/"+kisa.nimi+"/maarita/vartiot/")
-                else :
-                        return kipaResponseRedirect("/kipa/"+kisa.nimi+"/maarita/talletettu/")
-        else :
-                tal=""
-                if talletettu=="talletettu" and not posti : tal="Talletettu!"
-                taakse= "/kipa/"
-                if kisa_nimi:
-                    taakse = "/kipa/"+kisa_nimi+"/"
-                    return render(request, 'tupa/maarita.html',
-                                        { 'heading' : "Määritä kisa" ,
-                                        'forms' : (kisaForm,) ,
-                                        'formsets' : ( sarjaFormit,),
-                                        'kisa_nimi' : kisa_nimi,
-                                        'talletettu': tal },)
+                if "nappi" in request.POST.keys() and request.POST['nappi'] == "ohjaus" :
+                        return redirect("/kipa/"+kisa.nimi+"/maarita/vartiot/")
                 else:
-                    return render(request, 'tupa/maarita_riisuttu.html',
-                                      { 'heading' : "Määritä kisa" ,
-                                        'forms' : (kisaForm,) ,
-                                        'formsets' : ( sarjaFormit,),
-                                        'kisa_nimi' : kisa_nimi,
-                                        'talletettu': tal,
-                                        'ohjaus_nappi' : "siirry vartioiden määrittelyyn"},)
+                        return redirect("/kipa/"+kisa.nimi+"/maarita/")
+            else:
+                messages.error(request, u'Ei onnistu, korjaa merkityt kentät' )
+
+        return render(request, 'tupa/maarita.html', {
+                                'heading' : "Määritä kisa" ,
+                                'forms' : (kisaForm,) ,
+                                'formsets' : (sarjaFormit,),
+                                'kisa_nimi' : kisa_nimi,
+                                'ohjaus_nappi' : ohjaus_nappi,
+                                'base_template' : base_template,},)
 
 @permission_required('tupa.change_tehtava')
 def maaritaValitseTehtava(request,kisa_nimi):
