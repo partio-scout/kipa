@@ -168,6 +168,9 @@ def maaritaKisa(request, kisa_nimi = None):
             else:
                 messages.error(request, u'Ei onnistu, korjaa merkityt kentät' )
 
+        kisaForm.label="Kisan perustiedot"
+        sarjaFormit.label="Sarjat"
+
         return render(request, 'tupa/maarita.html', {
                                 'heading' : "Määritä kisa" ,
                                 'forms' : (kisaForm,) ,
@@ -297,6 +300,7 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
 	otsikko = u'Uusi tehtävä' + ' (' + sarja.nimi + ')'
 
 	if tehtava and not tehtava.nimi == '' : otsikko = unicode(tehtava.nimi) + ' (' + sarja.nimi + ')'
+        tehtavaForm.label = "Tehtävän tiedot ja osatehtävät"
 
         # Talletetaanko ja siirrytäänkö talletettu sivuun?
         if posti and not 'lisaa_maaritteita' in posti.keys() and daatta['valid'] :
@@ -315,6 +319,7 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
 				                'taakse' : {'url' : '/kipa/' + kisa_nimi + '/maarita/tehtava/',
                                                 'title' : u'Muokkaa tehtävää' },
                                 'talletettu': tal,
+                                'base_template' : "tupa/base.html",
                                 'ohjaus_nappi': "lisää uusi tehtävä" },)
 
 @permission_required('tupa.change_syote')

@@ -11,7 +11,7 @@
 {% if forms %}
     {% for form in forms%}
         <fieldset>
-		<legend>Kisan perustiedot {{form.helppiteksti}}</legend>
+		<legend>{{form.label}} {{form.helppiteksti}}</legend>
 		{{form}}
 	</fieldset>
     {% endfor%}
@@ -20,7 +20,7 @@
 {% if formsets %}
     {% for formset in formsets %}
         <fieldset>
-		<legend>Sarjat {{formset.helppiteksti}}</legend>
+		<legend>{{formset.label}} {{formset.helppiteksti}}</legend>
 		{{ formset.management_form }}
 		{% for form in formset.forms %}
 		                {{ form }} <br>
