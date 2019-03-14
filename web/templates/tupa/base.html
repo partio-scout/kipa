@@ -35,18 +35,6 @@ function setVisibility(id, visibility) {
 document.getElementById(id).style.display = visibility;
 }
 </script>
-{% if talletettu %}
-<script type="text/javascript">
-   $.jGrowl.defaults.position = 'center';
-</script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $.jGrowl('{{talletettu}}', {
-                life: 3000
-                });
-        });
-    </script>
-{% endif %}
 {% include "tupa/messages.html" %}
 </head>
 
