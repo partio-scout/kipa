@@ -33,8 +33,6 @@ import django.db
 from TulosLaskin import *
 from log import *
 
-def kipaResponseRedirect(url) : return HttpResponse('<html><head><meta http-equiv="REFRESH" content="0;url='+url+'"></HEAD><BODY></BODY></HTML>')
-
 def loginSivu(request):
     Posti=None
     if request.method == 'POST':
@@ -429,7 +427,7 @@ def syotaTehtava(request, kisa_nimi, tehtava_id, tarkistus = None) :
                         'taakse' : {'url' : '/kipa/' + kisa_nimi + '/syota/', 'title' : u'Syötä tuloksia' } } ,)
 
 @permission_required('tupa.change_testaustulos')
-def testiTulos(request, kisa_nimi,talletettu=None):
+def testiTulos(request, kisa_nimi):
         """
         Määrittää kisalle testitulokset. Eli ns "oikeat" tulokset,
         joita voidaan testeissä verrata laskennan tuottamiin tuloksiin.
@@ -465,19 +463,17 @@ def testiTulos(request, kisa_nimi,talletettu=None):
                 taulut.id=s.id
                 taulukko.append(taulut)
         if posti and validi:
-                return kipaResponseRedirect("/kipa/"+kisa_nimi+"/maarita/testitulos/talletettu/")
-        tal=""
-        if talletettu=="talletettu" and not posti : tal="Talletettu!"
+                messages.success(request, u'Tallennettu' )
+                return redirect("/kipa/"+kisa_nimi+"/maarita/testitulos/")
 
         return render(request, 'tupa/testitulos.html',
                         { 'taulukko' : taulukko ,
                         'heading' : "Testituloksien määritys" ,
                         'kisa_nimi' : kisa_nimi,
-                        'taakse' : "/kipa/"+kisa_nimi+"/",
-                        'talletettu': tal },)
+                        'taakse' : "/kipa/"+kisa_nimi+"/",},)
 
 @permission_required('tupa.change_tuomarineuvostulos')
-def tuomarineuvos(request, kisa_nimi,talletettu=None):
+def tuomarineuvos(request, kisa_nimi):
         """
         Määrittää kisalle tuomarineuvoston tulokset. Eli tulokset joilla voidaan ylimäärittää laskimen laskemat tulokset.
         """
@@ -513,15 +509,13 @@ def tuomarineuvos(request, kisa_nimi,talletettu=None):
                 s.taustaTulokset() # Taustalaskenta
 
         if posti and validi:
-                return kipaResponseRedirect("/kipa/"+kisa_nimi+"/maarita/tuomarineuvos/talletettu/")
-        tal=""
-        if talletettu=="talletettu" and not posti : tal="Talletettu!"
+                messages.success(request, u'Tallennettu' )
+                return redirect("/kipa/"+kisa_nimi+"/maarita/tuomarineuvos/")
 
         return render(request, 'tupa/tuomarineuvos.html',
                         { 'taulukko' : taulukko ,
                         'heading' : "Tuomarineuvoston antamien tulosten määritys" ,
-			'kisa_nimi': kisa_nimi,
-                        'talletettu': tal })
+			'kisa_nimi': kisa_nimi,})
 
 
 """
@@ -768,7 +762,7 @@ def kopioiTehtavia(request,kisa_nimi,sarja_id ):
         kisa =get_object_or_404(Kisa, nimi=kisa_nimi)
         sarjaan= get_object_or_404(Sarja, id=sarja_id)
         sarjat = Sarja.objects.filter(kisa=kisa)
-        redirect=True
+        redir = True
         posti=None
         if request.method == 'POST':
                 posti=request.POST
@@ -794,9 +788,9 @@ def kopioiTehtavia(request,kisa_nimi,sarja_id ):
                                 tehtava= get_object_or_404(Tehtava, id=k)
                                 kopioiTehtava(tehtava,sarjaan)
                 else:
-                        redirect=False
-        if redirect:
-                return kipaResponseRedirect("/kipa/"+kisa.nimi+"/maarita/tehtava/")
+                        redir = False
+        if redir:
+                return redirect("/kipa/"+kisa.nimi+"/maarita/tehtava/")
         else:
                 return render(request, 'tupa/valitse_form.html',
                                         { 'heading' : u"Kopioi Tehtäviä sarjaan: "+sarjaan.nimi ,
@@ -819,9 +813,7 @@ def tallennaKisa(request, kisa_nimi):
 @permission_required('tupa.change_kisa')
 def poistaKisa(request, kisa_nimi) :
         kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
-        posti=None
         if request.method=='POST' :
-                posti=request.POST
                 kisa.delete()
                 return redirect("/kipa/")
         otsikko = 'Poista kisa'
@@ -1015,7 +1007,7 @@ def luoTestiTulokset(request,kisa_nimi,sarja_id):
                         tt , p = TestausTulos.objects.get_or_create(vartio=v,tehtava=t )
                         tt.pisteet=str(tulos)
                         tt.save()
-        return kipaResponseRedirect("/kipa/"+kisa_nimi+"/maarita/testitulos/" )
+        return redirect("/kipa/"+kisa_nimi+"/maarita/testitulos/" )
 
 @login_required
 def laskennanTilanne(request,kisa_nimi) :
@@ -1068,7 +1060,7 @@ def apua(request) :
         """
         Apua onnettomalle ja surulliselle käyttäjälle
         """
-        return kipaResponseRedirect('/kipamedia/manual_v02.pdf')
+        return redirect('/kipamedia/manual_v02.pdf')
 
 def tehtavanVaiheet(request,kisa_nimi,tehtava_id,vartio_id=None):
         kisa= get_object_or_404(Kisa , nimi=kisa_nimi )

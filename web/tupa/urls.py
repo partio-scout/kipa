@@ -7,9 +7,6 @@ from django.conf.urls import url
 from django.conf import settings
 from . import views
 
-
-tal=r"(?P<talletettu>(talletettu)?)/?$"
-
 urlpatterns = [
         url(r'^apua/', views.apua, name='apua'),
         url(r'^$', views.etusivu, name='etusivu'),
@@ -29,9 +26,9 @@ urlpatterns = [
         url(r'^(?P<kisa_nimi>[^/]+)/maarita/vaiheet/(?P<tehtava_id>\d+)/(?P<vartio_id>\d*)/?' ,  views.tehtavanVaiheet, name='tehtavanVaiheet'),
         url(r'^(?P<kisa_nimi>[^/]+)/maarita/vartiot/$',  views.maaritaVartiot, name='maaritaVartiot'),
         url(r'^(?P<kisa_nimi>[^/]+)/maarita/tehtava/kopioi/sarjaan/(?P<sarja_id>\d+)/$', views.kopioiTehtavia, name='kopioiTehtavia'),
-        url(r'^(?P<kisa_nimi>[^/]+)/maarita/testitulos/'+tal, views.testiTulos, name='testiTulos'),
+        url(r'^(?P<kisa_nimi>[^/]+)/maarita/testitulos/$', views.testiTulos, name='testiTulos'),
         url(r'^(?P<kisa_nimi>[^/]+)/luo/sarja/(?P<sarja_id>\d+)/testitulokset/$', views.luoTestiTulokset, name='luoTestiTulokset'),
-        url(r'^(?P<kisa_nimi>[^/]+)/maarita/tuomarineuvos/'+tal , views.tuomarineuvos, name='tuomarineuvos'),
+        url(r'^(?P<kisa_nimi>[^/]+)/maarita/tuomarineuvos/$' , views.tuomarineuvos, name='tuomarineuvos'),
         url(r'^(?P<kisa_nimi>[^/]+)/syota/(?P<tarkistus>(tarkistus/)?)$', views.syotaKisa, name='syotaKisa'),
         url(r'^(?P<kisa_nimi>[^/]+)/syota/(?P<tarkistus>(tarkistus/)?)tehtava/(?P<tehtava_id>\d+)/$', views.syotaTehtava, name='syotaTehtava'),
         url(r'^(?P<kisa_nimi>[^/]+)/nayta/tilanne/$', views.laskennanTilanne, name='laskennanTilanne'),
