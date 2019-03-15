@@ -258,8 +258,8 @@ def laskeSarja(sarja,syotteet,vartiot=None,tehtavat=None):
         if vartiot and tehtavat : jee=1 # Pakotetaan tietokantahaku.
 
         #Lasketaan tulokset:
-        muuttujat = luoMuuttujat(sarja.vartio_set.all(),tehtavat,syotteet)
-        laskut= luoLaskut(vartiot,tehtavat)
+        muuttujat = luoMuuttujat(vartiot,tehtavat,syotteet)
+        laskut = luoLaskut(vartiot,tehtavat)
         tulokset = laskeTaulukko(laskut,muuttujat)
 
         #Muokataan oikean muotoinen tulostaulukko:
@@ -267,13 +267,13 @@ def laskeSarja(sarja,syotteet,vartiot=None,tehtavat=None):
         for i in range(len(vartiot)):
                 # Merkataan tuloksiin H hylättyihin tehtäviin:
                 for t in range(len(tulokset[i])) :
-                        hylatty=True
+                        hylatty=False
                         tekematta=False
                         tehtSyotteet=syotteet.filter(maarite__osa_tehtava__tehtava=tehtavat[t]).filter(vartio=vartiot[i])
                         #syotteet= vartiot[i].syote_set.filter(maarite__osa_tehtava__tehtava=tehtavat[t])
                         for s in tehtSyotteet :
                                 if s.arvo=="e" : tekematta=True
-                                if not s.arvo=="h":  hylatty=False
+                                if s.arvo=="h":  hylatty=True
                         
                         if hylatty and len(tehtSyotteet): tulokset[i][t]= "H"
                         if tekematta: tulokset[i][t]= "E"
