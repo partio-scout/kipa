@@ -209,7 +209,7 @@ class Tehtava(models.Model) :
                 for osatehtava in OsaTehtava.objects.filter(tehtava=self):
                         for syotemaarite in SyoteMaarite.objects.filter(osa_tehtava=osatehtava):
                                 syote = Syote.objects.filter(maarite=syotemaarite, vartio=vartio)
-                                if syote and syote[0].arvo == 'h':
+                                if syote and ( syote[0].arvo == 'h' or syote[0].arvo == 'e' ):
                                         return True
                 return False
 
