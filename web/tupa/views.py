@@ -239,6 +239,8 @@ def maaritaVartiot(request, kisa_nimi):
                 messages.success(request, u'Muutokset tallennettu' )
                 if "nappi" in posti.keys() and posti["nappi"]=="ohjaus" :
                         return redirect("/kipa/"+kisa_nimi+"/maarita/tehtava/")
+                return redirect("/kipa/"+kisa_nimi+"/maarita/vartiot/")
+
             else: # Jos tallennus ei onnistunut
                 messages.error(request, u'Ei onnistu, korjaa merkityt kentät' )
 
@@ -403,9 +405,12 @@ def syotaTehtava(request, kisa_nimi, tehtava_id, tarkistus = None) :
                     rivi.append(osatehtavan_formit)
                 syoteFormit.append( (v,rivi))
 
-        if posti and validi  : # Sivu oikein
-            tehtava.save()
-            messages.success(request, u'Muutokset tallennettu' )
+        if posti:
+            if validi  : # Sivu oikein
+                tehtava.save()
+                messages.success(request, u'Muutokset tallennettu' )
+            else:
+                messages.error(request, u'Ei onnistu, korjaa merkityt kentät' )
 
         tilanne=tehtavanTilanne(tehtava)
         if syottovirhe : tilanne="v"
@@ -751,7 +756,7 @@ def piirinTulokset(request, kisa_nimi, muotoilu):
             'kisa' : kisa,
             'kisa_nimi' : kisa.nimi,
             'template_selector' : template_selector,
-            'heading' : 'Piirien tuolokset',
+            'heading' : 'Piirien tulokset',
             },)
 
 @permission_required('tupa.change_tehtava')
