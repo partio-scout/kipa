@@ -1,20 +1,8 @@
 # encoding: utf-8
 import os
 
-import time
-try :
-        fin = open("templates/version.html", "r")
-        revision_line=fin.readline() ;
-        fin.close()
-        fout = open("templates/version.html", "w") 
-        fout.write( revision_line )
-        fout.write( "{% comment %} " +time.strftime('%X %x') +" {% endcomment %}" ) # Add clock to force svn commit 
-        fout.close()
-except: pass
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-hakemisto = BASE_DIR + '/web'
-tarkistus= os.getcwd()
+hakemisto = os.path.normpath(os.path.dirname(__file__))
+tarkistus = os.getcwd()
 
 DEBUG = False
 RECORDING=False
@@ -164,10 +152,10 @@ TEST_RUNNER = ('tupa.tests.run_one_fixture')
 
 
 STATIC_URL = '/kipamedia/'
-STATIC_ROOT = os.path.join(BASE_DIR, "web/media")
+STATIC_ROOT = os.path.join(hakemisto, "media")
 '''
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "web/media"),
+    os.path.join(hakemisto, "media"),
 ]
 '''
 #ALLOWED_HOSTS = ['127.0.0.1'] # Määritä tähän kaikki palvelimesi IP-osoitteet pilkulla erotettuna
