@@ -194,13 +194,27 @@ tr .odd:hover
 	background:#FF9;
 }
 
+#kisataulukko tr td {
+    padding: 7px;
+    padding-right: 15px;
+}
+
+#kisataulukko a {
+	background: transparent url("/kipamedia/arrow_blue.gif") no-repeat scroll 0px 1px;
+	padding-left: 15px;
+}
+
+#kisataulukko tr:nth-child(even) {
+    background-color: #faffda;
+}
+
 #taulukko th
 {
 	font-size:11px;
 	text-align:left;
 	font-weight:bold;
 	color:#fff;
-	background-color:#222;
+	background-color:#305520; /*#222;*/
 	/* #5169b3;*/
 	padding:3px; /* NOTE: th padding must be set explicitly in order to support sticky table headers in IE */
 }
@@ -236,7 +250,7 @@ tr .odd:hover
 	font-size:x-small;
 	font-weight:bold;
 	color:#fff;
-	background-color:#222;
+	background-color:#305520;/*#222;*/
 	/* #5169b3;  oli #b9c9fe; */
 	vertical-align:top;
 	padding:5px;
@@ -247,6 +261,20 @@ tr .odd:hover
 	font-style:italic;
 	color:#666;
 	background-color:#CCC;
+}
+
+
+#tehtava-tila
+{
+	background-color:#305520;
+	border:0;
+	padding:2;
+	color:#fff;
+}
+
+#tehtava-tila a
+{
+	color:#00a9ff;
 }
 
 #tehtava-taulukko
@@ -370,13 +398,32 @@ tr .odd:hover
 	font-family:Verdana,"Lucida Grande",Lucida,sans-serif;
 }
 
+#login {
+	float:right;
+	margin-top:-4px;
+	margin-bottom:0;
+	padding-bottom:0;
+	height:18px;
+}
+
+#messages {
+	float:right;
+	position: relative;
+	background-color: #EEE;
+	margin: auto;
+	padding-left: 5px;
+	padding-right: 5px;
+	border: 3px solid #ccc;
+	width: 400;
+}
+
 #breadcrumbs
 {
 	background:url(/kipamedia/green-bar.png);
 	height:15px;
 	margin-bottom:-1px;
 	padding:3px 0 3px 8px;
-	position:relative;
+	/*position:relative;*/
 	z-index:2;
 	color:#5D5D5D;
 	font-size:11px;
@@ -439,27 +486,22 @@ a.sitetoolbarnavactive:hover { color: #0d3b65; border: 1px solid #486B8A; paddin
 
 .aloittamatta {
 	background: #ffff88;
-	width:150px;
 }
 
 .osittain {
 	background: #fc3;
-	width:150px;
 }
 
 .syotetty {
 	background: #b9f73e;
-	width:150px;
 }
 
 .tarkistettu {
 	background: #679b00;
-	width:150px;
 }
 
 .virhe {
 	background: #ff4f00;
-	width:150px;
 }
 
 #tulostaulukko_screen {
@@ -473,6 +515,27 @@ a.sitetoolbarnavactive:hover { color: #0d3b65; border: 1px solid #486B8A; paddin
 
 #tulostaulukko_screen td {
 	vertical-align:top;
+	padding-right:10px;
+}
+
+#tulostaulukko_screen .odd {
+	background: #faffda;
+}
+
+#tulostaulukko_screen .even {
+	
+}
+
+#vartiot td:first-child {
+	font-weight: bold;
+}
+
+.right {
+	text-align: right;
+}
+
+.left {
+	text-align: left;
 }
 
 #sarjakohtaiset_tulokset td
@@ -498,3 +561,13 @@ td.th_erotin {
 
 .capitalize {text-transform:capitalize;}
 
+.jgrowl-{}
+.jgrowl-debug{}
+.jgrowl-info{}
+.jgrowl-success{}
+.jgrowl-warning{
+	background: #300!important;
+}
+.jgrowl-error{
+	background: #300!important;
+}

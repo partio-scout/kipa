@@ -33,6 +33,7 @@ Osatehtävän tyyppi:
         {%ifequal sarake.tyyppi tyyppi %} checked='checked' {% endifequal %} />
         {{sarake.otsikko}} &nbsp; &nbsp;
 {% endfor %}
+<br><br>
 {% for sarake in taulukko%}
         
         <div id="{{sarake.id}}" class='hidden' >    

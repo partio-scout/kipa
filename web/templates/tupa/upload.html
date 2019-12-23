@@ -4,7 +4,7 @@
 {% block content %} 
 <h1> {{heading}} </h1>
 
-<form method="POST" action="" enctype="multipart/form-data">
+<form method="POST" action="" enctype="multipart/form-data">{% csrf_token %}
 
 <p>
 <br>

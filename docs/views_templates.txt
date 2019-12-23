@@ -1,0 +1,113 @@
+Mitä templateja kukin näkymä käyttää:
+
+Umpihanki » Etusivu
+<!-- #### templates/tupa/base.html -->
+<!-- #### templates/tupa/login.html -->
+<!-- #### templates/tupa/kisa.html -->
+
+
+#### Suoritusten syöttö ####
+
+Umpihanki » Syötä tuloksia (sekä) Syötä tuloksia - tarkistussyötteet
+<!-- #### templates/tupa/base.html -->
+<!-- #### templates/tupa/login.html -->
+<!-- #### templates/tupa/valitse.html -->
+<!-- #### templates/tupa/valitse_linkki.html --> jokaiselle sarjalle
+
+Umpihanki » Syötä tuloksia » (tehtävä)
+<!-- #### templates/tupa/base.html -->
+<!-- #### templates/tupa/login.html -->
+<!-- #### templates/tupa/syota_tehtava.html -->
+<!-- #### templates/tupa/tallenna.html -->
+
+Umpihanki » Tuomarineuvoston antamien tulosten määritys
+<!-- #### templates/tupa/base.html -->
+<!-- #### templates/tupa/login.html -->
+<!-- #### templates/tupa/valitse.html -->
+<!-- #### templates/tupa/tuomarineuvos.html --> jokaiselle sarjalle
+<!-- #### templates/tupa/tallenna.html -->
+
+
+#### Tulokset ####
+
+Umpihanki » Tulokset sarjoittain (sarjan tulokset) (sekä) (tulosta tuloksia) (sekä) (tulokset CVS-tiedostoon)
+<!-- #### templates/tupa/base.html -->
+<!-- #### templates/tupa/login.html -->
+<!-- #### templates/tupa/tulosta.html -->
+
+Umpihanki » Tulokset sarjoittain » (sarja)
+<!-- #### templates/tupa/base.html -->
+<!-- #### templates/tupa/login.html -->
+<!-- #### templates/tupa/tulokset.html -->
+
+(tulosta tuloksia)
+<!-- #### templates/tupa/tuloksetHTML.html -->
+
+(heijasta tuloksia)
+<!-- #### templates/tupa/heijasta.html -->
+
+Umpihanki » Laskennan tilanne
+<!-- #### templates/tupa/base.html -->
+<!-- #### templates/tupa/login.html -->
+<!-- #### templates/tupa/laskennan_tilanne.html -->
+
+
+#### Kisan määritykset ###
+
+Umpihanki » Määritä kisa
+<!-- #### templates/tupa/base.html -->
+<!-- #### templates/tupa/login.html -->
+<!-- #### templates/tupa/maarita.html -->
+<!-- #### templates/tupa/tallenna.html -->
+
+Umpihanki » Määritä vartiot
+<!-- #### templates/tupa/base.html -->
+<!-- #### templates/tupa/login.html -->
+<!-- #### templates/tupa/valitse.html -->
+<!-- #### templates/tupa/valitse_formset.html -->
+<!-- #### templates/tupa/tallenna.html -->
+
+Umpihanki » Muokkaa tehtävää
+<!-- #### templates/tupa/base.html -->
+<!-- #### templates/tupa/login.html -->
+<!-- #### templates/tupa/valitse.html -->
+<!-- #### templates/tupa/maaritaValitseTestava.html --> (jokaiselle sarjalle)
+<!-- #### templates/tupa/poista.html -->
+
+Umpihanki » Muokkaa tehtävää » (tehtävä)
+<!-- #### templates/tupa/base.html -->
+<!-- #### templates/tupa/login.html -->
+<!-- #### templates/tupa/maarita.html -->
+<!-- #### templates/tupa/tallenna.html -->
+	+ templates/tupa/forms/...
+
+Umpihanki » Testituloksien määritys
+<!-- #### templates/tupa/base.html -->
+<!-- #### templates/tupa/login.html -->
+<!-- #### templates/tupa/valitse.html -->
+<!-- #### templates/tupa/valitse.html -->
+<!-- #### templates/tupa/testitulos.html --> (jokaiselle sarjalle)
+
+
+#### Ylläpito ####
+
+(listaa kaikki kisat)
+<!-- #### templates/tupa/index.html -->
+<!-- #### templates/tupa/login.html -->
+
+(tallenna kisa)
+
+Umpihanki » Korvaa kisa tiedostosta
+<!-- #### templates/tupa/base.html -->
+<!-- #### templates/tupa/login.html -->
+<!-- #### templates/tupa/upload.html -->
+<!-- #### templates/tupa/tallenna.html -->
+
+Umpihanki » Poista kisa
+<!-- #### templates/tupa/base.html -->
+<!-- #### templates/tupa/login.html -->
+<!-- #### templates/tupa/poista_kisa.html -->
+
+
+#### Apua ####
+(ohje)

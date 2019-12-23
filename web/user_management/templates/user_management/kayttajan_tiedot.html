@@ -1,0 +1,31 @@
+{% extends "tupa/base.html" %}
+
+{% block title %}{{ heading }}{% endblock %}
+
+{% block content %} 
+
+
+<h1>{{ heading }}</h1>
+
+    {% if form %}
+    <form action="" method="post">
+        <table>
+            {{ form.as_table }}
+        </table>
+        {% csrf_token %}
+        {% include "tupa/tallenna.html" %}
+    </form>
+    {% endif %}
+
+    {% if pwform %}
+    <form action="" method="post">
+        <table>
+            {{ pwform.as_table }}
+        </table>
+        {% csrf_token %}
+        {% include "tupa/tallenna.html" %}
+    </form>
+    {% endif %}
+
+{% endblock %}
+
