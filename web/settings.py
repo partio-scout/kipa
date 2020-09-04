@@ -3,7 +3,7 @@ import os
 hakemisto=os.path.normpath(os.path.dirname(__file__))
 tarkistus= os.getcwd()
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 RECORDING=False
 if not hakemisto == tarkistus :
@@ -31,7 +31,7 @@ CACHE_TULOKSET_TIME = 1800 # Tuloscachen voimassaoloaika viimeisesta nayttokerra
 #CACHE_BACKEND = 'locmem:///' # Cache system for developement
 #CACHE_BACKEND = 'locmem:///' # Cache system for developement
 CACHE_BACKEND = 'db://tupa_tulos_cache'
-if not CACHE_TULOKSET : 
+if not CACHE_TULOKSET:
         CACHE_BACKEND = 'dummy:///' # No cache in use
         TAUSTALASENTA = False
 
@@ -101,7 +101,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     #'django.contrib.formtools',
     'django.template',
-    'django.contrib.databrowse'     
+    'django.contrib.databrowse'
 
 ]
 
