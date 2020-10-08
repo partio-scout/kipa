@@ -5,6 +5,10 @@ Kipa- / Tupa2-ohjelmisto, jota käytetään partiotaitokilpailujen tuloslaskenta
 
 Asennusohjeet: https://sites.google.com/site/kisapalvelukipa/kaeytae-ja-asenna
 
+Jos haluaisit käyttää Kipaa mutta asentaminen tuntuu vaikealta, voit tiedustella
+valmiiksi asennetun Kipan käyttämistä kisoihisi Nettipartiolaiset ry:ltä sähköpostitse
+osoitteella sivutilat@partio.net.
+
 Vanhat sivustot:
 
 * https://sites.google.com/site/kisapalvelukipa/
