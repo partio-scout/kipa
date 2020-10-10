@@ -1,0 +1,11 @@
+---
+name: Automated tests
+
+on: pull_request
+
+jobs:
+  sqlite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: bash -x scripts/citest

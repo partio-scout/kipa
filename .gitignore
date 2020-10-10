@@ -1,1 +1,5 @@
 *.pyc
+src
+env*
+*.orig
+*.rej
