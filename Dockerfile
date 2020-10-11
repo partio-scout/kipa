@@ -1,13 +1,15 @@
-FROM ubuntu:12.04
+FROM python:2
 
-MAINTAINER siimeon<siimeon.developer@gmail.com>
+WORKDIR /app/web
 
-RUN apt-get update && apt-get install -y python python-django git
+COPY . /app/
 
-RUN git clone https://github.com/siimeon/Kipa.git /root/kipa
+RUN echo "PYTHONPATH=/usr/local/lib/python2.7/site-packages" | tee -a /etc/profile
 
-EXPOSE 8000
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
 
-WORKDIR /root/kipa/web
+EXPOSE 3000
 
-CMD git pull &&  python manage.py runserver 0.0.0.0:8000
+CMD ["./manage.py", "runserver", "0.0.0.0:3000"]
+
+RUN pip install -r /app/requirements.txt
