@@ -1,44 +1,54 @@
 import os
 
-hakemisto=os.path.normpath(os.path.dirname(__file__))
-tarkistus= os.getcwd()
+hakemisto = os.path.normpath(os.path.dirname(__file__))
+tarkistus = os.getcwd()
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-RECORDING=False
-if not hakemisto == tarkistus :
-        #Viittaisi siihen etta kyseessa on apachen alta toimiva, joten pakotetaan debugit pois
-        DEBUG=False
-        TEMPLATE_DEBUG = False
+RECORDING = False
+if not hakemisto == tarkistus:
+    # Viittaisi siihen etta kyseessa on apachen alta toimiva, joten pakotetaan debugit pois
+    DEBUG = False
+    TEMPLATE_DEBUG = False
 
 ADMINS = (
-     #('frans korhonen', 'frans.korhonen@gmail.com'),
+    #('frans korhonen', 'frans.korhonen@gmail.com'),
 )
 
 MANAGERS = ADMINS
-
-DATABASE_ENGINE = 'django.db.backends.sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
-DATABASE_NAME = hakemisto + '/tupa.db'     # Or path to database file if using sqlite3.
+DATABASE_NAME = os.path.join(hakemisto, 'tupa.db'),
+DATABASE_ENGINE = 'django.db.backends.sqlite3',
 DATABASE_USER = ''             # Not used with sqlite3.
 DATABASE_PASSWORD = ''         # Not used with sqlite3.
-DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+# Set to empty string for localhost. Not used with sqlite3.
+DATABASE_HOST = ''
+# Set to empty string for default. Not used with sqlite3.
+DATABASE_PORT = ''
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(hakemisto, 'tupa.db'),
+    }
+}
 
 # Cache
-TAUSTALASKENTA = False # Tulokset lasketaan taustalla (Vaatii toimiakseen tomivan cachekokoonpanon)
-CACHE_TULOKSET = False # Etsitaanko tuloksia cachesta
-CACHE_TULOKSET_TIME = 1800 # Tuloscachen voimassaoloaika viimeisesta nayttokerrasta. [s]
-#CACHE_BACKEND = 'locmem:///' # Cache system for developement
-#CACHE_BACKEND = 'locmem:///' # Cache system for developement
+# Tulokset lasketaan taustalla (Vaatii toimiakseen tomivan cachekokoonpanon)
+TAUSTALASKENTA = False
+CACHE_TULOKSET = False  # Etsitaanko tuloksia cachesta
+# Tuloscachen voimassaoloaika viimeisesta nayttokerrasta. [s]
+CACHE_TULOKSET_TIME = 1800
+# CACHE_BACKEND = 'locmem:///' # Cache system for developement
+# CACHE_BACKEND = 'locmem:///' # Cache system for developement
 CACHE_BACKEND = 'db://tupa_tulos_cache'
 if not CACHE_TULOKSET:
-        CACHE_BACKEND = 'dummy:///' # No cache in use
-        TAUSTALASENTA = False
+    CACHE_BACKEND = 'dummy:///'  # No cache in use
+    TAUSTALASENTA = False
 
-# Local time zone for this installation. 
+# Local time zone for this installation.
 TIME_ZONE = 'Europe/Helsinki'
 
-# Language code for this installation. 
+# Language code for this installation.
 LANGUAGE_CODE = 'fi-FI'
 
 SITE_ID = 1
@@ -57,22 +67,17 @@ STATIC_DOC_ROOT = hakemisto + "/media/"
 # Example: "http://media.lawrence.com"
 MEDIA_URL = ''
 
-FILE_UPLOAD_HANDLERS= ("django.core.files.uploadhandler.MemoryFileUploadHandler",
- "django.core.files.uploadhandler.TemporaryFileUploadHandler",)
-
-# URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
-# trailing slash.
-# Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/'
+FILE_UPLOAD_HANDLERS = ("django.core.files.uploadhandler.MemoryFileUploadHandler",
+                        "django.core.files.uploadhandler.TemporaryFileUploadHandler",)
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'shbtq($_^om(xep=5f97k2+ntb3!cqn+)%8r#s6udzqnhj$5p6'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
-    'django.template.loaders.app_directories.load_template_source',
-#     'django.template.loaders.eggs.load_template_source',
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+    #     'django.template.loaders.eggs.load_template_source',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -99,14 +104,17 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'tupa',
     'django.contrib.admin',
-    #'django.contrib.formtools',
     'django.template',
-    'django.contrib.databrowse'
-
+    'django.contrib.staticfiles',
 ]
 
 LOGIN_URL = ('/kipa/')
 LOGIN_REDIRECT_URL = ('/kipa/')
 
-TEST_RUNNER = ('tupa.tests.run_one_fixture')
+TEST_RUNNER = ('tupa.tests.TestRunner')
 
+STATIC_URL = '/kipamedia/'
+STATIC_ROOT = os.path.join(hakemisto, "media")
+
+
+ALLOWED_HOSTS = ["*"]

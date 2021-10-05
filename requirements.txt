@@ -1,7 +1,6 @@
-#django
-#django==1.2.7
+django==1.5
 #https://www.djangoproject.com/download/1.2.7/tarball/
-git+https://github.com/django/django.git@1.2.7#egg=django
+#git+https://github.com/django/django.git@1.2.7#egg=django
 south
 #mysql-python
-git+https://github.com/PyMySQL/mysqlclient-python.git@v1.4.6#egg=MySQLdb
+#git+https://github.com/PyMySQL/mysqlclient-python.git@v1.4.6#egg=MySQLdb
