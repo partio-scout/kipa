@@ -19,10 +19,10 @@ import log
 def korvaa(lause,pino,loppu=None) :
     """
     Korvaa lauseen muuttujat pinon mukaisella etuliitteella a.b.c jne.
-    "." lausessa muuttujan edessa liikuttaa muuttujaa pinossa ylospain 
-    optionaalinen loppu parametri lisaa muuttujan peraan arvon. 
+    "." lausessa muuttujan edessa liikuttaa muuttujaa pinossa ylospain
+    optionaalinen loppu parametri lisaa muuttujan peraan arvon.
     loppu parametri poistuu ensimmaisella .a operaatiola
-    esim: 
+    esim:
     >>> korvaa("c",["a","b"])
     'a.b.c'
     >>> korvaa(".c",["a","b"])
@@ -49,10 +49,10 @@ def korvaa(lause,pino,loppu=None) :
     '56'
     """
     # Ensiksi täytyy poistaa kaikki x..y -> y
-    poistoon= re.search(r"([^-.+*/(),]+[.][.])",lause) 
+    poistoon= re.search(r"([^-.+*/(),]+[.][.])",lause)
     while poistoon :
         lause=re.sub(r"([^-.+*/()]+[.][.])","",lause,count=1)
-        poistoon= re.search(r"([^-.+*/()]+[.][.])",lause) 
+        poistoon= re.search(r"([^-.+*/()]+[.][.])",lause)
     haku= re.finditer("(?<![]])(\.{0,3})([a-zA-Z]\w*)(?:\.(\w+))?(?:\.(\w+))?(?:\.(\w+))?(?!\w*[(])",lause )
     muutokset=[]
     for h in haku :
@@ -66,11 +66,11 @@ def korvaa(lause,pino,loppu=None) :
             for i in range(kohtaan) :
                 uusi=uusi+"." +pino[i]
             for g in ryhmat[1:] :
-                if g: 
+                if g:
                     uusi=uusi+"."+g
                     vanha=vanha+"."+g
             vanha=vanha[1:]
-            if loppu and len(ryhmat[0])==0: 
+            if loppu and len(ryhmat[0])==0:
                 uusi=uusi+"."+loppu
             uusi=uusi[1:]
             muutokset.append((h.start(),h.end(),uusi))
@@ -98,7 +98,7 @@ def suoritusJoukko(s) :
     return muokattu
 
 def luoMuuttujat(vartiot,tehtavat,syotteet) :
-    """ 
+    """
     Luo sarjan syotteiden muuttujasanakirjan:
     rakenne on muotoa: muuttujat[tehtavan_nimi][osatatehtavan_nimi][syotteen_nimi][vartion_nro]=arvo
     mukana olevien vartioista loytyy tieto: muuttujat[tehtavan_nimi]["mukana"][vartion_nro]=1
@@ -120,10 +120,10 @@ def luoMuuttujat(vartiot,tehtavat,syotteet) :
                 dict_syotteet=[]
                 for v in vartiot :
                     s=maaritteen_syotteet.filter(vartio=v)
-                    if len(s)==1 : 
+                    if len(s)==1 :
                         try :
                             dict_syotteet.append((str(v.nro),DictDecimal(s[0].arvo)))
-                        except InvalidOperation: 
+                        except InvalidOperation:
                             if not s[0].arvo=="kesk":
                                 dict_syotteet.append((str(v.nro),s[0].arvo))
                         except TypeError : pass
@@ -142,7 +142,7 @@ def luoOsatehtavanKaava(ot_lause,parametrit):
     -Toteuttaa muk -> ..mukana pikatien
     -Muuntaa suor pikatien kaikkien vartioiden suorituksiin parametristä vartion_kaava
     """
-    ot_lause #=ot.kaava #.lower() 
+    ot_lause #=ot.kaava #.lower()
     log.logString( "  kaava = " + ot_lause )
     korvautuu=True
 
@@ -156,7 +156,7 @@ def luoOsatehtavanKaava(ot_lause,parametrit):
         vanha=ot_lause
         for p_nimi,p_arvo in parametrit.items():
             ot_lause=re.sub(p_nimi+r"(?!\w+)",p_arvo,ot_lause)
-        # Pikatie "muk" -> "..mukana" 
+        # Pikatie "muk" -> "..mukana"
         ot_lause=re.sub("muk"+r"(?!\w+)","..mukana",ot_lause)
         # Muunnos "suor" -> kaikkien vartioiden lasketut suoritukset
         try:
@@ -171,19 +171,19 @@ def luoOsatehtavanKaava(ot_lause,parametrit):
     return ot_lause
 
 def luoTehtavanKaava(t,v):
-        pino=[] # Pinoon laitetaan kulloinenkin iterointipolku, 
+        pino=[] # Pinoon laitetaan kulloinenkin iterointipolku,
                 #jotta muuttujan nimet voidaan muuttaa suhteellisesta kirjaimesta absoluuttiseen polkuun.
         t_nimi= t.nimi.replace(" ","").replace("!","").lower()
         pino.append(t_nimi)
         osatehtavat=t.osatehtava_set.all()
         ot_lauseet=[]
-        
+
         log.logString( u"<h3>Tehtävä: " + t.nimi.upper()+"</h3>" )
         if t.kaava.upper()=="SS" :
                 log.logString( u"kaava = ⚡⚡" )
         else:
                 log.logString( u"kaava =  " + t.kaava.upper() )
-        
+
         for ot in osatehtavat:
                 log.logString( u"\n<b>Osatehtävä: " + ot.nimi.upper()+"</b>" )
                 pino.append(ot.nimi)
@@ -196,7 +196,7 @@ def luoTehtavanKaava(t,v):
                         for m in maaritteet:
                                 ot_lause=ot_lause+m.nimi+"+"
                         ot_lause=ot_lause[:-1]
-                
+
                 parametrit={}
                 for p in ot.parametri_set.all():
                         parametrit[p.nimi]=p.arvo
@@ -209,12 +209,12 @@ def luoTehtavanKaava(t,v):
                         if not ot_lause==vanha : korvautuu=True
 
                 log.logString( "  sijoitettu = " + ot_lause )
-                     
-                # Muutetaan muuttujien nimet koko polun mittaisiksi: 
+
+                # Muutetaan muuttujien nimet koko polun mittaisiksi:
                 #tehtava(nimi).osatehtava(nimi).syote(nimi).vartio(nro)
                 ot_lause=korvaa(ot_lause,pino,str(v.nro))
                 # Pikatie vartio -> vartion numero
-                ot_lause=re.sub("vartio"+r"(?!\w+)", str(v.nro) ,ot_lause)        
+                ot_lause=re.sub("vartio"+r"(?!\w+)", str(v.nro) ,ot_lause)
                 ot_lauseet.append((ot.nimi,ot_lause))
                 pino.pop()
         tehtava_lause=""
@@ -246,13 +246,13 @@ def luoLaskut(vartiot,tehtavat) :
 
 def laskeSarja(sarja,syotteet,vartiot=None,tehtavat=None):
         """
-        Laskee tulokset halutulle sarjalle. 
+        Laskee tulokset halutulle sarjalle.
         Palauttaa kaksiuloitteisen taulukon[vartio][tehtävä] = pisteet.
         Taulukon ensimmäisissä sarakkeissa on vartio tai tehtävä objekteja muissa pisteitä.
         Taulukon vasemmassa ylänurkassa on sarjan objekti
         """
         #syotteetr=Syote.objects.all() #(maarite__osa_tehtava__tehtava__sarja=sarja )
-        
+
         if not vartiot : vartiot=sarja.vartio_set.all()
         if not tehtavat: tehtavat=sarja.tehtava_set.all()
         if vartiot and tehtavat : jee=1 # Pakotetaan tietokantahaku.
@@ -274,12 +274,16 @@ def laskeSarja(sarja,syotteet,vartiot=None,tehtavat=None):
                         for s in tehtSyotteet :
                                 if s.arvo=="e" : tekematta=True
                                 if not s.arvo=="h":  hylatty=False
-                        
+
                         if hylatty and len(tehtSyotteet): tulokset[i][t]= "H"
                         if tekematta: tulokset[i][t]= "E"
 
+                # Lasketaan vain tehtävät, jotka on merkitty "tarkistettu" -checkboxilla
+                for t in range(len(tulokset[i])) :
+                        if not tehtavat[t].tarkistettu: tulokset[i][t] = "S"
+
                 #Merkataan siirrettäviksi ulkopuolella olevat:
-                if not vartiot[i].keskeyttanyt == None or not vartiot[i].ulkopuolella == None : 
+                if not vartiot[i].keskeyttanyt == None or not vartiot[i].ulkopuolella == None :
                         #Merkataan keskeyttaneille tuloksiin "K" keskeyttämisestä eteenpäin
                         if not vartiot[i].keskeyttanyt==None:
                                 kesk=vartiot[i].keskeyttanyt-1
@@ -292,18 +296,18 @@ def laskeSarja(sarja,syotteet,vartiot=None,tehtavat=None):
                                 tuom=vartion_tuomarit.filter(tehtava=tehtavat[t])
                                 if len(tuom) :
                                         log.logString( u"Tuomarineuvoston ylimääritys: " + str(tuom[0].pisteet) )
-                                        try: 
+                                        try:
                                                 tulokset[i][t]= Decimal(tuom[0].pisteet)
                                         except:
                                                 tulokset[i][t]= tuom[0].pisteet
                 #Kokonaispisteet:
                 summa=0
                 for s in tulokset[i] :
-                        if s and type(s)!=str and type(s)!=unicode : summa+= s 
+                        if s and type(s)!=str and type(s)!=unicode : summa+= s
                 tulokset[i].insert(0,summa)
                 #Vartio objekti jokaisen rivin alkuun:
                 tulokset[i].insert(0,vartiot[i])
-        
+
         # Kirjataan välivaiheisiin lopputulos
         try:
                 log.logString( "\n<b>TULOS = " + str(tulokset[0][2])+"</b>" )
@@ -336,7 +340,7 @@ def laskeSarja(sarja,syotteet,vartiot=None,tehtavat=None):
         if sarja.tasapiste_teht1 : tasa1 = sarja.tasapiste_teht1+1
         if sarja.tasapiste_teht2 : tasa2 = sarja.tasapiste_teht2+1
         if sarja.tasapiste_teht2 : tasa3 = sarja.tasapiste_teht3+1
-        
+
         tulokset.sort(key=operator.itemgetter(1) ,reverse=True)
         ulkona.sort(key=operator.itemgetter(1) ,reverse=True)
         #Järjestetään taulukot
@@ -345,7 +349,7 @@ def laskeSarja(sarja,syotteet,vartiot=None,tehtavat=None):
                 ulkona.sort( key=operator.itemgetter(1,tasa1,tasa2,tasa3),reverse=True )
         except : # tehtäviä < 3
 		        pass
-        
+
         # Etsitään tasapistetulokset :
         edellinen=None
         for vi, vartio in enumerate(ulkona) :
@@ -363,7 +367,7 @@ def laskeSarja(sarja,syotteet,vartiot=None,tehtavat=None):
                 edellinen = vartio
         #Lisätään tehtävärivi ylos
         mukana.insert(0,t_list)
-        
+
         return (mukana,ulkona)
 
 if __name__ == "__main__":
