@@ -300,10 +300,14 @@ def laskeSarja(sarja,syotteet,vartiot=None,tehtavat=None):
                 # Lisää varoitus, jos vartion pisteet ylittävät tehtävän max. pisteet
                 for t in range(len(tulokset[i])) :
                         pisteet = tulokset[i][t]
+                        # Tarkistetaan, että pisteet on laskettu (numeerinen arvo).
+                        # Vartion pisteet voivat olla myös esim. H, E tai K (katso
+                        # silmukka vähän ylempää), tällöin tarkistus on turha.
                         if (pisteet and type(pisteet) != str and type(pisteet) != unicode) :
+                                # Onko pisteet > max pisteet
                                 if pisteet > float(tehtavat[t].maksimipisteet):
+                                        # Lisää huomautus tulosluetteloon
                                         tulokset[i][t] = str(tulokset[i][t]) + " (?)"
-
 
                 #Kokonaispisteet:
                 summa=0
