@@ -8,8 +8,8 @@ TEMPLATE_DEBUG = DEBUG
 RECORDING = False
 if not hakemisto == tarkistus:
     # Viittaisi siihen etta kyseessa on apachen alta toimiva, joten pakotetaan debugit pois
-    DEBUG = False
-    TEMPLATE_DEBUG = False
+    DEBUG = True
+    TEMPLATE_DEBUG = True
 
 ADMINS = (
     #('frans korhonen', 'frans.korhonen@gmail.com'),
@@ -113,8 +113,7 @@ LOGIN_REDIRECT_URL = ('/kipa/')
 
 TEST_RUNNER = ('tupa.tests.TestRunner')
 
-STATIC_URL = '/kipamedia/'
-STATIC_ROOT = os.path.join(hakemisto, "media")
+STATIC_URL = '/media/'
 
 
 ALLOWED_HOSTS = ["*"]
