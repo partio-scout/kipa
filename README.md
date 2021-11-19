@@ -13,10 +13,6 @@ Jos haluaisit käyttää Kipaa mutta asentaminen tuntuu vaikealta, voit tieduste
 valmiiksi asennetun Kipan käyttämistä kisoihisi Nettipartiolaiset ry:ltä sähköpostitse
 osoitteella sivutilat@partio.net.
 
-Vanhat sivustot:
-
-* https://sites.google.com/site/kisapalvelukipa/
-
 Lisenssi
 ========
 
