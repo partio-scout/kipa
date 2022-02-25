@@ -56,7 +56,7 @@
         <field type="IntegerField" name="jarjestysnro">1</field>
         <field type="CharField" name="kaava">a+b</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">3</field>
-        <field type="BooleanField" name="tarkistettu">False</field>
+        <field type="BooleanField" name="tarkistettu">True</field>
     </object>
     <object pk="53" model="tupa.syotemaarite">
         <field type="CharField" name="nimi">fgjf</field>
@@ -112,7 +112,7 @@
         <field type="IntegerField" name="jarjestysnro">1</field>
         <field type="CharField" name="kaava">min</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">3</field>
-        <field type="BooleanField" name="tarkistettu">False</field>
+        <field type="BooleanField" name="tarkistettu">True</field>
     </object>
     <object pk="55" model="tupa.syotemaarite">
         <field type="CharField" name="nimi">min</field>
@@ -145,7 +145,7 @@
         <field type="IntegerField" name="jarjestysnro">6</field>
         <field type="CharField" name="kaava">interpoloi</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">3</field>
-        <field type="BooleanField" name="tarkistettu">False</field>
+        <field type="BooleanField" name="tarkistettu">True</field>
     </object>
     <object pk="54" model="tupa.osatehtava">
         <field type="CharField" name="nimi">interpoloi</field>
@@ -161,7 +161,7 @@
         <field type="IntegerField" name="jarjestysnro">7</field>
         <field type="CharField" name="kaava">max</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">3</field>
-        <field type="BooleanField" name="tarkistettu">False</field>
+        <field type="BooleanField" name="tarkistettu">True</field>
     </object>
     <object pk="56" model="tupa.syotemaarite">
         <field type="CharField" name="nimi">max</field>
@@ -189,7 +189,7 @@
         <field type="IntegerField" name="jarjestysnro">322</field>
         <field type="CharField" name="kaava">2*c-a</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">3</field>
-        <field type="BooleanField" name="tarkistettu">False</field>
+        <field type="BooleanField" name="tarkistettu">True</field>
     </object>
     <object pk="57" model="tupa.syotemaarite">
         <field type="CharField" name="nimi">a + b + c</field>

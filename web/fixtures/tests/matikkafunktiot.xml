@@ -31,7 +31,7 @@
         <field type="IntegerField" name="jarjestysnro">1</field>
         <field type="CharField" name="kaava">sqrt(2)</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">4</field>
-        <field type="BooleanField" name="tarkistettu">False</field>
+        <field type="BooleanField" name="tarkistettu">True</field>
     </object>
     <object pk="719" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">43</field>
@@ -58,7 +58,7 @@
         <field type="IntegerField" name="jarjestysnro">2</field>
         <field type="CharField" name="kaava">abs(-18)</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">4</field>
-        <field type="BooleanField" name="tarkistettu">False</field>
+        <field type="BooleanField" name="tarkistettu">True</field>
     </object>
     <object pk="720" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">43</field>
@@ -85,7 +85,7 @@
         <field type="IntegerField" name="jarjestysnro">3</field>
         <field type="CharField" name="kaava">power(2,8)</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">4</field>
-        <field type="BooleanField" name="tarkistettu">False</field>
+        <field type="BooleanField" name="tarkistettu">True</field>
     </object>
     <object pk="721" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">43</field>
@@ -112,7 +112,7 @@
         <field type="IntegerField" name="jarjestysnro">4</field>
         <field type="CharField" name="kaava">ln(10)</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">4</field>
-        <field type="BooleanField" name="tarkistettu">False</field>
+        <field type="BooleanField" name="tarkistettu">True</field>
     </object>
     <object pk="722" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">43</field>
@@ -139,7 +139,7 @@
         <field type="IntegerField" name="jarjestysnro">5</field>
         <field type="CharField" name="kaava">log(10)</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">4</field>
-        <field type="BooleanField" name="tarkistettu">False</field>
+        <field type="BooleanField" name="tarkistettu">True</field>
     </object>
     <object pk="723" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">43</field>
@@ -166,7 +166,7 @@
         <field type="IntegerField" name="jarjestysnro">6</field>
         <field type="CharField" name="kaava">floor(10.332)</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">4</field>
-        <field type="BooleanField" name="tarkistettu">False</field>
+        <field type="BooleanField" name="tarkistettu">True</field>
     </object>
     <object pk="724" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">43</field>
@@ -193,7 +193,7 @@
         <field type="IntegerField" name="jarjestysnro">7</field>
         <field type="CharField" name="kaava">ceil(9.1)</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">4</field>
-        <field type="BooleanField" name="tarkistettu">False</field>
+        <field type="BooleanField" name="tarkistettu">True</field>
     </object>
     <object pk="725" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">43</field>
@@ -220,7 +220,7 @@
         <field type="IntegerField" name="jarjestysnro">8</field>
         <field type="CharField" name="kaava">mod(10,4)</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">4</field>
-        <field type="BooleanField" name="tarkistettu">False</field>
+        <field type="BooleanField" name="tarkistettu">True</field>
     </object>
     <object pk="726" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">43</field>
@@ -247,7 +247,7 @@
         <field type="IntegerField" name="jarjestysnro">9</field>
         <field type="CharField" name="kaava">exp(5)</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">4</field>
-        <field type="BooleanField" name="tarkistettu">False</field>
+        <field type="BooleanField" name="tarkistettu">True</field>
     </object>
     <object pk="727" model="tupa.testaustulos">
         <field to="tupa.vartio" name="vartio" rel="ManyToOneRel">43</field>

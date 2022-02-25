@@ -71,7 +71,7 @@
         <field type="IntegerField" name="jarjestysnro">1</field>
         <field type="CharField" name="kaava">a*b</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">32</field>
-        <field type="BooleanField" name="tarkistettu">False</field>
+        <field type="BooleanField" name="tarkistettu">True</field>
         <field type="CharField" name="maksimipisteet">10</field>
     </object>
     <object pk="337" model="tupa.syotemaarite">
@@ -200,7 +200,7 @@
         <field type="IntegerField" name="jarjestysnro">2</field>
         <field type="CharField" name="kaava">ss</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">32</field>
-        <field type="BooleanField" name="tarkistettu">False</field>
+        <field type="BooleanField" name="tarkistettu">True</field>
         <field type="CharField" name="maksimipisteet">5</field>
     </object>
     <object pk="339" model="tupa.syotemaarite">
@@ -283,7 +283,7 @@
         <field type="IntegerField" name="jarjestysnro">3</field>
         <field type="CharField" name="kaava">ss</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">32</field>
-        <field type="BooleanField" name="tarkistettu">False</field>
+        <field type="BooleanField" name="tarkistettu">True</field>
         <field type="CharField" name="maksimipisteet">5</field>
     </object>
     <object pk="341" model="tupa.syotemaarite">

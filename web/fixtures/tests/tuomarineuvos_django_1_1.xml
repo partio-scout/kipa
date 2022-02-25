@@ -30,7 +30,7 @@
         <field name="jarjestysnro" type="IntegerField">1</field>
         <field name="kaava" type="CharField">ss</field>
         <field name="sarja" rel="ManyToOneRel" to="tupa.sarja">2</field>
-        <field name="tarkistettu" type="BooleanField">False</field>
+        <field name="tarkistettu" type="BooleanField">True</field>
     </object>
     <object model="tupa.syotemaarite" pk="26">
         <field name="nimi" type="CharField">a</field>
