@@ -198,9 +198,9 @@ def TulosTestFactory(fixture_name):
                                                         for p in Parametri.objects.filter(osa_tehtava=k):
                                                                 ilmoitus=ilmoitus + "\n    "+p.nimi+"="+p.arvo+" "
                                                         ilmoitus=ilmoitus + "\nSyotteet: "
-                                                        for s in Syote.objects.filter(maarite__osa_tehtava=k).filter(vartio=t.vartio):
+                                                        for syo in Syote.objects.filter(maarite__osa_tehtava=k).filter(vartio=t.vartio):
 
-                                                                ilmoitus=ilmoitus + s.maarite.nimi+"="+ s.arvo + " "
+                                                                ilmoitus=ilmoitus + syo.maarite.nimi+"="+ syo.arvo + " "
                                                 ilmoitus=ilmoitus + "\nVartio: "  + t.vartio.nimi  
                                                 ilmoitus=ilmoitus + "\nTulos: "   + str(tulos)+' != '+str(vaadittava)
                                                 virheet.append(ilmoitus) 
