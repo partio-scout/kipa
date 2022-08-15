@@ -978,7 +978,7 @@ def apua(request) :
         """
         Apua onnettomalle ja surulliselle käyttäjälle
         """
-        return kipaResponseRedirect('/kipamedia/manual_v02.pdf')
+        return kipaResponseRedirect('/kipamedia/Manuaali_v03.pdf')
 
 def tehtavanVaiheet(request,kisa_nimi,tehtava_id,vartio_id=None):
         kisa= get_object_or_404(Kisa , nimi=kisa_nimi )
