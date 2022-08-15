@@ -1,0 +1,23 @@
+name: 'build'
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+
+jobs:
+  build-and-publish-latest:
+    name: 'Build latest'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2 # Checking out the repo
+
+      - name: Build and Publish latest Docker image
+        uses: docker/build-push-action@v1
+        with:
+          registry: ghcr.io
+          username: ${GITHUB_ACTOR}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          repository: partio-scout/kipa
+          tags: latest
