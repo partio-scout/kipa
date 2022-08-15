@@ -43,6 +43,7 @@
         <field type="IntegerField" name="jarjestysnro">1</field>
         <field type="CharField" name="kaava">ss</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">2</field>
+        <field type="BooleanField" name="tarkistettu">True</field>
     </object>
     <object pk="5" model="tupa.syotemaarite">
         <field type="CharField" name="nimi">a</field>
@@ -88,6 +89,7 @@
         <field type="TextField" name="rastikasky"></field>
         <field type="IntegerField" name="jarjestysnro">2</field>
         <field type="CharField" name="kaava">ss</field>
+        <field type="BooleanField" name="tarkistettu">True</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">2</field>
     </object>
     <object pk="6" model="tupa.syotemaarite">

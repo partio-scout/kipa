@@ -35,7 +35,7 @@
         <field type="IntegerField" name="jarjestysnro">1</field>
         <field type="CharField" name="kaava">sS</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">1</field>
-        <field type="BooleanField" name="tarkistettu">False</field>
+        <field type="BooleanField" name="tarkistettu">True</field>
         <field type="CharField" name="maksimipisteet">4</field>
     </object>
     <object pk="2190" model="tupa.testaustulos">

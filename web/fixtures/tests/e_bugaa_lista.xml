@@ -568,7 +568,7 @@
         <field type="IntegerField" name="jarjestysnro">12</field>
         <field type="CharField" name="kaava">ss</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">18</field>
-        <field type="BooleanField" name="tarkistettu">False</field>
+        <field type="BooleanField" name="tarkistettu">True</field>
         <field type="CharField" name="maksimipisteet"></field>
         <field type="BooleanField" name="svirhe">False</field>
     </object>
@@ -838,7 +838,7 @@
         <field type="IntegerField" name="jarjestysnro">13</field>
         <field type="CharField" name="kaava">ss</field>
         <field to="tupa.sarja" name="sarja" rel="ManyToOneRel">18</field>
-        <field type="BooleanField" name="tarkistettu">False</field>
+        <field type="BooleanField" name="tarkistettu">True</field>
         <field type="CharField" name="maksimipisteet"></field>
         <field type="BooleanField" name="svirhe">False</field>
     </object>

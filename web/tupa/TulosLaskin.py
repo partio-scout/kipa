@@ -278,6 +278,10 @@ def laskeSarja(sarja,syotteet,vartiot=None,tehtavat=None):
                         if hylatty and len(tehtSyotteet): tulokset[i][t]= "H"
                         if tekematta: tulokset[i][t]= "E"
 
+                # Lasketaan vain tehtävät, jotka on merkitty "tarkistettu" -checkboxilla
+                for t in range(len(tulokset[i])) :
+                        if not tehtavat[t].tarkistettu: tulokset[i][t] = "S"
+
                 #Merkataan siirrettäviksi ulkopuolella olevat:
                 if not vartiot[i].keskeyttanyt == None or not vartiot[i].ulkopuolella == None :
                         #Merkataan keskeyttaneille tuloksiin "K" keskeyttämisestä eteenpäin
