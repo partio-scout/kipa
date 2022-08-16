@@ -1,24 +1,19 @@
 import os
 
-hakemisto=os.path.normpath(os.path.dirname(__file__))
-tarkistus= os.getcwd()
+hakemisto=os.path.normpath(os.path.dirname(__file__)) + '/..'
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
-RECORDING=False
-if not hakemisto == tarkistus :
-        #Viittaisi siihen etta kyseessa on apachen alta toimiva, joten pakotetaan debugit pois
-        DEBUG=False
-        TEMPLATE_DEBUG = False
+RECORDING = False
 
 ADMINS = (
-     #('frans korhonen', 'frans.korhonen@gmail.com'),
+     ('First Name', 'noreply@kipa.example.com'),
 )
 
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'django.db.backends.sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
-DATABASE_NAME = hakemisto + '/tupa.db'     # Or path to database file if using sqlite3.
+DATABASE_NAME = hakemisto + '/../db/kipa.db'     # Or path to database file if using sqlite3.
 DATABASE_USER = ''             # Not used with sqlite3.
 DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
@@ -33,7 +28,7 @@ CACHE_TULOKSET_TIME = 1800 # Tuloscachen voimassaoloaika viimeisesta nayttokerra
 CACHE_BACKEND = 'db://tupa_tulos_cache'
 if not CACHE_TULOKSET:
         CACHE_BACKEND = 'dummy:///' # No cache in use
-        TAUSTALASENTA = False
+        TAUSTALASKENTA = False
 
 # Local time zone for this installation. 
 TIME_ZONE = 'Europe/Helsinki'
@@ -57,8 +52,10 @@ STATIC_DOC_ROOT = hakemisto + "/media/"
 # Example: "http://media.lawrence.com"
 MEDIA_URL = ''
 
-FILE_UPLOAD_HANDLERS= ("django.core.files.uploadhandler.MemoryFileUploadHandler",
- "django.core.files.uploadhandler.TemporaryFileUploadHandler",)
+FILE_UPLOAD_HANDLERS= (
+    "django.core.files.uploadhandler.MemoryFileUploadHandler",
+    "django.core.files.uploadhandler.TemporaryFileUploadHandler",
+)
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -102,7 +99,6 @@ INSTALLED_APPS = [
     #'django.contrib.formtools',
     'django.template',
     'django.contrib.databrowse'
-
 ]
 
 LOGIN_URL = ('/kipa/')
@@ -110,3 +106,15 @@ LOGIN_REDIRECT_URL = ('/kipa/')
 
 TEST_RUNNER = ('tupa.tests.run_one_fixture')
 
+# Should we serve the media files through Python?
+SERVE_MEDIA = DEBUG
+
+try:
+  from .local import *
+except ImportError:
+  pass
+
+try:
+  from .docker import *
+except ImportError:
+  pass

@@ -1,10 +1,9 @@
-name: 'build'
+name: 'Build latest'
 
 on:
   push:
     branches:
     - master
-  pull_request:
 
 jobs:
   build-and-publish-latest:
