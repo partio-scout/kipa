@@ -9,7 +9,7 @@ urlpatterns = patterns('',
         (r'^admin/', include(admin.site.urls)),
 )
 
-if settings.DEBUG :
+if settings.SERVE_MEDIA:
         urlpatterns += patterns('',
                 (r'^kipamedia/(?P<path>.*)$', 'django.views.static.serve',
                 {'document_root': settings.STATIC_DOC_ROOT}),)

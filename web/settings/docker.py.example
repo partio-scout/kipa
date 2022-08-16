@@ -1,0 +1,5 @@
+with open('/app/db/secret.txt', 'r') as f:
+  SECRET_KEY = f.readline()
+
+# Should we serve the media files through Python?
+SERVE_MEDIA = True
