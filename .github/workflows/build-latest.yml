@@ -20,3 +20,4 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           repository: partio-scout/kipa
           tags: latest
+          platforms: linux/amd64,linux/arm64
