@@ -60,6 +60,8 @@ def laske(lauseke,m={},funktiot={}):
         # Korvataan muuttujien nimet oikeilla muuttujilla:
         lause=re.sub(r"\.([a-zA-Z_]\w*)(?=\.)",r"['\g<1>']",lause) # .x. -> [x].
         lause=re.sub(r"\.([a-zA-Z_]+[a-zA-Z_0-9]*)",r"['\g<1>']",lause)       # .x  -> [x]
+#        lause=re.sub(r"(?<!\d)\.([a-zA-Z_0-9]+)",r"['\g<1>']",lause)       # .x  -> [x]
+#        lause=re.sub(r"\.([a-zA-Z_0-9]+)(?=["+oper+"\])])",r"['\g<1>']",lause)       # .x  -> [x]
         lause=re.sub(r"\.(\d+)(?=["+oper+"]|$|\]|\))",r"['\g<1>']",lause)       # .n  -> [n]
         lause=re.sub(r"(?<=["+oper+r"])([a-zA-Z_0-9]\w*(?=[[]))",r"m['\g<1>']",lause) # x[  -> m[x][
         # Korvataan yksinäiset muuttujat (lähinnä funktioita):

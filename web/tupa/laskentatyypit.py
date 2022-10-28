@@ -248,14 +248,14 @@ def listaksi(a,*opt):
         if type(joukkio)==list:
                 lista=[]
                 for v in joukkio :
-                        if type(v)==DictDecimal or type(v)==Decimal :
+                        if type(v)==DictDecimal or type(v)==Decimal or type(v)==int :
                                 lista.append(DictDecimal(v))
                         else : lista.append(v)
                 return lista
         try:
                 lista=[]
                 for k in joukkio.keys() :
-                        if type(joukkio[k])==DictDecimal or type(joukkio[k])==Decimal :
+                        if type(joukkio[k])==DictDecimal or type(joukkio[k])==Decimal or type(joukkio[k])==int :
                                 lista.append(DictDecimal(joukkio[k]))
                 return lista
         except :
