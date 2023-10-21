@@ -2,7 +2,6 @@
 
 import sys
 print sys.path
-from tupa.dia2django import luoMallienRungot
 from django.core.management import execute_manager
 
 try:
