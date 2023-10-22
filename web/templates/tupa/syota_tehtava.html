@@ -17,41 +17,41 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	$("#taulukko").stickyTableHeaders();
-	
+
 	if ($.browser.mozilla) {
 		$("input").keypress(checkForEnter);
 	} else {
 		$("input").keydown(checkForEnter);
 	}
-	
+
 	jQuery(function($){
 	   $.mask.definitions['~']='[he0123456789]'; /* hylätty, ei syötetty, numeroarvot*/
 	   $(".time").mask("~?9:99:99");
 	});
-	
-/*    jQuery("input#kopioi_sarake1").click(function(){ 
-        if ($("input#kopioi_sarake1").is(':checked')) 
-        { 
-            // Checked, copy values 
-            $("input.col0").val($("input#copy_from1").val()); 
-        } 
-        else 
-        { 
-            // Clear on uncheck 
-            $("input.col0").val(""); 
+
+/*    jQuery("input#kopioi_sarake1").click(function(){
+        if ($("input#kopioi_sarake1").is(':checked'))
+        {
+            // Checked, copy values
+            $("input.col0").val($("input#copy_from1").val());
         }
-*/ 
-    }); 
+        else
+        {
+            // Clear on uncheck
+            $("input.col0").val("");
+        }
+*/
+    });
 
 </script>
 {% endblock header%}
 
-{% block content %} 
+{% block content %}
 <body id="body_syota_tehtava">
 
 <h1>{{tehtava.nimi|alaviiva_pois}}</h1>
 
-<form action="." name="form1" id="form1" method="post">     
+<form action="." name="form1" id="form1" method="post">
 
 <p>{% include "tupa/tallenna.html" %}</p>
 
@@ -87,14 +87,14 @@ $(document).ready(function(){
     <td width="150" valign="middle" class='virhe'><label>syöttövirhe</label></td>
     {% endifequal %}
 
-    
+
     <td bgcolor="#E8EDFF"><label><input type="checkbox" {%if tarkistettu %}checked="checked" {% endif %} name="tarkistettu" id="tarkistettu" />tarkistettu</label></td>
   </tr>
 {% if tarkistus %}<tr bgcolor="#ff9900"><td colspan=3>Syötät tarkistustuloksia</td></tr>{% endif %}
 </table>
 <br />
 
-   
+
     <table id="taulukko" border="0" cellpadding="2" cellspacing="0">
     <thead>
         <tr>
@@ -103,7 +103,7 @@ $(document).ready(function(){
             </th>
             {% for osatehtava in osatehtavat %}
                <th class="osatehtava_otsikko" colspan="{{osatehtava.syotemaarite_set.all|length}}">
-                   Osatehtävä {{ osatehtava.nimi }} 
+                   Osatehtävä {{ osatehtava.nimi }}
                </th>
                <th class="th_erotin" width=1></th>
             {% endfor %}
@@ -115,7 +115,7 @@ $(document).ready(function(){
             {% for osatehtava in osatehtavat %}
 	            {% for maarite in osatehtava.syotemaarite_set.all %}
 	               <th>
-	                   {{ maarite.nimi }} 
+	                   {{ maarite.nimi }}
 	               </th>
 	            {% endfor %}
 	            <th class="th_erotin"></th>
@@ -128,7 +128,7 @@ $(document).ready(function(){
             {% for osatehtava in osatehtavat %}
 	            {% for maarite in osatehtava.syotemaarite_set.all %}
 	               <th>
-	                   {{ maarite.tyyppi }} 
+	                   {{ maarite.tyyppi }}
 	                   {% ifequal maarite.tyyppi "aika" %}(hh:mm:ss){% endifequal %}
 	               </th>
 	            {% endfor %}
@@ -142,7 +142,7 @@ $(document).ready(function(){
             {% for osatehtava in osatehtavat %}
 	            {% for maarite in osatehtava.syotemaarite_set.all %}
 	               <th>
-	                   {{ maarite.kali_vihje }} 
+	                   {{ maarite.kali_vihje }}
 	               </th>
 	            {% endfor %}
 	            <th class="th_erotin"></th>
@@ -174,10 +174,10 @@ $(document).ready(function(){
 				</td>
 	                  {% for osatehtava in vartio.1 %}
 	                  {% for kentta in osatehtava %}
-	                         <td{% if  kentta.syottovirhe %} 
+	                         <td{% if  kentta.syottovirhe %}
 	                                bgcolor="#FF4F00"
 	                         {%endif%}>
-	                         
+
 	                         {{kentta.errors}}
 	                         {{kentta.arvo}}
 	                         {{kentta.tarkistus}}

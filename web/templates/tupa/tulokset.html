@@ -1,11 +1,11 @@
 {% extends "tupa/base.html" %}
-{% block title %}Sarjakohtaiset tulokset{% endblock title %} 
+{% block title %}Sarjakohtaiset tulokset{% endblock title %}
 {% block header %}
 {% if vaihtoaika %}
 <meta http-equiv="REFRESH" content="{{vaihtoaika}};url=/kipa/{{kisa_nimi}}/heijasta/sarja/{{vaihto_id}}/">
 {% endif %}
 {% endblock header %}
-{% block content %} 
+{% block content %}
 
 {% load kipatags %}
 
@@ -17,7 +17,7 @@
 </tr>
 <tr>
 	<td>{%if kisa_aika %}
-    		{{kisa_aika}}<br> 
+    		{{kisa_aika}}<br>
         {% endif %}
         {{kisa_paikka}}
     </td>
@@ -30,7 +30,7 @@
 {% if tulos_taulukko %}
 	<table id="tulostaulukko_screen" border=0 >
 		{% for rivi in tulos_taulukko%}
-                {%if forloop.counter|add:"3"|divisibleby:"5" %}      
+                {%if forloop.counter|add:"3"|divisibleby:"5" %}
                         <tr height="10" valign="top"><td></td></tr>
                 {% endif %}
                 {% if forloop.first %}
@@ -41,7 +41,7 @@
                                         {% comment %} ylarivin eka {% endcomment %}
                                         <td width="30" align="right"></td>
                                         <td width="30" align="right" style="padding-right:10px;"><b></b></td>
-                                        <td style="min-width:100px;"></td> 
+                                        <td style="min-width:100px;"></td>
                                         <td align="right" width=30 style="padding-right:10px;"></td>
                                 {% else %}
                                         {% comment %} ylarivi {% endcomment %}
@@ -52,11 +52,11 @@
                                         </b></td>
                                         {% endif %}
                                 {% endif %}
-			    {% endfor %}    
+			    {% endfor %}
 
                       </tr>
                       <tr valign="top">
-                
+
                         <td></td>
 			            {% for sarake in rivi %}
                      {% comment %} ylarivi {% endcomment %}
@@ -79,7 +79,7 @@
                         {%endfor %}
 
                       </tr>
-                      <tr valign="top"> 
+                      <tr valign="top">
                       <td></td><td></td><td align="right"><em>Maxpisteet</em></td>
                         {% for sarake in rivi %}
                                 {% if forloop.first  %}
@@ -100,12 +100,12 @@
                       <tr>
                             <td width="30" align="right"><b>SIJ.</b></td>
                             <td width="30" align="right" style="padding-right:10px;"><b></b></td>
-                            <td style="min-width:100px;"><b>VARTIO</b></td> 
+                            <td style="min-width:100px;"><b>VARTIO</b></td>
                             <td align="right" width=30 style="padding-right:10px;"><b>YHT</b></td>
                       </tr>
 
                       <tr valign='top'>
-                      
+
                 {% else %}
 			    {% for sarake in rivi %}
                      {% comment %} ylarivi {% endcomment %}
@@ -122,14 +122,14 @@
                      {% comment %} muut sarakkeet {% endcomment %}
                      {% else %}
                         <td align="right" style="padding-right:10px;">
-                                {% if forloop.first %} <b> {%endif%}     
+                                {% if forloop.first %} <b> {%endif%}
                                         {{ sarake }}
-                                {% if forloop.first %} </b> {%endif%}     
+                                {% if forloop.first %} </b> {%endif%}
                         </td>
                      {% endifequal %}
                      {% endifequal %}
-                     
-			    {% endfor %} 
+
+			    {% endfor %}
                      {% endif %}
 		      </tr>
                {% comment %} ULKONA OLEVAT: {% endcomment %}
@@ -139,35 +139,35 @@
                         {% for rivi in ulkona_taulukko%}
                         <tr valign='top'>
 			            {% for sarake in rivi %}
-                                
+
 
                                 {% ifequal forloop.counter 2 %}
                                         {% comment %} ekasarake {% endcomment %}
-                                        <td align="right" style="padding-right:10px;">{{ sarake.nro }}</td> <td>{{ sarake.nimi }} 
+                                        <td align="right" style="padding-right:10px;">{{ sarake.nro }}</td> <td>{{ sarake.nimi }}
                                                 {%if sarake.lippukunta %}<br>{%endif%}
                                                 {{sarake.lippukunta}}
-                                                {%if sarake.piiri %}<br> {%endif%} 
+                                                {%if sarake.piiri %}<br> {%endif%}
                                                 {{sarake.piiri}} </td>
-                                        
+
                                 {% else %}
                                         {% comment %} muut sarakkeet {% endcomment %}
                                 <td align="right" style="padding-right:10px;">
-                                        {% if forloop.first %} <b> {%endif%}     
+                                        {% if forloop.first %} <b> {%endif%}
                                         {{ sarake }}
-                                        {% if forloop.first %} </b> {%endif%}     
+                                        {% if forloop.first %} </b> {%endif%}
                                 </td>
                                 {% endifequal %}
                         {% endfor %}
                         </tr>
-                        {%if forloop.counter|divisibleby:"5" %}      
+                        {%if forloop.counter|divisibleby:"5" %}
                                         <tr height=10><td></td></tr>
                         {% endif %}
                         {% endfor %}
                 {% endif %}
         {% endfor %}
-        
+
 	</table>
-       
+
 {% else %}
     <p>Ei tuloksia.</p>
 {% endif %}

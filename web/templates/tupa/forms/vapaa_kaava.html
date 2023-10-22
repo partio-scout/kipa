@@ -5,14 +5,14 @@
 	<tr>
 		<td>Syötteen {{maarite.nimi}} kuvaus:</td>
 		<td>
-			<input type="text" 
-			        name="{{maarite.kali_vihje.name}}" 
-			        id="{{maarite.kali_vihje.id}}" 
+			<input type="text"
+			        name="{{maarite.kali_vihje.name}}"
+			        id="{{maarite.kali_vihje.id}}"
 			        value="{{maarite.kali_vihje.value}}" />
-			         Tyyppi: 
+			         Tyyppi:
 
 		        <select name="{{maarite.tyyppi.name}}">
-		                <option value="piste" 
+		                <option value="piste"
 		                {% ifequal maarite.tyyppi.value "piste" %}selected="selected"{% endifequal %}
 		                 >piste</option>
 		                <option value="aika"
@@ -28,13 +28,13 @@
 
 <font color=red><b>{{kaava.errors}}</b></font> Vartion suorituksen kaava:
 <span onmouseover="tooltip.show('Tähän tulee kaava, jolla lasketaan yksittäisen vartion suoritus osatehtävässä. Syötteisiin viitataan niiden kirjaimilla. Aikaa käsitellään laskennallisesti sekunteina.' );" onmouseout="tooltip.hide();"><img src="/kipamedia/help_small.png" />
-    
+
 Funktiot: {% include "tupa/forms/funktiot_apu.html" %} Operaattorit: {% include "tupa/forms/operaattorit_apu.html" %}
 </span>
 
-<input type="text" 
-                        name="{{kaava.name}}" 
-                        id="{{kaava.id}}" 
+<input type="text"
+                        name="{{kaava.name}}"
+                        id="{{kaava.id}}"
                         value="{{kaava.value}}" style="width:100%;" /><br />
 <br><br>
 
