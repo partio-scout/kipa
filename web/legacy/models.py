@@ -15,7 +15,7 @@ class Kisa(models.Model) :
         paikka = models.CharField(max_length=255)
         class Meta:
             db_table = u'tupa_kisa'
-        
+
 
         #end_legacy_class
 
@@ -28,7 +28,7 @@ class Sarja(models.Model) :
         kisa = models.ForeignKey(Kisa)
         class Meta:
             db_table = u'tupa_sarja'
-        
+
 
         #end_legacy_class
 
@@ -47,7 +47,7 @@ class Vartio(models.Model) :
         ulkopuolella = models.IntegerField(null=True, blank=True)
         class Meta:
             db_table = u'tupa_vartio'
-        
+
 
         #end_legacy_class
 
@@ -62,7 +62,7 @@ class Henkilo(models.Model) :
         homma = models.CharField(max_length=255, blank=True)
         class Meta:
             db_table = u'tupa_henkilo'
-        
+
 
         #end_legacy_class
 
@@ -79,10 +79,10 @@ class Tehtava(models.Model) :
         tarkistettu = models.BooleanField()
         class Meta:
             db_table = u'tupa_tehtava'
-        
+
 
         #end_legacy_class
-        
+
 
 class Osatehtava(models.Model) :
         #gen_legacy_class Osatehtava
@@ -93,7 +93,7 @@ class Osatehtava(models.Model) :
         tehtava = models.ForeignKey(Tehtava)
         class Meta:
             db_table = u'tupa_osatehtava'
-        
+
 
         #end_legacy_class
 
@@ -106,7 +106,7 @@ class Syotemaarite(models.Model) :
         osa_tehtava = models.ForeignKey(Osatehtava)
         class Meta:
             db_table = u'tupa_syotemaarite'
-        
+
 
         #end_legacy_class
 
@@ -119,7 +119,7 @@ class Syote(models.Model) :
         tarkistus = models.CharField(max_length=255, blank=True)
         class Meta:
             db_table = u'tupa_syote'
-        
+
 
         #end_legacy_class
 
@@ -131,7 +131,7 @@ class Tuomarineuvostulos(models.Model) :
         pisteet = models.CharField(max_length=255)
         class Meta:
             db_table = u'tupa_tuomarineuvostulos'
-        
+
 
         #end_legacy_class
 
@@ -143,7 +143,7 @@ class Testaustulos(models.Model):
         pisteet = models.CharField(max_length=255)
         class Meta:
             db_table = u'tupa_testaustulos'
-        
+
 
         #end_legacy_class
 
@@ -155,7 +155,7 @@ class Parametri(models.Model) :
         osa_tehtava = models.ForeignKey(Osatehtava)
         class Meta:
             db_table = u'tupa_parametri'
-        
+
 
         #end_legacy_class
-        
+

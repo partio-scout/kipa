@@ -60,7 +60,7 @@ for name, checks in accounts.items():
           include uwsgi_params;
           uwsgi_pass unix:/run/uwsgi/kipa.sock;
       }}
-  
+
       """.format(baseurl=baseurl, name=name.capitalize(), id=id, pwdfile=pwdfile)
 
 c = open(path + 'access.conf', 'w')

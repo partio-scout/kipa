@@ -18,7 +18,7 @@ class Command(NoArgsCommand):
     def handle_noargs(self, **options):
         source=open( "legacy/models.py" , "r" )
         koodi=source.read()
-        source.close()        
+        source.close()
         try:
             koodi=self.handle_inspection(options,koodi)
             source=open( "legacy/models.py","w" )
@@ -118,13 +118,13 @@ class Command(NoArgsCommand):
                 if comment_notes:
                     field_desc += ' # ' + ' '.join(comment_notes)
                 runko+=  sisennys + field_desc + "\n"
-                runko = runko.replace( "Tupa", "" ) 
+                runko = runko.replace( "Tupa", "" )
             for meta_line in self.get_meta(table_name):
                 runko+= sisennys + meta_line + "\n"
             koodi = re.sub(r'(?s)(?<=#gen_legacy_class '+ luokka +'\n).*?#end_legacy_class',
                                 runko+"\n"+sisennys +r"#end_legacy_class",koodi)
-            
-        return koodi 
+
+        return koodi
 
     def get_field_type(self, connection, table_name, row):
         """

@@ -72,7 +72,7 @@ class TehtavaLinkkilistaFormset(tuhoaTehtaviaFormset):
                         if form.instance:
                                 linkki=unicode(form.instance.id)+"/"
                                 nimi=unicode(form.instance.jarjestysnro)+". "+unicode(form.instance.nimi)
-                        piirto=piirto+"<a href="+linkki+">"+nimi+"</a>  "+form.as_p()+"<br>" 
+                        piirto=piirto+"<a href="+linkki+">"+nimi+"</a>  "+form.as_p()+"<br>"
                         piirto = piirto.replace("<p>","").replace("</p>","")
                 return SafeUnicode(piirto)
 
@@ -85,7 +85,7 @@ class HelpWidget(forms.TextInput):
                 self.helptext=helptext
 
         def render(self, name , value=None, attrs=None):
-                return SafeUnicode(super(HelpWidget, self).render(name, value, attrs) ) + '<span onmouseover="tooltip.show(\''+ self.helptext +'\');" onmouseout="tooltip.hide();"><img src="/kipamedia/help_small.png" /></span>' 
+                return SafeUnicode(super(HelpWidget, self).render(name, value, attrs) ) + '<span onmouseover="tooltip.show(\''+ self.helptext +'\');" onmouseout="tooltip.hide();"><img src="/kipamedia/help_small.png" /></span>'
 
 
 
@@ -108,11 +108,11 @@ class AikaWidget(forms.TextInput):
                                 newValue = str(h) +":"+str(min) +":"+str(sec)
                         except ValueError:
                                 pass
-                return super(AikaWidget,self).render(name,newValue,attrs) 
+                return super(AikaWidget,self).render(name,newValue,attrs)
 
 class PisteField(forms.CharField) :
         """
-        Decimal field accepting "kesk",h and ,/. as decimal delimiter 
+        Decimal field accepting "kesk",h and ,/. as decimal delimiter
         """
         def clean(self, value) :
                 value = value.strip()
@@ -137,13 +137,13 @@ class PisteField(forms.CharField) :
 
 class AikaField(forms.CharField):
         """
-        Validates field input as "hh:mm:ss" 
+        Validates field input as "hh:mm:ss"
         Converts input to an string number, time in seconds.
         """
         def clean(self, value) :
                 value = value.strip()
                 super(AikaField, self).clean(value)
-                haku = re.match(r"^(\d+):(\d+):(\d+)$",value)    
+                haku = re.match(r"^(\d+):(\d+):(\d+)$",value)
                 if haku:
                         return unicode(int(haku.group(1))*60*60 + int(haku.group(2))*60 + int(haku.group(3)))
                 elif not value :
@@ -181,7 +181,7 @@ def savePisteSyote(self,syote,field,fieldName,alternateName):
 
 class PisteSyoteForm(ModelForm):
         arvo = PisteField(required=False,widget=forms.TextInput(attrs={'size':'16', 'class':'numeric'} ) )
-        tarkistus = PisteField(required=False,widget=forms.HiddenInput ) 
+        tarkistus = PisteField(required=False,widget=forms.HiddenInput )
         def __init__(self,maarite,vartio,*argv,**argkw) :
                 super(ModelForm,self).__init__(*argv,**argkw)
                 self.maarite=maarite
@@ -214,7 +214,7 @@ class AikaSyoteForm(PisteSyoteForm) :
 
 class AikaTarkistusForm(PisteTarkistusForm) :
         tarkistus=AikaField(required=False,widget=AikaWidget( attrs={'class': 'time','value': ''} ))
-             
+
 def SyoteForm(*argv,**argkw) :
         if argv[0].tyyppi=="aika":
                 return AikaSyoteForm(*argv,**argkw)
@@ -237,8 +237,8 @@ def tulostauluFormFactory( tauluTyyppi ) :
                         self.taulu=None
                         self.posti=posti
                         self.errors=""
-                        self.id = "tuomarineuvos_"+str(vartio.id)+"_"+str(tehtava.id) 
-                        try : 
+                        self.id = "tuomarineuvos_"+str(vartio.id)+"_"+str(tehtava.id)
+                        try :
                                 self.taulu=tauluTyyppi.objects.get(vartio=vartio,tehtava=tehtava)
                         except tauluTyyppi.DoesNotExist : pass
                         self.vartio=vartio
@@ -247,13 +247,13 @@ def tulostauluFormFactory( tauluTyyppi ) :
                         if self.posti and self.id in self.posti.keys():
                                 self.pisteet=self.posti[self.id]
                                 return 1
-                        else: 
+                        else:
                                 return None
-                def save(self): 
+                def save(self):
                         tulos=None
-                        if self.pisteet == None or len(self.pisteet)==0  and self.taulu : 
+                        if self.pisteet == None or len(self.pisteet)==0  and self.taulu :
                                 self.taulu.delete()
-                        if self.pisteet and len(self.pisteet)  : 
+                        if self.pisteet and len(self.pisteet)  :
                                 tulos, created = tauluTyyppi.objects.get_or_create(vartio=self.vartio,
                                                                               tehtava=self.tehtava)
                                 tulos.pisteet=self.pisteet
@@ -261,13 +261,13 @@ def tulostauluFormFactory( tauluTyyppi ) :
                                 self.taulu=tulos
                         return tulos
                 def __unicode__(self) :
-                        formidata = { "name" : self.id  , "id" : self.id ,"value": "","errors" : self.errors } 
-                        if self.taulu: 
+                        formidata = { "name" : self.id  , "id" : self.id ,"value": "","errors" : self.errors }
+                        if self.taulu:
                                 formidata["value"]=self.taulu.pisteet
                         return render_to_string("tupa/forms/tulostaulu.html",  dict(formidata) )
         return tulostauluForm
 
-TuomarineuvosForm = tulostauluFormFactory( TuomarineuvosTulos ) 
+TuomarineuvosForm = tulostauluFormFactory( TuomarineuvosTulos )
 TestiTulosForm = tulostauluFormFactory( TestausTulos )
 
 ####################################################################
@@ -278,7 +278,7 @@ class KisaForm(ModelForm):
         def clean_nimi(self):
                 nimi = self.cleaned_data['nimi']
                 nimi = re.sub(r'\s', '_',nimi)
-                kisat = Kisa.objects.all() 
+                kisat = Kisa.objects.all()
                 for k in kisat :
                         if k.nimi==nimi and self.instance and not self.instance == k :
                                 raise forms.ValidationError("Nimi on jo käytössä")
@@ -299,7 +299,7 @@ class UploadFileNameForm(forms.Form):
         def clean_name(self):
                 nimi = self.cleaned_data['name']
                 nimi = re.sub(r'\s', '_',nimi)
-                kisat = Kisa.objects.all() 
+                kisat = Kisa.objects.all()
                 for k in kisat :
                         if k.nimi==nimi :
                                 raise forms.ValidationError("Nimi on jo käytössä")

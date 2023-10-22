@@ -393,7 +393,7 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                             formi =  TarkistusSyoteForm(m,v,posti,instance=syote,prefix=str(v.nro)+"_"+str(m.pk),)
                         else : # Syötetään normi syötteitä.
                                 formi = SyoteForm(m,v,posti,instance=syote,prefix=str(v.nro)+"_"+str(m.pk),)
-                        if not "class" in formi.fields['arvo'].widget.attrs.keys() : 
+                        if not "class" in formi.fields['arvo'].widget.attrs.keys() :
                             formi.fields['arvo'].widget.attrs["class"]="col"+str(colnum)
                         else: formi.fields['arvo'].widget.attrs["class"] += " col" + str(colnum)
 
