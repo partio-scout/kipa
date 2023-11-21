@@ -12,7 +12,7 @@ from TulosLaskin import *
 import settings
 
 import thread
-import time 
+import time
 
 import log
 from binascii import *

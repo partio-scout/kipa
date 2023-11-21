@@ -1,6 +1,6 @@
 {% extends "tupa/base.html" %}
 {% block title %}{{ heading }}{% endblock %}
-{% block content %} 
+{% block content %}
 
 {% load kipatags %}
 
@@ -12,7 +12,7 @@
     {% for form in forms%}
         <fieldset>
 		<legend>{{form.label}}</legend>
-		{{form}} 
+		{{form}}
         {{form.helppiteksti}}<br>
 	</fieldset>
     {% endfor%}

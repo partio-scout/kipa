@@ -1,6 +1,6 @@
 {% extends "tupa/valitse.html" %}
 
-{% block sarake %} 
+{% block sarake %}
 	<table width="600" border="1">
         <tr>
         <td></td>
@@ -17,13 +17,13 @@
                 <td>{{rivi.nimi}}</td>
 			    {% for kentta in rivi.formit%}
 			         <td>{{ kentta }}{{kentta.errors}}</td>
-			    {% endfor %}    
-		      </tr>    
+			    {% endfor %}
+		      </tr>
 		{% endfor %}
 	</table>
 {% endblock%}
 {% block content %}
-        <form action="." method="post">     
+        <form action="." method="post">
         {{ block.super }}
         {% include "tupa/tallenna.html" %}
 {% endblock%}

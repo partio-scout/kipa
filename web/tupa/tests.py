@@ -51,9 +51,9 @@ class aritmeettinen_laskin_test(unittest.TestCase):
         assert    laske('5+2**5') == Decimal('37')
     def testkaksiplusmerkkia(self):
         assert    laske('5+2++5') == Decimal('12')
-    def testkaksimiinusmerkkia(self): 
+    def testkaksimiinusmerkkia(self):
         assert    laske('5+2--5') == Decimal('12')
-    def testplusmiinus(self): 
+    def testplusmiinus(self):
         assert    laske('5+2+-5') == Decimal('2')
     def testkertojako(self):
         assert    laske('5+2*/5') == None
@@ -70,7 +70,7 @@ class aritmeettinen_laskin_test(unittest.TestCase):
     def testMedFunktio(self):
         assert laske('med(a)', {'a': Decimal("4") } ) == Decimal("4")
     #def testMedFunktio2(self):
-    #    assert laske('med(a)', {'a': {'a' : Decimal("4"),'b' : Decimal("5"),'c' : Decimal("6")} }) == Decimal("5") 
+    #    assert laske('med(a)', {'a': {'a' : Decimal("4"),'b' : Decimal("5"),'c' : Decimal("6")} }) == Decimal("5")
     #Poistettu, koska nykyinen toteutsu ei toimi n�in, muutetaan vastaavaksi joskus...
     def testListaFunktio(self):
         assert laske('min([a,3,1])', {'a': Decimal("100") } ) == Decimal("1")
@@ -136,7 +136,7 @@ def ViewSanityCheck(fixture_name):
                                 maaritaTehtava(request,kisa_nimi=kisa_nimi,sarja_id=sarja_id)
                                 kopioiTehtavia(request,kisa_nimi=kisa_nimi,sarja_id=sarja_id)
                                 tulostaSarja(request,kisa_nimi=kisa_nimi, sarja_id=sarja_id)
-                                sarjanTuloksetCSV(request, kisa_nimi=kisa_nimi, sarja_id=sarja_id) 
+                                sarjanTuloksetCSV(request, kisa_nimi=kisa_nimi, sarja_id=sarja_id)
                                 tulostaSarjaHTML(request, kisa_nimi=kisa_nimi, sarja_id=sarja_id)
                         for t in tehtavat: # teht�v�kohtaiset n�kym�t
                                 tehtava_id=t.id
@@ -165,14 +165,14 @@ def TulosTestFactory(fixture_name):
                         settings.DEBUG=False
                         self.sarjat=Sarja.objects.select_related().all()
                         virheet=[]
-                        settings.TAUSTALASKENTA = False 
-                        settings.CACHE_TULOKSET = False 
+                        settings.TAUSTALASKENTA = False
+                        settings.CACHE_TULOKSET = False
                         settings.CACHE_BACKEND = 'dummy:///' # No cache in use
                         for s in self.sarjat:
                                 virheilmoitus=unicode("")
                                 for f in self.fixtures:
-                                        virheilmoitus=virheilmoitus+f+" " 
-                                        
+                                        virheilmoitus=virheilmoitus+f+" "
+
                                 virheilmoitus=virheilmoitus+"\nSarja: "+s.nimi+""
                                 self.testausTulokset=TestausTulos.objects.select_related().filter(tehtava__sarja=s)
                                 tulokset=s.laskeTulokset()
@@ -191,19 +191,19 @@ def TulosTestFactory(fixture_name):
                                                 ilmoitus= virheilmoitus
                                                 ilmoitus=ilmoitus + "\nTehtava: " + t.tehtava.nimi
                                                 ilmoitus=ilmoitus + "\nKaava: " + t.tehtava.kaava
-                                                ilmoitus=ilmoitus + "\nOstatehtavien kaavat: " 
+                                                ilmoitus=ilmoitus + "\nOstatehtavien kaavat: "
                                                 for k in OsaTehtava.objects.filter(tehtava=t.tehtava):
                                                         ilmoitus=ilmoitus + "\n"+k.nimi +"="+ k.kaava + " "
-                                                        ilmoitus=ilmoitus + "\n  Parametrit: " 
+                                                        ilmoitus=ilmoitus + "\n  Parametrit: "
                                                         for p in Parametri.objects.filter(osa_tehtava=k):
                                                                 ilmoitus=ilmoitus + "\n    "+p.nimi+"="+p.arvo+" "
                                                         ilmoitus=ilmoitus + "\nSyotteet: "
                                                         for syo in Syote.objects.filter(maarite__osa_tehtava=k).filter(vartio=t.vartio):
 
                                                                 ilmoitus=ilmoitus + syo.maarite.nimi+"="+ syo.arvo + " "
-                                                ilmoitus=ilmoitus + "\nVartio: "  + t.vartio.nimi  
+                                                ilmoitus=ilmoitus + "\nVartio: "  + t.vartio.nimi
                                                 ilmoitus=ilmoitus + "\nTulos: "   + str(tulos)+' != '+str(vaadittava)
-                                                virheet.append(ilmoitus) 
+                                                virheet.append(ilmoitus)
                                 for t in s.tehtava_set.all() :
                                     for v in s.vartio_set.all() :
                                         tulos=haeTulos(tulokset,v,t)
@@ -211,11 +211,11 @@ def TulosTestFactory(fixture_name):
                                             ilmoitus= virheilmoitus
                                             ilmoitus=ilmoitus + "\nTehtava: " + t.nimi
                                             ilmoitus=ilmoitus + "\nTulos: "   + str(tulos)
-                                            virheet.append(ilmoitus) 
+                                            virheet.append(ilmoitus)
 
                         virhe= str(len(virheet)) + " errors"
                         for v in virheet:
-                                virhe=virhe + "\n--------------------------------\n" + v 
+                                virhe=virhe + "\n--------------------------------\n" + v
                         self.failUnless( len(virheet) == 0 , unicode(virhe).encode('ascii', 'replace'))
                 	sys.stdout.flush()
 
@@ -226,13 +226,13 @@ def TulosTestFactory(fixture_name):
                         """
                         #Kytket��n taustalaskenta pois p��lt� testin ajaki
                         settings.DEBUG=False
-                        self.TAUSTALASKENTA=settings.TAUSTALASKENTA                        
+                        self.TAUSTALASKENTA=settings.TAUSTALASKENTA
                         settings.TAUSTALASKENTA=None
                         posti_vapaa={}
                         posti_puhdas={}
                         for s in Sarja.objects.select_related().all():
                                 for t in s.tehtava_set.all() :
-                                        # Parsitaan post data html sivusta: 
+                                        # Parsitaan post data html sivusta:
                                         posti={}
                                         c = Client()
                                         osoite ="/kipa/"+s.kisa.nimi+"/maarita/tehtava/"+str(t.id)+"/"
@@ -250,9 +250,9 @@ def TulosTestFactory(fixture_name):
                                                                         posti[name.group(1)]=value.group(1)
                                                                 elif check :
                                                                         posti[name.group(1)]=value.group(1)
-                                        
+
                                         all=re.findall(r'<select\s*?name=["\'](.*?)["\'].*?>(.*?)</select>',page)
-                                        if all : 
+                                        if all :
                                            for i in all:
                                               j=re.search('<(\s*?option.*?selected=["\']selected["\'].*?)>',i[1])
                                               if j:
@@ -334,7 +334,7 @@ def run_one_fixture(test_labels, verbosity=1, interactive=True, extra_tests=[]):
                     sys.stdout.flush()
                     #print ('Testataan fixtuurit: %s\n' %test_fixtures)
 
-        # Jos testilabeliksi asetettu 'perus' ajetaan ainoastaan fixtures kansiosta löytyvät testit            
+        # Jos testilabeliksi asetettu 'perus' ajetaan ainoastaan fixtures kansiosta löytyvät testit
         elif test_labels[0] == 'perus':
             print '\n***Ajetaan perusfixtuurit***\n'
             test_fixtures=[]
@@ -346,12 +346,12 @@ def run_one_fixture(test_labels, verbosity=1, interactive=True, extra_tests=[]):
                     sys.stdout.flush()
 
         #Jos label on määritelty, muttei ole perus tai kisat, oletetaan sen olevan
-	#ajettavaksi haluttu yksittäinen fixtuuri            
+	#ajettavaksi haluttu yksittäinen fixtuuri
         else:
             # Ajetaan vain yksi, annettu fixtuuri
-            print '\n***Ajetaan yksi fixtuuri***\n'    
+            print '\n***Ajetaan yksi fixtuuri***\n'
             print ( '%s.xml\n' %test_labels[0] )
-            test_fixtures = []	
+            test_fixtures = []
             test_fixtures.extend(test_labels)
             for item in range(len(test_fixtures)):
 		if test_fixtures[item].endswith('.xml'):
@@ -359,7 +359,7 @@ def run_one_fixture(test_labels, verbosity=1, interactive=True, extra_tests=[]):
 		else:
 			test_fixtures[item] = ('%s/fixtures/tests/%s.xml' %(os.curdir, test_fixtures[item]))
 
-    # Jos testilabelia ei ole määritelty ajetaan kaikki mahdolliset testit             
+    # Jos testilabelia ei ole määritelty ajetaan kaikki mahdolliset testit
     else:
         # Testeissä käytettävät fixturet:
         # haetaan kaikki xml fixtuurien nimet.
@@ -371,14 +371,14 @@ def run_one_fixture(test_labels, verbosity=1, interactive=True, extra_tests=[]):
 			print ('Löytyi: %s\n' %f)
                 	test_fixtures.append("fixtures/tests/"+f)
 			sys.stdout.flush()
-            
-        print '\n***Ajetaan kisa fixtuurit***\n'    
+
+        print '\n***Ajetaan kisa fixtuurit***\n'
         test_labels = ''
         for f in os.listdir(os.curdir+"/fixtures/tests/kisat/"):
             if not f.find(".xml") == -1 :
                 print ('Löytyi: %s\n' %f)
                 test_fixtures.append("fixtures/tests/kisat/"+f)
-                sys.stdout.flush()	
+                sys.stdout.flush()
 
     # Tasapisteiss� m��r��v�t teht�v�t testi
     testit.append( TasapisteTesti )
@@ -394,9 +394,9 @@ def run_one_fixture(test_labels, verbosity=1, interactive=True, extra_tests=[]):
     # luodaan viewtestit fixtuureista.
     for t in test_fixtures:
        	testit.append( ViewSanityCheck(t) )
-          
+
     #suite = reorder_suite(suite, (TestCase,))
-    suites = [] 
+    suites = []
     for t in testit :
         suites.append(unittest.TestLoader().loadTestsFromTestCase(t))
     suite=unittest.TestSuite(suites)

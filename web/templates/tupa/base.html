@@ -56,8 +56,8 @@ document.getElementById(id).style.display = visibility;
 
 <div id="wrap">
 
-    <div id="header"><div id="pageTitle" class="capitalize"><a href="/kipa/{{kisa_nimi}}/">{{kisa_nimi|alaviiva_pois}}</a></div>  
-		<div style="float:right; margin-top:-4px; margin-bottom:0; padding-bottom:0; height:18px;">		
+    <div id="header"><div id="pageTitle" class="capitalize"><a href="/kipa/{{kisa_nimi}}/">{{kisa_nimi|alaviiva_pois}}</a></div>
+		<div style="float:right; margin-top:-4px; margin-bottom:0; padding-bottom:0; height:18px;">
 			{% include "tupa/login.html" %}
 		</div>
 
@@ -66,9 +66,9 @@ document.getElementById(id).style.display = visibility;
 	{% if tarkistus %}
 	<a href="/kipa/{{kisa_nimi}}/" class="capitalize">{{kisa_nimi|alaviiva_pois}}</a> {%if taakse.url and taakse.title%}&raquo; <a href="{{taakse.url}}tarkistus/">{{taakse.title|alaviiva_pois}} (tarkistus)</a> {% endif %}&raquo; {{heading|alaviiva_pois}}
 	{% else %}
-	<a href="/kipa/{{kisa_nimi}}/" class="capitalize">{{kisa_nimi|alaviiva_pois}}</a> {%if taakse.url and taakse.title%}&raquo; <a href="{{taakse.url}}">{{taakse.title|alaviiva_pois}}</a> {% endif %}&raquo; {{heading|alaviiva_pois}}   
+	<a href="/kipa/{{kisa_nimi}}/" class="capitalize">{{kisa_nimi|alaviiva_pois}}</a> {%if taakse.url and taakse.title%}&raquo; <a href="{{taakse.url}}">{{taakse.title|alaviiva_pois}}</a> {% endif %}&raquo; {{heading|alaviiva_pois}}
     {% endif %}
-    
+
     </div>
 
     <div id="main" class="clearfix">
@@ -76,7 +76,7 @@ document.getElementById(id).style.display = visibility;
         <div id="container">
 
             <div id="left" class="column">
-                <div id="sitetoolbarrow"> 
+                <div id="sitetoolbarrow">
 					<a href="/kipa/{{kisa_nimi}}/" class="sitetoolbarnav" title="Etusivulle"><img src="/kipamedia/home.png" width="32" height="32" alt="Etusivulle" /></a>
 					<a href="/kipa/{{kisa_nimi}}/syota/" class="sitetoolbarnav" title="Syötä suorituksia"><img src="/kipamedia/add.png" width="32" height="32" alt="Syötä suorituksia" /></a>
 					<a href="/kipa/{{kisa_nimi}}/syota/tarkistus/" class="sitetoolbarnav" title="Syötä suorituksia (tarkistus)"><img src="/kipamedia/accept.png" width="32" height="32" alt="Syötä suorituksia (tarkistus)" /></a>

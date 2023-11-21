@@ -21,17 +21,17 @@ class PostDataRecorder:
         """
         Nauhoittaa post requestit record.xml tietokanta tiedoston loppuun mikali se on olemassa ja settings.RECORDING==True
         """
-        def process_request(self, request) : 
-                if settings.RECORDING==True: 
+        def process_request(self, request) :
+                if settings.RECORDING==True:
                         if request.method == 'POST':
                                 posti=request.POST
                                 address=request.path
-                                
+
                                 kisa_haku = re.search("^/kipa/(.*?)/.*$",address)
                                 if not kisa_haku:
                                         return None
                                 kisa_nimi = kisa_haku.group(1)
-                                
+
                                 if kisa_nimi == "uusiKisa" :
                                         kisa_nimi = posti['nimi']
                                 record_name="record/" + kisa_nimi +".xml"
@@ -46,8 +46,8 @@ class PostDataRecorder:
                                         elem.setAttribute("name", n )
                                         elem.setAttribute("value", v )
                                         post_test.appendChild(elem)
-                                        data.childNodes[0].appendChild(post_test) 
-                                
+                                        data.childNodes[0].appendChild(post_test)
+
                                 if not os.path.isfile(record_name) :
                                         uusi = open(record_name,"w")
                                         if not kisa_haku.group(1) == "uusiKisa" :
@@ -65,10 +65,10 @@ class PostDataRecorder:
                                         pos = next # position of beginning of this line
                                         next += len(line) # compute position of beginning of next line
                                 filuu.close()
-                                
+
                                 FILE = open(record_name,"r+")
                                 FILE.seek(pos,0)
-                                
+
                                 uusi=data.toprettyxml(encoding="utf-8",indent='    ', newl="\n")
                                 for line in uusi.splitlines()[2:-1]:
                                         FILE.write(line+"\n")

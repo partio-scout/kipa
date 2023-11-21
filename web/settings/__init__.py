@@ -35,10 +35,10 @@ if not CACHE_TULOKSET:
         CACHE_BACKEND = 'dummy:///' # No cache in use
         TAUSTALASKENTA = False
 
-# Local time zone for this installation. 
+# Local time zone for this installation.
 TIME_ZONE = 'Europe/Helsinki'
 
-# Language code for this installation. 
+# Language code for this installation.
 LANGUAGE_CODE = 'fi-FI'
 
 SITE_ID = 1
