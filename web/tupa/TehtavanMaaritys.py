@@ -57,7 +57,7 @@ def is_kaava(s) :
                         #numero+=1
                 tulos = laskeTaulukko([[kaava]],muuttujat)
                 if tulos[0][0]==None or tulos[0][0]=='S' :
-			return False
+                        return False
                 else : return True
 
 def validate(posti,field_name,testFunctions,prefix="" ) :

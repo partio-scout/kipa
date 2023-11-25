@@ -53,7 +53,7 @@ def summa( *lista ) :
         s=DictDecimal(0)
         for v in lista :
                 if v and not type(v)==unicode and not type(v)==str:
-			s=s+v
+                        s=s+v
         return s
 
 def interpoloi(x,x1,y1,x2,y2=0):
