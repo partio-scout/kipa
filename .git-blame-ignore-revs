@@ -4,3 +4,8 @@ e08c8ac867542061ddd9d5ba96bfe4f4e6080b7c
 # Remove trailing spaces from templates and css
 54c1c73c606545b05dd3e762eecec583b84ffad0
 
+# Use spaces instead of tabs in python files
+f1a94d22a334661a8ddbd7a04d5c1d480886ef32
+
+# Use spaces instead of tabs in template files
+ae6391ac34b6f959fd16053f24076353aae0e54b
