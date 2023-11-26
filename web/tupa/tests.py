@@ -8,6 +8,7 @@ from models import *
 from taulukkolaskin import *
 import decimal
 from django.test import TestCase
+from django.test.simple import DjangoTestSuiteRunner
 from views import *
 import os
 from django.test.client import Client
@@ -307,6 +308,10 @@ class TasapisteTesti(TestCase) :
                 assert tulokset[0][5][0].nro==5
                 assert tulokset[0][6][0].nro==6
 
+class CustomTestRunner(DjangoTestSuiteRunner):
+        def run_tests(self, test_labels=None, extra_tests=None, verbosity=1, interactive=True, failfast=True, **kwargs):
+                run_one_fixture(test_labels, verbosity, interactive, extra_tests)
+
 def run_one_fixture(test_labels, verbosity=1, interactive=True, extra_tests=[]):
 #ajetaan vain haluttu fixtuuri
 # Nollataan fixturet
@@ -401,7 +406,7 @@ def run_one_fixture(test_labels, verbosity=1, interactive=True, extra_tests=[]):
         suites.append(unittest.TestLoader().loadTestsFromTestCase(t))
     suite=unittest.TestSuite(suites)
 
-    old_name = settings.DATABASE_NAME
+    old_name = settings.DATABASES["default"]["NAME"]
     from django.db import connection
     connection.creation.create_test_db(verbosity, autoclobber=not interactive)
     result = unittest.TextTestRunner(verbosity=verbosity).run(suite)
