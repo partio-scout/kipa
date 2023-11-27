@@ -2,6 +2,8 @@ import os
 
 hakemisto=os.path.normpath(os.path.dirname(__file__)) + '/..'
 
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 RECORDING = False
