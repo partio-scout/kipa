@@ -15,7 +15,7 @@
         <div style="float:right; margin-top:-4px; margin-bottom:0; padding-bottom:0; height:18px;">
             {% include "tupa/login.html" %}
         </div>
-	</div><!-- /header -->
+    </div><!-- /header -->
     <div id="breadcrumbs"></div>
 
     <div id="main" class="clearfix">
@@ -23,20 +23,20 @@
         <div id="container">
             <div id="right" class="column">
 
-		<h1>Kisat</h1>
-		<blockquote>
-			{% if object_list %}
-			    {% for kisa in object_list %}
-				<A href='{{kisa.nimi}}/' > {{kisa.nimi}} </A> <br>
-			    {% endfor %}
+        <h1>Kisat</h1>
+        <blockquote>
+            {% if object_list %}
+                {% for kisa in object_list %}
+                <A href='{{kisa.nimi}}/' > {{kisa.nimi}} </A> <br>
+                {% endfor %}
 
-			{% else %}
-			    <p>Ei määriteltyjä kisoja.</p>
-			{% endif %}
+            {% else %}
+                <p>Ei määriteltyjä kisoja.</p>
+            {% endif %}
 
-			<p><A href='uusiKisa/maarita/'>Luo uusi kisa</A><br></p>
-			<p><A href='lisaaKisa/'> Lisää kisa tiedostosta</A><br></p>
-		</blockquote>
+            <p><A href='uusiKisa/maarita/'>Luo uusi kisa</A><br></p>
+            <p><A href='lisaaKisa/'> Lisää kisa tiedostosta</A><br></p>
+        </blockquote>
 
             </div><!-- /right -->
         </div><!-- /container -->

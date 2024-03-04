@@ -64,7 +64,7 @@ def kopioiTehtava(teht,sarjaan,uusiNimi=None) :
                         uusip.id=None # Luodaan uusi seuraavalla savella.
                         uusip.save()
 
-		# Kopioi maaritteet:
+                # Kopioi maaritteet:
                 maaritteet = ot.syotemaarite_set.all()
                 for m in maaritteet:
                         uusim=copy_model_instance(m)

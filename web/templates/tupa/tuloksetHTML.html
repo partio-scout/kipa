@@ -6,21 +6,21 @@
 <style type="text/css">
 <!--
 BODY {
-	Size: A4 landscape;
-	FONT-SIZE: 11px;
-	LINE-HEIGHT: 120%;
-	FONT-FAMILY: Tahoma, Verdana, Arial, Helvetica, sans-serif;
-	BACKGROUND-COLOR: white;
-	margin-top: 15px;
-	margin-left: 20px;
+    Size: A4 landscape;
+    FONT-SIZE: 11px;
+    LINE-HEIGHT: 120%;
+    FONT-FAMILY: Tahoma, Verdana, Arial, Helvetica, sans-serif;
+    BACKGROUND-COLOR: white;
+    margin-top: 15px;
+    margin-left: 20px;
 }
 TD {
-	FONT-SIZE: 11px;
-	vertical-align:top;
+    FONT-SIZE: 11px;
+    vertical-align:top;
 }
 
 @page figures {
-	size: landscape
+    size: landscape
 }
 
 .capitalize {text-transform:capitalize;}
@@ -35,24 +35,24 @@ TD {
 
 <table width="100%" border="0" id="tulostaulukko_otsikko">
 <tr valign="top">
-	<td width="33%"><h1 class="uppercase" style="margin:0; padding:0; line-height:normal;">{{kisa_nimi|alaviiva_pois}}</h1></td>
-	<td width="33%" align="center"><h1 style="line-height:normal;">{{heading}}</h1></td>
-	<td width="33%" align="right">&nbsp;</td>
+    <td width="33%"><h1 class="uppercase" style="margin:0; padding:0; line-height:normal;">{{kisa_nimi|alaviiva_pois}}</h1></td>
+    <td width="33%" align="center"><h1 style="line-height:normal;">{{heading}}</h1></td>
+    <td width="33%" align="right">&nbsp;</td>
 </tr>
 <tr>
-	<td>{%if kisa_aika %}
-    		{{kisa_aika}}<br>
+    <td>{%if kisa_aika %}
+            {{kisa_aika}}<br>
         {% endif %}
         {{kisa_paikka}}
     </td>
-	<td align="center">{% now "j.n.Y G:i"%}</td>
-	<td align="right">&nbsp;</td>
+    <td align="center">{% now "j.n.Y G:i"%}</td>
+    <td align="right">&nbsp;</td>
 </tr>
 </table>
 
 {% if tulos_taulukko %}
-	<table id="tulostaulukko_screen" border=0 >
-		{% for rivi in tulos_taulukko%}
+    <table id="tulostaulukko_screen" border=0 >
+        {% for rivi in tulos_taulukko%}
                 {%if forloop.counter|add:"3"|divisibleby:"5" %}
                         <tr height="10"><td></td></tr>
                 {% endif %}
@@ -75,13 +75,13 @@ TD {
                                         </b></td>
                                         {% endif %}
                                 {% endif %}
-			    {% endfor %}
+                {% endfor %}
 
                       </tr>
                       <tr valign="top">
 
                         <td></td>
-			            {% for sarake in rivi %}
+                        {% for sarake in rivi %}
                      {% comment %} ylarivi {% endcomment %}
                                 {% if forloop.first  %}
                                         {% comment %} ylarivin eka {% endcomment %}
@@ -89,7 +89,7 @@ TD {
                                 {% else %}
                                         {% comment %} ylarivi {% endcomment %}
                                         {%if sarake.lyhenne %}
-					        {%if sarake.rastikasky %}
+                            {%if sarake.rastikasky %}
                                                         <td align="right" style="padding-right:10px;"><b><a href=" {{sarake.rastikasky}} " target="_blank">{{sarake.lyhenne}}</a></b></td>
                                                 {% else %}
                                                         <td align="right" style="padding-right:10px;"><b>{{sarake.lyhenne}}</b></td>
@@ -134,7 +134,7 @@ TD {
                       <tr valign='top'>
 
                 {% else %}
-			    {% for sarake in rivi %}
+                {% for sarake in rivi %}
                      {% comment %} ylarivi {% endcomment %}
                      {% ifequal forloop.counter 2 %}
                      {% comment %} ekasarake {% endcomment %}
@@ -156,16 +156,16 @@ TD {
                      {% endifequal %}
                      {% endifequal %}
 
-			    {% endfor %}
+             {% endfor %}
                      {% endif %}
-		      </tr>
+              </tr>
                {% comment %} ULKONA OLEVAT: {% endcomment %}
                 {% if forloop.last %}
                         <tr><td>&nbsp;  </td></tr>
                         <tr><td> </td> <td></td><td><b>Ulkopuolella:</b> </td></tr>
                         {% for rivi in ulkona_taulukko%}
                         <tr valign='top'>
-			            {% for sarake in rivi %}
+                        {% for sarake in rivi %}
 
 
                                 {% ifequal forloop.counter 2 %}
@@ -199,7 +199,7 @@ TD {
         </tr>
 
 
-	</table>
+    </table>
 
 {% else %}
     <p>Ei tuloksia.</p>

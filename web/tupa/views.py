@@ -49,7 +49,7 @@ def loginSivu(request):
     return redirect('/kipa/')
 
 def logoutSivu(request):
-	logout(request)
+        logout(request)
         return kipaResponseRedirect("/kipa/")
 
 from django import template
@@ -153,8 +153,8 @@ def maaritaKisa(request, kisa_nimi=None,talletettu=None):
         if kisaForm.is_valid():
                 if sarjaFormit.is_valid():
                         kisa=kisaForm.save()
-                	sarjaFormit=SarjaFormSet(posti,instance=kisa)
-			sarjaFormit.save()
+                        sarjaFormit=SarjaFormSet(posti,instance=kisa)
+                        sarjaFormit.save()
 
         if kisa :
                 for s in kisa.sarja_set.all() : s.taustaTulokset() # tulosten taustalaskenta
@@ -306,9 +306,9 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
 
         sarja.taustaTulokset() # Taustalaskenta
 
-	otsikko = u'Uusi tehtävä' + ' (' + sarja.nimi + ')'
+        otsikko = u'Uusi tehtävä' + ' (' + sarja.nimi + ')'
 
-	if tehtava and not tehtava.nimi == '' : otsikko = unicode(tehtava.nimi) + ' (' + sarja.nimi + ')'
+        if tehtava and not tehtava.nimi == '' : otsikko = unicode(tehtava.nimi) + ' (' + sarja.nimi + ')'
 
         # Talletetaanko ja siirrytäänkö talletettu sivuun?
         if posti and not 'lisaa_maaritteita' in posti.keys() and daatta['valid'] :
@@ -322,9 +322,9 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None,talletettu
                 return render_to_response('tupa/maarita.html',
                                 { 'forms': [tehtavaForm],
                                 'heading' : otsikko,
-				                'kisa_nimi': kisa_nimi,
-				                'tehtava_ida': 5,
-				                'taakse' : {'url' : '/kipa/' + kisa_nimi + '/maarita/tehtava/',
+                                'kisa_nimi': kisa_nimi,
+                                'tehtava_ida': 5,
+                                'taakse' : {'url' : '/kipa/' + kisa_nimi + '/maarita/tehtava/',
                                                 'title' : u'Muokkaa tehtävää' },
                                 'talletettu': tal,
                                 'ohjaus_nappi': "lisää uusi tehtävä" },
@@ -425,20 +425,20 @@ def syotaTehtava(request, kisa_nimi , tehtava_id,talletettu=None,tarkistus=None)
                 if syottovirhe : tilanne="v"
                 return render_to_response('tupa/syota_tehtava.html',
                         { 'tehtava' : tehtava ,
-			            'sarja' : tehtava.sarja.id,
+                        'sarja' : tehtava.sarja.id,
                         'maaritteet' : maaritteet ,
                         'osatehtavat' : osatehtavat,
                         'syotteet' : syoteFormit,
                         'talletettu': tal ,
                         'tilanne' : tilanne,
                         'tarkistettu' : tarkistettu,
-			            'kisa_nimi': kisa_nimi,
+                        'kisa_nimi': kisa_nimi,
                         'tarkistus' : tarkistus,
-			            'heading' : tehtava.nimi,
+                        'heading' : tehtava.nimi,
                         'varsinaiset_syotteet_url' : "/kipa/"+kisa_nimi+"/syota/tehtava/"+str(tehtava_id)+"/",
                         'maaritys_url' : "/kipa/"+kisa_nimi+"/maarita/tehtava/"+str(tehtava_id)+"/",
                         'tulokset_url' : "/kipa/"+kisa_nimi+"/tulosta/normaali/sarja/"+str(tehtava.sarja.id)+"/",
-			            'taakse' : {'url' : '/kipa/' + kisa_nimi + '/syota/', 'title' : u'Syötä tuloksia' } } ,
+                        'taakse' : {'url' : '/kipa/' + kisa_nimi + '/syota/', 'title' : u'Syötä tuloksia' } } ,
                         context_instance=RequestContext(request),)
 
 def testiTulos(request, kisa_nimi,talletettu=None):
@@ -532,7 +532,7 @@ def tuomarineuvos(request, kisa_nimi,talletettu=None):
         return render_to_response('tupa/tuomarineuvos.html',
                         { 'taulukko' : taulukko ,
                         'heading' : "Tuomarineuvoston antamien tulosten määritys" ,
-			'kisa_nimi': kisa_nimi,
+                        'kisa_nimi': kisa_nimi,
                         'talletettu': tal })
 
 def tulostaSarja(request, kisa_nimi, sarja_id, tulostus=0,vaihtoaika=None,vaihto_id=None) :
@@ -557,15 +557,15 @@ def tulostaSarja(request, kisa_nimi, sarja_id, tulostus=0,vaihtoaika=None,vaihto
         if tulostus: templaatti= 'tupa/tuloksetHTML.html'
         if vaihtoaika: templaatti= 'tupa/heijasta.html'
         return render_to_response( templaatti,
-			{'tulos_taulukko' : mukana,
-            'ulkona_taulukko' : ulkona,
-			'kisa_nimi' : kisa_nimi,
-			'kisa_aika' : kisa_aika,
-			'kisa_paikka' : kisa_paikka,
-			'heading' : sarja.nimi,
-			'vaihtoaika' : vaihtoaika,
-			'vaihto_id' : vaihto_id,
-			'taakse' : {'url' : '../../', 'title' : 'Tulokset sarjoittain'} },
+                        {'tulos_taulukko' : mukana,
+                        'ulkona_taulukko' : ulkona,
+                        'kisa_nimi' : kisa_nimi,
+                        'kisa_aika' : kisa_aika,
+                        'kisa_paikka' : kisa_paikka,
+                        'heading' : sarja.nimi,
+                        'vaihtoaika' : vaihtoaika,
+                        'vaihto_id' : vaihto_id,
+                        'taakse' : {'url' : '../../', 'title' : 'Tulokset sarjoittain'} },
 
             context_instance=RequestContext(request),)
 

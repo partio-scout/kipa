@@ -7,7 +7,7 @@
 
 .hidden
 {
-	display: none;
+    display: none;
 }
 
 </style>
@@ -16,7 +16,7 @@
 
 Osatehtävän tyyppi:
 <span onmouseover="tooltip.show('<b>Kisapiste</b> on yksi syöte, joka ei vaadi laskentaa. <br /><b>Raakapiste</b> on syöte, jonka perusteella lasketaan vartiolle kisapisteet, esim. interpoloimalla. <br /><b>Kokonaisaika</b> on aikasyöte, jonka perusteella lasketaan vartiolle kisapisteet. <br /><b>Aikaväliin</b> syötetään alkuaika ja loppuaika, jonka perusteella Kipa laskee vartion suoritusajan ja senmukaiset kisapisteet. <br /><b>Vapaakaava</b> antaa mahdollisuuden määritellä matemaattisen kaavan, jonka perusteella lasketaan syötteistä kisapisteet. <br /><b>Puhdaskaavalla</b> voi määritellä täysin vapaasti Kipan syötteiden laskennan.');" onmouseout="tooltip.hide();">
-	<img src="/kipamedia/help_small.png" />
+    <img src="/kipamedia/help_small.png" />
 </span>
 
 {% for sarake in taulukko%}
@@ -38,7 +38,7 @@ Osatehtävän tyyppi:
         <div id="{{sarake.id}}" class='hidden' >
 
         <table border="0">
-		<td>{{sarake.form}}</td>
+            <td>{{sarake.form}}</td>
         </table>
         </div>
 {% endfor %}

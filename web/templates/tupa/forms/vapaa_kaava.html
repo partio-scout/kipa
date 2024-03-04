@@ -2,25 +2,25 @@
 <b>Syötteet:</b><br>
 <table>
 {% for maarite in maaritteet %}
-	<tr>
-		<td>Syötteen {{maarite.nimi}} kuvaus:</td>
-		<td>
-			<input type="text"
-			        name="{{maarite.kali_vihje.name}}"
-			        id="{{maarite.kali_vihje.id}}"
-			        value="{{maarite.kali_vihje.value}}" />
-			         Tyyppi:
+    <tr>
+        <td>Syötteen {{maarite.nimi}} kuvaus:</td>
+        <td>
+            <input type="text"
+                    name="{{maarite.kali_vihje.name}}"
+                    id="{{maarite.kali_vihje.id}}"
+                    value="{{maarite.kali_vihje.value}}" />
+            Tyyppi:
 
-		        <select name="{{maarite.tyyppi.name}}">
-		                <option value="piste"
-		                {% ifequal maarite.tyyppi.value "piste" %}selected="selected"{% endifequal %}
-		                 >piste</option>
-		                <option value="aika"
-		                {% ifequal maarite.tyyppi.value "aika" %}selected="selected"{% endifequal %}
-		                >aika</option>
-		        </select>
-		</td>
-	</tr>
+            <select name="{{maarite.tyyppi.name}}">
+                <option value="piste"
+                {% ifequal maarite.tyyppi.value "piste" %}selected="selected"{% endifequal %}
+                 >piste</option>
+                <option value="aika"
+                {% ifequal maarite.tyyppi.value "aika" %}selected="selected"{% endifequal %}
+                >aika</option>
+            </select>
+        </td>
+    </tr>
 {% endfor %}
 </table>
 

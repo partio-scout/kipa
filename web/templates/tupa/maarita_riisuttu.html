@@ -9,21 +9,21 @@
 {% if forms %}
     {% for form in forms%}
         <fieldset>
-		<legend>{{form.label}} </legend>
-		{{form}} <br>
-	</fieldset>
+        <legend>{{form.label}} </legend>
+        {{form}} <br>
+    </fieldset>
     {% endfor%}
 {% endif %}
 <br>
 {% if formsets %}
     {% for formset in formsets %}
         <fieldset>
-		<legend>{{formset.label}}</legend>
-		{{ formset.management_form }}
-		{% for form in formset.forms %}
-		                {{ form }} <br>
-		{% endfor %}
-	</fieldset>
+        <legend>{{formset.label}}</legend>
+        {{ formset.management_form }}
+        {% for form in formset.forms %}
+                {{ form }} <br>
+        {% endfor %}
+    </fieldset>
     {% endfor%}
 {% endif %}
 {% include "tupa/tallenna.html" %}

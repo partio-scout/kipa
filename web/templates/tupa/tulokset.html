@@ -11,25 +11,25 @@
 
 <table width="100%" border="0" id="tulostaulukko_otsikko">
 <tr valign="top">
-	<td width="33%"><h1 style:"margin:0; padding:0;">{{kisa_nimi|alaviiva_pois }}</h1></td>
-	<td width="33%" align="center"><h1>{{heading}}</h1></td>
-	<td width="33%" align="right">&nbsp;</td>
+    <td width="33%"><h1 style:"margin:0; padding:0;">{{kisa_nimi|alaviiva_pois }}</h1></td>
+    <td width="33%" align="center"><h1>{{heading}}</h1></td>
+    <td width="33%" align="right">&nbsp;</td>
 </tr>
 <tr>
-	<td>{%if kisa_aika %}
-    		{{kisa_aika}}<br>
+    <td>{%if kisa_aika %}
+            {{kisa_aika}}<br>
         {% endif %}
         {{kisa_paikka}}
     </td>
-	<td align="center"><br>{% now "j.n.Y G:i"%}</td>
-	<td align="right">&nbsp;</td>
+    <td align="center"><br>{% now "j.n.Y G:i"%}</td>
+    <td align="right">&nbsp;</td>
 </tr>
 </table>
 <br />
 
 {% if tulos_taulukko %}
-	<table id="tulostaulukko_screen" border=0 >
-		{% for rivi in tulos_taulukko%}
+    <table id="tulostaulukko_screen" border=0 >
+        {% for rivi in tulos_taulukko%}
                 {%if forloop.counter|add:"3"|divisibleby:"5" %}
                         <tr height="10" valign="top"><td></td></tr>
                 {% endif %}
@@ -52,13 +52,13 @@
                                         </b></td>
                                         {% endif %}
                                 {% endif %}
-			    {% endfor %}
+                {% endfor %}
 
                       </tr>
                       <tr valign="top">
 
                         <td></td>
-			            {% for sarake in rivi %}
+                        {% for sarake in rivi %}
                      {% comment %} ylarivi {% endcomment %}
                                 {% if forloop.first  %}
                                         {% comment %} ylarivin eka {% endcomment %}
@@ -107,7 +107,7 @@
                       <tr valign='top'>
 
                 {% else %}
-			    {% for sarake in rivi %}
+                {% for sarake in rivi %}
                      {% comment %} ylarivi {% endcomment %}
                      {% ifequal forloop.counter 2 %}
                      {% comment %} ekasarake {% endcomment %}
@@ -129,16 +129,16 @@
                      {% endifequal %}
                      {% endifequal %}
 
-			    {% endfor %}
+                {% endfor %}
                      {% endif %}
-		      </tr>
+              </tr>
                {% comment %} ULKONA OLEVAT: {% endcomment %}
                 {% if forloop.last %}
                         <tr><td>&nbsp;  </td></tr>
                         <tr><td> </td> <td></td><td><b>Ulkopuolella:</b> </td></tr>
                         {% for rivi in ulkona_taulukko%}
                         <tr valign='top'>
-			            {% for sarake in rivi %}
+                        {% for sarake in rivi %}
 
 
                                 {% ifequal forloop.counter 2 %}
@@ -166,7 +166,7 @@
                 {% endif %}
         {% endfor %}
 
-	</table>
+    </table>
 
 {% else %}
     <p>Ei tuloksia.</p>

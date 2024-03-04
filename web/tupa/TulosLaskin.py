@@ -3,7 +3,7 @@
 #    Copyright (C) 2010  Espoon Partiotuki ry. ept@partio.fi
 
 if not __name__ == "__main__":
-	from funktiot import *
+        from funktiot import *
 
 from decimal import *
 from laskentatyypit import *
@@ -361,7 +361,7 @@ def laskeSarja(sarja,syotteet,vartiot=None,tehtavat=None):
                 tulokset.sort( key=operator.itemgetter(1,tasa1,tasa2,tasa3),reverse=True )
                 ulkona.sort( key=operator.itemgetter(1,tasa1,tasa2,tasa3),reverse=True )
         except : # tehtäviä < 3
-		        pass
+                        pass
 
         # Etsitään tasapistetulokset :
         edellinen=None

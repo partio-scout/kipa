@@ -83,7 +83,7 @@ class MathList(SequenceOperations,list):
         """
         def operate_to_all(self,function2, other,*args) :
                 oper = None
-               	if type(other) == MathList :
+                if type(other) == MathList :
                         oper = MathList([function2(self[i],other[i],*args) for i in range(len(self))])
                 elif type(other) == MathDict :
                         oper = MathListDict({})
@@ -238,13 +238,13 @@ def listaksi(a,*opt):
         else : joukkio = a
 
         if type( joukkio )==DictDecimal or type(joukkio)==bool:
-		        joukkio = [joukkio]
+                        joukkio = [joukkio]
         if type( joukkio )==Decimal:
-		        joukkio = [DictDecimal(joukkio)]
+                        joukkio = [DictDecimal(joukkio)]
         elif type( joukkio )==unicode or type( joukkio )==str:
                 return joukkio
         #elif type( joukkio )== MathDict:
-        #	return joukkio
+        # return joukkio
         if type(joukkio)==list:
                 lista=[]
                 for v in joukkio :
@@ -281,7 +281,7 @@ def run_dict(list,funktio,*param):
                 parametrit = []
 
                 for p in params :
-                       	if type(p)== MathDict and k in p.keys() : parametrit.append(p[k])
+                        if type(p)== MathDict and k in p.keys() : parametrit.append(p[k])
                         else : parametrit.append(p)
 
                 if list:
