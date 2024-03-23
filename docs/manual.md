@@ -21,31 +21,31 @@ Riemukkaita laskentahetkiä!
 
 ### Yleistä
 
-Kipa eli Kisapalvelu on Partiokilpailujen tuloslaskentaa helpottamaan
+Kipa eli Kisapalvelu on partiokilpailujen tuloslaskentaa helpottamaan
 tehty ohjelmisto. Kipa on helppokäyttäinen ja se on vapaasti
 levitettävissä sekä muokattavissa. Ohjelmisto kehittyy edelleen joten
 tarkista aina uusimman version saatavuus.
 
 ### Ominaisuudet
 
-* **Selainkäyttö**: Kisatoimistossa koneet joilta tuloksia syötetään ei vaadi ohjelmien asentamista, Kipaa voi käyttää Internet selaimella.
+* **Selainkäyttö**: Kisatoimistossa koneet joilta tuloksia syötetään ei vaadi ohjelmien asentamista, Kipaa voi käyttää Internet-selaimella.
 * **Monen käyttäjän tuki**: Kisatoimistossa voi syöttää usealla koneilla esimerkiksi eri sarjoja tai eri tehtäviä.
 * **Tuomarineuvostofunktio**: Lasketun tuloksen voi korvata "kovalla arvolla" jos laskettu tulos ei jostain syystä kelpaa.
-* **Tulokset Exceliin**: Tulokset saa ulos CSV tiedostona joka helpottaa printtien yms. tekemistä.
+* **Tulokset Exceliin**: Tulokset saa ulos CSV-tiedostona joka helpottaa printtien yms. tekemistä.
 * **Monta yhtäaikaista kilpailua**: Yhdelle palvelimille voidaan asentaa käytännössä ääretön määrä kilpailuja joita voivat muut koneet käyttää.
 * **Tulosten syöttö kahteen kertaan**: Erityisesti SM-kilpailuita varten toteutettu ominaisuus jolla voidaan eliminoida kirjoitusvirheiden vaikutus.
-* **Tuloslaskennen tilanne näkymä**: Graafinen näkymä joka helpottaa Kisatoimiston tai Kisanjohdon hahmottamista, miten tulostenlaskenta ja tarkastus etenee.
-* **Ilmainen, Vapaasti kehitettävä**: Kipaa saa vapaasti levittää ja muokata kunhan edelleen kehitetyt versiot ovat vapaasti saatavilla myös muille.
+* **Tuloslaskennen tilannenäkymä**: Graafinen näkymä helpottaa tuloslaskennan ja tarkastuksen etenemisen hahmottamista.
+* **Ilmainen ja vapaasti kehitettävä**: Kipaa saa vapaasti levittää ja muokata kunhan edelleen kehitetyt versiot ovat vapaasti saatavilla myös muille.
 * **Vapaa kaava**: Tehtävän kaava voidaan määrittää matemaattisesti lähes millaiseksi tahansa.
 * **Valmiit tehtävämallit**: Yleisimpiä tehtäviä kuten suorasumma, interpolointi tai aikaväli varten on valmiit pohjat jotka nopeuttavat käyttöä.
 * **Tehtävien kopiointi**: Sarjasta toiseen tai sarjan sisällä tehtävien kopiointi.
 * **Windows- ja Linux-tuki**: Palvelin voidaan asentaa sekä Windows- & Linux-koneille, myös pilotoitu OS X -koneille.
-* **Varmuuskopiointi**: Kilpailun tulokset voidaan tuoda .xml varmuuskopiona tai siirtää toiselle koneelle.
+* **Varmuuskopiointi**: Kilpailun tulokset voidaan tuoda XML-varmuuskopiona tai siirtää toiselle koneelle.
 * **Tupan ominaisuudet**: Perinteikkään Tupan ominaisuudet on pyritty tuomaan mahdollisimman pitkälti myös Kipaan.
 
 ## Referenssit
 
-Esimerkiksi kisoja joita on laskettu Kipalla
+Esimerkkejä kisoista, joita on laskettu Kipalla:
 
 * Punkku 2009 - Harmaa Sarja
 * Päpa Piirin kevät kisat 2010
@@ -58,60 +58,56 @@ Esimerkiksi kisoja joita on laskettu Kipalla
 
 ### Miten Kipa toimii
 
-Kipa asennetaan yhdelle tietokoneelle jolta käsin voidaan syöttä
+Kipa asennetaan yhdelle tietokoneelle, jolta käsin voidaan syöttää
 kilpailun tiedot ja tulokset. Kipan hienoutena on kuitenkin että samaa
-Kisaa voidaan verkon yli käyttää myös muilta päätteiltä jotka voivat
-periaatteessa olla mitä tahansa laitteitta joissa on web-selain. Kone
+kisaa voidaan verkon yli käyttää myös muilta päätteiltä, jotka voivat
+periaatteessa olla mitä tahansa laitteitta, joissa on Internet-selain. Kone,
 jolle Kipa on asennettu toimii palvelimena. Kaikki kisan tiedot pidetään
-tallessa keskitetysti koneella johon Kipa on asennettu, tämän
-tietokoneen pitää olla luonnollisesti päällä jotta muut koneet voivat
-olla siihen yhteydessä.
+tallessa keskitetysti palvelinkoneella, jonka pitää luonnollisesti olla
+päällä jotta muut koneet voivat olla siihen yhteydessä.
 
 ![](images/01.png)
 
-Tyypillisesti Kipa asentuu *Apache* ohjelmiston päälle joka käynnistyy
+Tyypillisesti Kipa asentuu Apache-ohjelmiston päälle, joka käynnistyy
 samalla kun tietokone käynnistetään.
 
 ### Windows
 
 Lataa Suomen Partiolaisten sivuilta Kipan asennuspaketti ja käynnistä se
-koneelta jolle Kipa asennetaan ja toimii Kisan palvelimena.
+koneelta, jolle Kipa asennetaan ja joka toimii kisan palvelimena.
 
-Suorita Windows asennus paketti ja vastaa joka kohtaan jossa kysytään
+Suorita Windows-asennuspaketti ja vastaa joka kohtaan jossa kysytään
 jatkoa OK, Next, Yes, Finish yms. Älä muuta arvoja ellet ole täysin
-varma siitä mitä teet. Uusimman asennuspaketin pitäisi löytyä sekä
-Suomen Partiolaisten sivujen kautta.
+varma siitä, mitä teet.
 
 Windows installeri (Windows Vista, Windows 7 testattu). Testattu sekä 32
 että 64-bittisillä järjestelmillä.
 
-Tämän jälkeen koneellesi on asennettu Apache ja Python (osittain), sekä
-Kipa.
+Tämän jälkeen koneellesi on asennettu Apache ja Python (osittain), sekä Kipa.
 
+Osoitteesta
 [http://localhost/kipa/](http://localhost/kipa/)
-web osoitteesta löytyy tämän jälkeen koneellasi
-Kipa. Ohjelmaa ei tarvitse erikseen käynnistää.
+pitäisi tämän jälkeen löytyä Kipa. Ohjelmaa ei tarvitse erikseen käynnistää.
 
-Katso lisätietoja kohdasta verkkokäyttö mikäli tarvitset useamman
-käyttäjän yhtä aikaisen mahdollisuuden.
+Katso lisätietoja-kohdasta verkkokäyttö mikäli tarvitset useamman
+käyttäjän yhtäaikaisen mahdollisuuden.
 
-Jos et tarvitse ohjelmaa enää katso kohta poistaminen.
+Jos et tarvitse ohjelmaa enää, katso kohta poistaminen.
 
 ### Linux
 
-Kipa on testattu useissa Red Hat, Ubuntu sekä Debian koneissa. Tarjolla
-on sekä asennuspaketti DEB muodossa että manuaalinen vaihtoehto ja jos
+Kipa on testattu useissa Red Hat -, Ubuntu- sekä Debian-koneissa. Tarjolla
+on sekä asennuspaketti DEB-muodossa että manuaalinen vaihtoehto ja jos
 kirjastojen kanssa tulee ongelmia voi kehittäjädokumentaatiosta löytää
 tiedon tarvittavista muutoksista.
 
-Ohjelmassa ei ole mitään käännettävää, kunhan riippuvuudet ja
-konfiguraatiot on kehitys dokumentaation mukaiset on Kipa helppo
-asentaa.
+Ohjelmassa ei ole mitään käännettävää, kunhan riippuvuudet ja konfiguraatiot
+on kehitysdokumentaation mukaisesti on Kipa helppo asentaa.
 
 ### Apple, OS X
 
 OS X:n päällä ainoa testattu tapa on käyttää Djangon omaa
-kehitysserveriä josta kehitysdokumentaatiossa enemmän. Myös Apache
+kehityspalvelinta, josta kehitysdokumentaatiossa enemmän. Myös Apache
 lienee mahdollinen, mutta ei testattu. Vakavahenkistä kisaa varten
 kannattaa toimivuutta testata lisää ennen kilpailua.
 
@@ -148,19 +144,19 @@ pyörittämiseen.
 Kipaa ei missään tapauksessa kannata asentaa automaattipaketeilla
 tietokoneelle missä on jo Apache asennettuna!
 
-Kipan laskenta perustuu Pythonin koodiin. Python 2.5-2.6 on testattu ja
-tuettu.
+Kipan laskenta perustuu Pythonin-ohjelmointikielellä kirjoitettuun koodiin.
+Python 2.5-2.6 on testattu ja tuettu.
 
 Kipan web-julkaisu ja kantayhteydet djangoon. Djangon versiot 1.0 sekä
 1.1 on testattu (nämä ovat melko nirsoja tod. näk. uusiin versioihin)
 
 Koneelle pitää asentaa http-palvelin joka osaa suorittaa python koodia
 esimerkiksi modpython moduulin avulla ja lisäksi tarjota djangolle oma
-"hakemisto", jossa toimii. Tässä kannattaa tutustua Kipaa varten
+"hakemisto", jossa se toimii. Tässä kannattaa tutustua Kipaa varten
 muokattuun httpd.conf tiedostoon
 ([www.tupa2.sf.net](http://www.tupa2.sf.net)).
 
-Web- tiedostot kopioidaan samaan hakemistoon johon on määritelty Djangon
+Web-tiedostot kopioidaan samaan hakemistoon, johon on määritelty Djangon
 oma hakemisto
 
 Asennus niille jotka luulee tietävänsä mitä tekee tai haluaa ymmärtää.
@@ -175,7 +171,7 @@ Asennus niille jotka luulee tietävänsä mitä tekee tai haluaa ymmärtää.
 #### Linux + muut
 
 1. Poista Apache
-2. poista /data hakemist
+2. poista hakemisto /data
 
 ## Kipan käyttö
 
@@ -208,10 +204,11 @@ Syötä vartion tiedot:
 
 * **Nro**: Vartion numero
 * **Nimi**: Vartion nimi
-* **Keskeyttänyt**: Jos vartio keskeyttänyt kirjataan tehtävänumero mistä
-lähtien vartio keskeyttänyt, muuten tyhjä
-* **Ulkopuolella**: Jos vartio ulkopuolella kirjataan tehtävänumero mistä
-lähtien vartio ulkona, yksi mikäli alusta asti, muuten tyhjä
+* **Keskeyttänyt**: Jos vartio keskeyttää, kirjataan ensimmäisen
+  tekemättä jätetyn tehtävän tehtävänumero.
+* **Ulkopuolella**: Jos vartio siirtyy kisan ulkopuolelle, kirjataan ensimmäisen
+  kisan ulkopuolella suoritetun tehtävän numero. Kirjataan "1", mikäli
+  vartio kisaa kisan ulkopuolella kisan alusta asti.
 * **Poista**: Pistä ruksi jos haluat poistaa vartion (ei tarvitse tehdä tyhjille)
 
 Paina lopuksi "Tallenna"
@@ -229,16 +226,16 @@ tässä huomioida. Muista merkitä vartiot ulkopuolelle / keskeyttäneeksi.
 ![](images/02.png)
 
 Yllä olevassa kuvassa näkyy tehtävän, osatehtävien syötekentät.
-Vasemmalla on ensimmäisen osatehtävän syötekentät esimerkiksi joissa
-syötetään raakapisteitä ja oikean puolimmaiseen kenttään jos vartio on
-ylittänyt ajan (-1 piste). Yllä on tarkistettu ruutu. Kun tämä ruutu on
+Vasemmalla on ensimmäisen osatehtävän syötekentät, joihin
+syötetään raakapisteitä ja oikealle puolelle jos vartio on
+ylittänyt ajan (-1 piste). Yllä on "tarkistettu"-ruutu. Kun tämä ruutu on
 ruksittu ja tiedot tallennettu näkyy laskennan tilanne alla että nämä
-tulokset on tarkistettu. Tätä voidaan hyödyntää kisatoimistoissa, missä
+tulokset on tarkistettu. Tätä voidaan hyödyntää kisatoimistoissa, jossa
 käytetään kaksia silmiä tarkistamaan syötteiden oikeellisuus.
 
 ![](images/03.png)
 
-Mikäli vartion suoritus on hylätty laitetaan h kirjain vartion
+Mikäli vartion suoritus on hylätty syötetään h-kirjain vartion
 tulokseksi. Ajan syötössä käyteään syötemuotoa HH:MM:SS kuten yllä
 näkyy.
 
@@ -248,54 +245,54 @@ Etusivun valikosta löytyy toiminto tuplasyöte. Tälle toiminnallisuudella
 on käyttöä kilpailuissa joissa tulosten oikeellisuus pitää varmistaa
 syöttämällä luvut kahteen kertaan kirjoitusvirheiden varalta.
 
-Ensin syötetään normaalisti tulokset kauttaaltaan. Kun tehtävän tulokset
+Ensin syötetään tulokset normaalisti. Kun tehtävän tulokset
 on syötetty kertaalleen voidaan tuloksia alkaa syöttämään toiseen
-kertaan ja painetaan tallenna kun syöttäminen on valmis.
+kertaan. Painetaan "Tallenna" kun syöttäminen on valmis.
 
 ![](images/04.png)
 
-Järjestelmä näyttää punaisella solut joissa syöte ei täsmää
+Järjestelmä näyttää punaisella solut, joiden syöte ei täsmää
 ensimmäisellä kerralla syötettyyn.
 
 ### Tuomarineuvostyökalu
 
 Työkalulla voi syöttää tuloksia vartioille joiden tulosta ei syystä tai
-toisesta voida laskea normaalisti vaan se pitää syöttää \"kovana
-arvona\". Jos tuloksissa näkyy yllättäviä arvoja kannattaa tarkistaa,
-ettei ole epähuomiossa syötetty arvoja tuomarineuvostyökaluun.
+toisesta voida laskea normaalisti vaan se pitää syöttää "kovana
+arvona". Jos tuloksissa näkyy yllättäviä arvoja, kannattaa tarkistaa,
+ettei tuomarineuvostotyökaluun ole epähuomiossa syötetty arvoja.
 
 ![](images/05.png)
 
 ### Varmuuskopiointi / Vieminen / Palauttaminen
 
-Kisan tiedot on mahdollista tuoda yhtenä xml dumppina pois talteen.
+Kisan tiedot on mahdollista viedä talteen yhtenä XML-dumppina.
 Tälle voi olla tarvetta, mikäli haluaa esimerkiksi tehdä jotain
 testailuja olemassa olevaan konfiguraatioon, ottaa varmuuskopion tai
 viedä jollekkin toiselle koneelle kilpailun kaikki tiedot.
 
 ![](images/06.png)
 
-Tallenna kisa toiminnalla saa .xml tiedoston jonka voi tallentaa
-koneelle, palauta kisa toiminnalla taas voidaan .xml tiedostosta
+Tallenna kisa -toiminnolla saa XML-tiedoston, jonka voi tallentaa
+koneelle. Palauta kisa -toiminnolla taas voidaan XML-tiedostosta
 palauttaa kisa.
 
 ### Laskennan tilanne
 
-Laskennan tilanne näkymästä näkee minkä tehtävien syötteet on syötetty
-kokonaan/osittain/ei ollenkaan. Värit kertovat. Yhdessä näkymässä joka
-sarjasta miten pitkällä tehtävien syöttö on.
+Laskennan tilanne -näkymästä näkee minkä tehtävien syötteet on syötetty
+kokonaan/osittain/ei ollenkaan. Värit kertovat yhdessä näkymässä jokaisesta
+sarjasta, miten pitkällä tehtävien syöttö on.
 
 ![](images/07.png)
 
 ![](images/08.png)
 
-### Tulosten vienti CSV tiedostoon
+### Tulosten vienti CSV-tiedostoon
 
-Jos tuloksia on tarvetta muokata, filtteröidä tai tulostusnäkymää
-jalostaa on helpointa viedä tulokset CSV muotoon jolloin niitä voidaan
-muokata esimerkiksi Excel ohjelmalla. Tulosnäkymä sivulta löytyy
-jokaisen sarjan tuloksille Tulokset CSV tiedostoon painike jolla ohjelma
-antaa sarjan tulokset ulos yhtenä tiedostona.
+Jos tuloksia on tarvetta muokata, suodattaa tai tulostusnäkymää
+jalostaa on helpointa viedä tulokset CSV-muotoon jolloin niitä voidaan
+muokata esimerkiksi Excel-ohjelmalla. Tulosnäkymä sivulta löytyy
+jokaisen sarjan tuloksille "Tulokset CSV tiedostoon"-painike, josta painettaessa
+ohjelma antaa sarjan tulokset ulos yhtenä tiedostona.
 
 ![](images/09.png)
 
@@ -304,16 +301,16 @@ antaa sarjan tulokset ulos yhtenä tiedostona.
 Ennen kuin tekee tehtävän määrittelyä on hyvä ymmärtää lyhyt oppimäärä
 miten Kipa laskee tuloksia.
 
-Kipassa on jokaisessa sarjassa erilliset tehtävät, tehtävät on tulee
+Kipassa on jokaisessa sarjassa erilliset tehtävät, tehtävät tulee
 numeroida. Tehtävien numeroinnin tulee vastata järjestystä jossa sarjan
 vartiot suorittavat tehtäviä. Jokainen tehtävä koostuu osatehtävistä,
-jotka on nimetty a-z. Osatehtävien nimi viittaukset syntyy
+jotka on nimetty a -- z. Viittaukset osatehtävien nimiin syntyvät
 automaattisesti. Tehtävän kaava on koostuu osatehtävien viittauksista.
 Jokainen osatehtävä koostuu syötteistä joille tulee syöttää kuvaus
-tehtävän määrittely vaiheessa (esim. juoksuaika).
+tehtävän määrittelyvaiheessa (esim. juoksuaika).
 
-Kun selaa tehtäviä näkyy tehtävänumerot ja numerot. Kun katsoo tehtävän
-\"ylätason\" tietoja nähdään vastaavasti osatehtävien nimet ja niiden
+Kun selaa tehtäviä näkyvät tehtävänumerot ja numerot. Kun katsoo tehtävän
+"ylätason" tietoja nähdään vastaavasti osatehtävien nimet ja niiden
 kaava. Osatehtävillä on taas omat syötteensä ja kaavansa
 
 ![](images/10.png)
@@ -331,7 +328,7 @@ sarjoihin. Yleisesti kannattaa tehdä ensin yksi sarja jossa on eniten
 tehtäviä ja sen jälkeen duplikoida sarjan tehtävät myös muihin sarjoihin
 ja muuttaa sopivilta osin mikäli tarvetta.
 
-Valitse \"Lisää tehtävä\" kun olet tekemässä uutta tehtävää.
+Valitse "Lisää tehtävä", kun olet tekemässä uutta tehtävää.
 
 Kun haluat kopioida sarjan toisesta sarjasta, valitset ensin sarjan
 mihin haluat kopioida, sen jälkeen valitse kopioi tehtävä ja sitten voit
@@ -341,11 +338,11 @@ valita mitkä tehtävät haluat kopioida sarjaasi.
 
 ### Tehtävän kaavan määrittely
 
-Syötä Nimi kenttään vartion nimi ja Järjestysnumero kenttään tehtävän
-järjestysnumero, on tärkeää laittaa tehtävät oikeaan järjestykseen -
+Syötä Nimi-kenttään vartion nimi ja Järjestysnumero-kenttään tehtävän
+järjestysnumero, on tärkeää laittaa tehtävät oikeaan järjestykseen --
 muuten kisan ulkopuolelle siirtyvät / keskeyttäneet vartiot ovat väärin
 mukana tehtävien järjestyksessä. Järjestysnumeron pitää kuvata sitä
-järjestystä missä järjestyksessä vartiot kiertävät rataa.
+järjestystä, jossa vartiot kiertävät rataa.
 
 ![](images/12.png)
 
@@ -360,11 +357,9 @@ sekä kätevyydestä saadut pisteet lasketaan yhteen.
 
 Kehittyneempiä kaava esimerkkejä:
 
-* `a-b` -- lasketaan esimerkiksi ajan pisteet josta vähennetään sakkopisteet. Määritellään kaksi osatehtävää.
-* `(a+b)/c` -- lasketaan kaksi kätevyyttä yhteen jotka jaetaan aikasakolla. Määritellään kolme osatehtävää.
+* `a-b` -- Lasketaan esimerkiksi ajan pisteet, josta vähennetään sakkopisteet. Määritellään kaksi osatehtävää.
+* `(a+b)/c` -- Lasketaan yhteen kaksi kätevyyttä ja niiden summa jaetaan aikasakolla. Määritellään kolme osatehtävää.
 * `b*2+a/c` -- tehtävän pisteet\*2 + aika/sakolla
-
--   
 
 ![](images/13.png)
 
@@ -378,13 +373,13 @@ Interpoloinnnisa vartioiden suorituksia verrataan toisiinsa. Kiinteissä
 arvoissa taas verrataan vartion suoritusta etukäteen järjestejien
 asettamiin arvoihin tai maksimi/minimi arvoihin.
 
-Interpolointi arviointi tehtävissä missä paras suoritus on
-mahdollisimman pieni arvo käytetään nollasuorituksen arvon hakemiseen
+Interpolointitehtävissä, joissa paras suoritus on
+mahdollisimman pieni arvo käytetään nollasuorituksen arvona
 useimmiten 0.5 kertaa keskimmäinen suoritus. Vastaavasti jos suoritus on
-sitä parempi mitä suurempi tulos käytetään usein kertoimena 1.5 kertaa
+sitä parempi, mitä suurempi tulos on, käytetään usein 1.5 kertaa
 keskimmäinen suoritus arvoa.
 
-Kipa tukee myös vaihtoista interpolointi kerrointa. Kerroin voi olla
+Kipa tukee myös vaihtoista interpolointikerrointa. Kerroin voi olla
 vaikka 0.9 jolloin jos vartio jää keskimmäisestä suorituksesta 10%
 annetaan suoritukseksi nolla pistettä. Interpolointi kerrointa voi
 muuttaa sen mukaan miten paljon odotetaan että vartioiden välillä on
@@ -392,14 +387,14 @@ hajontaa. Mikäli interpolointi kerroin on lähellä ykköstä on suuri
 hajonta, kun kerroin kauempana luvusta 1 on pienempi hajonta vartioiden
 välillä.
 
-Kisan ulkopuolella olevia vartiota ei huomioida interpolointi asteikossa
+Kisan ulkopuolella olevia vartiota ei huomioida interpoloinnissa.
 
-### Arviointi ominaisuus
+### Arviointi
 
-Jossain tehtävätyypeissä on lisäksi käytössä lisäksi arviointi. Tätä
-käytetään silloin kun vartioiden tehtävä on arvioida esimerkiksi puun
-korkeutta aikaa tms. Arviointia käytettäessä laitetaan ruksi Arviointi
-kenttään ja syötetään oikea vastaus.
+Jossain tehtävätyypeissä on käytössä lisäksi arviointi. Tätä
+käytetään silloin, kun vartioiden tehtävä on arvioida esimerkiksi puun
+korkeutta aikaa tms. Arviointia käytettäessä laitetaan ruksi
+Arviointi-kenttään ja syötetään oikea vastaus.
 
 ![](images/15.png)
 
@@ -411,8 +406,8 @@ Kisapiste on kaikista yksinkertaisin pistetyyppi. Mikäli tehtävästä saa
 esimerikiksi kuusi pistettä syötetään suoraan valmiita pisteitä väliltä
 0 -- 6 syötteinä. Mikäli on tarvetta käyttää desimaalieroitinta on sekä
 pilkun että pisteen käyttö mahdollista, esim 4,5 tai 4.50 tarkoittavat
-samaa. Esimerkkinä tehtävästä on Ensiapu jossa annetaan suoraan pisteitä
-0-5 välillä. Kisapisteitä kuten kaikkia muitakin osatehtävä tyyppejä voi
+samaa. Esimerkkinä tehtävästä on Ensiapu, jossa annetaan suoraan pisteitä
+0-5 välillä. Kisapisteitä kuten kaikkia muitakin osatehtävätyyppejä voi
 käyttää yksin tai yhdessä.
 
 Kisapisteitä määritellessä syötetään vain kuvaus tehtävän määrittelyyn.
@@ -424,7 +419,7 @@ Kisapisteitä määritellessä syötetään vain kuvaus tehtävän määrittelyy
 Raakapisteitä käytetään kun esimerkiksi kun vartio vastaa 30 kohdan
 tietovisaan ja tarjolla on korkeintaan neljä pistettä. Silloin
 muunnetaan että 4 kisapistettä saa 30 oikealla vastauksella. Samoin
-raakapisteitä voidaan käyttää vartio heittää esimerkiksi keihästä.
+raakapisteitä voidaan käyttää kun vartio heittää esimerkiksi keihästä.
 Tällöin parhaat pisteet saa pisimmälle heittävä vartio, eikä etukäteen
 voida määrittää maksimiarvoa johon vartion suoritusta verrattaisiin.
 
@@ -492,10 +487,10 @@ Aikavälin määrittäminen toimii samalla tavalla kuin kokonaisaika on
 kuvailtu yllä. Ainoa ero määrittelyssa on, että tulee määritellä kaksi
 syötettä. Useimmissa tapauksissa syötteet ovat alkuaika ja loppuaika.
 Tällöin laskentalogiikka toimii täysin samoin kuin kuvattu
-kokonaisajassa - järjestelmä vain laskee lisäksi kokonaisajan aikavälin
+kokonaisajassa -- järjestelmä vain laskee lisäksi kokonaisajan aikavälin
 syötteistä.
 
-Kipa osaa huomioida myös vuorokauden ylittymisen
+Kipa osaa huomioida myös vuorokauden ylittymisen.
 
 ### Vapaa kaava
 
@@ -522,7 +517,7 @@ Nollasuoritus, kaava = `0`
 
 ## Testausohjeita
 
-### Yleistä 
+### Yleistä
 
 Kaikki ohjelmistot sisältävät virheitä ja emme suinkaan loukkaannu jos
 ilmoitat löytäneesi bugin KiPasta -päinvastoin: koska KiPa projektin
@@ -534,28 +529,28 @@ vapaaehtoisesti ja omalla vapaa-ajallaan.
 Virheet voidaan karkeasti jakaa laskimen ja käyttöliittymän kesken, alla
 ohjeet kumpaakin tapausta varten:
 
-### Virhe laskimessa 
+### Virhe laskimessa
 
 Tarkoittaen esimerkiksi sitä että huomaat KiPan laskevan tuloksia
 väärin.
 
 1. Tee lyhyt kisa jossa esiintyy nimenomainen laskentaongelma. Nimeä
 kisa kuvaavasti, esimerkiksi: hylätty suoritus suunistuksessa
-2. Käytä KiPan toimintoa \"Määrittele testituloksia\", jonka löydät
-pääsivulta kohdasta \"Kisan Määritykset\". Kirjaa ylös oikeat
+2. Käytä KiPan toimintoa "Määrittele testituloksia", jonka löydät
+pääsivulta kohdasta "Kisan Määritykset". Kirjaa ylös oikeat
 laskentatulosket tehtävään.
-3. Tallenna kisa XML -tiedostoksi toiminnolla \"Tallenna kisa\", jonka
-löydät pääsivulta, kohdasta \"Ylläpito\".
-4. Toimita tallentamasi .xml -tiedosto kehittäjille, lisäämme kyseisen
-tiedoston testitapaukseksi automaattisiin unit-testeihin.
+3. Tallenna kisa XML-tiedostoksi toiminnolla "Tallenna kisa", jonka
+löydät pääsivulta, kohdasta "Ylläpito".
+4. Toimita tallentamasi XML-tiedosto kehittäjille, lisäämme kyseisen
+tiedoston testitapaukseksi automaattisiin yksikkötesteihin.
 
-### Virhe käyttöliittymässä 
+### Virhe käyttöliittymässä
 
 1. Mieti hetki mitä olit tekemässä kun virhe tapahtui, yritä toistaa kyseinen tilanne.
-2. Jos pystyt ja osaat, ota ruutukaappaus tilanteesta 3. Tallenna kisa xml -tiedostoksi kohdassa "Virhe laskimessa" annetuilla ohjeilla
+2. Jos pystyt ja osaat, ota ruutukaappaus tilanteesta 3. Tallenna kisa XML-tiedostoksi kohdassa "Virhe laskimessa" annetuilla ohjeilla
 4. Ota yhteyttä kehittäjiin ja yritä kuvailla mitä olit tekemässä ja mitä tapahtui, kerro ainakin seuraavat asiat:
     - Käyttämäsi käyttöjärjestelmä (Windows, Macintosh, Linux)
-    - Käyttämäsi internet selain (Firefox, internet explorer, Chrome)
+    - Käyttämäsi Internet-selain (Firefox, Internet Explorer, Chrome)
     - ohjeet miten kyseisen vikatilanteen saa toistettua
     - kisatiedosto
 
@@ -584,11 +579,11 @@ näytti rumalta. hypätkää kaivoo.*
 * Frans.korhonen@gmail.com
 * Joonas.hirn@gmail.com
 
-## Verkkokäyttö 
+## Verkkokäyttö
 
-### Verkkokäyttö Kipassa yleisesti 
+### Yleistä
 
-Kisapalvelu on suunniteltu tukemaan tuloslaskentatoimistoja joissa on
+Kisapalvelu on suunniteltu tukemaan tuloslaskentatoimistoja, joissa on
 useita henkilöitä syöttämässä ja tarkastamassa syötteitä
 samanaikaisesti. Tällöin Kipa asennetaan vain yhdelle koneelle ja muut
 koneet käyttävät selaimella yhdellä koneella pyörivää Kipaa verkon yli.
@@ -598,43 +593,37 @@ verkossa palvelimena tai ei.
 
 ### Edut
 
-Samaa sarjaa voi syöttää vaikka kymmenen henkeä yhtäaikaa
-
-Ohjelma asennetaan vain yhdelle koneelle
-
-Clientit voivat olla mitä vain koneita joissa web-selain ja verkkoyhteys
-
-Mahdollisuus näyttää joltain koneelta tuloksia sitä mukaan kun niitä
-syötetään muilta koneilta.
+* Samaa sarjaa voi syöttää vaikka kymmenen henkeä yhtäaikaa
+* Ohjelma asennetaan vain yhdelle koneelle
+* Clientit voivat olla mitä vain koneita, joissa on Internet-selain ja verkkoyhteys
+* Mahdollisuus näyttää joltain koneelta tuloksia sitä mukaan kun niitä
+  syötetään muilta koneilta.
 
 ### Vaatimukset
 
-Lähiverkko jossa tietokoneet kiinni
-
-Yksi tietokone johon on asennettu Kipa (palvelin). Palomuurin tulee
-sallia http liikenne porttiin 80
-
-n+1 kappaletta tietokoneita, joissa web-selain (client)
+* Lähiverkko, jossa tietokoneet ovat kiinni
+* Yksi tietokone johon on asennettu Kipa (palvelin). Palomuurin tulee sallia http-liikenne porttiin 80.
+* n+1 kappaletta tietokoneita, joissa on Internet-selain (client)
 
 ### Yleistä lähiverkon / verkon käytöstä
 
-Lähiverkko
+#### Lähiverkko
 
 Kaikkien tietokoneiden pitää olla samassa verkossa niin että niillä on
 verkkoyhteys palvelimelle johon Kipa on asennettu. Yhteyden toimivuutta
 voi kokeilla vaikka ping \<IP osoite\> komennolla. Palvelimelle
-tarvitaan portti 80 auki http liikennöintiä varten. Jos kisatoimistosta
+tarvitaan portti 80 auki http-liikennöintiä varten. Jos kisatoimistosta
 ei ole pääsy Internettiin kannattaa harkita palomuurin sammuttamisesta
 palvelimelta.
 
-Internet
+#### Internet
 
-On mahdollista asentaa Kipa sekä julkisesti Internettiin jolloin kaikki
+On myös mahdollista asentaa Kipa julkisesti Internettiin jolloin kaikki
 kisat ovat verkossa näkyvillä kaikille, tällöin kannattaa miettiä onko
-turvallisuusriskinä, että kuka tahansa jolla on osoite voi mennä
+turvallisuusriskinä, että kuka tahansa, jolla on osoite, voi mennä
 muokkamaan kisan määrittelyitä ja tehtäviä. Lisäturvana kannattaa
 harkita käyttäjäautentikoitia osoitteeseen jossa Kipa pyörii. Samoin
-rajoituksia voi tulla syrjäseuduilla toimivilla kisatoimistoilla joihin
+rajoituksia voi tulla syrjäseuduilla toimiville kisatoimistoille, joihin
 ei saada riittävän hyvää verkkoyhteyttä.
 
 ### Tunnettuja ongelmia
@@ -642,8 +631,8 @@ ei saada riittävän hyvää verkkoyhteyttä.
 * Verkkokäytössä jos useampi kuin yksi henkilö syöttää samaa tehtävää
   samalle sarjalle yhtä aikaa vain myöhemmin tallennettu syöttö
   tallentuu. Myöhemmin tallennettu korvaa aiemmin tallennetun.
-* Tietokoneilla on esimerkiksi mokkula ja WLAN yhteys päällä yhtäaikaa
-  ja siksi tietokone hakee väärää yhteyttä käyttäen palvelinta.
+* Tietokoneilla on esimerkiksi mokkula- ja WLAN-yhteys päällä yhtäaikaa
+  ja siksi tietokone hakee palvelint väärää yhteyttä käyttäen.
 
 ## Teknologia
 
@@ -655,10 +644,10 @@ avointa lähdekoodia, Django, Python, SQLite sekä Apache.
 
 ### Arkkitehtuuri
 
-Kisapalvelu, Kipa, on puhdas web applikaatio. Laskenta on toteutettu
-Pythonilla. Web näkymät on rakennettu Django frameworkin päälle, mikä on
-toteuttu pythonilla. Kaikki syötteet tallennetaan sqlite kantaan jonka
-yhteydet hoitaa Django. SQLite toiminnalisuus tulee Pythonin mukana.
+Kisapalvelu, Kipa, on puhdas web-applikaatio. Laskenta on toteutettu
+Pythonilla. Web näkymät on rakennettu Django-ohjelmistokehyksen päälle,
+joka on toteuttu pythonilla. Kaikki syötteet tallennetaan sqlite-kantaan,
+jonka yhteydet hoitaa Django. SQLite-toiminnalisuus tulee Pythonin mukana.
 Web-palvelimena on käytetty Apachea sekä djangon kehitysserveriä, mutta
 ei pitäisi olla esteitä toteuttaa toiminnallisuutta millä tahansa
 web-palvelimella joka tukee Pythonin suorittamista, dokumentaation
@@ -670,10 +659,10 @@ voi olla kovempi kannattaa tämä pitää mielessä.
 
 ### Suorituskyky ja skaalautuvuus
 
-Normaali käytössä ei Kipa nosta mainittavasti koneen CPU kuormaa.
+Normaalikäytössä ei Kipa nosta mainittavasti koneen CPU kuormaa.
 Yhdellä kannettavalla voidaan hyvin ajaa kisatoimiston palveluja.
 Piikkittäisiä kuormituksia syntyy ainoastaan tulosten laskemisesta,
-isohkoissa kilpailussa jossa on tuhansia syötteitä vie kaavojen
+isohkoissa kilpailussa, jossa on tuhansia syötteitä, vie kaavojen
 parsiminen ja laskenta isoille sarjoille joissain tapauksissa joitain
 sekunteja. Testien mukaan kuorma kuitenkin säikeistyy käytössä olevien
 threadien määrän mukaan - kuitenkin vain yksi per istunto.
@@ -691,7 +680,7 @@ ei kuitenkaan ole nähty olevan vaikutusta suorituskykyyn.
 * Windows 7 32bit/64bit, Windows Vista 32bit
 * Ubuntu 8.10, 9.04, 9.10, Debian 5, Arch Linux
 * Python 2.5, Python 2.6
-* Django - 1.0 & 1.1
+* Django 1.0 & 1.1
 * Apache 2.2
 
 ## Lisenssi
@@ -706,9 +695,9 @@ Sourceforge sivustolla projektiin kehittämiseen liittyvää tietoa,
 lähdekoodeja yms. Web-osoite viittaa projektin alkuperäiseen työnimeen
 Tupa2.
 
-<http://tupa2.sourceforge.net/>
+http://tupa2.sourceforge.net/
 
-<http://sourceforge.net/projects/tupa2/>
+http://sourceforge.net/projects/tupa2/
 
 ## Kehitystyö ja tekijät
 
@@ -756,9 +745,9 @@ jatkokehityksestä löytyy.
 
 ## Apachen konfigurointi
 
-Apachen httpd.conf tiedostoon pitää lisätä seuraava tekstinpätkä, jotta
-voidaan ajaa Python koodia sekä djangoa. Alla oleva konfiguraatio
-edellyttää että tiedostot ovat kopioitu /data hakemistoon (Linux/Unix)
+Apachen httpd.conf-tiedostoon pitää lisätä seuraava tekstinpätkä, jotta
+voidaan ajaa Python-koodia sekä djangoa. Alla oleva konfiguraatio
+edellyttää että tiedostot ovat kopioitu hakemistoon /data (Linux/Unix)
 tietokoneilla.
 
 ```
@@ -810,17 +799,14 @@ interpoloi(arvio(vartion_kaava-oikea),
 ### Kaavan syntaksi
 
 Kaavoissa voi käyttää matematiikan perusoperaattoreita +-\*/, sulkuja
-sekä Kipaan määritettyjä funktioita.
-Laskujärjestyksessä noudatetaan matematiikan sääntöjä. Osatehtävän
-syötteisiin viitataan
+sekä Kipaan määritettyjä funktioita. Laskujärjestyksessä noudatetaan
+matematiikan sääntöjä. Osatehtävän syötteisiin viitataan
 niiden nimillä (a -- z), jolloin ne tarkoittavat laskennassa kulloinkin
-olevan vartion kyseistä syötettä.
-Hierarkiassa voi liikkua ylöspäin lisäämällä muuttujan eteen pisteen.
-Esim. \_.a\_ tarkoittaa kaikkien
+olevan vartion kyseistä syötettä. Hierarkiassa voi liikkua ylöspäin
+lisäämällä muuttujan eteen pisteen. Esim. \_.a\_ tarkoittaa kaikkien
 saman sarjan vartioiden kyseisen suorituksen lukujoukkoa. Hierarkiassa
-voi liikkua mihin tahansa
-tehtävään saman sarjan sisällä. Interpoloinneissa voidaan käyttää
-\_muk\_ lukujoukkoa suodatettamaan
+voi liikkua mihin tahansa tehtävään saman sarjan sisällä.
+Interpoloinneissa voidaan käyttää \_muk\_ lukujoukkoa suodatettamaan
 ulkopuoliset vartiot pois. (esim \_.a\*muk\_)
 
 Esimerkkejä:
@@ -848,7 +834,7 @@ max(...pidempi:piipeli.a)
 
 ### Parametrit
 
-Parametrit ovat yksittäisiä palikoita joiden avulla on helppo muokata käyttöliittymästä haluttuja kaavan osia.
+Parametrit ovat yksittäisiä palikoita, joiden avulla on helppo muokata käyttöliittymästä haluttuja kaavan osia.
 Jokainen parametri on merkkijono, jonka nimeä vastaava kohta kaavassa korvataan.
 Kaikki parametrit tulee määrittää, joten käyttämättömät parametrit määritetään
 tyhjiksi. Seuraavassa peruskaavan parametrit ja niiden arvovaihtoehdot.
@@ -907,7 +893,7 @@ Hyöylliset henkilökohtaiset tekniset tiedot & taidot.
 * Merkkijonot: (string,unicode)
 * Taulukot (table,tuple)
 * Decimal (luokka)
-* xml.dom.minidom XML parseri
+* xml.dom.minidom XML-parseri
 * Unittest -- testausluokat
 * RE - Regular expressions
 * Merkkijonohaut
@@ -921,7 +907,7 @@ Hyöylliset henkilökohtaiset tekniset tiedot & taidot.
   * Testaus
   * Unicode
   * Authentication
-  * Admin sivu
+  * Admin-sivu
 * HTML
   * taulukot
   * formit
@@ -934,7 +920,7 @@ Hyöylliset henkilökohtaiset tekniset tiedot & taidot.
 python manage.py runserver
 ```
 
-Käynnistää kehityserverin paikalliselle koneelle porttiin 8000
+Käynnistää kehitypalvelimen paikalliselle koneelle porttiin 8000
 
 Jonka jälkeen kipan pitäisi löytyä selaimella osoitteesta:
 [127.0.0.1:8000/tupa](http://127.0.0.1:8000/tupa)
@@ -945,7 +931,7 @@ Järjestelmä käyttää juuresta löytyvää tupa.db tiedostoa.
 python manage.py testserver [tietokantapohja.xml]
 ```
 
-Käynnistää testiserverin. Muuten samanlainen kuin runserver,
+Käynnistää testipalvelimen. Muuten samanlainen kuin runserver,
 paitsi että käyttää virtuaalista tietokantaa muistissa. Ei tee mitään
 muutoksia tiedostoihin. Turvallinen erilaisiin kokeiluihin.
 Voidaan täyttää halutulla tietokantapohjalla (fixture). esim.
@@ -958,14 +944,14 @@ python manage.py testserver fixtures/tests/katuu.xml
 python manage.py test
 ```
 
-Ajaa järjestelmän unit testit. Testaa erinäisiä asioita järjestelmässä
+Ajaa järjestelmän yksikkötestit. Testaa erinäisiä asioita järjestelmässä
 testidatan pohjalta:
 
 * Laskee oikeita tuloksia
 * kaatuuko datan tilanteissa
-* Tallenttaa tietoa oikein.
+* Tallentaa tietoa oikein.
 
-Käyttää testidatana kaikkia fixtures/tests/ löytyviä xml päätteisiä
+Käyttää testidatana kaikkia fixtures/tests/ löytyviä XML-päätteisiä
 tietokantapohjia.
 
 ```
@@ -974,9 +960,9 @@ python manage.py syncdb
 
 Päivittää lähdekoodin datamallin ja tietokannan.
 
-1. päivittää dia UML-kaaviosta \"tupa/tietokanta.dia\" datamalliin
+1. päivittää dia UML-kaaviosta "tupa/tietokanta.dia" datamalliin
     \"tupa/models.py\" tietokantataulutiedot
-2.  päivittää tietokantatiedoston \"tupa.db\" \"models.py\" päivitetyn
+2.  päivittää tietokantatiedoston "tupa.db" "models.py" päivitetyn
     määrittelyn perustella.
 
 VAROITUS: Mikäli tietokannan rakenne olennaisesti muuttuu, on
@@ -1024,9 +1010,9 @@ kehityskäyttöön)
 RECORDING=True
 ```
 
-Nauhoittaa jokaisen serverllä tapahtuvan sivutallennuksen. Juuresta
-löytyvään record.xml tiedostoon, mikäli se on olemassa. Tarkoitettu
-tiedontallennus testien luontiin.
+Nauhoittaa jokaisen serverillä tapahtuvan sivutallennuksen. Juuresta
+löytyvään record.xml-tiedostoon, mikäli se on olemassa. Tarkoitettu
+tiedontallennukseen testien luontia varten.
 
 ### Alkuperäinen skripti
 
