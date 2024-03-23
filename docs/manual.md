@@ -958,12 +958,7 @@ tietokantapohjia.
 python manage.py syncdb
 ```
 
-Päivittää lähdekoodin datamallin ja tietokannan.
-
-1. päivittää dia UML-kaaviosta "tupa/tietokanta.dia" datamalliin
-    \"tupa/models.py\" tietokantataulutiedot
-2.  päivittää tietokantatiedoston "tupa.db" "models.py" päivitetyn
-    määrittelyn perustella.
+päivittää tietokantatiedoston "tupa.db" "models.py" päivitetyn määrittelyn perustella.
 
 VAROITUS: Mikäli tietokannan rakenne olennaisesti muuttuu, on
 mahdollista ettei se enään ole yhteensopiva jo olemassa olevan tietokannan kanssa.
@@ -1072,13 +1067,6 @@ firefox localhost
     - `AritmeettinenLaskin.py`
         * Laskin joka laskee matemaattisia lauekeita merkkijonosta jossa on merkejä +-/\*() sekä numeroita.
         * Rippuvuus: Python
-
-    - `dia2django.py`
-        * Luo .dia UML kaaviosta django yhteensopivaa lähdekoodia. Käytetään ylläpitämään models.py tiedoston mallien keskeistä sisältöä kaavion perusteella.
-        * Rippuvuudet: Python
-    - `tietokanta.dia`
-        * Tietokantamäärittely uml kaaviossa. Käyttää pääsääntöisesti sql tietotyyppejä datamääritteinä.
-        * Rippuvuudet: Dia
     - `duplicate.py`
         * Tiedon monistaminen. Tehtävien kopiointi, XML tietokantatiedoston luonti.
         * Riippuvuudet: Python,Django,models.py
