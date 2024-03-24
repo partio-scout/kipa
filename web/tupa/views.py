@@ -154,6 +154,7 @@ def maaritaKisa(request, kisa_nimi=None,talletettu=None):
                 if sarjaFormit.is_valid():
                         kisa=kisaForm.save()
                         sarjaFormit=SarjaFormSet(posti,instance=kisa)
+                        sarjaFormit.is_valid()
                         sarjaFormit.save()
 
         if kisa :
