@@ -6,7 +6,8 @@ Test Setup        Open Competition
 Test Teardown     Close Browser
 Force Tags        regression    smoke
 Library           Selenium2Library
-Resource          yhteiset_resurssit.txt
+Resource          yhteiset_resurssit.resource
+Variables         kipa_sivuosoitteet_ja_otsikot.py
 
 *** Test Cases ***
 Luodaan uusi kisa
