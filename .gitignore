@@ -3,3 +3,4 @@ src
 env*
 *.orig
 *.rej
+web/settings/local.py

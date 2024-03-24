@@ -5,8 +5,9 @@ Suite Teardown    Close All Browsers And Stop Selenium Server
 Test Setup        Open Competition
 Test Teardown     Close Browser
 Force Tags        regression    smoke
-Library           Selenium2Library
-Resource          yhteiset_resurssit.txt
+Library           SeleniumLibrary
+Resource          yhteiset_resurssit.resource
+Variables         kipa_sivuosoitteet_ja_otsikot.py
 
 *** Test Cases ***
 Luodaan uusi kisa
