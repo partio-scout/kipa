@@ -12,3 +12,6 @@ DATABASES = {
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'shbtq($_^om(xep=5f97k2+ntb3!cqn+)%8r#s6udzqnhj$5p6'
+
+# Serve static content
+SERVE_MEDIA = True
