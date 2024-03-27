@@ -6,6 +6,7 @@ on: pull_request
 jobs:
   unit-tests-sqlite:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - name: start SUT
@@ -14,6 +15,7 @@ jobs:
         run: docker compose run web './manage.py' test --failfast
   robot-tests:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - name: start SUT
