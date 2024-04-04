@@ -1,7 +1,7 @@
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': hakemisto + '/../db/kipa.db',                      # Or path to database file if using sqlite3.
+        'NAME': '/path/to/your/db/kipa.db',     # docs/initial.db is a good starting point
         # The following settings are not used with sqlite3:
         'USER': '',
         'PASSWORD': '',
@@ -12,3 +12,6 @@ DATABASES = {
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'shbtq($_^om(xep=5f97k2+ntb3!cqn+)%8r#s6udzqnhj$5p6'
+
+# Serve static content
+SERVE_MEDIA = True
