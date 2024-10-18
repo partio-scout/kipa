@@ -1,5 +1,6 @@
 import csv, codecs, cStringIO
 
+
 class UnicodeWriter:
     """
     A CSV writer which will write rows to CSV file "f",
@@ -28,5 +29,3 @@ class UnicodeWriter:
     def writerows(self, rows):
         for row in rows:
             self.writerow(row)
-
-

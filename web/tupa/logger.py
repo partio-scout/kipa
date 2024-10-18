@@ -7,72 +7,76 @@ from django.conf import settings
 from xml.dom.minidom import parse, parseString
 import os.path
 import re
+
 ##from tupa.models import Kisa
 from django.shortcuts import get_object_or_404
 from duplicate import kisa_xml
 
 from xml.dom.minidom import getDOMImplementation
+
 impl = getDOMImplementation()
 
-record_base='<?xml version="1.0" encoding="utf-8"?>\n<django-objects version="1.0">\n</django-objects>'
+record_base = '<?xml version="1.0" encoding="utf-8"?>\n<django-objects version="1.0">\n</django-objects>'
 
-#recorder middleware:
+# recorder middleware:
 class PostDataRecorder:
-        """
-        Nauhoittaa post requestit record.xml tietokanta tiedoston loppuun mikali se on olemassa ja settings.RECORDING==True
-        """
-        def process_request(self, request) :
-                if settings.RECORDING==True:
-                        if request.method == 'POST':
-                                posti=request.POST
-                                address=request.path
+    """
+    Nauhoittaa post requestit record.xml tietokanta tiedoston loppuun mikali se on olemassa ja settings.RECORDING==True
+    """
 
-                                kisa_haku = re.search("^/kipa/(.*?)/.*$",address)
-                                if not kisa_haku:
-                                        return None
-                                kisa_nimi = kisa_haku.group(1)
+    def process_request(self, request):
+        if settings.RECORDING == True:
+            if request.method == "POST":
+                posti = request.POST
+                address = request.path
 
-                                if kisa_nimi == "uusiKisa" :
-                                        kisa_nimi = posti['nimi']
-                                record_name="record/" + kisa_nimi +".xml"
+                kisa_haku = re.search("^/kipa/(.*?)/.*$", address)
+                if not kisa_haku:
+                    return None
+                kisa_nimi = kisa_haku.group(1)
 
-                                data = impl.createDocument(None, "uusi_lisa", None)
+                if kisa_nimi == "uusiKisa":
+                    kisa_nimi = posti["nimi"]
+                record_name = "record/" + kisa_nimi + ".xml"
 
-                                post_test = data.createElement('post_request')
-                                post_test.setAttribute("address", address )
+                data = impl.createDocument(None, "uusi_lisa", None)
 
-                                for n,v in posti.iteritems():
-                                        elem = data.createElement('input')
-                                        elem.setAttribute("name", n )
-                                        elem.setAttribute("value", v )
-                                        post_test.appendChild(elem)
-                                        data.childNodes[0].appendChild(post_test)
+                post_test = data.createElement("post_request")
+                post_test.setAttribute("address", address)
 
-                                if not os.path.isfile(record_name) :
-                                        uusi = open(record_name,"w")
-                                        if not kisa_haku.group(1) == "uusiKisa" :
-                                                kisa = Kisa.objects.get( nimi=kisa_haku.group(1) )
-                                                vanha = kisa_xml(kisa)
-                                                print vanha
-                                                uusi.write( kisa_xml(kisa) ) # talletetaan kisan kanta pohjaksi
-                                        else :
-                                                uusi.write(record_base) # uusi kisa -> ei olemassaolevaa tietokantaa.
-                                        uusi.close()
+                for n, v in posti.iteritems():
+                    elem = data.createElement("input")
+                    elem.setAttribute("name", n)
+                    elem.setAttribute("value", v)
+                    post_test.appendChild(elem)
+                    data.childNodes[0].appendChild(post_test)
 
-                                pos = next = 0
-                                filuu = open(record_name, 'r')
-                                for line in filuu.readlines():
-                                        pos = next # position of beginning of this line
-                                        next += len(line) # compute position of beginning of next line
-                                filuu.close()
+                if not os.path.isfile(record_name):
+                    uusi = open(record_name, "w")
+                    if not kisa_haku.group(1) == "uusiKisa":
+                        kisa = Kisa.objects.get(nimi=kisa_haku.group(1))
+                        vanha = kisa_xml(kisa)
+                        print vanha
+                        uusi.write(kisa_xml(kisa))  # talletetaan kisan kanta pohjaksi
+                    else:
+                        uusi.write(
+                            record_base
+                        )  # uusi kisa -> ei olemassaolevaa tietokantaa.
+                    uusi.close()
 
-                                FILE = open(record_name,"r+")
-                                FILE.seek(pos,0)
+                pos = next = 0
+                filuu = open(record_name, "r")
+                for line in filuu.readlines():
+                    pos = next  # position of beginning of this line
+                    next += len(line)  # compute position of beginning of next line
+                filuu.close()
 
-                                uusi=data.toprettyxml(encoding="utf-8",indent='    ', newl="\n")
-                                for line in uusi.splitlines()[2:-1]:
-                                        FILE.write(line+"\n")
-                                FILE.write( "</django-objects>" )
-                                FILE.close()
-                                return None
+                FILE = open(record_name, "r+")
+                FILE.seek(pos, 0)
 
+                uusi = data.toprettyxml(encoding="utf-8", indent="    ", newl="\n")
+                for line in uusi.splitlines()[2:-1]:
+                    FILE.write(line + "\n")
+                FILE.write("</django-objects>")
+                FILE.close()
+                return None
