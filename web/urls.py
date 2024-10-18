@@ -4,14 +4,20 @@ from django.conf import settings
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
-        (r'^kipa/',  include('tupa.urls')),
-        (r'^admin/', include(admin.site.urls)),
+urlpatterns = patterns(
+    "",
+    (r"^kipa/", include("tupa.urls")),
+    (r"^admin/", include(admin.site.urls)),
 )
 
 if settings.SERVE_MEDIA:
-        urlpatterns += patterns('',
-                (r'^kipamedia/(?P<path>.*)$', 'django.views.static.serve',
-                {'document_root': settings.STATIC_DOC_ROOT}),)
+    urlpatterns += patterns(
+        "",
+        (
+            r"^kipamedia/(?P<path>.*)$",
+            "django.views.static.serve",
+            {"document_root": settings.STATIC_DOC_ROOT},
+        ),
+    )
 
-handler500 = 'tupa.views.raportti_500'
+handler500 = "tupa.views.raportti_500"
