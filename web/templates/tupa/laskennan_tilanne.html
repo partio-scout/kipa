@@ -3,7 +3,6 @@
 {% block title %}Tulokset sarjoittain{% endblock %}
 
 {% block header %}
-<head>
 <meta http-equiv="refresh" content="60" http-equiv="Content-Type" content="text/html; charset=utf-8"  />
 <title>Tulokset sarjoittain</title>
 <link href="kipa.css" rel="stylesheet" type="text/css" />
@@ -20,7 +19,6 @@
         <tr valign="top">
         {%for sarake in rivi %}
                 {% if forloop.first %}
-                        <font color="#FFFFFF">
                         <td width="50" fgcolor="#FFFFFF" bgcolor="#000000" ><font color="#FFFFFF">{{ sarake.1 }}</font></td>
                 {%else%}
 
@@ -69,7 +67,6 @@
 
   </p>
 
-</script>
 </body>
 
 {% endblock %}

@@ -55,9 +55,9 @@ document.getElementById(id).style.display = visibility;
     </div><!-- /header -->
     <div id="breadcrumbs">
         {% if tarkistus %}
-        <a href="/kipa/{{kisa_nimi}}/" class="capitalize">{{kisa_nimi|alaviiva_pois}}</a> {%if taakse.url and taakse.title%}&raquo; <a href="{{taakse.url}}tarkistus/">{{taakse.title|alaviiva_pois}} (tarkistus)</a> {% endif %}&raquo; {{heading|alaviiva_pois}}
+        <a href="/kipa/{{kisa_nimi}}/" class="capitalize">{{kisa_nimi|alaviiva_pois}}</a> {%if taakse.url and taakse.title%}» <a href="{{taakse.url}}tarkistus/">{{taakse.title|alaviiva_pois}} (tarkistus)</a> {% endif %}» {{heading|alaviiva_pois}}
         {% else %}
-        <a href="/kipa/{{kisa_nimi}}/" class="capitalize">{{kisa_nimi|alaviiva_pois}}</a> {%if taakse.url and taakse.title%}&raquo; <a href="{{taakse.url}}">{{taakse.title|alaviiva_pois}}</a> {% endif %}&raquo; {{heading|alaviiva_pois}}
+        <a href="/kipa/{{kisa_nimi}}/" class="capitalize">{{kisa_nimi|alaviiva_pois}}</a> {%if taakse.url and taakse.title%}» <a href="{{taakse.url}}">{{taakse.title|alaviiva_pois}}</a> {% endif %}» {{heading|alaviiva_pois}}
         {% endif %}
 
     </div>

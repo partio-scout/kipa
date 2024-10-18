@@ -10,13 +10,15 @@
 Parhaat pisteet saa:<br>
 <input type="radio" id="{{parhaan_haku.id}}" value="min" name="{{parhaan_haku.name}}"
 {% ifequal parhaan_haku.value "min" %}checked="checked" {% endifequal %}
-/> pienin</label><br>
+/> <label>pienin</label><br>
 <input type="radio" id="{{parhaan_haku.id}}" value="max" name="{{parhaan_haku.name}}"
 {% ifequal parhaan_haku.value "max" %}checked="checked" {% endifequal %}
-/> suurin</label><br>
+/> <label>suurin</label><br>
 <input type="radio" id="{{parhaan_haku.id}}" value="" name="{{parhaan_haku.name}}"
 {% ifequal parhaan_haku.value "" %}checked="checked" {% endifequal %}
-/> {%if vapaa %} kaava:
+/>
+<label>
+{%if vapaa %} kaava:
 <span onmouseover="tooltip.show('Tähän tulee kaava, joka määrittää suorituksen, jolla saa täydet pisteet.<br> Kaavassa voi käyttää normaalien funktioiden lisäksi muutamaa lisäviitettä:<br>suor (kaikkien vartioiden suoritukset)<br>muk (mukana olevien vartioiden suodatin)<br><br>Esimerkiksi<br>min(suor*muk) pienin mukana olevan vartion suoritus<br>' );"
 onmouseout="tooltip.hide();">
 <img src="/kipamedia/help_small.png" />
@@ -37,7 +39,7 @@ Montako kisapistettä jaetaan:
 <td>
 Tässä kerrotaan suoritus, jolla saa maksimipisteet. Tämä voi olla vartioiden suorituksista pienin, suurin tai jokin kiinteä luku. Mikäli kyseessä on arviointi valitse pienin.
 </td>
-
+</tr>
 </table>
 
 </fieldset>
