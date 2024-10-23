@@ -8,16 +8,16 @@
 <font color=red><b>
 </b></font>
 Parhaat pisteet saa:<br>
-<input type="radio" id="{{parhaan_haku.id}}" value="min" name="{{parhaan_haku.name}}"
+<input type="radio" id="{{parhaan_haku.id}}_1" value="min" name="{{parhaan_haku.name}}"
 {% ifequal parhaan_haku.value "min" %}checked="checked" {% endifequal %}
-/> <label>pienin</label><br>
-<input type="radio" id="{{parhaan_haku.id}}" value="max" name="{{parhaan_haku.name}}"
+/> <label for="{{parhaan_haku.id}}_1">pienin</label><br>
+<input type="radio" id="{{parhaan_haku.id}}_2" value="max" name="{{parhaan_haku.name}}"
 {% ifequal parhaan_haku.value "max" %}checked="checked" {% endifequal %}
-/> <label>suurin</label><br>
-<input type="radio" id="{{parhaan_haku.id}}" value="" name="{{parhaan_haku.name}}"
+/> <label for="{{parhaan_haku.id}}_2">suurin</label><br>
+<input type="radio" id="{{parhaan_haku.id}}_3" value="" name="{{parhaan_haku.name}}"
 {% ifequal parhaan_haku.value "" %}checked="checked" {% endifequal %}
 />
-<label>
+<label for="{{parhaan_haku.id}}_3">
 {%if vapaa %} kaava:
 <span onmouseover="tooltip.show('Tähän tulee kaava, joka määrittää suorituksen, jolla saa täydet pisteet.<br> Kaavassa voi käyttää normaalien funktioiden lisäksi muutamaa lisäviitettä:<br>suor (kaikkien vartioiden suoritukset)<br>muk (mukana olevien vartioiden suodatin)<br><br>Esimerkiksi<br>min(suor*muk) pienin mukana olevan vartion suoritus<br>' );"
 onmouseout="tooltip.hide();">
