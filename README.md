@@ -43,3 +43,7 @@ Tämän ohjelman mukana pitäisi tulla kopio GPL-lisenssistä; jos näin ei ole,
 Hakemistosta `./web/roobt` löytyy myös toinen robot-tiedosto nimeltään
 `autentikointi.txt`, mutta sen ajaminen ei taida onnistua, ellei ensin toteuta
 Kipaan suunniteltua kirjautumista.
+
+### Python-koodin formatointi
+
+Koodi noudattaa Black-autoformatterin vesion 21.12.b0 mukaista tyyliä. Formatointi tarkastetaan osana CI-putkea.

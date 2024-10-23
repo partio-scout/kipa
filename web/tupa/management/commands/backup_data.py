@@ -6,43 +6,72 @@ from django.utils.datastructures import SortedDict
 
 from optparse import make_option
 
+
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
-        make_option('--format', default='json', dest='format',
-            help='Specifies the output serialization format for fixtures.'),
-        make_option('--indent', default=None, dest='indent', type='int',
-            help='Specifies the indent level to use when pretty-printing output'),
-        make_option('--database', action='store', dest='database',
-            default=DEFAULT_DB_ALIAS, help='Nominates a specific database to load '
-                'fixtures into. Defaults to the "default" database.'),
-        make_option('-e', '--exclude', dest='exclude',action='append', default=[],
-            help='App to exclude (use multiple --exclude to exclude multiple apps).'),
-        make_option('-n', '--natural', action='store_true', dest='use_natural_keys', default=False,
-            help='Use natural keys if they are available.'),
+        make_option(
+            "--format",
+            default="json",
+            dest="format",
+            help="Specifies the output serialization format for fixtures.",
+        ),
+        make_option(
+            "--indent",
+            default=None,
+            dest="indent",
+            type="int",
+            help="Specifies the indent level to use when pretty-printing output",
+        ),
+        make_option(
+            "--database",
+            action="store",
+            dest="database",
+            default=DEFAULT_DB_ALIAS,
+            help="Nominates a specific database to load "
+            'fixtures into. Defaults to the "default" database.',
+        ),
+        make_option(
+            "-e",
+            "--exclude",
+            dest="exclude",
+            action="append",
+            default=[],
+            help="App to exclude (use multiple --exclude to exclude multiple apps).",
+        ),
+        make_option(
+            "-n",
+            "--natural",
+            action="store_true",
+            dest="use_natural_keys",
+            default=False,
+            help="Use natural keys if they are available.",
+        ),
     )
-    help = 'Output the contents of the database as a fixture of the given format.'
-    args = '[appname appname.ModelName ...]'
+    help = "Output the contents of the database as a fixture of the given format."
+    args = "[appname appname.ModelName ...]"
 
     def handle(self, *app_labels, **options):
         from django.db.models import get_app, get_apps, get_models, get_model
 
-        format = options.get('format','json')
-        indent = options.get('indent',None)
-        using = options.get('database', DEFAULT_DB_ALIAS)
+        format = options.get("format", "json")
+        indent = options.get("indent", None)
+        using = options.get("database", DEFAULT_DB_ALIAS)
         connection = connections[using]
-        exclude = options.get('exclude',[])
-        show_traceback = options.get('traceback', False)
-        use_natural_keys = options.get('use_natural_keys', False)
+        exclude = options.get("exclude", [])
+        show_traceback = options.get("traceback", False)
+        use_natural_keys = options.get("use_natural_keys", False)
 
         excluded_apps = set(get_app(app_label) for app_label in exclude)
 
         if len(app_labels) == 0:
-            app_list = SortedDict((app, None) for app in get_apps() if app not in excluded_apps)
+            app_list = SortedDict(
+                (app, None) for app in get_apps() if app not in excluded_apps
+            )
         else:
             app_list = SortedDict()
             for label in app_labels:
                 try:
-                    app_label, model_label = label.split('.')
+                    app_label, model_label = label.split(".")
                     try:
                         app = get_app(app_label)
                     except ImproperlyConfigured:
@@ -50,7 +79,9 @@ class Command(BaseCommand):
 
                     model = get_model(app_label, model_label)
                     if model is None:
-                        raise CommandError("Unknown model: %s.%s" % (app_label, model_label))
+                        raise CommandError(
+                            "Unknown model: %s.%s" % (app_label, model_label)
+                        )
 
                     if app in app_list.keys():
                         if app_list[app] and model not in app_list[app]:
@@ -83,12 +114,14 @@ class Command(BaseCommand):
                 objects.extend(model._default_manager.using(using).all())
 
         try:
-            return serializers.serialize(format, objects, indent=indent,
-                        use_natural_keys=use_natural_keys)
+            return serializers.serialize(
+                format, objects, indent=indent, use_natural_keys=use_natural_keys
+            )
         except Exception, e:
             if show_traceback:
                 raise
             raise CommandError("Unable to serialize database: %s" % e)
+
 
 def sort_dependencies(app_list):
     """Sort a list of app,modellist pairs into a single list of models.
@@ -98,6 +131,7 @@ def sort_dependencies(app_list):
     dependency has it's dependencies serialized first.
     """
     from django.db.models import get_model, get_models
+
     # Process the list of models, and get the list of dependencies
     model_dependencies = []
     models = set()
@@ -108,23 +142,23 @@ def sort_dependencies(app_list):
         for model in model_list:
             models.add(model)
             # Add any explicitly defined dependencies
-            if hasattr(model, 'natural_key'):
-                deps = getattr(model.natural_key, 'dependencies', [])
+            if hasattr(model, "natural_key"):
+                deps = getattr(model.natural_key, "dependencies", [])
                 if deps:
-                    deps = [get_model(*d.split('.')) for d in deps]
+                    deps = [get_model(*d.split(".")) for d in deps]
             else:
                 deps = []
 
             # Now add a dependency for any FK or M2M relation with
             # a model that defines a natural key
             for field in model._meta.fields:
-                if hasattr(field.rel, 'to'):
+                if hasattr(field.rel, "to"):
                     rel_model = field.rel.to
-                    if hasattr(rel_model, 'natural_key'):
+                    if hasattr(rel_model, "natural_key"):
                         deps.append(rel_model)
             for field in model._meta.many_to_many:
                 rel_model = field.rel.to
-                if hasattr(rel_model, 'natural_key'):
+                if hasattr(rel_model, "natural_key"):
                     deps.append(rel_model)
             model_dependencies.append((model, deps))
 
@@ -157,9 +191,12 @@ def sort_dependencies(app_list):
             else:
                 skipped.append((model, deps))
         if not changed:
-            raise CommandError("Can't resolve dependencies for %s in serialized app list." %
-                ', '.join('%s.%s' % (model._meta.app_label, model._meta.object_name)
-                for model, deps in sorted(skipped, key=lambda obj: obj[0].__name__))
+            raise CommandError(
+                "Can't resolve dependencies for %s in serialized app list."
+                % ", ".join(
+                    "%s.%s" % (model._meta.app_label, model._meta.object_name)
+                    for model, deps in sorted(skipped, key=lambda obj: obj[0].__name__)
+                )
             )
         model_dependencies = skipped
 
