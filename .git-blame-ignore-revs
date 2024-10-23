@@ -9,3 +9,6 @@ f1a94d22a334661a8ddbd7a04d5c1d480886ef32
 
 # Use spaces instead of tabs in template files
 ae6391ac34b6f959fd16053f24076353aae0e54b
+
+# Format python code with black
+b215abbc7ae11614bab50fb7c3b95c307cf933d5
