@@ -15,3 +15,6 @@ b215abbc7ae11614bab50fb7c3b95c307cf933d5
 
 # Format Django templates with djLint
 047d51f497bdb08d6c092b05d917d331fb7cebd0
+
+# Format JavaScript and CSS with prettier
+11eff78408e2bb6bdf4c65efb4adf3117204172c
