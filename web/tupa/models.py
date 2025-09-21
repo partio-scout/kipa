@@ -168,7 +168,8 @@ class Tehtava(models.Model):
                     laskennassa = False
                 elif self.vartioHylatty(v):
                     laskennassa = False
-
+                elif self.vartioTekematta(v):
+                    laskennassa = False
                 if laskennassa:
                     mukana.append(v)
         return mukana
@@ -181,6 +182,17 @@ class Tehtava(models.Model):
             for syotemaarite in SyoteMaarite.objects.filter(osa_tehtava=osatehtava):
                 syote = Syote.objects.filter(maarite=syotemaarite, vartio=vartio)
                 if syote and syote[0].arvo == "h":
+                    return True
+        return False
+
+    def vartioTekematta(self, vartio):
+        """
+        Käy läpi kaikki vartion tulossyötteet ja palauttaa True, jos joku niistä on hylätty.
+        """
+        for osatehtava in OsaTehtava.objects.filter(tehtava=self):
+            for syotemaarite in SyoteMaarite.objects.filter(osa_tehtava=osatehtava):
+                syote = Syote.objects.filter(maarite=syotemaarite, vartio=vartio)
+                if syote and syote[0].arvo == "e":
                     return True
         return False
 
