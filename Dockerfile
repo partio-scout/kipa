@@ -21,5 +21,5 @@ RUN rm -rf /app/media \
     && chmod +x /docker-entrypoint.d/gunicorn.sh \
     && pip install -r /requirements.txt \
     && tr -dc A-Za-z0-9 < /dev/urandom | head -c 40 > /secret.txt \
-    && python manage.py makemigrations tupa \
+    && python manage.py collectstatic --noinput \
     && nginx -t

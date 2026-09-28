@@ -32,3 +32,5 @@ else:
     }
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
+
+STATIC_ROOT = "/static/"

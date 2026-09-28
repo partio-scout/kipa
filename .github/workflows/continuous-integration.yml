@@ -69,7 +69,7 @@ jobs:
           pip install robotframework
           pip install robotframework-seleniumlibrary
       - name: start SUT
-        run: docker run -d -p 3000:80 kipa
+        run: docker run -d -p 3000:80 -e KIPA_ADMIN_USER=admin -e KIPA_ADMIN_PASSWORD=admin kipa
       - name: wait SUT to start
         run: while ! curl -s -f 'http://localhost:3000/kipa' ; do sleep 2; docker ps; done
         shell: bash

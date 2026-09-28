@@ -31,6 +31,9 @@ services:
       KIPA_DB_NAME: kipa
       KIPA_DB_USER: kipa
       KIPA_DB_PASSWORD: ${KIPA_DB_PASSWORD:?Set KIPA_DB_PASSWORD}
+      # Optional: creates this admin on first start if it doesn't exist yet
+      KIPA_ADMIN_USER: ${KIPA_ADMIN_USER:-}
+      KIPA_ADMIN_PASSWORD: ${KIPA_ADMIN_PASSWORD:-}
 
 volumes:
   kipa-mysql:

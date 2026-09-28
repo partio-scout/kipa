@@ -2,6 +2,14 @@
 Open KiPa Main Page
     Open Browser And Maximize    ${KIPA_URL}/
     Wait Until Keyword Succeeds    10 sec    2 sec    Title Should Be    ${KIPA_OTSIKKO}
+    ${kirjautumaton}=    Run Keyword And Return Status    Page Should Contain Element    uname
+    IF    ${kirjautumaton}    Log In To Kipa
+
+Log In To Kipa
+    Input Text    uname    ${admin_tunnus}
+    Input Text    pword    ${admin_salasana}
+    Click Button    Kirjaudu »
+    Wait Until Keyword Succeeds    10 sec    2 sec    Page Should Contain Link    Kirjaudu ulos
 
 Create New Competition
     [Arguments]    ${competition}
@@ -13,7 +21,7 @@ Create New Competition
     Click Button    tallenna
     Close Browser
     comment    kaikissa ympäristöissä ei näköjään ehditä avamaan selainta aikarajan puitteissa, yritetään 5 sekunnin välein 15 sekunnin ajan ennenkuin luovutetaan
-    Wait Until Keyword Succeeds    30 sec    5sec    Open Browser And Maximize    ${KIPA_URL}/
+    Wait Until Keyword Succeeds    30 sec    5sec    Open KiPa Main Page
     Click Link    ${competition}
     Location Should Be    ${KIPA_URL}/${competition}/
     Title Should Be    Kipa - ${competition}

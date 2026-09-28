@@ -64,6 +64,23 @@ käyttöön ympäristömuuttujilla `KIPA_DB_ENGINE=mysql`, `KIPA_DB_HOST`,
 `KIPA_DB_PORT`, `KIPA_DB_NAME`, `KIPA_DB_USER` ja `KIPA_DB_PASSWORD`.
 Ilman niitä käytetään SQLiteä kuten ennenkin.
 
+### Käyttäjät ja oikeudet
+
+Kipa vaatii kirjautumisen. Ensimmäisen pääkäyttäjän saa luotua antamalla
+käynnistyksessä ympäristömuuttujat `KIPA_ADMIN_USER` ja
+`KIPA_ADMIN_PASSWORD` (käyttäjä luodaan vain, jos sitä ei vielä ole).
+
+Pääkäyttäjä hallitsee käyttäjiä osoitteessa http://localhost:8000/admin/.
+Käyttäjän sivulla valitaan, mitkä kisat hänelle näkyvät ja millä tasolla:
+
+* **Tulokset**: näkee tulokset ja laskennan tilanteen
+* **Syöttö**: + syöttää suorituksia
+* **Määritys**: + määrittää sarjat, vartiot, tehtävät ja tuomarineuvoston tulokset
+* **Ylläpito**: + palauttaa ja poistaa kisan
+
+Jokainen kirjautunut käyttäjä voi luoda uuden kisan, ja saa siihen
+automaattisesti ylläpito-oikeuden. Pääkäyttäjä näkee kaikki kisat.
+
 ## Asennus Nginx-proxyn taakse
 
 Paremmin konfikuroitava ja joustavampi tapa ajaa Kipaa on ajaa sitä
