@@ -1,0 +1,36 @@
+services:
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: kipa
+      MYSQL_USER: kipa
+      MYSQL_PASSWORD: ${KIPA_DB_PASSWORD:?Set KIPA_DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD}
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - kipa-mysql:/var/lib/mysql
+    healthcheck:
+      # TCP ping only succeeds once the real server (not the init-time one) is up
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  kipa:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:80"
+    environment:
+      KIPA_DB_ENGINE: mysql
+      KIPA_DB_HOST: db
+      KIPA_DB_NAME: kipa
+      KIPA_DB_USER: kipa
+      KIPA_DB_PASSWORD: ${KIPA_DB_PASSWORD:?Set KIPA_DB_PASSWORD}
+
+volumes:
+  kipa-mysql:

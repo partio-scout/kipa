@@ -47,6 +47,23 @@ Uudelleenkäynnistys voidaan tämän jälkeen tehdä komennolla
 Mikäli haluaa käynnistää Kipasta kehitysversion se tapahtuu vaihtamalla
 tagin `latest` tilalle `develop`.
 
+### MySQL-tietokanta
+
+SQLite ei sovellu useamman samanaikaisen käyttäjän käyttöön. MySQL:n kanssa
+Kipa ja tietokanta käynnistetään repositorion juuresta komennolla:
+
+```sh
+export KIPA_DB_PASSWORD=<salasana>
+export MYSQL_ROOT_PASSWORD=<root-salasana>
+docker compose up -d --build
+```
+
+Kipa löytyy tämän jälkeen osoitteesta http://localhost:8000/kipa ja
+tietokanta tallennetaan `kipa-mysql`-volumeen. Kontissa MySQL otetaan
+käyttöön ympäristömuuttujilla `KIPA_DB_ENGINE=mysql`, `KIPA_DB_HOST`,
+`KIPA_DB_PORT`, `KIPA_DB_NAME`, `KIPA_DB_USER` ja `KIPA_DB_PASSWORD`.
+Ilman niitä käytetään SQLiteä kuten ennenkin.
+
 ## Asennus Nginx-proxyn taakse
 
 Paremmin konfikuroitava ja joustavampi tapa ajaa Kipaa on ajaa sitä
