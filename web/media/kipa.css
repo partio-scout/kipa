@@ -507,6 +507,36 @@ td.th_erotin {
   margin-bottom: 0;
   padding-bottom: 0;
   height: 18px;
+  color: #9fa8a9;
+  font-family: Verdana, "Lucida Grande", Lucida, sans-serif;
+  font-size: 12px;
+  line-height: 26px;
+}
+
+.login-form a,
+.login-form a:visited {
+  color: #fff;
+  margin-left: 12px;
+  text-decoration: none;
+}
+
+.login-form a:hover {
+  text-decoration: underline;
+}
+
+.login-viesti {
+  color: #b9f73e;
+  margin-right: 20px;
+}
+
+.login-kayttaja {
+  color: #fff;
+  font-weight: bold;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+  width: 120px;
 }
 
 .tab-selection-box {

@@ -1,11 +1,15 @@
 <!-- Käydään viestit läpi -->
-{% for message in messages %}{{ message }}{% endfor %}
+{% for message in messages %}<span class="login-viesti">{{ message }}</span>{% endfor %}
 {% if user.is_authenticated %}
+    <span class="login-kayttaja">{{ user.get_username }}</span>
+    {% if user.is_staff %}<a href="/admin/">Käyttäjien hallinta</a>{% endif %}
     <a href="/kipa/logout">Kirjaudu ulos</a>
 {% else %}
     <form action="/kipa/login/" name="form1" id="form1" method="post">
-        <input type="text" id="uname" name="uname">
-        <input type="password" id="pword" name="pword">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+        <input type="text" id="uname" name="uname" placeholder="Käyttäjätunnus">
+        <input type="password" id="pword" name="pword" placeholder="Salasana">
         <button type="submit" class="small blue awesome">Kirjaudu »</button>
     </form>
 {% endif %}

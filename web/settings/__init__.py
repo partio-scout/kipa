@@ -59,6 +59,10 @@ MEDIA_ROOT = hakemisto + "/media/"
 
 STATIC_DOC_ROOT = hakemisto + "/media/"
 
+# Djangon omat staattiset tiedostot (admin); Dockerissa nginx palvelee STATIC_ROOTista.
+STATIC_URL = "/static/"
+STATIC_ROOT = hakemisto + "/../static/"
+
 # URL that handles the media served from MEDIA_ROOT.
 # Example: "http://media.lawrence.com"
 MEDIA_URL = ""
@@ -79,6 +83,7 @@ SECRET_KEY = "shbtq($_^om(xep=5f97k2+ntb3!cqn+)%8r#s6udzqnhj$5p6"
 MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
 ]
@@ -108,6 +113,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.sessions",
     "django.contrib.sites",
+    "django.contrib.staticfiles",
     "tupa",
     "django.contrib.admin",
     #'django.contrib.formtools',
