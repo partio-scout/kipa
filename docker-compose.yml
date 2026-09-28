@@ -31,6 +31,7 @@ services:
       KIPA_DB_NAME: kipa
       KIPA_DB_USER: kipa
       KIPA_DB_PASSWORD: ${KIPA_DB_PASSWORD:?Set KIPA_DB_PASSWORD}
+      KIPA_ALLOWED_HOSTS: ${KIPA_ALLOWED_HOSTS:-localhost,127.0.0.1}
       # Optional: creates this admin on first start if it doesn't exist yet
       KIPA_ADMIN_USER: ${KIPA_ADMIN_USER:-}
       KIPA_ADMIN_PASSWORD: ${KIPA_ADMIN_PASSWORD:-}

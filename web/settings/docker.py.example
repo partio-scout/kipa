@@ -3,6 +3,13 @@ with open("/secret.txt", "r") as f:
 
 import os
 
+# "*" hyväksyy kaikki osoitteet (kätevä lähiverkossa, jossa koneen IP voi vaihtua).
+ALLOWED_HOSTS = [
+    osoite.strip()
+    for osoite in os.environ.get("KIPA_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+    if osoite.strip()
+]
+
 if os.environ.get("KIPA_DB_ENGINE", "sqlite") == "mysql":
     import pymysql
 

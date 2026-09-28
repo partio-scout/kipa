@@ -49,6 +49,9 @@ tagin `latest` tilalle `develop`.
 
 ### MySQL-tietokanta
 
+Askel askeleelta etenevä ohje aloittelijalle löytyy tiedostosta
+[asennus-omalle-koneelle.md](asennus-omalle-koneelle.md).
+
 SQLite ei sovellu useamman samanaikaisen käyttäjän käyttöön. MySQL:n kanssa
 Kipa ja tietokanta käynnistetään repositorion juuresta komennolla:
 
@@ -62,7 +65,9 @@ Kipa löytyy tämän jälkeen osoitteesta http://localhost:8000/kipa ja
 tietokanta tallennetaan `kipa-mysql`-volumeen. Kontissa MySQL otetaan
 käyttöön ympäristömuuttujilla `KIPA_DB_ENGINE=mysql`, `KIPA_DB_HOST`,
 `KIPA_DB_PORT`, `KIPA_DB_NAME`, `KIPA_DB_USER` ja `KIPA_DB_PASSWORD`.
-Ilman niitä käytetään SQLiteä kuten ennenkin.
+Ilman niitä käytetään SQLiteä kuten ennenkin. `KIPA_ALLOWED_HOSTS`
+(pilkuilla eroteltu lista tai `*`) määrää, millä osoitteilla Kipaan saa
+yhteyden; oletuksena vain `localhost,127.0.0.1`.
 
 ### Käyttäjät ja oikeudet
 
