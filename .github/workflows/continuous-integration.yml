@@ -5,7 +5,7 @@ on: pull_request
 
 jobs:
   auto-formatting:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
@@ -23,7 +23,7 @@ jobs:
           black -t py312 --check web/**/*.py.example
           djlint --check .
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
@@ -40,7 +40,7 @@ jobs:
           djlint --profile=django --lint --ignore "H006,H013,H030,H031,D018,T003" .
           ruff check
   unit-tests-sqlite:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -53,7 +53,7 @@ jobs:
         working-directory: ./web
         run: python './manage.py' test --failfast
   robot-tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
