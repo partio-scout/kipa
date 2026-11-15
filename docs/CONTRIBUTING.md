@@ -16,15 +16,14 @@ Lyhyt ohje git-versionhallinan käyttämisestä niin, että historiasta tulisi m
 
 Ominaisuudet tai muut kokonaisuudet toteutetaan omissa haaroissaan ja sitten haarasta tehdään PR katselmointia varten.
 
-Mahdolliset viitteet tiketöintijärjestelmän tiketteihin tai PR:iin ovat tärkeitä. Kun PR mergetään masteriin on merge-commitin otsikon hyvä olla muotoa `#<PR-numero> <Kuvaus kokonaisuudesta>`. Merge-committeja ei ole fiksua jättää gitin ehdottamiksi "Merge pull request #42 'user/feature-fix-stuff'", sillä haaran nimi saattaa olla PR:n valmistuessa katselmoitavaksi jo vanhentunut. Commitin tietää merge-commitiksi vaikkei sitä commit-viestin otsikossa lukisikaan.
+Mahdolliset viitteet tiketöintijärjestelmän tiketteihin tai PR:iin ovat tärkeitä. Kun PR mergetään developpiin, on merge-commitin otsikon hyvä olla muotoa `#<PR-numero> <Kuvaus kokonaisuudesta>`. Merge-committeja ei ole fiksua jättää gitin ehdottamiksi "Merge pull request #42 'user/feature-fix-stuff'", sillä haaran nimi saattaa olla PR:n valmistuessa katselmoitavaksi jo vanhentunut. Commitin tietää merge-commitiksi vaikkei sitä commit-viestin otsikossa lukisikaan.
 
 ### Haarat
 
-Käytössä on kolme jatkuvaa haaraa:
+Käytössä on kaksi jatkuvaa haaraa:
 
-* `master`: Julkaisukelpoinen koodi.
-* `develop`: Kehityksessä käytettävä haara. pull requestien kohde. Mergetään masteriin tehtäessä uutta julkaisua.
-* `gh-pages`: Kipan verkkosivujen sisältö.
+* `develop`: Kehityksessä käytettävä haara. Pull requestien kohde.
+* `main`: Testattu ja julkaisuvalmis koodi. Ei rinnakkainen haara developpiin nähden, vaan developin muutoksen tuodaan mainiin `git merge --ff-only develop`
 
 ### Merge
 
