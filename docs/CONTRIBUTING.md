@@ -56,3 +56,11 @@ Ominaisuus mergetään `git merge --no-ff feature`:
 Tätä merge-strategiaa kutsutaan nimellä "semi linear merge". Azure DevOps:issa voi tämän strategian asettaa käyttöön repositoriotasolla, mutta githubissa ei ole erillistä toimintoa tätä varten.
 
 Mikäli PR muodostuu vain yhdestä commitista, jää merge-commitin tehtäväksi lähinnä viittaaminen githubin PR:ään ja mahdollisiin tiketteihin.
+
+## Julkaisu
+
+Kipan julkaisukäytännöt ovat kevyet. Kehityshaara developpiin viety koodi julkaistaan automaattisesti docker-konttikuvana tägillä develop. Vastaavasti mainiin viety koodi julkaistaan automaattisesti tägillä latest. Varsinaista versionumerointia ei enää tehdä. Konttikuviin asetetaan sen luontiin käytetty git-revisio labelina, jonka avulla voidaan jälkikäteen selvitellä mahdollisia ongelmia.
+
+Mainiin eli projektin päähaaraan viedään muutokset ikään kuin siirtämällä main-osoitin toimivaksi testattuun kehityshaaran committiin. Eli esimerkiksi komentamalla `git merge --ff-only develop`.
+
+Paras tapa testata muutoksia ennen niiden viemistä päähaaraan on laskea niillä kilpailun tulokset. Kehityksessä mukana olevan on siis hyvä ottaa säännöllisesti itselleen tulostoimistopesti. Myös jonkinasteinen keskustelu julkaisusta kehittäjien kesken olisi suotavaa.
