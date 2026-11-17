@@ -16,15 +16,14 @@ Lyhyt ohje git-versionhallinan käyttämisestä niin, että historiasta tulisi m
 
 Ominaisuudet tai muut kokonaisuudet toteutetaan omissa haaroissaan ja sitten haarasta tehdään PR katselmointia varten.
 
-Mahdolliset viitteet tiketöintijärjestelmän tiketteihin tai PR:iin ovat tärkeitä. Kun PR mergetään masteriin on merge-commitin otsikon hyvä olla muotoa `#<PR-numero> <Kuvaus kokonaisuudesta>`. Merge-committeja ei ole fiksua jättää gitin ehdottamiksi "Merge pull request #42 'user/feature-fix-stuff'", sillä haaran nimi saattaa olla PR:n valmistuessa katselmoitavaksi jo vanhentunut. Commitin tietää merge-commitiksi vaikkei sitä commit-viestin otsikossa lukisikaan.
+Mahdolliset viitteet tiketöintijärjestelmän tiketteihin tai PR:iin ovat tärkeitä. Kun PR mergetään developpiin, on merge-commitin otsikon hyvä olla muotoa `#<PR-numero> <Kuvaus kokonaisuudesta>`. Merge-committeja ei ole fiksua jättää gitin ehdottamiksi "Merge pull request #42 'user/feature-fix-stuff'", sillä haaran nimi saattaa olla PR:n valmistuessa katselmoitavaksi jo vanhentunut. Commitin tietää merge-commitiksi vaikkei sitä commit-viestin otsikossa lukisikaan.
 
 ### Haarat
 
-Käytössä on kolme jatkuvaa haaraa:
+Käytössä on kaksi jatkuvaa haaraa:
 
-* `master`: Julkaisukelpoinen koodi.
-* `develop`: Kehityksessä käytettävä haara. pull requestien kohde. Mergetään masteriin tehtäessä uutta julkaisua.
-* `gh-pages`: Kipan verkkosivujen sisältö.
+* `develop`: Kehityksessä käytettävä haara. Pull requestien kohde.
+* `main`: Testattu ja julkaisuvalmis koodi. Ei rinnakkainen haara developpiin nähden, vaan developin muutoksen tuodaan mainiin `git merge --ff-only develop`
 
 ### Merge
 
@@ -57,3 +56,11 @@ Ominaisuus mergetään `git merge --no-ff feature`:
 Tätä merge-strategiaa kutsutaan nimellä "semi linear merge". Azure DevOps:issa voi tämän strategian asettaa käyttöön repositoriotasolla, mutta githubissa ei ole erillistä toimintoa tätä varten.
 
 Mikäli PR muodostuu vain yhdestä commitista, jää merge-commitin tehtäväksi lähinnä viittaaminen githubin PR:ään ja mahdollisiin tiketteihin.
+
+## Julkaisu
+
+Kipan julkaisukäytännöt ovat kevyet. Kehityshaara developpiin viety koodi julkaistaan automaattisesti docker-konttikuvana tägillä develop. Vastaavasti mainiin viety koodi julkaistaan automaattisesti tägillä latest. Varsinaista versionumerointia ei enää tehdä. Konttikuviin asetetaan sen luontiin käytetty git-revisio labelina, jonka avulla voidaan jälkikäteen selvitellä mahdollisia ongelmia.
+
+Mainiin eli projektin päähaaraan viedään muutokset ikään kuin siirtämällä main-osoitin toimivaksi testattuun kehityshaaran committiin. Eli esimerkiksi komentamalla `git merge --ff-only develop`.
+
+Paras tapa testata muutoksia ennen niiden viemistä päähaaraan on laskea niillä kilpailun tulokset. Kehityksessä mukana olevan on siis hyvä ottaa säännöllisesti itselleen tulostoimistopesti. Myös jonkinasteinen keskustelu julkaisusta kehittäjien kesken olisi suotavaa.
