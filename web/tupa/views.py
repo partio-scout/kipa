@@ -13,6 +13,8 @@ from django.template import RequestContext
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.views import redirect_to_login
+from django.utils.http import url_has_allowed_host_and_scheme
 from .duplicate import kopioiTehtava
 from .duplicate import kisa_xml
 import random
@@ -31,6 +33,7 @@ from .formit import (
 )
 from .models import (
     Kisa,
+    KisaOikeus,
     OsaTehtava,
     Parametri,
     Sarja,
@@ -49,6 +52,12 @@ import django.db
 
 from .TulosLaskin import laskeSarja
 from .log import clearLoki, enableLogging, palautaLoki
+from .oikeudet import nakyvat_kisat, tarkista_oikeus, vaadi_oikeus
+
+TULOKSET = KisaOikeus.TULOKSET
+SYOTTO = KisaOikeus.SYOTTO
+MAARITYS = KisaOikeus.MAARITYS
+YLLAPITO = KisaOikeus.YLLAPITO
 
 
 def kipaResponseRedirect(url):
@@ -62,10 +71,19 @@ def kipaResponseRedirect(url):
 def loginSivu(request):
     if request.method == "POST":
         posti = request.POST
-        user = authenticate(username=posti["uname"], password=posti["pword"])
+        user = authenticate(
+            username=posti.get("uname", ""), password=posti.get("pword", "")
+        )
         if user and user.is_active:
             login(request, user)
-            messages.success(request, "Heippa " + user.first_name + "!")
+            messages.success(
+                request, "Heippa " + (user.first_name or user.username) + "!"
+            )
+            seuraava = posti.get("next", "")
+            if url_has_allowed_host_and_scheme(
+                seuraava, allowed_hosts={request.get_host()}
+            ):
+                return redirect(seuraava)
         else:
             messages.error(request, "Kirjautuminen epäonnistui")
 
@@ -136,7 +154,7 @@ def etusivu(request):
     Kipan päävalikko.
 
     """
-    kisat = Kisa.objects.all()
+    kisat = nakyvat_kisat(request.user)
 
     vanha_tietokanta = testaa_tietokanta()
     if vanha_tietokanta:
@@ -148,7 +166,7 @@ def etusivu(request):
     )
 
 
-# @permission_required('tupa.change_kisa')
+@vaadi_oikeus(TULOKSET)
 def kisa(request, kisa_nimi):
     """
     Kisakohtainen päävalikko.
@@ -171,6 +189,7 @@ def kisa(request, kisa_nimi):
     )
 
 
+@vaadi_oikeus(TULOKSET)
 def tulosta(request, kisa_nimi, tulostyyppi=""):
     """
     Valintalista kisan sarjojen tuloksista.
@@ -194,10 +213,14 @@ def maaritaKisa(request, kisa_nimi=None, talletettu=None):
     """
     Kisan ja sarjojen määritys.
     """
+    if not request.user.is_authenticated:
+        return redirect_to_login(request.get_full_path())
     # Tietokantahaku:
     kisa = None
     if kisa_nimi:
         kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
+        tarkista_oikeus(request, kisa, MAARITYS)
+    uusi_kisa = kisa is None
 
     # Post data
     posti = None
@@ -213,6 +236,10 @@ def maaritaKisa(request, kisa_nimi=None, talletettu=None):
     if kisaForm.is_valid():
         if sarjaFormit.is_valid():
             kisa = kisaForm.save()
+            if uusi_kisa:
+                KisaOikeus.objects.create(
+                    kisa=kisa, kayttaja=request.user, taso=YLLAPITO
+                )
             sarjaFormit = SarjaFormSet(posti, instance=kisa)
             sarjaFormit.is_valid()
             sarjaFormit.save()
@@ -259,6 +286,7 @@ def maaritaKisa(request, kisa_nimi=None, talletettu=None):
             )
 
 
+@vaadi_oikeus(MAARITYS)
 def maaritaValitseTehtava(request, kisa_nimi):
     """
     Valitsee tehtävän määritettäväksi.
@@ -298,6 +326,7 @@ def maaritaValitseTehtava(request, kisa_nimi):
         )
 
 
+@vaadi_oikeus(MAARITYS)
 def maaritaVartiot(request, kisa_nimi, talletettu=None):
     """
     Määrittää kisan vartiot sarjoittain.
@@ -354,6 +383,7 @@ def maaritaVartiot(request, kisa_nimi, talletettu=None):
         )
 
 
+@vaadi_oikeus(MAARITYS)
 def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None, talletettu=""):
     """
     Määritää tehtävän.
@@ -371,13 +401,13 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None, talletett
     # Tabs:
     daatta = {}
     if tehtava_id:  # Muokataan vanhaa tehtävää
-        tehtava = get_object_or_404(Tehtava, id=tehtava_id)
+        tehtava = get_object_or_404(Tehtava, id=tehtava_id, sarja__kisa__nimi=kisa_nimi)
         sarja = tehtava.sarja
         tehtava.osatehtava_set.all()
         daatta = luoTehtavaData([tehtava])  # alkudata tehtävänmääritysformihässäkälle.
 
     else:  # Luodaan uutta tehtävää
-        sarja = get_object_or_404(Sarja, id=sarja_id)
+        sarja = get_object_or_404(Sarja, id=sarja_id, kisa__nimi=kisa_nimi)
         tehtava = Tehtava(sarja)
 
     # Haetaan suurin kaytosssa oleva jarjestysnro tassa sarjassa:
@@ -395,6 +425,11 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None, talletett
         suurin_jarjestysnro=nro,
         tags={"kisa_nimi": kisa_nimi, "tehtava_id": tehtava_id},
     )
+
+    # Estetään tehtävän siirto toisen kisan sarjaan muokatulla POST-datalla.
+    for k, v in daatta.items():
+        if k != "valid":
+            v["sarja"] = sarja.id
 
     # Tallennetaan formin muokkaama data
     tehtava_id = tallennaTehtavaData(daatta)
@@ -448,6 +483,7 @@ def maaritaTehtava(request, kisa_nimi, tehtava_id=None, sarja_id=None, talletett
         )
 
 
+@vaadi_oikeus(SYOTTO)
 def syotaKisa(request, kisa_nimi, tarkistus=None):
     """
     Valitsee kisan tehtävän jonka tuloksia ruvetaan syöttämään.
@@ -473,11 +509,12 @@ def syotaKisa(request, kisa_nimi, tarkistus=None):
     )
 
 
+@vaadi_oikeus(SYOTTO)
 def syotaTehtava(request, kisa_nimi, tehtava_id, talletettu=None, tarkistus=None):
     """
     Määrittää tehtävän syötteet.
     """
-    tehtava = get_object_or_404(Tehtava, id=tehtava_id)
+    tehtava = get_object_or_404(Tehtava, id=tehtava_id, sarja__kisa__nimi=kisa_nimi)
     osatehtavat = OsaTehtava.objects.filter(tehtava=tehtava)
     maaritteet = SyoteMaarite.objects.filter(osa_tehtava__tehtava=tehtava)
     tehtava.sarja.taustaTulokset()  # Taustalaskenta
@@ -613,6 +650,7 @@ def syotaTehtava(request, kisa_nimi, tehtava_id, talletettu=None, tarkistus=None
         )
 
 
+@vaadi_oikeus(MAARITYS)
 def testiTulos(request, kisa_nimi, talletettu=None):
     """
     Määrittää kisalle testitulokset. Eli ns "oikeat" tulokset,
@@ -668,6 +706,7 @@ def testiTulos(request, kisa_nimi, talletettu=None):
     )
 
 
+@vaadi_oikeus(MAARITYS)
 def tuomarineuvos(request, kisa_nimi, talletettu=None):
     """
     Määrittää kisalle tuomarineuvoston tulokset. Eli tulokset joilla voidaan ylimäärittää laskimen laskemat tulokset.
@@ -722,13 +761,14 @@ def tuomarineuvos(request, kisa_nimi, talletettu=None):
     )
 
 
+@vaadi_oikeus(TULOKSET)
 def tulostaSarja(
     request, kisa_nimi, sarja_id, tulostus=0, vaihtoaika=None, vaihto_id=None
 ):
     """
     Sarjan tulokset.
     """
-    sarja = Sarja.objects.get(id=sarja_id)
+    sarja = get_object_or_404(Sarja, id=sarja_id, kisa__nimi=kisa_nimi)
     tulokset = sarja.laskeTulokset()
     mukana = tulokset[0]
     ulkona = tulokset[1]
@@ -764,6 +804,7 @@ def tulostaSarja(
     )
 
 
+@vaadi_oikeus(TULOKSET)
 def heijasta(request, kisa_nimi, sarja_id=None, tulostus=0):
     kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
     sarjat = kisa.sarja_set.all()
@@ -786,6 +827,7 @@ def heijasta(request, kisa_nimi, sarja_id=None, tulostus=0):
     )
 
 
+@vaadi_oikeus(TULOKSET)
 def tulostaSarjaHTML(request, kisa_nimi, sarja_id):
     """
     Sarjan tulokset, sivu muotoiltuna tulostusta varten ilman turhia grafiikoita.
@@ -793,12 +835,13 @@ def tulostaSarjaHTML(request, kisa_nimi, sarja_id):
     return tulostaSarja(request, kisa_nimi, sarja_id, tulostus=1)
 
 
+@vaadi_oikeus(TULOKSET)
 def sarjanTuloksetCSV(request, kisa_nimi, sarja_id):
     """
     Sarjan tulokset CSV-tiedostoon esim. Excel-muokkausta varten.
     """
     # Lasketaan tulokset:
-    sarja = Sarja.objects.get(id=sarja_id)
+    sarja = get_object_or_404(Sarja, id=sarja_id, kisa__nimi=kisa_nimi)
     tulokset = sarja.laskeTulokset()
     mukana = tulokset[0]
     ulkona = tulokset[1]
@@ -883,6 +926,7 @@ def sarjanTuloksetCSV(request, kisa_nimi, sarja_id):
     return response
 
 
+@vaadi_oikeus(TULOKSET)
 def piirit(request, kisa_nimi):
     """
     Piirikohtaiset tulokset.
@@ -893,12 +937,13 @@ def piirit(request, kisa_nimi):
     )
 
 
+@vaadi_oikeus(MAARITYS)
 def kopioiTehtavia(request, kisa_nimi, sarja_id):
     """
     Valitsee ja kopioi valitut saman kisan tehtävät määriteltyyn sarjaan.
     """
     kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
-    sarjaan = get_object_or_404(Sarja, id=sarja_id)
+    sarjaan = get_object_or_404(Sarja, id=sarja_id, kisa=kisa)
     sarjat = Sarja.objects.filter(kisa=kisa)
     redirect = True
     posti = None
@@ -925,7 +970,7 @@ def kopioiTehtavia(request, kisa_nimi, sarja_id):
         if posti and sarjaForm.is_valid():
             kopioitavat = sarjaForm.cleaned_data["kopioitavat_tehtavat"]
             for k in kopioitavat:
-                tehtava = get_object_or_404(Tehtava, id=k)
+                tehtava = get_object_or_404(Tehtava, id=k, sarja__kisa=kisa)
                 kopioiTehtava(tehtava, sarjaan)
         else:
             redirect = False
@@ -945,6 +990,7 @@ def kopioiTehtavia(request, kisa_nimi, sarja_id):
         )
 
 
+@vaadi_oikeus(MAARITYS)
 def tallennaKisa(request, kisa_nimi):
     """
     Palauttaa käyttäjälle valitun kisan xml formaatissa.
@@ -957,6 +1003,7 @@ def tallennaKisa(request, kisa_nimi):
     return response
 
 
+@vaadi_oikeus(YLLAPITO)
 def poistaKisa(request, kisa_nimi):
     kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
     if request.method == "POST":
@@ -979,10 +1026,14 @@ def saveNewId(object, changeDict, keyName):
 
 
 def korvaaKisa(request, kisa_nimi=None):
+    if not request.user.is_authenticated:
+        return redirect_to_login(request.get_full_path())
     try:
         kisa = Kisa.objects.get(nimi=kisa_nimi)
     except Exception:
         kisa = None
+    if kisa:
+        tarkista_oikeus(request, kisa, YLLAPITO)
 
     otsikko = "Korvaa kisa tiedostosta"
     if not kisa_nimi:
@@ -1051,12 +1102,20 @@ def korvaaKisa(request, kisa_nimi=None):
                 "parametrit": {},
             }
 
+            vanhat_oikeudet = [(request.user.id, YLLAPITO)]
             if not len(kisat) == 1:
                 return kipaResponseRedirect("/kipa/" + kisa_nimi + "/korvaa/")
             elif kisa:
+                vanhat_oikeudet = list(
+                    kisa.kisaoikeus_set.values_list("kayttaja_id", "taso")
+                )
                 kisa.delete()
             kisat[0].nimi = kisa_nimi
             saveNewId(kisat[0], translations, "kisat")
+            for kayttaja_id, taso in vanhat_oikeudet:
+                KisaOikeus.objects.create(
+                    kisa=kisat[0], kayttaja_id=kayttaja_id, taso=taso
+                )
             for s in sarjat:
                 s.kisa_id = translations["kisat"][s.kisa_id]
                 saveNewId(s, translations, "sarjat")
@@ -1141,11 +1200,12 @@ def haeTulos(tuloksetSarjalle, vartio, tehtava):
                 return tul
 
 
+@vaadi_oikeus(MAARITYS)
 def luoTestiTulokset(request, kisa_nimi, sarja_id):
     """
     Luo testitulokset valitulle sarjalle ja tallentaa ne kantaan
     """
-    sarja = get_object_or_404(Sarja, id=sarja_id)
+    sarja = get_object_or_404(Sarja, id=sarja_id, kisa__nimi=kisa_nimi)
     tulokset = sarja.laskeTulokset()
 
     for t in sarja.tehtava_set.all():
@@ -1157,6 +1217,7 @@ def luoTestiTulokset(request, kisa_nimi, sarja_id):
     return kipaResponseRedirect("/kipa/" + kisa_nimi + "/maarita/testitulos/")
 
 
+@vaadi_oikeus(TULOKSET)
 def laskennanTilanne(request, kisa_nimi):
     kisa = get_object_or_404(Kisa, nimi=kisa_nimi)
     taulukko = [[]]
@@ -1231,9 +1292,9 @@ def apua(request):
     return kipaResponseRedirect("/kipamedia/Manuaali_v03.pdf")
 
 
+@vaadi_oikeus(MAARITYS)
 def tehtavanVaiheet(request, kisa_nimi, tehtava_id, vartio_id=None):
-    get_object_or_404(Kisa, nimi=kisa_nimi)
-    tehtava = get_object_or_404(Tehtava, id=tehtava_id)
+    tehtava = get_object_or_404(Tehtava, id=tehtava_id, sarja__kisa__nimi=kisa_nimi)
     vartiot = Vartio.objects.filter(sarja=tehtava.sarja)
     if not len(vartiot):
         responssi = "<!DOCTYPE html><html><body><h1>Ei vartioita</h1><br></body></html>"
@@ -1261,7 +1322,10 @@ def tehtavanVaiheet(request, kisa_nimi, tehtava_id, vartio_id=None):
     tehtavan_syotteet = Syote.objects.filter(maarite__osa_tehtava__tehtava=tehtava)
 
     laskeSarja(
-        tehtava.sarja, tehtavan_syotteet, Vartio.objects.filter(id=vartio_id), [tehtava]
+        tehtava.sarja,
+        tehtavan_syotteet,
+        Vartio.objects.filter(id=vartio_id, sarja=tehtava.sarja),
+        [tehtava],
     )
     responssi += (
         '<a href="/kipa/lista/maarita/tehtava/'

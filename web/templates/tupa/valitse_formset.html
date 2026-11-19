@@ -1,6 +1,7 @@
 {% extends "tupa/valitse.html" %}
 {% block alku %}
     <form method="post" action="">
+        {% csrf_token %}
         {% include "tupa/tallenna.html" %}
         <br>
         <br>

@@ -1,11 +1,43 @@
 with open("/secret.txt", "r") as f:
     SECRET_KEY = f.readline()
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "/db/kipa.db",
+import os
+
+# "*" hyväksyy kaikki osoitteet (kätevä lähiverkossa, jossa koneen IP voi vaihtua).
+ALLOWED_HOSTS = [
+    osoite.strip()
+    for osoite in os.environ.get("KIPA_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+    if osoite.strip()
+]
+
+if os.environ.get("KIPA_DB_ENGINE", "sqlite") == "mysql":
+    import pymysql
+
+    pymysql.install_as_MySQLdb()
+
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": os.environ.get("KIPA_DB_NAME", "kipa"),
+            "USER": os.environ.get("KIPA_DB_USER", "kipa"),
+            "PASSWORD": os.environ["KIPA_DB_PASSWORD"],
+            "HOST": os.environ.get("KIPA_DB_HOST", "db"),
+            "PORT": os.environ.get("KIPA_DB_PORT", "3306"),
+            "CONN_MAX_AGE": 60,
+            "OPTIONS": {
+                "charset": "utf8mb4",
+                "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+            },
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": "/db/kipa.db",
+        }
+    }
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
+
+STATIC_ROOT = "/static/"

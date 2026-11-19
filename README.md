@@ -14,6 +14,8 @@ Ohjeita Kipan käyttöön ja tarkempaa tietoa ohjelmistosta löytyy
 [käyttöohjeesta](docs/manual.md).
 
 Asennusohjeet löytyvät [asennusohjeesta](docs/installation.md).
+Aloittelijalle on askel askeleelta etenevä
+[ohje Kipan asentamiseen omalle koneelle](docs/asennus-omalle-koneelle.md).
 
 ## Kehitys
 

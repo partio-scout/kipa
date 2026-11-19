@@ -32,6 +32,40 @@ class Kisa(models.Model):
         db_table = "kipa_kisa"
 
 
+class KisaOikeus(models.Model):
+    """Käyttäjän oikeustaso kisaan. Jokainen taso sisältää alempien tasojen oikeudet."""
+
+    TULOKSET = 1
+    SYOTTO = 2
+    MAARITYS = 3
+    YLLAPITO = 4
+    TASOT = [
+        (TULOKSET, "Tulokset: näkee tulokset ja laskennan tilanteen"),
+        (SYOTTO, "Syöttö: + syöttää suorituksia"),
+        (MAARITYS, "Määritys: + määrittää sarjat, vartiot ja tehtävät"),
+        (YLLAPITO, "Ylläpito: + palauttaa ja poistaa kisan"),
+    ]
+
+    kisa = models.ForeignKey(Kisa, on_delete=CASCADE)
+    kayttaja = models.ForeignKey(
+        "auth.User", on_delete=CASCADE, verbose_name="käyttäjä"
+    )
+    taso = models.PositiveSmallIntegerField(choices=TASOT, default=TULOKSET)
+
+    def __str__(self):
+        return f"{self.kayttaja} / {self.kisa}: {self.get_taso_display()}"
+
+    class Meta:
+        verbose_name = "Kisan käyttöoikeus"
+        verbose_name_plural = "Kisojen käyttöoikeudet"
+        db_table = "kipa_kisaoikeus"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["kisa", "kayttaja"], name="kisaoikeus_uniikki"
+            )
+        ]
+
+
 class Sarja(models.Model):
     nimi = models.CharField(max_length=255)
     vartion_maksimikoko = models.IntegerField(blank=True, null=True, default=0)

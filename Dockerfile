@@ -9,6 +9,7 @@ COPY --chown=nobody:nogroup web/media /media
 COPY web/settings/docker.py.example /app/settings/docker.py
 COPY requirements.txt /
 COPY nginx.conf /etc/nginx/
+COPY kipa-start.sh /docker-entrypoint.d/gunicorn.sh
 
 RUN python3.12 -m venv venv
 ENV PATH="/venv/bin:$PATH"
@@ -17,10 +18,8 @@ WORKDIR /app
 
 RUN rm -rf /app/media \
     && mkdir /db \
+    && chmod +x /docker-entrypoint.d/gunicorn.sh \
     && pip install -r /requirements.txt \
     && tr -dc A-Za-z0-9 < /dev/urandom | head -c 40 > /secret.txt \
-    && python manage.py makemigrations tupa \
-    && python manage.py migrate \
-    && nginx -t \
-    && echo "gunicorn --daemon --bind unix:/tmp/kipa.sock wsgi --error-logfile /tmp/errors " > /docker-entrypoint.d/gunicorn.sh \
-    && chmod +x /docker-entrypoint.d/gunicorn.sh \
+    && python manage.py collectstatic --noinput \
+    && nginx -t

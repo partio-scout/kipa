@@ -4,6 +4,7 @@
     {% load kipatags %}
     <h1>{{ heading|alaviiva_pois }}</h1>
     <form method="post" action="">
+        {% csrf_token %}
         <p>{% include "tupa/tallenna.html" %}</p>
         {% if forms %}
             {% for form in forms %}

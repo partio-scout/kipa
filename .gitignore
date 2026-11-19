@@ -4,3 +4,4 @@ env*
 *.orig
 *.rej
 web/settings/local.py
+.env

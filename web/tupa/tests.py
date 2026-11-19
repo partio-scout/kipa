@@ -7,7 +7,16 @@ import unittest
 from .taulukkolaskin import laske
 from django.test import TestCase
 from django.test.runner import DiscoverRunner
-from .models import Kisa, OsaTehtava, Parametri, Sarja, Syote, Tehtava, TestausTulos
+from .models import (
+    Kisa,
+    KisaOikeus,
+    OsaTehtava,
+    Parametri,
+    Sarja,
+    Syote,
+    Tehtava,
+    TestausTulos,
+)
 from .views import (
     kisa,
     kopioiTehtavia,
@@ -29,10 +38,24 @@ from .views import (
     tulostaSarjaHTML,
 )
 import os
+from django.contrib.auth.models import User
 from django.test.client import Client
 from django.http import HttpRequest
 import re
 import settings
+
+
+def testiadmin():
+    user, _ = User.objects.get_or_create(
+        username="testiadmin", defaults={"is_superuser": True, "is_staff": True}
+    )
+    return user
+
+
+def kirjautunut_client():
+    c = Client()
+    c.force_login(testiadmin())
+    return c
 
 
 def is_number(s):
@@ -165,6 +188,7 @@ def ViewSanityCheck(fixture_name):
             sarjat = Sarja.objects.all()
             tehtavat = Tehtava.objects.all()
             request = HttpRequest()
+            request.user = testiadmin()
             maaritaKisa(request)
             korvaaKisa(request)
             for k in kisat:  # Kisakohtaiset näkymät
@@ -299,7 +323,7 @@ def TulosTestFactory(fixture_name):
                 for t in s.tehtava_set.all():
                     # Parsitaan post data html sivusta:
                     posti = {}
-                    c = Client()
+                    c = kirjautunut_client()
                     osoite = (
                         "/kipa/" + s.kisa.nimi + "/maarita/tehtava/" + str(t.id) + "/"
                     )
@@ -363,7 +387,7 @@ def PostTestFactory(fixture_name):
                         if i.hasAttribute("value"):
                             param[1] = i.getAttribute("value")
                         data.append(param)
-                c = Client()
+                c = kirjautunut_client()
                 posti = dict(data)
                 c.post(osoite, posti)
 
@@ -386,6 +410,60 @@ class TasapisteTesti(TestCase):
         assert tulokset[0][4][0].nro == 4
         assert tulokset[0][5][0].nro == 5
         assert tulokset[0][6][0].nro == 6
+
+
+class KayttooikeusTesti(TestCase):
+    """
+    Testaa kisakohtaiset käyttöoikeudet.
+    """
+
+    def setUp(self):
+        self.kisa = Kisa.objects.create(nimi="oikeuskisa")
+        self.muu_kisa = Kisa.objects.create(nimi="muukisa")
+        self.sarja = Sarja.objects.create(nimi="s", kisa=self.kisa)
+        self.muu_sarja = Sarja.objects.create(nimi="s", kisa=self.muu_kisa)
+        self.kayttaja = User.objects.create_user("katsoja", password="x")
+        KisaOikeus.objects.create(
+            kisa=self.kisa, kayttaja=self.kayttaja, taso=KisaOikeus.TULOKSET
+        )
+        self.c = Client()
+        self.c.force_login(self.kayttaja)
+
+    def testKirjautumatonOhjataanKirjautumaan(self):
+        vastaus = Client().get("/kipa/oikeuskisa/")
+        self.assertEqual(vastaus.status_code, 302)
+
+    def testKatsojaNakeeVainOmatKisat(self):
+        sivu = self.c.get("/kipa/").content.decode()
+        self.assertIn("oikeuskisa", sivu)
+        self.assertNotIn("muukisa", sivu)
+        self.assertEqual(self.c.get("/kipa/muukisa/").status_code, 403)
+
+    def testKatsojanOikeustaso(self):
+        self.assertEqual(self.c.get("/kipa/oikeuskisa/").status_code, 200)
+        self.assertEqual(
+            self.c.get("/kipa/oikeuskisa/tulosta/normaali/").status_code, 200
+        )
+        self.assertEqual(self.c.get("/kipa/oikeuskisa/syota/").status_code, 403)
+        self.assertEqual(self.c.get("/kipa/oikeuskisa/maarita/").status_code, 403)
+        self.assertEqual(self.c.post("/kipa/oikeuskisa/poista/").status_code, 403)
+        self.assertTrue(Kisa.objects.filter(nimi="oikeuskisa").exists())
+
+    def testToisenKisanSarjaaEiVoiAvata(self):
+        osoite = "/kipa/oikeuskisa/tulosta/normaali/sarja/%d/" % self.muu_sarja.id
+        self.assertEqual(self.c.get(osoite).status_code, 404)
+
+    def testLuojaSaaYllapitoOikeuden(self):
+        self.c.post(
+            "/kipa/uusiKisa/maarita/",
+            {
+                "nimi": "omakisa",
+                "sarja_set-TOTAL_FORMS": "0",
+                "sarja_set-INITIAL_FORMS": "0",
+            },
+        )
+        oikeus = KisaOikeus.objects.get(kisa__nimi="omakisa", kayttaja=self.kayttaja)
+        self.assertEqual(oikeus.taso, KisaOikeus.YLLAPITO)
 
 
 class CustomTestRunner(DiscoverRunner):
@@ -411,7 +489,7 @@ def run_one_fixture(test_labels, verbosity=1, interactive=True, extra_tests=[]):
 
     settings.DEBUG = False
 
-    testit = [aritmeettinen_laskin_test]
+    testit = [aritmeettinen_laskin_test, KayttooikeusTesti]
 
     if test_labels:
         # print test_labels[0]

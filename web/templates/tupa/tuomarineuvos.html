@@ -16,6 +16,7 @@
 {% endblock %}
 {% block content %}
     <form action="." method="post">
+        {% csrf_token %}
         {{ block.super }}
         {% include "tupa/tallenna.html" %}
     {% endblock %}

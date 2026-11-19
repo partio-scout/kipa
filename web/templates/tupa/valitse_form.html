@@ -3,6 +3,7 @@
 {% block sarake %}{{ sarake }}{% endblock %}
 {% block content %}
     <form method="post" action="">
+        {% csrf_token %}
         {{ block.super }}
         {% if napin_tyyppi == "kopioi" %}
             {% include "tupa/kopioi.html" %}

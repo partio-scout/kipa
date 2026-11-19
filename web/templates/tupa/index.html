@@ -22,22 +22,26 @@
                     <div id="right" class="column">
                         <h1>Kisat</h1>
                         <blockquote>
-                            {% if object_list %}
-                                {% for kisa in object_list %}
-                                    <a href="{{ kisa.nimi }}/">{{ kisa.nimi }}</a>
-                                    <br>
-                                {% endfor %}
+                            {% if not user.is_authenticated %}
+                                <p>Kirjaudu sisään nähdäksesi kisat.</p>
                             {% else %}
-                                <p>Ei määriteltyjä kisoja.</p>
+                                {% if object_list %}
+                                    {% for kisa in object_list %}
+                                        <a href="{{ kisa.nimi }}/">{{ kisa.nimi }}</a>
+                                        <br>
+                                    {% endfor %}
+                                {% else %}
+                                    <p>Ei näkyviä kisoja.</p>
+                                {% endif %}
+                                <p>
+                                    <a href="uusiKisa/maarita/">Luo uusi kisa</a>
+                                    <br>
+                                </p>
+                                <p>
+                                    <a href="lisaaKisa/">Lisää kisa tiedostosta</a>
+                                    <br>
+                                </p>
                             {% endif %}
-                            <p>
-                                <a href="uusiKisa/maarita/">Luo uusi kisa</a>
-                                <br>
-                            </p>
-                            <p>
-                                <a href="lisaaKisa/">Lisää kisa tiedostosta</a>
-                                <br>
-                            </p>
                         </blockquote>
                     </div>
                 </div>
